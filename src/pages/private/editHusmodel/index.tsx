@@ -69,19 +69,21 @@ export const EditHouseModel = () => {
                 </h1>
               </div>
             </div>
-            <div className="flex items-center gap-4 mb-6">
-              <img
-                src={house?.photo}
-                alt="house"
-                className="w-[160px] rounded-lg"
-              />
-              <div>
-                <h2 className="text-darkBlack font-semibold text-[20px]">
-                  {house?.husmodell_name}
-                </h2>
-                <p className="text-gray w-[900px]">{house?.Hustittel}</p>
+            {house && (
+              <div className="flex items-center gap-4 mb-6">
+                <img
+                  src={house?.photo}
+                  alt="house"
+                  className="w-[160px] rounded-lg"
+                />
+                <div>
+                  <h2 className="text-darkBlack font-semibold text-[20px]">
+                    {house?.husmodell_name}
+                  </h2>
+                  <p className="text-gray w-[900px]">{house?.Hustittel}</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div>
             <div className="border-b border-gray2 flex items-center justify-between gap-2 mb-6 px-6">

@@ -205,15 +205,6 @@ export function formatDateOnly(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-export function TimestampDisplay(dato: any) {
-  const date = new Date(
-    dato.seconds * 1000 + Math.floor(dato.nanoseconds / 1000000)
-  );
-
-  const formattedDate = date.toISOString().split("T")[0].replace(/-/g, ".");
-
-  return formattedDate;
-}
 export function formatSpaceSeparatedToNOK(value: string): string {
   const numericValue = Number(value.replace(/\s/g, ""));
   return numericValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " NOK";

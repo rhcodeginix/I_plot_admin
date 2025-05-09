@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "../../../components/common/button";
 import { UserRoundCheck } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import { fetchBankLeadData, TimestampDisplay } from "../../../lib/utils";
+import { fetchBankLeadData } from "../../../lib/utils";
 import { Spinner } from "../../../components/Spinner";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
@@ -164,7 +164,7 @@ export const Oppsummering: React.FC<{
                         Fødselsdato:
                       </div>
                       <div className="w-[300px] text-[#000000] font-semibold">
-                        {TimestampDisplay(item?.dato)}
+                        {item?.dato}
                       </div>
                     </div>
                     <div className="flex gap-3 items-center">

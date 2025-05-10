@@ -1,6 +1,11 @@
 import { MapPin, UserRoundCheck, X } from "lucide-react";
 // import { Spinner } from "../../../components/Spinner";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -49,6 +54,9 @@ const formSchema = z.object({
     Kommentar: z.string().min(1, {
       message: "Kommentar til banken må bestå av minst 1 tegn.",
     }),
+    tomtekostnader: z.string().min(1, {
+      message: "Estimert totale tomtekostnader må bestå av minst 1 tegn.",
+    }),
   }),
   house: z.object({
     housemodell: z
@@ -57,12 +65,23 @@ const formSchema = z.object({
     Kommentar: z.string().min(1, {
       message: "Kommentar til banken må bestå av minst 1 tegn.",
     }),
+    byggekostnader: z.string().min(1, {
+      message: "Estimert totale byggekostnader må bestå av minst 1 tegn.",
+    }),
   }),
 });
 
-export const PlotHusmodell: React.FC<{
-  setActiveTab: any;
-}> = ({ setActiveTab }) => {
+// export const PlotHusmodell: React.FC<{
+//   setActiveTab: any;
+// }> = ({ setActiveTab }) => {
+export type PlotHusmodellHandle = {
+  validateForm: () => Promise<boolean>;
+};
+
+export const PlotHusmodell = forwardRef<
+  PlotHusmodellHandle,
+  { setActiveTab: (tab: number) => void }
+>(({ setActiveTab }, ref) => {
   const location = useLocation();
   const navigate = useNavigate();
   const pathSegments = location.pathname.split("/");
@@ -201,6 +220,19 @@ export const PlotHusmodell: React.FC<{
 
     getData();
   }, [form, id, house]);
+
+  useImperativeHandle(ref, () => ({
+    validateForm: async () => {
+      let isValid = false;
+
+      await form.handleSubmit(async (data) => {
+        await onSubmit(data);
+        isValid = true;
+      })();
+
+      return isValid;
+    },
+  }));
 
   return (
     <>
@@ -553,6 +585,56 @@ export const PlotHusmodell: React.FC<{
                   </div>
                 </div>
                 <div className="flex gap-6">
+                  <div className="w-[35%]">
+                    <FormField
+                      control={form.control}
+                      name="plot.tomtekostnader"
+                      render={({ field, fieldState }) => (
+                        <FormItem>
+                          <p
+                            className={`${
+                              fieldState.error ? "text-red" : "text-black"
+                            } mb-[6px] text-sm font-medium`}
+                          >
+                            Estimert{" "}
+                            <span className="text-darkBlack font-bold">
+                              totale tomtekostnader
+                            </span>{" "}
+                            (kjøp + klargjøring):
+                          </p>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                placeholder="Skriv her..."
+                                {...field}
+                                className={`bg-white rounded-[8px] border text-black
+                                          ${
+                                            fieldState?.error
+                                              ? "border-red"
+                                              : "border-gray1"
+                                          } `}
+                                type="text"
+                                inputMode="numeric"
+                                onChange={({ target: { value } }: any) =>
+                                  field.onChange({
+                                    target: {
+                                      name: `tomtekostnader`,
+                                      value: value.replace(/\D/g, "")
+                                        ? new Intl.NumberFormat("no-NO").format(
+                                            Number(value.replace(/\D/g, ""))
+                                          )
+                                        : "",
+                                    },
+                                  })
+                                }
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <div className="w-[65%]">
                     <FormField
                       control={form.control}
@@ -658,6 +740,56 @@ export const PlotHusmodell: React.FC<{
                   <div className="w-[65%]"></div>
                 </div>
                 <div className="flex gap-6">
+                  <div className="w-[35%]">
+                    <FormField
+                      control={form.control}
+                      name="house.byggekostnader"
+                      render={({ field, fieldState }) => (
+                        <FormItem>
+                          <p
+                            className={`${
+                              fieldState.error ? "text-red" : "text-black"
+                            } mb-[6px] text-sm font-medium`}
+                          >
+                            Estimert{" "}
+                            <span className="text-darkBlack font-bold">
+                              totale byggekostnader
+                            </span>{" "}
+                            (oppstilling på neste side):
+                          </p>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                placeholder="Skriv her..."
+                                {...field}
+                                className={`bg-white rounded-[8px] border text-black
+                                          ${
+                                            fieldState?.error
+                                              ? "border-red"
+                                              : "border-gray1"
+                                          } `}
+                                type="text"
+                                inputMode="numeric"
+                                onChange={({ target: { value } }: any) =>
+                                  field.onChange({
+                                    target: {
+                                      name: `byggekostnader`,
+                                      value: value.replace(/\D/g, "")
+                                        ? new Intl.NumberFormat("no-NO").format(
+                                            Number(value.replace(/\D/g, ""))
+                                          )
+                                        : "",
+                                    },
+                                  })
+                                }
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <div className="w-[65%]">
                     <FormField
                       control={form.control}
@@ -705,7 +837,7 @@ export const PlotHusmodell: React.FC<{
             </div>
             <div id="submit">
               <Button
-                text="Lagre"
+                text="Neste"
                 className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                 type="submit"
               />
@@ -716,4 +848,4 @@ export const PlotHusmodell: React.FC<{
       </Form>
     </>
   );
-};
+});

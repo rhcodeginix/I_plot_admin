@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Kunden } from "./kunden";
 import { Banknote, ChevronRight, ScrollText, User } from "lucide-react";
 import { PlotHusmodell } from "./plotHusmodell";
@@ -61,6 +61,28 @@ export const BankleadsTabs = () => {
 
   const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
   const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
+
+  const kundenRef = useRef<any>(null);
+  const plotHusmodellRef = useRef<any>(null);
+  const projectAccountingRef = useRef<any>(null);
+
+  const validateBeforeTabChange = async (targetTabIndex: number) => {
+    if (activeTab === 0 && kundenRef.current) {
+      const isValid = await kundenRef.current.validateForm();
+      if (!isValid) return;
+    }
+    if (activeTab === 1 && plotHusmodellRef.current) {
+      const isValid = await plotHusmodellRef.current.validateForm();
+      if (!isValid) return;
+    }
+    if (activeTab === 2 && projectAccountingRef.current) {
+      const isValid = await projectAccountingRef.current.validateForm();
+      if (!isValid) return;
+    }
+
+    setActiveTab(targetTabIndex);
+  };
+
   return (
     <>
       <div>
@@ -217,9 +239,10 @@ export const BankleadsTabs = () => {
                       ? "font-semibold bg-[#7839EE] text-white"
                       : "text-[#4D4D4D]"
                   }`}
+                  
                   onClick={() => {
                     if (id) {
-                      setActiveTab(index);
+                      validateBeforeTabChange(index);
                     }
                   }}
                 >
@@ -229,9 +252,20 @@ export const BankleadsTabs = () => {
               ))}
             </div>
           </div>
-          {activeTab === 0 && <Kunden setActiveTab={setActiveTab} />}
-          {activeTab === 1 && <PlotHusmodell setActiveTab={setActiveTab} />}
-          {activeTab === 2 && <ProjectAccounting setActiveTab={setActiveTab} />}
+        
+          {activeTab === 0 && (
+            <Kunden ref={kundenRef} setActiveTab={setActiveTab} />
+          )}
+          {activeTab === 1 && (
+            <PlotHusmodell ref={plotHusmodellRef} setActiveTab={setActiveTab} />
+          )}
+          {activeTab === 2 && (
+            <ProjectAccounting
+              ref={projectAccountingRef}
+              setActiveTab={setActiveTab}
+            />
+          )}
+
           {activeTab === 3 && <Oppsummering setActiveTab={setActiveTab} />}
         </div>
       </div>

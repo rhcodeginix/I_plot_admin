@@ -1,6 +1,11 @@
 import { Trash2, UserRoundCheck } from "lucide-react";
 // import { Spinner } from "../../../components/Spinner";
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -79,9 +84,17 @@ const formSchema = z.object({
     .min(1, "Minst ett produkt er påkrevd."),
 });
 
-export const Kunden: React.FC<{
-  setActiveTab: any;
-}> = ({ setActiveTab }) => {
+// export const Kunden: React.FC<{
+//   setActiveTab: any;
+// }> = ({ setActiveTab }) => {
+export type KundenHandle = {
+  validateForm: () => Promise<boolean>;
+};
+
+export const Kunden = forwardRef<
+  KundenHandle,
+  { setActiveTab: (tab: number) => void }
+>(({ setActiveTab }, ref) => {
   const location = useLocation();
   const navigate = useNavigate();
   const pathSegments = location.pathname.split("/");
@@ -158,7 +171,7 @@ export const Kunden: React.FC<{
     };
 
     getData();
-  }, [form, id, phoneCallApiData]);
+  }, [id]);
 
   const addProduct = () => {
     append({
@@ -243,6 +256,19 @@ export const Kunden: React.FC<{
       });
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    validateForm: async () => {
+      let isValid = false;
+
+      await form.handleSubmit(async (data) => {
+        await onSubmit(data);
+        isValid = true;
+      })();
+
+      return isValid;
+    },
+  }));
 
   const handlePhoneChange = async (phoneNumber: string, index: number) => {
     if (phoneNumber) {
@@ -682,7 +708,7 @@ export const Kunden: React.FC<{
             </div>
             <div id="submit">
               <Button
-                text="Lagre"
+                text="Neste"
                 className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                 type="submit"
               />
@@ -693,4 +719,4 @@ export const Kunden: React.FC<{
       </Form>
     </>
   );
-};
+});

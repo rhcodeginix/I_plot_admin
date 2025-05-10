@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import Ic_info_circle from "../../../assets/images/Ic_info_circle.svg";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../config/firebaseConfig";
@@ -18,7 +23,7 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import toast from "react-hot-toast";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref as reff, uploadBytes } from "firebase/storage";
 import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
@@ -43,9 +48,17 @@ const formSchema = z.object({
     .optional(),
 });
 
-export const ProjectAccounting: React.FC<{
-  setActiveTab: any;
-}> = ({ setActiveTab }) => {
+// export const ProjectAccounting: React.FC<{
+//   setActiveTab: any;
+// }> = ({ setActiveTab }) => {
+export type ProjectAccountingHandle = {
+  validateForm: () => Promise<boolean>;
+};
+
+export const ProjectAccounting = forwardRef<
+  ProjectAccountingHandle,
+  { setActiveTab: (tab: number) => void }
+>(({ setActiveTab }, ref) => {
   const form = useForm<any>({
     resolver: zodResolver(formSchema),
   });
@@ -135,7 +148,7 @@ export const ProjectAccounting: React.FC<{
       const fileType = "documents";
       const timestamp = Date.now();
       const fileName = `${timestamp}_${file.name}`;
-      const storageRef = ref(storage, `${fileType}/${fileName}`);
+      const storageRef = reff(storage, `${fileType}/${fileName}`);
 
       try {
         const snapshot = await uploadBytes(storageRef, file);
@@ -402,6 +415,19 @@ export const ProjectAccounting: React.FC<{
 
   const formattedNumber = totalPrisOfTomtekost.toLocaleString("nb-NO");
 
+  useImperativeHandle(ref, () => ({
+    validateForm: async () => {
+      let isValid = false;
+
+      await form.handleSubmit(async (data) => {
+        await onSubmit(data);
+        isValid = true;
+      })();
+
+      return isValid;
+    },
+  }));
+
   return (
     <>
       {loading ? (
@@ -612,56 +638,7 @@ export const ProjectAccounting: React.FC<{
                             </div>
                           );
                         })}
-                        {newByggekostList?.map((item: any, index: number) => {
-                          const isEditing = editingPriceIndex === index;
 
-                          return (
-                            <div
-                              className="flex items-center gap-2 justify-between"
-                              key={index}
-                            >
-                              <div className="flex items-center gap-2">
-                                <img src={Ic_info_circle} alt="icon" />
-                                <p className="text-gray text-sm font-medium">
-                                  {item?.Headline}
-                                </p>
-                              </div>
-
-                              {isEditing ? (
-                                <input
-                                  inputMode="numeric"
-                                  type="text"
-                                  value={editedPrices[index] ?? item.pris ?? ""}
-                                  onChange={(e) => {
-                                    setEditedPrices({
-                                      ...editedPrices,
-                                      [index]: e.target.value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(
-                                              e.target.value.replace(/\D/g, "")
-                                            )
-                                          )
-                                        : "",
-                                    });
-                                  }}
-                                  onBlur={() => setEditingPriceIndex(null)}
-                                  className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
-                                />
-                              ) : (
-                                <h4
-                                  className="text-black font-medium text-base cursor-pointer"
-                                  onClick={() => setEditingPriceIndex(index)}
-                                >
-                                  {editedPrices[index]
-                                    ? `${editedPrices[index]} NOK`
-                                    : item?.pris
-                                    ? `${item.pris} NOK`
-                                    : "inkl. i tilbud"}
-                                </h4>
-                              )}
-                            </div>
-                          );
-                        })}
                         <div className="bg-[#F9F9FB] flex items-center justify-between gap-2 p-2">
                           <div className="flex items-center gap-2">
                             <img src={Ic_info_circle} alt="icon" />
@@ -675,6 +652,56 @@ export const ProjectAccounting: React.FC<{
                         </div>
                       </div>
                     )}
+                    {newByggekostList?.map((item: any, index: number) => {
+                      const isEditing = editingPriceIndex === index;
+
+                      return (
+                        <div
+                          className="flex items-center gap-2 justify-between"
+                          key={index}
+                        >
+                          <div className="flex items-center gap-2">
+                            <img src={Ic_info_circle} alt="icon" />
+                            <p className="text-gray text-sm font-medium">
+                              {item?.Headline}
+                            </p>
+                          </div>
+
+                          {isEditing ? (
+                            <input
+                              inputMode="numeric"
+                              type="text"
+                              value={editedPrices[index] ?? item.pris ?? ""}
+                              onChange={(e) => {
+                                setEditedPrices({
+                                  ...editedPrices,
+                                  [index]: e.target.value.replace(/\D/g, "")
+                                    ? new Intl.NumberFormat("no-NO").format(
+                                        Number(
+                                          e.target.value.replace(/\D/g, "")
+                                        )
+                                      )
+                                    : "",
+                                });
+                              }}
+                              onBlur={() => setEditingPriceIndex(null)}
+                              className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
+                            />
+                          ) : (
+                            <h4
+                              className="text-black font-medium text-base cursor-pointer"
+                              onClick={() => setEditingPriceIndex(index)}
+                            >
+                              {editedPrices[index]
+                                ? `${editedPrices[index]} NOK`
+                                : item?.pris
+                                ? `${item.pris} NOK`
+                                : "inkl. i tilbud"}
+                            </h4>
+                          )}
+                        </div>
+                      );
+                    })}
                     <div className="border-t border-gray2"></div>
                     <div className="flex items-center gap-2 justify-between">
                       <div className="flex items-center gap-2">
@@ -994,7 +1021,7 @@ export const ProjectAccounting: React.FC<{
                     </div>
 
                     <Button
-                      text="Lagre"
+                      text="Neste"
                       className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                       onClick={handleSubmitNewCost}
                     />
@@ -1007,4 +1034,4 @@ export const ProjectAccounting: React.FC<{
       )}
     </>
   );
-};
+});

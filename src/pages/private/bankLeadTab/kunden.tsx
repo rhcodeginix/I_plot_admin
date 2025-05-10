@@ -71,12 +71,8 @@ const formSchema = z.object({
           .string()
           .email({ message: "Vennligst skriv inn en gyldig e-postadresse." })
           .min(1, { message: "E-posten må være på minst 2 tegn." }),
-        dato: z.string().min(1, {
-          message: "Fødselsdato må bestå av minst 2 tegn.",
-        }),
-        Personnummer: z.string().min(1, {
-          message: "Personnummer må bestå av minst 2 tegn.",
-        }),
+        dato: z.string().optional(),
+        Personnummer: z.string().optional(),
         Kundetype: z.string().min(1, { message: "Kundetype må spesifiseres." }),
       })
     )
@@ -222,7 +218,7 @@ export const Kunden: React.FC<{
         toast.success("Updated successfully", {
           position: "top-right",
         });
-        navigate(`/bank-leads/${uniqueId}`);
+        navigate(`/edit-bank-leads/${uniqueId}`);
         setActiveTab(1);
       } else {
         await setDoc(docRef, {
@@ -237,7 +233,7 @@ export const Kunden: React.FC<{
           supplierId: email !== "andre.finger@gmail.com" ? permission : null,
         });
         toast.success("Added successfully", { position: "top-right" });
-        navigate(`/bank-leads/${uniqueId}`);
+        navigate(`/edit-bank-leads/${uniqueId}`);
         setActiveTab(1);
       }
     } catch (error) {

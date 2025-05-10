@@ -305,7 +305,7 @@ export const ProjectAccounting: React.FC<{
       });
       toast.success("Updated successfully", { position: "top-right" });
 
-      navigate(`/bank-leads/${id}`);
+      navigate(`/edit-bank-leads/${id}`);
       setActiveTab(3);
     } catch (error) {
       console.error("Firestore operation failed:", error);

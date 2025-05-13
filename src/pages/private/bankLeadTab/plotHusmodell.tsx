@@ -50,7 +50,7 @@ const formSchema = z.object({
     Bruksnummer: z.string().min(1, "Bruksnummer er påkrevd"),
     Seksjonsnummer: z.string().optional(),
     Festenummer: z.string().optional(),
-    alreadyHavePlot: z.string().optional(),
+    alreadyHavePlot: z.string().min(1, "Påkrevd"),
     Kommentar: z.string().min(1, {
       message: "Kommentar til banken må bestå av minst 1 tegn.",
     }),
@@ -233,7 +233,10 @@ export const PlotHusmodell = forwardRef<
       return isValid;
     },
   }));
-
+  const alreadyHavePlotError =
+    form.formState.errors?.plot &&
+    "alreadyHavePlot" in form.formState.errors.plot &&
+    form.formState.errors.plot.alreadyHavePlot;
   return (
     <>
       <Form {...form}>
@@ -539,50 +542,59 @@ export const PlotHusmodell = forwardRef<
                     />
                   </div>
                 </div>
-                <div className="flex items-center gap-2 justify-between">
-                  <p className={`font-semibold`}>
-                    Eier kunden tomten allerede?
-                  </p>
-                  <div className="flex gap-4 items-center">
-                    {[
-                      {
-                        label: "Ja",
-                        value: "Ja",
-                      },
-                      {
-                        label: "Nei",
-                        value: "Nei",
-                      },
-                    ].map((item: any, index: number) => (
-                      <div
-                        key={index}
-                        onClick={() => {
-                          form.setValue("plot.alreadyHavePlot", item.value);
-                        }}
-                        className={`border-2 rounded-lg p-[10px] w-[106px] cursor-pointer ${
-                          selectedPlotType === item.value
-                            ? "border-[#002776]"
-                            : "border-transparent"
-                        }`}
-                        style={{
-                          boxShadow:
-                            selectedPlotType === item.value
-                              ? ""
-                              : "0px 1px 4px 0px #27201D26",
-                        }}
-                      >
+                <div>
+                  <div className="flex items-center gap-2 justify-between">
+                    <p className={`font-semibold`}>
+                      Eier kunden tomten allerede?
+                    </p>
+                    <div className="flex gap-4 items-center">
+                      {[
+                        {
+                          label: "Ja",
+                          value: "Ja",
+                        },
+                        {
+                          label: "Nei",
+                          value: "Nei",
+                        },
+                      ].map((item: any, index: number) => (
                         <div
-                          className={`${
+                          key={index}
+                          onClick={() => {
+                            form.setValue("plot.alreadyHavePlot", item.value);
+                          }}
+                          className={`border-2 rounded-lg p-[10px] w-[106px] cursor-pointer ${
                             selectedPlotType === item.value
-                              ? "font-medium"
-                              : "text-[#4D4D4D] font-normal"
-                          } text-sm text-center font-medium`}
+                              ? "border-[#002776]"
+                              : "border-transparent"
+                          }`}
+                          style={{
+                            boxShadow:
+                              selectedPlotType === item.value
+                                ? ""
+                                : "0px 1px 4px 0px #27201D26",
+                          }}
                         >
-                          {item.label}
+                          <div
+                            className={`${
+                              selectedPlotType === item.value
+                                ? "font-medium"
+                                : "text-[#4D4D4D] font-normal"
+                            } text-sm text-center font-medium`}
+                          >
+                            {item.label}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
+
+                  {alreadyHavePlotError &&
+                    !form.watch("plot.alreadyHavePlot") && (
+                      <div className="text-red text-sm mt-2">
+                        {(alreadyHavePlotError as any).message}
+                      </div>
+                    )}
                 </div>
                 <div className="flex gap-6">
                   <div className="w-[35%]">

@@ -4,7 +4,7 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import Ic_info_circle from "../../../assets/images/Ic_info_circle.svg";
+// import Ic_info_circle from "../../../assets/images/Ic_info_circle.svg";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../config/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -27,7 +27,7 @@ import { getDownloadURL, ref as reff, uploadBytes } from "firebase/storage";
 import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
-import { Pencil, Plus } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { fetchBankLeadData } from "../../../lib/utils";
 
 const formSchema = z.object({
@@ -225,7 +225,6 @@ export const ProjectAccounting = forwardRef<
 
   const [newCost, setNewCost] = useState({
     Headline: "",
-    MerInformasjon: "",
     pris: "",
     IncludingOffer: false,
   });
@@ -235,7 +234,6 @@ export const ProjectAccounting = forwardRef<
     setShowModal(true);
     setNewCost({
       Headline: "",
-      MerInformasjon: "",
       pris: "",
       IncludingOffer: false,
     });
@@ -253,9 +251,53 @@ export const ProjectAccounting = forwardRef<
   const [newByggekostList, setNewByggekostList] = useState<any>([]);
   const [apiData, setApiData] = useState<any>();
 
+  const [TomtekostHusmodell, setTomtekostHusmodell] = useState<any>({
+    Tomtekost: [],
+  });
+
+  useEffect(() => {
+    if (husmodellData?.Tomtekost) {
+      const data = {
+        IncludingOffer: false,
+        pris: "0",
+        TomtekostID: new Date().toISOString().split("T")[0],
+        Headline: "Tomtekjøp",
+      };
+
+      setTomtekostHusmodell((prevState: any) => ({
+        Tomtekost: [...prevState.Tomtekost, ...husmodellData?.Tomtekost, data],
+      }));
+    }
+  }, []);
+
+  const [ByggekostnaderHusmodell, setByggekostnaderHusmodell] = useState<any>({
+    Byggekostnader: [],
+  });
+
+  useEffect(() => {
+    if (husmodellData?.Byggekostnader) {
+      const data = {
+        IncludingOffer: false,
+        pris: "0",
+        ByggekostnaderID: new Date().toISOString().split("T")[0],
+        Headline: "Kundens tilvalg",
+      };
+
+      setByggekostnaderHusmodell((prevState: any) => ({
+        Byggekostnader: [
+          ...prevState.Byggekostnader,
+          ...husmodellData?.Byggekostnader,
+          data,
+        ],
+      }));
+    }
+  }, [husmodellData?.Byggekostnader]);
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const updatedByggekostnader = (
-      apiData ? apiData?.Byggekostnader : husmodellData?.Byggekostnader || []
+      apiData
+        ? apiData?.Byggekostnader
+        : ByggekostnaderHusmodell?.Byggekostnader || []
     ).map((item: any, index: number) => ({
       ...item,
       pris: editedPrices[index] ? editedPrices[index] : item.pris,
@@ -268,7 +310,7 @@ export const ProjectAccounting = forwardRef<
     }));
 
     const updatedTomtekost = (
-      apiData ? apiData?.Tomtekost : husmodellData?.Tomtekost || []
+      apiData ? apiData?.Tomtekost : TomtekostHusmodell?.Tomtekost || []
     ).map((item: any, index: number) => ({
       ...item,
       pris: editedPricesTom[index] ? editedPricesTom[index] : item.pris,
@@ -283,7 +325,7 @@ export const ProjectAccounting = forwardRef<
     }));
 
     const updatedHusmodellData = {
-      ...(apiData ? apiData?.Tomtekost : husmodellData),
+      ...(apiData ? apiData?.Tomtekost : TomtekostHusmodell),
       Byggekostnader: [...updatedByggekostnader, ...newByggekostnaderFormatted],
       Tomtekost: [...updatedTomtekost, ...newTomtekostFormatted],
     };
@@ -375,7 +417,7 @@ export const ProjectAccounting = forwardRef<
     };
 
     getData();
-  }, [form, id, houseId, apiData]);
+  }, [form, id, houseId]);
 
   const parsePrice = (value: any): number => {
     if (!value) return 0;
@@ -385,8 +427,8 @@ export const ProjectAccounting = forwardRef<
   };
 
   const Byggekostnader =
-    apiData?.Byggekostnader ?? husmodellData?.Byggekostnader ?? [];
-  const Tomtekost = apiData?.Tomtekost ?? husmodellData?.Tomtekost ?? [];
+    apiData?.Byggekostnader ?? ByggekostnaderHusmodell?.Byggekostnader ?? [];
+  const Tomtekost = apiData?.Tomtekost ?? TomtekostHusmodell?.Tomtekost ?? [];
 
   const totalPrisOfByggekostnader = [
     ...Byggekostnader,
@@ -552,11 +594,12 @@ export const ProjectAccounting = forwardRef<
                   <div className="flex flex-col gap-5">
                     {(apiData
                       ? apiData?.Byggekostnader.length > 0
-                      : husmodellData?.Byggekostnader?.length > 0) && (
+                      : ByggekostnaderHusmodell?.Byggekostnader?.length >
+                        0) && (
                       <div className="flex flex-col gap-5">
                         {(apiData
                           ? apiData?.Byggekostnader
-                          : husmodellData?.Byggekostnader
+                          : ByggekostnaderHusmodell?.Byggekostnader
                         )?.map((item: any, index: number) => {
                           const isEditing = editingPriceIndex === index;
                           const isHeadlineEditing =
@@ -568,7 +611,7 @@ export const ProjectAccounting = forwardRef<
                               key={index}
                             >
                               <div className="flex items-center gap-2">
-                                <img src={Ic_info_circle} alt="icon" />
+                                {/* <img src={Ic_info_circle} alt="icon" /> */}
                                 {/* <p className="text-gray text-sm font-medium">
                                   {item?.Headline}
                                 </p> */}
@@ -603,53 +646,90 @@ export const ProjectAccounting = forwardRef<
                                 )}
                               </div>
 
-                              {isEditing ? (
-                                <input
-                                  inputMode="numeric"
-                                  type="text"
-                                  value={editedPrices[index] ?? item.pris ?? ""}
-                                  onChange={(e) => {
-                                    setEditedPrices({
-                                      ...editedPrices,
-                                      [index]: e.target.value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(
-                                              e.target.value.replace(/\D/g, "")
+                              <div className="flex items-center gap-3">
+                                {isEditing ? (
+                                  <input
+                                    inputMode="numeric"
+                                    type="text"
+                                    value={
+                                      editedPrices[index] ?? item.pris ?? ""
+                                    }
+                                    onChange={(e) => {
+                                      setEditedPrices({
+                                        ...editedPrices,
+                                        [index]: e.target.value.replace(
+                                          /\D/g,
+                                          ""
+                                        )
+                                          ? new Intl.NumberFormat(
+                                              "no-NO"
+                                            ).format(
+                                              Number(
+                                                e.target.value.replace(
+                                                  /\D/g,
+                                                  ""
+                                                )
+                                              )
                                             )
-                                          )
-                                        : "",
-                                    });
+                                          : "",
+                                      });
+                                    }}
+                                    onBlur={() => setEditingPriceIndex(null)}
+                                    className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
+                                  />
+                                ) : (
+                                  <h4
+                                    className="text-black font-medium text-base cursor-pointer"
+                                    onClick={() => setEditingPriceIndex(index)}
+                                  >
+                                    {editedPrices[index]
+                                      ? `${editedPrices[index]} NOK`
+                                      : item?.pris
+                                      ? `${item.pris} NOK`
+                                      : "inkl. i tilbud"}
+                                  </h4>
+                                )}
+                                <Trash2
+                                  className="text-red w-5 h-5 cursor-pointer"
+                                  onClick={() => {
+                                    const indexToDelete = index;
+                                    if (apiData) {
+                                      const updatedList =
+                                        apiData.Byggekostnader.filter(
+                                          (_: any, index: number) =>
+                                            index !== indexToDelete
+                                        );
+                                      setApiData({
+                                        ...apiData,
+                                        Byggekostnader: updatedList,
+                                      });
+                                    } else {
+                                      const updatedList =
+                                        ByggekostnaderHusmodell?.Byggekostnader?.filter(
+                                          (_: any, index: number) =>
+                                            index !== indexToDelete
+                                        ) || [];
+
+                                      setByggekostnaderHusmodell({
+                                        ...ByggekostnaderHusmodell,
+                                        Byggekostnader: updatedList,
+                                      });
+                                    }
+
+                                    const newEditedPrices = { ...editedPrices };
+                                    const newEditedHeadlines = {
+                                      ...editedHeadlines,
+                                    };
+                                    delete newEditedPrices[indexToDelete];
+                                    delete newEditedHeadlines[indexToDelete];
+                                    setEditedPrices(newEditedPrices);
+                                    setEditedHeadlines(newEditedHeadlines);
                                   }}
-                                  onBlur={() => setEditingPriceIndex(null)}
-                                  className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
                                 />
-                              ) : (
-                                <h4
-                                  className="text-black font-medium text-base cursor-pointer"
-                                  onClick={() => setEditingPriceIndex(index)}
-                                >
-                                  {editedPrices[index]
-                                    ? `${editedPrices[index]} NOK`
-                                    : item?.pris
-                                    ? `${item.pris} NOK`
-                                    : "inkl. i tilbud"}
-                                </h4>
-                              )}
+                              </div>
                             </div>
                           );
                         })}
-
-                        <div className="bg-[#F9F9FB] flex items-center justify-between gap-2 p-2">
-                          <div className="flex items-center gap-2">
-                            <img src={Ic_info_circle} alt="icon" />
-                            <p className="text-gray text-sm font-medium">
-                              Dine tilvalg
-                            </p>
-                          </div>
-                          <div className="border border-gray2 rounded-lg bg-white py-[10px] px-[14px] flex items-center justify-center text-darkBlack font-medium text-base">
-                            221.800 NOK
-                          </div>
-                        </div>
                       </div>
                     )}
                     {newByggekostList?.map((item: any, index: number) => {
@@ -661,51 +741,71 @@ export const ProjectAccounting = forwardRef<
                           key={index}
                         >
                           <div className="flex items-center gap-2">
-                            <img src={Ic_info_circle} alt="icon" />
+                            {/* <img src={Ic_info_circle} alt="icon" /> */}
                             <p className="text-gray text-sm font-medium">
                               {item?.Headline}
                             </p>
                           </div>
 
-                          {isEditing ? (
-                            <input
-                              inputMode="numeric"
-                              type="text"
-                              value={editedPrices[index] ?? item.pris ?? ""}
-                              onChange={(e) => {
-                                setEditedPrices({
-                                  ...editedPrices,
-                                  [index]: e.target.value.replace(/\D/g, "")
-                                    ? new Intl.NumberFormat("no-NO").format(
-                                        Number(
-                                          e.target.value.replace(/\D/g, "")
+                          <div className="flex items-center gap-3">
+                            {isEditing ? (
+                              <input
+                                inputMode="numeric"
+                                type="text"
+                                value={editedPrices[index] ?? item.pris ?? ""}
+                                onChange={(e) => {
+                                  setEditedPrices({
+                                    ...editedPrices,
+                                    [index]: e.target.value.replace(/\D/g, "")
+                                      ? new Intl.NumberFormat("no-NO").format(
+                                          Number(
+                                            e.target.value.replace(/\D/g, "")
+                                          )
                                         )
-                                      )
-                                    : "",
-                                });
+                                      : "",
+                                  });
+                                }}
+                                onBlur={() => setEditingPriceIndex(null)}
+                                className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
+                              />
+                            ) : (
+                              <h4
+                                className="text-black font-medium text-base cursor-pointer"
+                                onClick={() => setEditingPriceIndex(index)}
+                              >
+                                {editedPrices[index]
+                                  ? `${editedPrices[index]} NOK`
+                                  : item?.pris
+                                  ? `${item.pris} NOK`
+                                  : "inkl. i tilbud"}
+                              </h4>
+                            )}
+                            <Trash2
+                              className="text-red w-5 h-5 cursor-pointer"
+                              onClick={() => {
+                                const updatedList = newByggekostList.filter(
+                                  (_: any, idx: number) => idx !== index
+                                );
+                                setNewByggekostList(updatedList);
+
+                                const newEditedPrices = { ...editedPrices };
+                                const newEditedHeadlines = {
+                                  ...editedHeadlines,
+                                };
+                                delete newEditedPrices[index];
+                                delete newEditedHeadlines[index];
+                                setEditedPrices(newEditedPrices);
+                                setEditedHeadlines(newEditedHeadlines);
                               }}
-                              onBlur={() => setEditingPriceIndex(null)}
-                              className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
                             />
-                          ) : (
-                            <h4
-                              className="text-black font-medium text-base cursor-pointer"
-                              onClick={() => setEditingPriceIndex(index)}
-                            >
-                              {editedPrices[index]
-                                ? `${editedPrices[index]} NOK`
-                                : item?.pris
-                                ? `${item.pris} NOK`
-                                : "inkl. i tilbud"}
-                            </h4>
-                          )}
+                          </div>
                         </div>
                       );
                     })}
                     <div className="border-t border-gray2"></div>
                     <div className="flex items-center gap-2 justify-between">
                       <div className="flex items-center gap-2">
-                        <img src={Ic_info_circle} alt="icon" />
+                        {/* <img src={Ic_info_circle} alt="icon" /> */}
                         <p className="text-gray text-lg font-bold">
                           Sum byggkostnader
                         </p>
@@ -739,25 +839,12 @@ export const ProjectAccounting = forwardRef<
                     <Pencil className="text-primary absolute top-5 right-4" />
                   </div>
                   <div className="flex flex-col gap-5">
-                    <div className="flex items-center gap-2 justify-between">
-                      <div className="flex items-center gap-2">
-                        <img src={Ic_info_circle} alt="icon" />
-                        <p className="text-gray text-sm font-medium">
-                          Tomtekjøp
-                        </p>
-                      </div>
-                      <input
-                        type="text"
-                        className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[10px] px-[14px] w-[140px]"
-                        placeholder="Enter"
-                      />
-                    </div>
                     {(apiData
                       ? apiData?.Tomtekost.length > 0
-                      : husmodellData?.Tomtekost.length > 0) &&
+                      : TomtekostHusmodell?.Tomtekost.length > 0) &&
                       (apiData
                         ? apiData?.Tomtekost
-                        : husmodellData?.Tomtekost
+                        : TomtekostHusmodell?.Tomtekost
                       )?.map((item: any, index: number) => {
                         const isEditing = editingPriceTomIndex === index;
                         const isHeadlineEditing =
@@ -768,10 +855,8 @@ export const ProjectAccounting = forwardRef<
                             key={index}
                           >
                             <div className="flex items-center gap-2">
-                              <img src={Ic_info_circle} alt="icon" />
-                              {/* <p className="text-gray text-sm font-medium">
-                                {item?.Headline}
-                              </p> */}
+                              {/* <img src={Ic_info_circle} alt="icon" /> */}
+
                               {isHeadlineEditing ? (
                                 <input
                                   type="text"
@@ -804,9 +889,6 @@ export const ProjectAccounting = forwardRef<
                                 </p>
                               )}
                             </div>
-                            {/* <h4 className="text-black font-medium text-base">
-                          {item?.pris ? `${item.pris} NOK` : "inkl. i tilbud"}
-                        </h4> */}
                             {isEditing ? (
                               <input
                                 inputMode="numeric"
@@ -854,44 +936,66 @@ export const ProjectAccounting = forwardRef<
                           key={index}
                         >
                           <div className="flex items-center gap-2">
-                            <img src={Ic_info_circle} alt="icon" />
+                            {/* <img src={Ic_info_circle} alt="icon" /> */}
                             <p className="text-gray text-sm font-medium">
                               {item?.Headline}
                             </p>
                           </div>
-
-                          {isEditing ? (
-                            <input
-                              inputMode="numeric"
-                              type="text"
-                              value={editedPrices[index] ?? item.pris ?? ""}
-                              onChange={(e) => {
-                                setEditedPrices({
-                                  ...editedPrices,
-                                  [index]: e.target.value.replace(/\D/g, "")
-                                    ? new Intl.NumberFormat("no-NO").format(
-                                        Number(
-                                          e.target.value.replace(/\D/g, "")
+                          <div className="flex items-center gap-3">
+                            {isEditing ? (
+                              <input
+                                inputMode="numeric"
+                                type="text"
+                                value={
+                                  editedPricesTom[index] ?? item.pris ?? ""
+                                }
+                                onChange={(e) => {
+                                  setEditedPricesTom({
+                                    ...editedPricesTom,
+                                    [index]: e.target.value.replace(/\D/g, "")
+                                      ? new Intl.NumberFormat("no-NO").format(
+                                          Number(
+                                            e.target.value.replace(/\D/g, "")
+                                          )
                                         )
-                                      )
-                                    : "",
-                                });
+                                      : "",
+                                  });
+                                }}
+                                onBlur={() => setEditingPriceIndex(null)}
+                                className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
+                              />
+                            ) : (
+                              <h4
+                                className="text-black font-medium text-base cursor-pointer"
+                                onClick={() => setEditingPriceIndex(index)}
+                              >
+                                {editedPricesTom[index]
+                                  ? `${editedPricesTom[index]} NOK`
+                                  : item?.pris
+                                  ? `${item.pris} NOK`
+                                  : "inkl. i tilbud"}
+                              </h4>
+                            )}
+
+                            <Trash2
+                              className="text-red w-5 h-5 cursor-pointer"
+                              onClick={() => {
+                                const updatedList = newTomtekostList.filter(
+                                  (_: any, idx: number) => idx !== index
+                                );
+                                setNewTomtekostList(updatedList);
+
+                                const newEditedPrices = { ...editedPricesTom };
+                                const newEditedHeadlines = {
+                                  ...editedHeadlines,
+                                };
+                                delete newEditedPrices[index];
+                                delete newEditedHeadlines[index];
+                                setEditedPricesTom(newEditedPrices);
+                                setEditedHeadlinesTom(newEditedHeadlines);
                               }}
-                              onBlur={() => setEditingPriceIndex(null)}
-                              className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
                             />
-                          ) : (
-                            <h4
-                              className="text-black font-medium text-base cursor-pointer"
-                              onClick={() => setEditingPriceIndex(index)}
-                            >
-                              {editedPrices[index]
-                                ? `${editedPrices[index]} NOK`
-                                : item?.pris
-                                ? `${item.pris} NOK`
-                                : "inkl. i tilbud"}
-                            </h4>
-                          )}
+                          </div>
                         </div>
                       );
                     })}
@@ -899,7 +1003,7 @@ export const ProjectAccounting = forwardRef<
                     <div className="border-t border-gray2"></div>
                     <div className="flex items-center gap-2 justify-between">
                       <div className="flex items-center gap-2">
-                        <img src={Ic_info_circle} alt="icon" />
+                        {/* <img src={Ic_info_circle} alt="icon" /> */}
                         <p className="text-gray text-lg font-bold">
                           Sum tomtekostnader
                         </p>
@@ -978,22 +1082,14 @@ export const ProjectAccounting = forwardRef<
                   </h2>
                   <input
                     type="text"
-                    placeholder="Headline"
+                    placeholder="Tittel"
                     value={newCost.Headline}
                     onChange={(e) =>
                       setNewCost({ ...newCost, Headline: e.target.value })
                     }
                     className="w-full mb-2 border border-gray1 p-2 rounded"
                   />
-                  <input
-                    type="text"
-                    placeholder="Mer Informasjon"
-                    value={newCost.MerInformasjon}
-                    onChange={(e) =>
-                      setNewCost({ ...newCost, MerInformasjon: e.target.value })
-                    }
-                    className="w-full mb-2 border border-gray1 p-2 rounded"
-                  />
+
                   <input
                     type="text"
                     placeholder="Pris"
@@ -1021,7 +1117,7 @@ export const ProjectAccounting = forwardRef<
                     </div>
 
                     <Button
-                      text="Neste"
+                      text="Lagre"
                       className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                       onClick={handleSubmitNewCost}
                     />

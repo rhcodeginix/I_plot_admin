@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Loader2, Pencil, Trash } from "lucide-react";
 import {
@@ -30,11 +29,11 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Button from "../../../components/common/button";
 import Modal from "../../../components/common/modal";
-import { fetchAdminDataByEmail, fetchHusmodellData } from "../../../lib/utils";
+import { fetchAdminDataByEmail } from "../../../lib/utils";
 
 export const BankTable = () => {
   const [page, setPage] = useState(1);
@@ -123,74 +122,132 @@ export const BankTable = () => {
     setShowConfirm(true);
   };
 
-  const getData = async (id: string) => {
-    const data = await fetchHusmodellData(id);
-    if (data) {
-      return data;
-    }
-  };
-
   const columns = useMemo<ColumnDef<any>[]>(
     () =>
       [
         {
-          accessorKey: "husmodell",
-          header: "Husmodell",
-          cell: ({ row }: any) => {
-            const [houseData, setHouseData] = useState<any>(null);
-
-            useEffect(() => {
-              const fetchData = async () => {
-                const data = await getData(
-                  row.original?.ProjectAccount?.houseId
-                );
-                setHouseData(data);
-              };
-              fetchData();
-            }, [row.original]);
-            return (
-              <>
-                {!row.original?.ProjectAccount?.houseId ? (
-                  "-"
-                ) : (
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={houseData?.Husdetaljer?.photo}
-                      alt="Husmodell"
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <p className="font-medium text-sm text-purple">
-                      {houseData?.Husdetaljer?.husmodell_name}
-                    </p>
-                  </div>
-                )}
-              </>
-            );
-          },
+          accessorKey: "id",
+          header: "Id",
+          cell: ({ row }: any) => (
+            <Link
+              to={`/bank-leads-detail/${row.original?.id}`}
+              className="text-sm text-darkBlack"
+            >
+              #{row.original?.id?.substring(0, 4)}...
+            </Link>
+          ),
         },
         {
-          accessorKey: "Laget av",
-          header: "Laget av",
+          accessorKey: "name",
+          header: "Navn",
           cell: ({ row }: any) => (
-            <div className="flex items-center gap-3">
-              <img
-                src={row.original?.createDataBy?.photo}
-                alt="Husmodell"
-                className="w-8 h-8 rounded-full"
-              />
-              <p className="font-medium text-sm text-purple">
-                {row.original?.createDataBy?.name}
-              </p>
+            <div className="flex items-center text-sm text-darkBlack w-max">
+              {row.original?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
+              {row.original?.Kunden?.Kundeinformasjon[0]?.l_name}
             </div>
           ),
         },
         {
-          accessorKey: "Sistendret",
-          header: "Sist endret",
+          accessorKey: "mobilnummer",
+          header: "Mobilnummer",
           cell: ({ row }: any) => (
-            <p className="text-sm font-semibold text-black">
-              {row.original.updatedAt}
+            <div className="flex items-center text-sm text-darkBlack">
+              {row.original?.Kunden?.Kundeinformasjon[0]?.mobileNummer}
+            </div>
+          ),
+        },
+        {
+          accessorKey: "EPost",
+          header: "E-post",
+          cell: ({ row }: any) => (
+            <div className="flex items-center text-sm text-darkBlack">
+              {row.original?.Kunden?.Kundeinformasjon[0]?.EPost}
+            </div>
+          ),
+        },
+        {
+          accessorKey: "Kundetype",
+          header: "Kundetype",
+          cell: ({ row }: any) => (
+            <div className="flex items-center text-sm text-darkBlack">
+              {row.original?.Kunden?.Kundeinformasjon[0]?.Kundetype}
+            </div>
+          ),
+        },
+        {
+          accessorKey: "Lead sendt videre",
+          header: "Lead sendt videre",
+          cell: ({ row }: any) => (
+            <p className="text-sm font-semibold text-black w-max">
+              {row.original.createdAt}
             </p>
+          ),
+        },
+        {
+          accessorKey: "Tilbudspris",
+          header: "Tilbudspris",
+          cell: ({ row }: any) => {
+            const projectAccount = row.original?.ProjectAccount?.husmodellData;
+
+            const parsePrice = (value: any): number => {
+              if (!value) return 0;
+              return parseFloat(
+                String(value)
+                  .replace(/\s/g, "")
+                  .replace(/\./g, "")
+                  .replace(",", ".")
+              );
+            };
+
+            const Byggekostnader = projectAccount?.Byggekostnader ?? [];
+            const Tomtekost = projectAccount?.Tomtekost ?? [];
+
+            const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
+              (acc: number, prod: any, index: number) => {
+                const value = prod?.pris;
+                return acc + parsePrice(value);
+              },
+              0
+            );
+
+            const totalPrisOfTomtekost = [...Tomtekost].reduce(
+              (acc: number, prod: any) => {
+                const value = prod.pris;
+                return acc + parsePrice(value);
+              },
+              0
+            );
+
+            const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
+            const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
+            return (
+              <p className="text-sm font-semibold text-black w-max">
+                {formattedGrandTotal} NOK
+              </p>
+            );
+          },
+        },
+        {
+          accessorKey: "status",
+          header: "Status",
+          cell: ({ row }: any) => (
+            <>
+              {row.original.status === "Sent" ? (
+                <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
+                  {row.original.status}
+                </p>
+              ) : row.original.status === "Rejected" ? (
+                <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
+                  {row.original.status}
+                </p>
+              ) : (
+                row.original.status === "Approved" && (
+                  <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
+                    {row.original.status}
+                  </p>
+                )
+              )}
+            </>
           ),
         },
         {
@@ -322,7 +379,7 @@ export const BankTable = () => {
         </Table>
         <div className="flex justify-between items-center py-4 px-6 border-t border-gray2">
           <button
-            className="px-[14px] py-2 rounded-lg disabled:opacity-50 shadow-shadow1 border border-gray1 text-black font-semibold text-sm"
+            className="px-[14px] py-2 rounded-lg disabled:opacity-50 shadow-shadow1 border border-gray1 text-black text-sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >

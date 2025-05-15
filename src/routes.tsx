@@ -5,6 +5,7 @@ import {
   AddUsers,
   AllBankLeads,
   Bankleads,
+  BankLeadsDetails,
   BankleadsTabs,
   ConstructedPlot,
   ConstructedPlotDetail,
@@ -67,6 +68,7 @@ export const routes = createBrowserRouter([
       { path: "/add-bank-leads", element: <BankleadsTabs /> },
       { path: "/edit-bank-leads/*", element: <BankleadsTabs /> },
       { path: "/bank-leads", element: <AllBankLeads /> },
+      { path: "/bank-leads-detail/*", element: <BankLeadsDetails /> },
     ],
   },
 ]);

@@ -244,6 +244,7 @@ export const Kunden = forwardRef<
             name: createData?.name,
           },
           supplierId: email !== "andre.finger@gmail.com" ? permission : null,
+          status: "Sent",
         });
         toast.success("Added successfully", { position: "top-right" });
         navigate(`/edit-bank-leads/${uniqueId}`);
@@ -700,12 +701,11 @@ export const Kunden = forwardRef<
             </div>
           </div>
           <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-            <div className="w-1/2 sm:w-auto">
-              <Button
-                text="Tilbake"
-                className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-              />
-            </div>
+            <Button
+              text="Tilbake"
+              className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+              onClick={() => navigate("/bank-leads")}
+            />
             <div id="submit">
               <Button
                 text="Neste"

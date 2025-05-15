@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/common/button";
 import { UserRoundCheck } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
 import { Spinner } from "../../../components/Spinner";
 import { doc, getDoc } from "firebase/firestore";
@@ -15,7 +15,6 @@ export const Oppsummering: React.FC<{
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const [loading, setLoading] = useState(true);
   const [bankData, setBankData] = useState<any>();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!id) {
@@ -85,7 +84,7 @@ export const Oppsummering: React.FC<{
     totalPrisOfByggekostnader.toLocaleString("nb-NO");
 
   const totalPrisOfTomtekost = [...Tomtekost].reduce(
-    (acc: number, prod: any, index: number) => {
+    (acc: number, prod: any) => {
       const value = prod.pris;
       return acc + parsePrice(value);
     },
@@ -293,7 +292,7 @@ export const Oppsummering: React.FC<{
         <Button
           text="Send til bank"
           className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-          onClick={() => navigate("/bank-leads")}
+          onClick={() => setActiveTab(4)}
         />
       </div>
     </>

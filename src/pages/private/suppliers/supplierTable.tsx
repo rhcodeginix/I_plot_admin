@@ -176,7 +176,6 @@ export const SupplierTable = () => {
           header: "Produkter",
           cell: ({ row }: any) => (
             <p className="text-sm text-darkBlack">{row.original.Produkter}</p>
-            // <p className="text-sm text-darkBlack">6</p>
           ),
         },
         {

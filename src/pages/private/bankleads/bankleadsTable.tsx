@@ -28,7 +28,6 @@ import {
   fetchAdminDataByEmail,
   fetchSupplierData,
 } from "../../../lib/utils";
-// import GoogleMapComponent from "../../../components/ui/map";
 import NorkartMap from "../../../components/map";
 
 export const BankleadsTable = () => {

@@ -4,7 +4,6 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-// import Ic_info_circle from "../../../assets/images/Ic_info_circle.svg";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../config/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -48,9 +47,6 @@ const formSchema = z.object({
     .optional(),
 });
 
-// export const ProjectAccounting: React.FC<{
-//   setActiveTab: any;
-// }> = ({ setActiveTab }) => {
 export type ProjectAccountingHandle = {
   validateForm: () => Promise<boolean>;
 };

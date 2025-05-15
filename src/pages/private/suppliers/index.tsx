@@ -1,5 +1,4 @@
 import { Plus } from "lucide-react";
-// import Ic_download_cloud from "../../../assets/images/Ic_download_cloud.svg";
 import Button from "../../../components/common/button";
 import { SupplierTable } from "./supplierTable";
 import { useRef } from "react";
@@ -8,12 +7,6 @@ import toast from "react-hot-toast";
 
 export const Suppliers = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // const handleUploadClick = () => {
-  //   if (fileInputRef.current) {
-  //     fileInputRef.current.click();
-  //   }
-  // };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;

@@ -1,5 +1,4 @@
 import { MapPin, UserRoundCheck, X } from "lucide-react";
-// import { Spinner } from "../../../components/Spinner";
 import React, {
   forwardRef,
   useEffect,
@@ -71,9 +70,6 @@ const formSchema = z.object({
   }),
 });
 
-// export const PlotHusmodell: React.FC<{
-//   setActiveTab: any;
-// }> = ({ setActiveTab }) => {
 export type PlotHusmodellHandle = {
   validateForm: () => Promise<boolean>;
 };

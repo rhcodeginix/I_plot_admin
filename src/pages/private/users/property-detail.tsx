@@ -264,7 +264,6 @@ export const PropertyDetail = () => {
                           ) ?? [];
 
                         if (
-                          // data.length >= 1 &&
                           lamdaDataFromApi?.eiendomsInformasjon
                             ?.basisInformasjon?.areal_beregnet
                         ) {
@@ -298,7 +297,6 @@ export const PropertyDetail = () => {
                           ) ?? [];
 
                         if (
-                          // data.length >= 1 &&
                           askData?.bya_calculations?.results?.total_allowed_bya
                         ) {
                           const totalData = data
@@ -348,7 +346,6 @@ export const PropertyDetail = () => {
                           ) ?? [];
 
                         if (
-                          // data.length >= 1 &&
                           askData?.bya_calculations?.results?.total_allowed_bya
                         ) {
                           const totalData = data

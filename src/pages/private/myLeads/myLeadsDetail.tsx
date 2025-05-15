@@ -45,48 +45,9 @@ const formSchema = z.object({
   City: z
     .array(z.string().min(1, { message: "Ønsket bygget i må spesifiseres." }))
     .min(1, { message: "Minst én by må velges." }),
-  // LeadsNotat: z.string().min(1, {
-  //   message: "Lead Notat må bestå av minst 2 tegn.",
-  // }),
   Tildelt: z.string().min(1, { message: "Tildelt i must må spesifiseres." }),
 });
 
-// const HistorikkFormSchema = z
-//   .object({
-//     activeStep: z.number().min(0),
-//     Hurtigvalg: z.string().optional(),
-//     date: z.coerce.date().optional(),
-//     notat: z.string().optional(),
-//   })
-//   .superRefine((data, ctx) => {
-//     if (data.Hurtigvalg) {
-//       if (
-//         data.Hurtigvalg !== "Start prosess" &&
-//         data.Hurtigvalg !== "Email Sent" &&
-//         data.Hurtigvalg !== "Signert"
-//       ) {
-//         if (!data.date) {
-//           ctx.addIssue({
-//             path: ["date"],
-//             code: z.ZodIssueCode.custom,
-//             message: "Dato er påkrevd",
-//           });
-//         }
-//       }
-//       if (data.Hurtigvalg !== "Email Sent" && data.Hurtigvalg !== "Signert") {
-//         if (!data.notat || data.notat.trim().length < 2) {
-//           ctx.addIssue({
-//             path: ["notat"],
-//             code: z.ZodIssueCode.too_small,
-//             type: "string",
-//             minimum: 2,
-//             inclusive: true,
-//             message: "Notat må bestå av minst 2 tegn.",
-//           });
-//         }
-//       }
-//     }
-//   });
 export const MyLeadsDetail = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
@@ -325,18 +286,9 @@ export const MyLeadsDetail = () => {
 
   const options = [
     { label: "Førstegangsmøte", color: "#996CFF", textColor: "text-primary" },
-    // { label: "Email Sent", color: "#06BDEF", textColor: "text-[#008BB1]" },
-    // { label: "Ikke svar", color: "#EFA906", textColor: "text-[#A27200]" },
-    // { label: "Ring tilbake", color: "#277252", textColor: "text-[#277252]" },
-    // {
-    //   label: "Ikke interessert",
-    //   color: "#F04438",
-    //   textColor: "text-[#B42318]",
-    // },
     { label: "Start prosess", color: "#E46A00", textColor: "text-[#994700]" },
     { label: "Signert", color: "#0022E4", textColor: "text-[#001795]" },
   ];
-  // const HurtigvalgValue = HistorikkForm.watch("Hurtigvalg");
 
   const [logs, setLogs] = useState([]);
   const fetchLogs = async () => {
@@ -651,7 +603,6 @@ export const MyLeadsDetail = () => {
                 <div
                   key={index}
                   className="flex flex-col z-20 items-center w-[145px]"
-                  // onClick={() => setActiveStep(index)}
                 >
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center border-4 shadow-md ${getStepStyle(

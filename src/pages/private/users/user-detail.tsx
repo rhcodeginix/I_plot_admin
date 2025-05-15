@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import { db } from "../../../config/firebaseConfig";
 import { Spinner } from "../../../components/Spinner";
 import Img_line_bg from "../../../assets/images/Img_line_bg.png";
-// import GoogleMapComponent from "../../../components/ui/map";
 import NorkartMap from "../../../components/map";
 
 export const UserDetail = () => {

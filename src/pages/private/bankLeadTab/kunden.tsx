@@ -1,5 +1,4 @@
 import { Trash2, UserRoundCheck } from "lucide-react";
-// import { Spinner } from "../../../components/Spinner";
 import React, {
   forwardRef,
   useEffect,
@@ -84,9 +83,6 @@ const formSchema = z.object({
     .min(1, "Minst ett produkt er påkrevd."),
 });
 
-// export const Kunden: React.FC<{
-//   setActiveTab: any;
-// }> = ({ setActiveTab }) => {
 export type KundenHandle = {
   validateForm: () => Promise<boolean>;
 };

@@ -118,7 +118,6 @@ export const HusmodellerTable = () => {
         updatedAt: formatter.format(new Date()),
         Produkter: Math.max(oldSupplierData?.Produkter + 1),
       });
-      // await deleteDoc(doc(db, "house_model", id));
 
       const oldHouseModelRef = doc(db, "house_model", id);
       const oldHouseModelSnap = await getDoc(oldHouseModelRef);
@@ -133,7 +132,6 @@ export const HusmodellerTable = () => {
           .toLocaleString("sv-SE", { timeZone: "UTC" })
           .replace(",", "");
       };
-      // Create a new document with the same data but without 'id'
       const newHouseModelRef = collection(db, "house_model");
       await addDoc(newHouseModelRef, {
         ...oldHouseModelData,
@@ -260,10 +258,7 @@ export const HusmodellerTable = () => {
       {
         accessorKey: "kategori",
         header: "Kategori",
-        cell: ({ row }) => (
-          <p className="text-sm text-gray">Herskapelig</p>
-          // <p className="text-sm text-gray">{row.original.Kategori}</p>
-        ),
+        cell: ({ row }) => <p className="text-sm text-gray">Herskapelig</p>,
       },
       {
         accessorKey: "husdetaljer",

@@ -46,21 +46,8 @@ export const AddNewSubCat: React.FC<{
     const existingCategories =
       formData.getValues(`hovedkategorinavn.${activeTabData}.Kategorinavn`) ||
       [];
-    // setCategory((prev: any) => {
-    //   const updatedCategory = [...prev];
-    //   updatedCategory[activeTabData] = {
-    //     ...updatedCategory[activeTabData],
-    //     Kategorinavn: [...existingCategories, newSubCategory],
-    //   };
-    //   return updatedCategory;
-    // });
-    // formData.setValue(
-    //   `hovedkategorinavn.${activeTabData}.Kategorinavn`,
-    //   [...existingCategories, newSubCategory],
-    //   { shouldValidate: true }
-    // );
+
     if (editIndex !== null && existingCategories[editIndex]) {
-      // Edit existing
       const updatedCategories = [...existingCategories];
       updatedCategories[editIndex].navn = updatedName;
 
@@ -79,7 +66,6 @@ export const AddNewSubCat: React.FC<{
         { shouldValidate: true }
       );
     } else {
-      // Add new
       const newSubCategory = { navn: updatedName, produkter: [] };
       setCategory((prev: any) => {
         const updatedCategory = [...prev];

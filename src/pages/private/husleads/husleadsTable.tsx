@@ -28,7 +28,6 @@ import {
   fetchAdminDataByEmail,
   fetchSupplierData,
 } from "../../../lib/utils";
-// import GoogleMapComponent from "../../../components/ui/map";
 import NorkartMap from "../../../components/map";
 
 export const HusleadsTable = () => {
@@ -57,7 +56,6 @@ export const HusleadsTable = () => {
 
     try {
       let q;
-      // let q = query(collection(db, "leads"), where("Isopt", "==", true));
       if (email === "andre.finger@gmail.com") {
         q = query(collection(db, "leads"), where("Isopt", "==", true));
       } else {

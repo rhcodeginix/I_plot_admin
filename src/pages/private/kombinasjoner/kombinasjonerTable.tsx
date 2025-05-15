@@ -28,7 +28,6 @@ import {
   fetchAdminDataByEmail,
   fetchSupplierData,
 } from "../../../lib/utils";
-// import GoogleMapComponent from "../../../components/ui/map";
 import NorkartMap from "../../../components/map";
 
 export const KombinasjonerTable = () => {
@@ -56,7 +55,6 @@ export const KombinasjonerTable = () => {
     setIsLoading(true);
 
     try {
-      // let q = query(collection(db, "leads"), where("Isopt", "==", false));
       let leadFalse;
       if (email === "andre.finger@gmail.com") {
         leadFalse = query(collection(db, "leads"), where("Isopt", "==", false));

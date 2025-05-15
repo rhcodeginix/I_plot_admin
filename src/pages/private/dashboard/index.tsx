@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import Ic_filter from "../../../assets/images/Ic_filter.svg";
-// import Ic_dropdown_menu from "../../../assets/images/Ic_dropdown_menu.svg";
-// import Ic_green_up_arrow from "../../../assets/images/Ic_green_up_arrow.svg";
 import DatePickerComponent from "../../../components/ui/datepicker";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";

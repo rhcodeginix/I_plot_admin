@@ -25,9 +25,7 @@ export const Login = () => {
       .string()
       .email({ message: "Vennligst skriv inn en gyldig e-postadresse." })
       .min(1, { message: "E-postadresse er påkrevd." }),
-    // .refine((val) => val === "andre.finger@gmail.com", {
-    //   message: "E-post er feil.",
-    // }),
+
     password: z
       .string()
       .min(8, { message: "Passordet må være minst 8 tegn langt." })
@@ -41,7 +39,6 @@ export const Login = () => {
       .regex(/[@$!%*?&]/, {
         message: "Passordet må inneholde minst ett spesialtegn.",
       }),
-    // .refine((val) => val === "Admin@2025", { message: "Passordet er feil." }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({

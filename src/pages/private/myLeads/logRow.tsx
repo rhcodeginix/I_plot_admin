@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil } from "lucide-react"; // or use any other icon lib
+import { Pencil } from "lucide-react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 

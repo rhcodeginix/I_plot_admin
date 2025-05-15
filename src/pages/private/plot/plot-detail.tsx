@@ -12,7 +12,6 @@ import Ic_chevron_right from "../../../assets/images/Ic_chevron_right.svg";
 import Ic_check_green_icon from "../../../assets/images/Ic_check_green_icon.svg";
 import Img_line_bg from "../../../assets/images/Img_line_bg.png";
 import { formatDateToDDMMYYYY } from "../../../lib/utils";
-// import GoogleMapComponent from "../../../components/ui/map";
 import Eierinformasjon from "./Eierinformasjon";
 import NorkartMap from "../../../components/map";
 
@@ -281,7 +280,6 @@ export const PlotDetail = () => {
                           ) ?? [];
 
                         if (
-                          // data.length >= 1 &&
                           lamdaDataFromApi?.eiendomsInformasjon
                             ?.basisInformasjon?.areal_beregnet
                         ) {
@@ -315,7 +313,6 @@ export const PlotDetail = () => {
                           ) ?? [];
 
                         if (
-                          // data.length >= 1 &&
                           askData?.bya_calculations?.results?.total_allowed_bya
                         ) {
                           const totalData = data
@@ -365,7 +362,6 @@ export const PlotDetail = () => {
                           ) ?? [];
 
                         if (
-                          // data.length >= 1 &&
                           askData?.bya_calculations?.results?.total_allowed_bya
                         ) {
                           const totalData = data

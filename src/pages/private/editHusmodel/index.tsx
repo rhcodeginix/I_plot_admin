@@ -93,7 +93,6 @@ export const EditHouseModel = () => {
                 {...(location.pathname.startsWith("/edit-husmodell")
                   ? { setActiveTab }
                   : {})}
-                // setActiveTab={setActiveTab}
               />
             </div>
             {activeTab === 0 && <Husdetaljer setActiveTab={setActiveTab} />}

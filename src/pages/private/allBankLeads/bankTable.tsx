@@ -60,6 +60,26 @@ export const BankTable = () => {
     getData();
   }, []);
 
+  const filteredData = useMemo(() => {
+    return bankLead.filter((model: any) => {
+      const modelDate = new Date(model.createdAt);
+
+      if (startDate && endDate) {
+        return modelDate >= startDate && modelDate <= endDate;
+      }
+
+      if (startDate && !endDate) {
+        return modelDate >= startDate;
+      }
+
+      if (!startDate && endDate) {
+        return modelDate <= endDate;
+      }
+
+      return true;
+    });
+  }, [bankLead, startDate, endDate]);
+
   const handleDateChange = (start: Date | null, end: Date | null) => {
     setStartDate(start);
     setEndDate(end);
@@ -277,8 +297,8 @@ export const BankTable = () => {
   const pageSize = 10;
   const paginatedData = useMemo(() => {
     const start = (page - 1) * pageSize;
-    return bankLead.slice(start, start + pageSize);
-  }, [bankLead, page]);
+    return filteredData.slice(start, start + pageSize);
+  }, [filteredData, page]);
 
   const table = useReactTable({
     data: paginatedData,
@@ -292,7 +312,7 @@ export const BankTable = () => {
         pageSize,
       },
     },
-    pageCount: Math.ceil(bankLead.length / pageSize),
+    pageCount: Math.ceil(filteredData.length / pageSize),
     manualPagination: true,
     onPaginationChange: (updater: any) => {
       if (typeof updater === "function") {
@@ -347,7 +367,7 @@ export const BankTable = () => {
                   <Loader2 className="w-6 h-6 animate-spin mx-auto" />
                 </TableCell>
               </TableRow>
-            ) : bankLead.length === 0 ? (
+            ) : filteredData.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}

@@ -154,13 +154,27 @@ export const Navbar: React.FC = () => {
             className={`text-base font-medium py-2 px-3 rounded-[6px] ${
               currentPath === "/bank-leads" ||
               currentPath.startsWith("/add-bank-leads") ||
-              currentPath.startsWith("/edit-bank-leads/")
+              currentPath.startsWith("/edit-bank-leads/") ||
+              currentPath.startsWith("/bank-leads-detail/")
                 ? "bg-lightPurple text-primary"
                 : "text-black"
             }`}
           >
             Bank Leads
           </Link>
+          {loginUser && loginUser === "andre.finger@gmail.com" && (
+            <Link
+              to={"/leads"}
+              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                currentPath === "/leads" ||
+                currentPath.startsWith("/leads-detail")
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Leads
+            </Link>
+          )}
         </div>
         <div className="flex items-center gap-4 relative">
           <div className="flex items-center gap-1">

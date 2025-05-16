@@ -1,0 +1,561 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Loader2, Pencil, Trash } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../../components/ui/table";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useEffect, useMemo, useState } from "react";
+import Ic_filter from "../../../assets/images/Ic_filter.svg";
+import DateRangePicker from "../../../components/ui/daterangepicker";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../../config/firebaseConfig";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import Button from "../../../components/common/button";
+import Modal from "../../../components/common/modal";
+import { fetchAdminDataByEmail } from "../../../lib/utils";
+
+export const LeadTable = () => {
+  const [page, setPage] = useState(1);
+  const [bankLead, setBankLead] = useState([]);
+  const navigate = useNavigate();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedId, setSelectedId] = useState<any>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [permission, setPermission] = useState<any>(null);
+  const email = sessionStorage.getItem("Iplot_admin");
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        const finalSupData = data?.supplier;
+        setPermission(finalSupData);
+      }
+    };
+
+    getData();
+  }, []);
+
+  const filteredData = useMemo(() => {
+    return bankLead.filter((model: any) => {
+      const modelDate = new Date(model.createdAt);
+
+      if (startDate && endDate) {
+        return modelDate >= startDate && modelDate <= endDate;
+      }
+
+      if (startDate && !endDate) {
+        return modelDate >= startDate;
+      }
+
+      if (!startDate && endDate) {
+        return modelDate <= endDate;
+      }
+
+      return true;
+    });
+  }, [bankLead, startDate, endDate]);
+
+  const handleDateChange = (start: Date | null, end: Date | null) => {
+    setStartDate(start);
+    setEndDate(end);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, "bank_leads", id));
+      fetchBankLeadData();
+      setShowConfirm(false);
+      toast.success("Delete successfully", { position: "top-right" });
+    } catch (error) {
+      console.error("Error deleting document:", error);
+    }
+  };
+
+  const fetchBankLeadData = async () => {
+    setIsLoading(true);
+
+    try {
+      let q;
+      if (email === "andre.finger@gmail.com") {
+        q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
+      } else {
+        q = query(
+          collection(db, "bank_leads"),
+          where("supplierId", "==", permission)
+        );
+      }
+
+      const querySnapshot = await getDocs(q);
+
+      const data: any = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setBankLead(data);
+    } catch (error) {
+      console.error("Error fetching bank lead data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBankLeadData();
+  }, [permission]);
+
+  const handleConfirmPopup = () => {
+    if (showConfirm) {
+      setShowConfirm(false);
+    } else {
+      setShowConfirm(true);
+    }
+  };
+
+  const confirmDelete = (id: string) => {
+    setSelectedId(id);
+    setShowConfirm(true);
+  };
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedOption && selectedId) {
+      try {
+        await updateDoc(doc(db, "bank_leads", selectedId), {
+          status: selectedOption,
+          updatedAt: new Date().toISOString(),
+        });
+        setShowModal(false);
+        setSelectedId(null);
+        toast.success("Status updated");
+        fetchBankLeadData();
+      } catch (error) {
+        console.error("Error updating status", error);
+      }
+    }
+  };
+
+  const handleEditPopup = () => {
+    if (showModal) {
+      setShowModal(false);
+    } else {
+      setShowModal(true);
+    }
+  };
+  const columns = useMemo<ColumnDef<any>[]>(
+    () =>
+      [
+        {
+          accessorKey: "id",
+          header: "Id",
+          cell: ({ row }: any) => (
+            <Link
+              to={`/leads-detail/${row.original?.id}`}
+              className="text-sm text-darkBlack"
+            >
+              #{row.original?.id?.substring(0, 4)}...
+            </Link>
+          ),
+        },
+        {
+          accessorKey: "name",
+          header: "Navn",
+          cell: ({ row }: any) => (
+            <div className="flex items-center text-sm text-darkBlack w-max">
+              {row.original?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
+              {row.original?.Kunden?.Kundeinformasjon[0]?.l_name}
+            </div>
+          ),
+        },
+        {
+          accessorKey: "mobilnummer",
+          header: "Mobilnummer",
+          cell: ({ row }: any) => (
+            <div className="flex items-center text-sm text-darkBlack">
+              {row.original?.Kunden?.Kundeinformasjon[0]?.mobileNummer}
+            </div>
+          ),
+        },
+        {
+          accessorKey: "EPost",
+          header: "E-post",
+          cell: ({ row }: any) => (
+            <div className="flex items-center text-sm text-darkBlack">
+              {row.original?.Kunden?.Kundeinformasjon[0]?.EPost}
+            </div>
+          ),
+        },
+        {
+          accessorKey: "Kundetype",
+          header: "Kundetype",
+          cell: ({ row }: any) => (
+            <div className="flex items-center text-sm text-darkBlack">
+              {row.original?.Kunden?.Kundeinformasjon[0]?.Kundetype}
+            </div>
+          ),
+        },
+        {
+          accessorKey: "Lead sendt videre",
+          header: "Lead sendt videre",
+          cell: ({ row }: any) => (
+            <p className="text-sm font-semibold text-black w-max">
+              {row.original.createdAt}
+            </p>
+          ),
+        },
+        {
+          accessorKey: "Tilbudspris",
+          header: "Tilbudspris",
+          cell: ({ row }: any) => {
+            const projectAccount = row.original?.ProjectAccount?.husmodellData;
+
+            const parsePrice = (value: any): number => {
+              if (!value) return 0;
+              return parseFloat(
+                String(value)
+                  .replace(/\s/g, "")
+                  .replace(/\./g, "")
+                  .replace(",", ".")
+              );
+            };
+
+            const Byggekostnader = projectAccount?.Byggekostnader ?? [];
+            const Tomtekost = projectAccount?.Tomtekost ?? [];
+
+            const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
+              (acc: number, prod: any, index: number) => {
+                const value = prod?.pris;
+                return acc + parsePrice(value);
+              },
+              0
+            );
+
+            const totalPrisOfTomtekost = [...Tomtekost].reduce(
+              (acc: number, prod: any) => {
+                const value = prod.pris;
+                return acc + parsePrice(value);
+              },
+              0
+            );
+
+            const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
+            const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
+            return (
+              <p className="text-sm font-semibold text-black w-max">
+                {formattedGrandTotal} NOK
+              </p>
+            );
+          },
+        },
+        {
+          accessorKey: "status",
+          header: "Status",
+          cell: ({ row }: any) => (
+            <div className="flex items-center gap-2">
+              {row.original.status === "Sent" ? (
+                <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
+                  {row.original.status}
+                </p>
+              ) : row.original.status === "Rejected" ? (
+                <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
+                  {row.original.status}
+                </p>
+              ) : (
+                row.original.status === "Approved" && (
+                  <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
+                    {row.original.status}
+                  </p>
+                )
+              )}
+              <Pencil
+                className="h-[18px] w-[18px] text-primary cursor-pointer"
+                onClick={() => {
+                  setShowModal(true);
+                  setSelectedId(row.original.id);
+                  setSelectedOption(row.original.status);
+                }}
+              />
+            </div>
+          ),
+        },
+        {
+          id: "action",
+          header: "Action",
+          cell: ({ row }: any) => (
+            <>
+              <div className="flex items-center gap-3">
+                <Trash
+                  className="h-5 w-5 text-primary cursor-pointer"
+                  onClick={() => confirmDelete(row.original.id)}
+                />
+              </div>
+            </>
+          ),
+        },
+      ].filter(Boolean) as ColumnDef<any>[],
+    [email, navigate, permission]
+  );
+
+  const pageSize = 10;
+  const paginatedData = useMemo(() => {
+    const start = (page - 1) * pageSize;
+    return filteredData.slice(start, start + pageSize);
+  }, [filteredData, page]);
+
+  const table = useReactTable({
+    data: paginatedData,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      pagination: {
+        pageIndex: page - 1,
+        pageSize,
+      },
+    },
+    pageCount: Math.ceil(filteredData.length / pageSize),
+    manualPagination: true,
+    onPaginationChange: (updater: any) => {
+      if (typeof updater === "function") {
+        const newState = updater({
+          pageIndex: page - 1,
+          pageSize,
+        });
+        setPage(newState.pageIndex + 1);
+      }
+    },
+  });
+
+  return (
+    <>
+      <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+        <div></div>
+        <div className="flex gap-3 items-center">
+          <DateRangePicker
+            startDate={startDate}
+            endDate={endDate}
+            onDateChange={handleDateChange}
+          />
+          <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
+            <img src={Ic_filter} alt="" />
+            <span className="text-black font-medium text-sm">Filter</span>
+          </div>
+        </div>
+      </div>
+      <div className="rounded-lg border border-gray2 shadow-shadow2 overflow-hidden">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup: any) => (
+              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+                {headerGroup.headers.map((header: any) => (
+                  <TableHead key={header.id} className="h-8 text-sm">
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  <Loader2 className="w-6 h-6 animate-spin mx-auto" />
+                </TableCell>
+              </TableRow>
+            ) : filteredData.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            ) : (
+              table.getRowModel().rows?.length &&
+              table.getRowModel().rows.map((row: any) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-muted/50"
+                >
+                  {row.getVisibleCells().map((cell: any) => (
+                    <TableCell key={cell.id} className="px-6 py-3">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+        <div className="flex justify-between items-center py-4 px-6 border-t border-gray2">
+          <button
+            className="px-[14px] py-2 rounded-lg disabled:opacity-50 shadow-shadow1 border border-gray1 text-black text-sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Forrige
+          </button>
+          <span className="text-black text-sm">
+            Side <span className="font-semibold">{page}</span> av{" "}
+            <span className="font-semibold">{table.getPageCount()}</span>
+          </span>
+          <button
+            className="px-[14px] py-2 rounded-lg disabled:opacity-50 shadow-shadow1 border border-gray1 text-black font-semibold text-sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Neste
+          </button>
+        </div>
+      </div>
+
+      {showConfirm && (
+        <Modal onClose={handleConfirmPopup} isOpen={true}>
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <p className="text-lg font-bold">
+                Er du sikker på at du vil slette?
+              </p>
+              <div className="flex justify-center mt-5 w-full gap-5 items-center">
+                <div
+                  onClick={() => setShowConfirm(false)}
+                  className="w-1/2 sm:w-auto"
+                >
+                  <Button
+                    text="Avbryt"
+                    className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  />
+                </div>
+                <div onClick={() => handleDelete(selectedId)}>
+                  <Button
+                    text="Bekrefte"
+                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {showModal && (
+        <Modal onClose={handleEditPopup} isOpen={true}>
+          <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-xl w-[300px] shadow-lg relative">
+              <form onSubmit={handleSubmit}>
+                <h2 className="text-lg font-semibold mb-4">Change Status</h2>
+
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="status"
+                      value="Sent"
+                      checked={selectedOption === "Sent"}
+                      onChange={(e) => setSelectedOption(e.target.value)}
+                      className="accent-primary h-4 w-4"
+                    />
+                    Sent
+                  </label>
+
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="status"
+                      value="Approved"
+                      checked={selectedOption === "Approved"}
+                      onChange={(e) => setSelectedOption(e.target.value)}
+                      className="accent-primary h-4 w-4"
+                    />
+                    Approved
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="status"
+                      value="Rejected"
+                      checked={selectedOption === "Rejected"}
+                      onChange={(e) => setSelectedOption(e.target.value)}
+                      className="accent-primary h-4 w-4"
+                    />
+                    Rejected
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="status"
+                      value="In Process"
+                      checked={selectedOption === "In Process"}
+                      onChange={(e) => setSelectedOption(e.target.value)}
+                      className="accent-primary h-4 w-4"
+                    />
+                    In Process
+                  </label>
+                </div>
+
+                <div className="flex justify-center mt-5 w-full gap-5 items-center">
+                  <div
+                    onClick={() => setShowModal(false)}
+                    className="w-1/2 sm:w-auto"
+                  >
+                    <Button
+                      text="Avbryt"
+                      className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      text="Bekrefte"
+                      className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                      type="submit"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+};

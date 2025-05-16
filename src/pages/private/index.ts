@@ -21,3 +21,5 @@ export { MyLeadsDetail } from "./myLeads/myLeadsDetail";
 export { BankleadsTabs } from "./bankLeadTab";
 export { AllBankLeads } from "./allBankLeads";
 export { BankLeadsDetails } from "./bankLeadDetail";
+export { AllLeads } from "./leads";
+export { LeadsDetails } from "./leadDetail";

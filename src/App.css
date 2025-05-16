@@ -169,3 +169,110 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
 }
+
+/* ----wizard------ */
+.stepper-wrapper {
+  width: 100%;
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.progress {
+  content: "";
+  width: 0%;
+  height: 1px;
+  position: absolute;
+  z-index: -1;
+  transition: width 1s;
+}
+
+.screen-indicator {
+  background-color: #eaecf0;
+  width: calc(100% - 30px);
+  height: 2px;
+  transition: 0.7s all;
+  z-index: 1;
+  border-radius: 6px;
+}
+.screen-indicator.screen-more {
+  min-width: 18% !important;
+}
+.screen-index {
+  border: 7px solid #f9fafb;
+  background: #eff1f5;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.screen-indicator-span {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 11.11%;
+  color: #344054;
+  white-space: nowrap;
+}
+.screen-indicator.completed {
+  background-color: #277252;
+}
+
+.screen-indicator-span.current .screen-index {
+  background-color: #6941c6;
+  box-shadow: 0px 0px 0px 4px #eef3f7;
+  border-color: #f9f5ff;
+}
+.screen-indicator-span.completed .screen-index {
+  color: #099250;
+  background-color: #099250;
+}
+/* @media only screen and (max-width: 575px) {
+  .stepper_main {
+    overflow-x: auto;
+  }
+  .stepper-wrapper {
+    width: 1050px;
+  }
+  .screen-indicator-span span {
+    font-size: 12px;
+  }
+  .screen-index {
+    width: 20px;
+    height: 20px;
+  }
+}
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  .stepper_main {
+    overflow-x: auto;
+  }
+  .stepper-wrapper {
+    width: 1150px;
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .stepper_main {
+    overflow-x: auto;
+  }
+  .stepper-wrapper {
+    width: 1200px;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1279px) {
+  .stepper_main {
+    overflow-x: auto;
+  }
+  .stepper-wrapper {
+    width: 1250px;
+  }
+}
+@media only screen and (min-width: 1280px) and (max-width: 1430px) {
+  .stepper_main {
+    overflow-x: auto;
+  }
+} */
+/* ------ */

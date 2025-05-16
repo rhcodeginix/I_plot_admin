@@ -1,8 +1,11 @@
-import { ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Banknote, ChartPie, ChevronRight } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
 import { Spinner } from "../../../components/Spinner";
+import { Oppsummering } from "./oppsummering";
+import { Fremdriftsplan } from "./Fremdriftsplan";
 
 export const BankLeadsDetails = () => {
   const navigate = useNavigate();
@@ -12,23 +15,43 @@ export const BankLeadsDetails = () => {
   const [loading, setLoading] = useState(true);
   const [bankData, setBankData] = useState<any>();
 
+  const getData = useCallback(async () => {
+    if (!id) return;
+
+    setLoading(true);
+    try {
+      const data = await fetchBankLeadData(id);
+      if (data) {
+        setBankData(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
+
   useEffect(() => {
     if (!id) {
       setLoading(false);
       return;
     }
-    const getData = async () => {
-      const data = await fetchBankLeadData(id);
-
-      if (data) {
-        setBankData(data);
-      }
-
-      setLoading(false);
-    };
 
     getData();
-  }, [id]);
+  }, [getData]);
+
+  const [activeTab, setActiveTab] = useState<any>(0);
+  const tabData = [
+    { label: "Oppsummering", icon: <Banknote /> },
+    { label: "Fremdriftsplan", icon: <ChartPie /> },
+  ];
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+
+    return () => clearTimeout(timeout);
+  }, [activeTab]);
 
   return (
     <>
@@ -51,6 +74,44 @@ export const BankLeadsDetails = () => {
           #{id} ( {bankData?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
           {bankData?.Kunden?.Kundeinformasjon[0]?.l_name})
         </div>
+      </div>
+      <div className="relative">
+        <div className="flex items-center justify-between gap-2 mb-6 px-10 mt-4">
+          <div
+            className="flex gap-4 rounded-lg bg-white p-[6px]"
+            style={{
+              boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
+            }}
+          >
+            {tabData.map((tab, index) => (
+              <button
+                key={index}
+                className={`${
+                  id ? "cursor-pointer" : "cursor-auto"
+                } flex items-center gap-2 text-darkBlack py-2 px-3 rounded-lg ${
+                  activeTab === index
+                    ? "font-semibold bg-[#7839EE] text-white"
+                    : "text-[#4D4D4D]"
+                }`}
+                onClick={() => setActiveTab(index)}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {activeTab === 0 && (
+          <Oppsummering bankData={bankData} loading={loading} />
+        )}
+        {activeTab === 1 && (
+          <Fremdriftsplan
+            bankData={bankData}
+            loading={loading}
+            getData={getData}
+          />
+        )}
       </div>
     </>
   );

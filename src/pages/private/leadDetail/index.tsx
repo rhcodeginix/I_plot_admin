@@ -3,7 +3,6 @@ import { Banknote, ChartPie, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
-import { Spinner } from "../../../components/Spinner";
 import { Oppsummering } from "./oppsummering";
 import { Fremdriftsplan } from "./Fremdriftsplan";
 
@@ -12,13 +11,11 @@ export const LeadsDetails = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
-  const [loading, setLoading] = useState(true);
   const [bankData, setBankData] = useState<any>();
 
   const getData = useCallback(async () => {
     if (!id) return;
 
-    setLoading(true);
     try {
       const data = await fetchBankLeadData(id);
       if (data) {
@@ -26,14 +23,11 @@ export const LeadsDetails = () => {
       }
     } catch (error) {
       console.error("Failed to fetch data:", error);
-    } finally {
-      setLoading(false);
     }
   }, [id]);
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
 
@@ -55,8 +49,6 @@ export const LeadsDetails = () => {
 
   return (
     <>
-      {loading && <Spinner />}
-
       <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
         <div className="flex items-center gap-1">
           <span
@@ -102,15 +94,9 @@ export const LeadsDetails = () => {
           </div>
         </div>
 
-        {activeTab === 0 && (
-          <Oppsummering bankData={bankData} loading={loading} />
-        )}
+        {activeTab === 0 && <Oppsummering bankData={bankData} />}
         {activeTab === 1 && (
-          <Fremdriftsplan
-            bankData={bankData}
-            loading={loading}
-            getData={getData}
-          />
+          <Fremdriftsplan bankData={bankData} getData={getData} />
         )}
       </div>
     </>

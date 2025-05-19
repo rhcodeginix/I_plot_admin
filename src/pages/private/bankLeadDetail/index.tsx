@@ -3,7 +3,6 @@ import { Banknote, ChartPie, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
-import { Spinner } from "../../../components/Spinner";
 import { Oppsummering } from "./oppsummering";
 import { Fremdriftsplan } from "./Fremdriftsplan";
 
@@ -55,8 +54,6 @@ export const BankLeadsDetails = () => {
 
   return (
     <>
-      {loading && <Spinner />}
-
       <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
         <div className="flex items-center gap-1">
           <span

@@ -5,7 +5,6 @@ import { AddNewCat } from "./AddNewCat";
 import Ic_trash from "../../../assets/images/Ic_trash.svg";
 import Button from "../../../components/common/button";
 import { useLocation } from "react-router-dom";
-import { Spinner } from "../../../components/Spinner";
 import { fetchHusmodellData } from "../../../lib/utils";
 import { Pencil } from "lucide-react";
 
@@ -24,11 +23,9 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
     const getData = async () => {
@@ -36,7 +33,6 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
       if (data && data.Huskonfigurator) {
         setCategory(data.Huskonfigurator.hovedkategorinavn);
       }
-      setLoading(false);
     };
 
     getData();
@@ -186,7 +182,6 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
           </div>
         </Modal>
       )}
-      {loading && <Spinner />}
     </>
   );
 };

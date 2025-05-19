@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { Spinner } from "../../../components/Spinner";
 import Stepper from "../../../components/ui/stepper";
 import { ChevronDown, Pencil } from "lucide-react";
 import Img_pdf from "../../../assets/images/Img_pdf.png";
@@ -18,7 +17,7 @@ export const Fremdriftsplan: React.FC<{
   bankData: any;
   loading: any;
   getData: any;
-}> = ({ bankData, loading, getData }) => {
+}> = ({ bankData, getData }) => {
   const [currIndex, setCurrIndex] = useState<number>(0);
 
   const order = [
@@ -72,8 +71,6 @@ export const Fremdriftsplan: React.FC<{
 
   return (
     <>
-      {loading && <Spinner />}
-
       <div className="mx-10 rounded-lg mb-20">
         <h3 className="text-darkBlack text-xl font-semibold mb-2">
           Fremdrifts- og faktureringsplan

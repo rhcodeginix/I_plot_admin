@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { Spinner } from "../components/Spinner";
 import { Navbar } from "../components/Navbar";
 import ScrollToTop from "../components/common/scrollToTop";
 import { useIsAuthenticated } from "../hooks/useAuth";
@@ -16,7 +15,14 @@ export const Layout = () => {
       <ScrollToTop />
       <Navbar />
       <main className="">
-        <Suspense fallback={<Spinner />}>
+        <Suspense
+          fallback={
+            <div
+              className="w-full h-full rounded-md custom-shimmer"
+              style={{ borderRadius: "8px" }}
+            ></div>
+          }
+        >
           <Outlet />
         </Suspense>
       </main>

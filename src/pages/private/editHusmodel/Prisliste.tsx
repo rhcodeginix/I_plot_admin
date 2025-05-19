@@ -19,7 +19,6 @@ import { db } from "../../../config/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { fetchHusmodellData } from "../../../lib/utils";
-import { Spinner } from "../../../components/Spinner";
 
 const formSchema = z.object({
   ByggekostnaderInfo: z.string().min(1, {
@@ -117,11 +116,9 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
   const pathSegments = location.pathname.split("/");
   const id: any = pathSegments.length > 2 ? pathSegments[2] : null;
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
     const getData = async () => {
@@ -132,7 +129,6 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
             form.setValue(key as any, value);
         });
       }
-      setLoading(false);
     };
 
     getData();
@@ -881,7 +877,6 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
               type="submit"
             />
           </div>
-          {loading && <Spinner />}
         </form>
       </Form>
     </>

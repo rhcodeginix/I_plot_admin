@@ -33,7 +33,6 @@ import {
   fetchSupplierData,
   phoneNumberValidations,
 } from "../../../lib/utils";
-import { Spinner } from "../../../components/Spinner";
 
 const formSchema = z.object({
   photo: z.union([
@@ -124,7 +123,6 @@ export const AddSuppliersForm = () => {
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const [createData, setCreateData] = useState<any>(null);
   useEffect(() => {
     const getData = async () => {
@@ -138,7 +136,6 @@ export const AddSuppliersForm = () => {
   }, []);
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
     const getData = async () => {
@@ -149,7 +146,6 @@ export const AddSuppliersForm = () => {
             form.setValue(key as any, value);
         });
       }
-      setLoading(false);
     };
 
     getData();
@@ -784,7 +780,6 @@ export const AddSuppliersForm = () => {
           </div>
         </form>
       </Form>
-      {loading && <Spinner />}
     </>
   );
 };

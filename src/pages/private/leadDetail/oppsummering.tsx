@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { UserRoundCheck } from "lucide-react";
-import { Spinner } from "../../../components/Spinner";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 
-export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
-  bankData,
-  loading,
-}) => {
+export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
   const [finalData, setFinalData] = useState<any>(null);
 
   useEffect(() => {
@@ -72,8 +68,6 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
 
   return (
     <>
-      {loading && <Spinner />}
-
       <div
         className="mx-10 rounded-lg mb-28"
         style={{

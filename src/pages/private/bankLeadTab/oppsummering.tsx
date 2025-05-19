@@ -3,7 +3,6 @@ import Button from "../../../components/common/button";
 import { UserRoundCheck } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
-import { Spinner } from "../../../components/Spinner";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 
@@ -13,19 +12,16 @@ export const Oppsummering: React.FC<{
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
-  const [loading, setLoading] = useState(true);
   const [bankData, setBankData] = useState<any>();
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
 
     const getData = async () => {
       const data = await fetchBankLeadData(id);
       setBankData(data);
-      setLoading(false);
     };
 
     getData();
@@ -44,14 +40,11 @@ export const Oppsummering: React.FC<{
 
         if (husmodellDocSnap.exists()) {
           setFinalData(husmodellDocSnap.data());
-          setLoading(false);
         } else {
           console.error("No document found for husmodell ID.");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
       }
     };
     if (bankData?.plotHusmodell?.house?.housemodell) {
@@ -97,8 +90,6 @@ export const Oppsummering: React.FC<{
 
   return (
     <>
-      {loading && <Spinner />}
-
       <div
         className="mx-10 rounded-lg mb-28"
         style={{

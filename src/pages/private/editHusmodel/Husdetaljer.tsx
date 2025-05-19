@@ -43,7 +43,6 @@ import {
   fetchHusmodellData,
   fetchSupplierData,
 } from "../../../lib/utils";
-import { Spinner } from "../../../components/Spinner";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
 
@@ -231,7 +230,6 @@ export const Husdetaljer: React.FC<{
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
-  const [loading, setLoading] = useState(true);
   const [suppliers, setSuppliers] = useState<any>([]);
   const [oldSupplierId, setOldSupplierId] = useState<any | null>(null);
   const [createData, setCreateData] = useState<any>(null);
@@ -255,7 +253,6 @@ export const Husdetaljer: React.FC<{
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
     const getData = async () => {
@@ -270,7 +267,6 @@ export const Husdetaljer: React.FC<{
           }
         });
       }
-      setLoading(false);
     };
 
     getData();
@@ -2450,7 +2446,6 @@ export const Husdetaljer: React.FC<{
               type="submit"
             />
           </div>
-          {loading && <Spinner />}
         </form>
       </Form>
 

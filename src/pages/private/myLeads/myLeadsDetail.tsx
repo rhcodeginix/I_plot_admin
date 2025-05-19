@@ -9,7 +9,6 @@ import {
   fetchSupplierData,
   formatTimestamp,
 } from "../../../lib/utils";
-import { Spinner } from "../../../components/Spinner";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -52,12 +51,10 @@ export const MyLeadsDetail = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
-  const [loading, setLoading] = useState(true);
   const [leadData, setLeadData] = useState<any>(null);
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
     const getData = async () => {
@@ -65,7 +62,6 @@ export const MyLeadsDetail = () => {
       if (data) {
         setLeadData(data);
       }
-      setLoading(false);
     };
 
     getData();
@@ -77,7 +73,6 @@ export const MyLeadsDetail = () => {
 
   const [houseModels, setHouseModels] = useState([]);
   const fetchHusmodellData = async () => {
-    setLoading(true);
     try {
       let q = query(
         collection(db, "house_model"),
@@ -94,13 +89,11 @@ export const MyLeadsDetail = () => {
     } catch (error) {
       console.error("Error fetching husmodell data:", error);
     } finally {
-      setLoading(false);
     }
   };
 
   const [cities, setCities] = useState([]);
   const fetchCitiesData = async () => {
-    setLoading(true);
     try {
       let q = query(collection(db, "cities"));
 
@@ -114,7 +107,6 @@ export const MyLeadsDetail = () => {
     } catch (error) {
       console.error("Error fetching city data:", error);
     } finally {
-      setLoading(false);
     }
   };
   const [supplierData, setSupplierData] = useState<any>();
@@ -134,7 +126,6 @@ export const MyLeadsDetail = () => {
   const [suppliers, setSuppliers] = useState([]);
 
   const fetchSuppliersData = async () => {
-    setLoading(true);
     try {
       let q = query(collection(db, "suppliers"));
 
@@ -148,7 +139,6 @@ export const MyLeadsDetail = () => {
     } catch (error) {
       console.error("Error fetching suppliers data:", error);
     } finally {
-      setLoading(false);
     }
   };
 
@@ -344,7 +334,6 @@ export const MyLeadsDetail = () => {
   };
   return (
     <>
-      {loading && <Spinner />}
       <div className="bg-lightPurple py-4 px-6">
         <div className="mb-4 flex items-center gap-3">
           <Link to="/my-leads" className="text-gray text-sm font-medium">

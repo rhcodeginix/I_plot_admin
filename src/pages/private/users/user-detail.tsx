@@ -2,7 +2,6 @@ import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { db } from "../../../config/firebaseConfig";
-import { Spinner } from "../../../components/Spinner";
 import Img_line_bg from "../../../assets/images/Img_line_bg.png";
 import NorkartMap from "../../../components/map";
 
@@ -65,34 +64,78 @@ export const UserDetail = () => {
 
   return (
     <>
-      {loading ? (
-        <div className="relative h-screen w-full">
-          <Spinner />
+      <div className="bg-lightPurple py-[20px] relative px-6">
+        <img
+          src={Img_line_bg}
+          alt="images"
+          className="absolute top-0 left-0 w-full h-full"
+          style={{ zIndex: 1 }}
+        />
+        <div style={{ zIndex: 9 }}>
+          {loading ? (
+            <div
+              className="w-[300px] h-[30px] rounded-md custom-shimmer mb-2"
+              style={{ borderRadius: "8px" }}
+            ></div>
+          ) : (
+            <h2 className="text-black text-[32px] font-semibold mb-2">
+              {data?.name}
+            </h2>
+          )}
+          {loading ? (
+            <div
+              className="w-[300px] h-[30px] rounded-md custom-shimmer"
+              style={{ borderRadius: "8px" }}
+            ></div>
+          ) : (
+            <p className="text-gray text-xl">{data?.email}</p>
+          )}
         </div>
-      ) : (
-        <>
-          <div className="bg-lightPurple py-[20px] relative px-6">
-            <img
-              src={Img_line_bg}
-              alt="images"
-              className="absolute top-0 left-0 w-full h-full"
-              style={{ zIndex: 1 }}
-            />
-            <div style={{ zIndex: 9 }}>
-              <h2 className="text-black text-[32px] font-semibold mb-2">
-                {data?.name}
-              </h2>
-              <p className="text-gray text-xl">{data?.email}</p>
-            </div>
-          </div>
-          <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
-            <h4 className="text-gray text-xl">
-              Søk Eiendom Count:{" "}
-              <span className="text-black font-semibold">
-                {data?.properties?.length}
-              </span>
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 desktop:grid-cols-4 gap-x-4 lg:gap-x-6 desktop:gap-x-8 gap-y-7 lg:gap-y-9 desktop:gap-y-12">
+      </div>
+      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
+        <h4 className="text-gray text-xl">
+          Søk Eiendom Count:{" "}
+          <span className="text-black font-semibold">
+            {data?.properties?.length}
+          </span>
+        </h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 desktop:grid-cols-4 gap-x-4 lg:gap-x-6 desktop:gap-x-8 gap-y-7 lg:gap-y-9 desktop:gap-y-12">
+          {loading ? (
+            <>
+              <div
+                className="w-full h-[400px] rounded-md custom-shimmer mb-2"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[400px] rounded-md custom-shimmer mb-2"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[400px] rounded-md custom-shimmer mb-2"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[400px] rounded-md custom-shimmer mb-2"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[400px] rounded-md custom-shimmer mb-2"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[400px] rounded-md custom-shimmer mb-2"
+                style={{ borderRadius: "8px" }}
+              ></div><div
+              className="w-full h-[400px] rounded-md custom-shimmer mb-2"
+              style={{ borderRadius: "8px" }}
+            ></div>
+            <div
+                className="w-full h-[400px] rounded-md custom-shimmer mb-2"
+                style={{ borderRadius: "8px" }}
+              ></div>
+            </>
+          ) : (
+            <>
               {paginatedProperties?.length > 0 ? (
                 paginatedProperties.map((property: any, index: number) => {
                   return (
@@ -160,38 +203,36 @@ export const UserDetail = () => {
               ) : (
                 <p>No Search History found.</p>
               )}
-            </div>
+            </>
+          )}
+        </div>
 
-            <div className="flex justify-center gap-2 mt-6">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className={`px-4 py-2 border rounded ${
-                  currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                Previous
-              </button>
-              <span className="px-4 py-2 border rounded">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-                className={`px-4 py-2 border rounded ${
-                  currentPage === totalPages
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+        <div className="flex justify-center gap-2 mt-6">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 border rounded ${
+              currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2 border rounded">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 border rounded ${
+              currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </>
   );
 };

@@ -4,7 +4,6 @@ import Ic_filter from "../../../assets/images/Ic_filter.svg";
 import DatePickerComponent from "../../../components/ui/datepicker";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { Spinner } from "../../../components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { fetchAdminDataByEmail } from "../../../lib/utils";
 
@@ -179,8 +178,6 @@ export const Dashboard = () => {
   ];
   return (
     <>
-      {loading && <Spinner />}
-
       <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
         <h1 className="text-darkBlack font-medium text-[30px]">
           Velkommen tilbake, André
@@ -208,47 +205,90 @@ export const Dashboard = () => {
               placeholderText="Select dates"
               className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] w-max"
             />
-            <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px]">
+            <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 pr-8 cursor-pointer shadow-shadow1 h-[40px]">
               <img src={Ic_filter} alt="" />
               <span className="text-black font-medium text-sm">Filters</span>
             </div>
           </div>
         </div>
         <div className="grid grid-cols-4 gap-6">
-          {data.map((item, index) => {
-            return (
+          {loading ? (
+            <>
               <div
-                className={`shadow-shadow2 border border-gray2 bg-lightPurple rounded-[8px] p-6 flex flex-col gap-2 ${
-                  item?.path && "cursor-pointer"
-                }`}
-                key={index}
-                onClick={item?.path ? () => navigate(item.path) : undefined}
-              >
-                <div className="flex items-center gap-2 justify-between">
-                  <span className="text-gray text-sm font-medium">
-                    {item.title}{" "}
-                    {item.title2 && (
-                      <span className="text-opacity-60 text-gray">
-                        {item.title2}
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
+            </>
+          ) : (
+            <>
+              {data.map((item, index) => {
+                return (
+                  <div
+                    className={`shadow-shadow2 border border-gray2 bg-lightPurple rounded-[8px] p-6 flex flex-col gap-2 ${
+                      item?.path && "cursor-pointer"
+                    }`}
+                    key={index}
+                    onClick={item?.path ? () => navigate(item.path) : undefined}
+                  >
+                    <div className="flex items-center gap-2 justify-between">
+                      <span className="text-gray text-sm font-medium">
+                        {item.title}{" "}
+                        {item.title2 && (
+                          <span className="text-opacity-60 text-gray">
+                            {item.title2}
+                          </span>
+                        )}
                       </span>
-                    )}
-                  </span>
-                  {/* <img src={Ic_dropdown_menu} alt="menu" /> */}
-                </div>
-                <div className="flex items-center gap-4 justify-between">
-                  <h4 className="text-darkBlack font-semibold text-[30px]">
-                    {item.value}
-                  </h4>
-                  {/* <div className="bg-lightGreen py-[2px] px-2 rounded-[16px] flex items-center gap-1">
+                      {/* <img src={Ic_dropdown_menu} alt="menu" /> */}
+                    </div>
+                    <div className="flex items-center gap-4 justify-between">
+                      <h4 className="text-darkBlack font-semibold text-[30px]">
+                        {item.value}
+                      </h4>
+                      {/* <div className="bg-lightGreen py-[2px] px-2 rounded-[16px] flex items-center gap-1">
                     <img src={Ic_green_up_arrow} alt="arrow" />
                     <span className="text-sm font-medium text-darkGreen">
                       {item.percentage}%
                     </span>
                   </div> */}
-                </div>
-              </div>
-            );
-          })}
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          )}
         </div>
       </div>
     </>

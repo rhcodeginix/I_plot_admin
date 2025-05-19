@@ -37,7 +37,6 @@ import { v4 as uuidv4 } from "uuid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { Spinner } from "../../../components/Spinner";
 import ApiUtils from "../../../api";
 
 const formSchema = z.object({
@@ -95,7 +94,6 @@ export const Kunden = forwardRef<
   const navigate = useNavigate();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
-  const [loading, setLoading] = useState(true);
 
   const form = useForm<any>({
     resolver: zodResolver(formSchema),
@@ -134,7 +132,6 @@ export const Kunden = forwardRef<
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
 
@@ -162,8 +159,6 @@ export const Kunden = forwardRef<
           form.setValue(`Kundeinformasjon`, formattedInfo);
         }
       }
-
-      setLoading(false);
     };
 
     getData();
@@ -710,7 +705,6 @@ export const Kunden = forwardRef<
               />
             </div>
           </div>
-          {loading && <Spinner />}
         </form>
       </Form>
     </>

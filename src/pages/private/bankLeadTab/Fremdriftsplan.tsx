@@ -29,7 +29,6 @@ import { db } from "../../../config/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
 import toast from "react-hot-toast";
-import { Spinner } from "../../../components/Spinner";
 
 const formSchema = z.object({
   Byggekontrakt: z.object({
@@ -91,7 +90,6 @@ export const Fremdriftsplan = forwardRef<
   const navigate = useNavigate();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
-  const [loading, setLoading] = useState(true);
   const form = useForm<any>({
     resolver: zodResolver(formSchema),
   });
@@ -181,7 +179,6 @@ export const Fremdriftsplan = forwardRef<
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
 
@@ -195,8 +192,6 @@ export const Fremdriftsplan = forwardRef<
           }
         });
       }
-
-      setLoading(false);
     };
 
     getData();
@@ -1336,7 +1331,6 @@ export const Fremdriftsplan = forwardRef<
               />
             </div>
           </div>
-          {loading && <Spinner />}
         </form>
       </Form>
     </>

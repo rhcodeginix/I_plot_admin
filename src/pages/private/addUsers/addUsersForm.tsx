@@ -27,7 +27,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { fetchAdminData } from "../../../lib/utils";
-import { Spinner } from "../../../components/Spinner";
 import {
   Select,
   SelectContent,
@@ -116,7 +115,6 @@ export const AddUserForm = () => {
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const [suppliers, setSuppliers] = useState([]);
   const [isPopup, setIsPopup] = useState(false);
 
@@ -313,7 +311,6 @@ export const AddUserForm = () => {
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
       return;
     }
     const getData = async () => {
@@ -329,7 +326,6 @@ export const AddUserForm = () => {
           }
         });
       }
-      setLoading(false);
     };
 
     getData();
@@ -674,7 +670,9 @@ export const AddUserForm = () => {
                             <SelectContent className="bg-white">
                               <SelectGroup>
                                 <SelectItem value="Admin">Admin</SelectItem>
-                                <SelectItem value="Bankansvarlig">Bankansvarlig</SelectItem>
+                                <SelectItem value="Bankansvarlig">
+                                  Bankansvarlig
+                                </SelectItem>
                               </SelectGroup>
                             </SelectContent>
                           </Select>
@@ -702,7 +700,6 @@ export const AddUserForm = () => {
           </div>
         </form>
       </Form>
-      {loading && <Spinner />}
 
       {isPopup && (
         <Modal onClose={handleConfirmPopup} isOpen={true}>

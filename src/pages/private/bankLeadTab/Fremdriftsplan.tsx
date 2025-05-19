@@ -247,7 +247,7 @@ export const Fremdriftsplan = forwardRef<
                     <FormField
                       control={form.control}
                       name={`Byggekontrakt.date`}
-                      render={({ field, fieldState }) => (
+                      render={({ field, fieldState }: any) => (
                         <FormItem>
                           <p
                             className={`${

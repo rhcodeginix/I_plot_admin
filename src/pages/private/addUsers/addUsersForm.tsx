@@ -85,6 +85,9 @@ const formSchema = z.object({
     .regex(/[@$!%*?&]/, {
       message: "Passordet må inneholde minst ett spesialtegn.",
     }),
+  role: z.string().min(1, {
+    message: "rolle må velges",
+  }),
 });
 
 function hashPassword(password: any) {
@@ -102,6 +105,9 @@ export const AddUserForm = () => {
       name: "",
       email: "",
       modulePermissions: [],
+      supplier: "",
+      password: "",
+      role: "",
     },
   });
 
@@ -627,6 +633,51 @@ export const AddUserForm = () => {
                                           } `}
                             type="password"
                           />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="role"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <p
+                        className={`${
+                          fieldState.error ? "text-red" : "text-black"
+                        } mb-[6px] text-sm font-medium`}
+                      >
+                        Rolle
+                      </p>
+                      <FormControl>
+                        <div className="relative">
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                            }}
+                            value={field.value}
+                          >
+                            <SelectTrigger
+                              className={`bg-white rounded-[8px] border text-black
+                              ${
+                                fieldState?.error
+                                  ? "border-red"
+                                  : "border-gray1"
+                              } `}
+                            >
+                              <SelectValue placeholder="Select rolle" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white">
+                              <SelectGroup>
+                                <SelectItem value="Admin">Admin</SelectItem>
+                                <SelectItem value="Bankansvarlig">Bankansvarlig</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                         </div>
                       </FormControl>
                       <FormMessage />

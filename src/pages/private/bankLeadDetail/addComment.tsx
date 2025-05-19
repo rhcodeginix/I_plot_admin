@@ -19,6 +19,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../config/firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import toast from "react-hot-toast";
+import { Input } from "../../../components/ui/input";
 // import { fetchAdminDataByEmail, fetchSupplierData } from "../../../lib/utils";
 
 const formSchema = z.object({
@@ -40,6 +41,7 @@ const formSchema = z.object({
   text: z.string().min(1, {
     message: "text må bestå av minst 2 tegn.",
   }),
+  full_fort_date: z.string().min(1, "Fullført den er påkrevd"),
 });
 
 export const AddComment: React.FC<{
@@ -68,6 +70,7 @@ export const AddComment: React.FC<{
         if (commentData) {
           form.setValue("text", commentData.text || "");
           form.setValue("photo", commentData.photo || []);
+          form.setValue("full_fort_date", commentData.full_fort_date || "");
         }
       }
     };
@@ -229,6 +232,39 @@ export const AddComment: React.FC<{
           </h2>
           <div className="mb-5 p-5">
             <div className="grid grid-cols-2 gap-5">
+              <div>
+                <FormField
+                  control={form.control}
+                  name={`full_fort_date`}
+                  render={({ field, fieldState }: any) => (
+                    <FormItem>
+                      <p
+                        className={`${
+                          fieldState.error ? "text-red" : ""
+                        } mb-[6px] text-sm`}
+                      >
+                        Forventet oppstart
+                      </p>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            placeholder="Skriv inn Forventet oppstart"
+                            {...field}
+                            className={`bg-white rounded-[8px] border text-black
+                                          ${
+                                            fieldState?.error
+                                              ? "border-red"
+                                              : "border-gray1"
+                                          } `}
+                            type="date"
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <div className="col-span-2">
                 <FormField
                   control={form.control}

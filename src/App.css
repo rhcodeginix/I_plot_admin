@@ -174,7 +174,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .stepper-wrapper {
   width: 100%;
   display: flex;
-  gap: 28px;
+  /* gap: 28px; */
   align-items: center;
   justify-content: space-between;
   position: relative;

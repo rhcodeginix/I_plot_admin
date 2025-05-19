@@ -53,12 +53,17 @@ export const Navbar: React.FC = () => {
   const [isPhoto, setIsPhoto] = useState(null);
 
   const [HusmodellPermission, setHusmodellPermission] = useState<any>(null);
+  const [Role, setRole] = useState<any>(null);
   const email = sessionStorage.getItem("Iplot_admin");
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
+
       if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
         setIsPhoto(data?.photo);
 
         const husmodellData = data?.modulePermissions?.find(
@@ -149,20 +154,22 @@ export const Navbar: React.FC = () => {
               Min Lead
             </Link>
           )}
-          <Link
-            to={"/bank-leads"}
-            className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-              currentPath === "/bank-leads" ||
-              currentPath.startsWith("/add-bank-leads") ||
-              currentPath.startsWith("/edit-bank-leads/") ||
-              currentPath.startsWith("/bank-leads-detail/")
-                ? "bg-lightPurple text-primary"
-                : "text-black"
-            }`}
-          >
-            Bank Leads
-          </Link>
-          {loginUser && loginUser === "andre.finger@gmail.com" && (
+          {Role && Role !== "Bankansvarlig" && (
+            <Link
+              to={"/bank-leads"}
+              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                currentPath === "/bank-leads" ||
+                currentPath.startsWith("/add-bank-leads") ||
+                currentPath.startsWith("/edit-bank-leads/") ||
+                currentPath.startsWith("/bank-leads-detail/")
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Bank Leads
+            </Link>
+          )}
+          {Role && Role === "Bankansvarlig" && (
             <Link
               to={"/leads"}
               className={`text-base font-medium py-2 px-3 rounded-[6px] ${
@@ -172,7 +179,7 @@ export const Navbar: React.FC = () => {
                   : "text-black"
               }`}
             >
-              Leads
+              Bank Leads
             </Link>
           )}
         </div>

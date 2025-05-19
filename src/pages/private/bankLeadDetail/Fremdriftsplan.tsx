@@ -5,6 +5,7 @@ import Stepper from "../../../components/ui/stepper";
 import { ChevronDown, Pencil } from "lucide-react";
 import Modal from "../../../components/common/modal";
 import { AddComment } from "./addComment";
+import { isValid, addDays, differenceInCalendarDays } from "date-fns";
 
 function formatPrice(inputStr: any) {
   let noSuffix = inputStr.replace(" NOK", "");
@@ -86,6 +87,25 @@ export const Fremdriftsplan: React.FC<{
         <div className="flex flex-col gap-6">
           {steps &&
             steps.map((step: any, index: number) => {
+              let diffText = "";
+
+              if (step?.comment?.full_fort_date) {
+                const baseDate = new Date(step.date);
+                const fullFortDate = new Date(step.comment.full_fort_date);
+
+                const expectedDate = addDays(baseDate, Number(step.day) || 0);
+
+                if (isValid(expectedDate) && isValid(fullFortDate)) {
+                  const dayDifference = differenceInCalendarDays(
+                    fullFortDate,
+                    expectedDate
+                  );
+                  diffText = `(${
+                    dayDifference >= 0 ? "+" : ""
+                  }${dayDifference} dager)`;
+                }
+              }
+
               return (
                 <div
                   key={index}
@@ -149,6 +169,18 @@ export const Fremdriftsplan: React.FC<{
                         {step.date.split("-").reverse().join(".")}
                       </h6>
                     </div>
+                    {step?.comment && (
+                      <div className="w-full flex flex-col gap-2">
+                        <p className="text-[#5D6B98] text-sm">Fullført</p>
+                        <h6 className="text-darkBlack font-medium">
+                          {step.comment.full_fort_date
+                            .split("-")
+                            .reverse()
+                            .join(".")}{" "}
+                          <span className="text-[#30374F99]">{diffText}</span>
+                        </h6>
+                      </div>
+                    )}
                     <div className="w-full flex flex-col gap-2">
                       <p className="text-[#5D6B98] text-sm">
                         Antatt antall dager til å fullføre

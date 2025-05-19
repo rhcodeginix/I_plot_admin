@@ -27,7 +27,6 @@ import {
   orderBy,
   query,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { Link, useNavigate } from "react-router-dom";
@@ -101,15 +100,16 @@ export const LeadTable = () => {
     setIsLoading(true);
 
     try {
-      let q;
-      if (email === "andre.finger@gmail.com") {
-        q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
-      } else {
-        q = query(
-          collection(db, "bank_leads"),
-          where("supplierId", "==", permission)
-        );
-      }
+      // let q;
+      // if (email === "andre.finger@gmail.com") {
+      //   q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
+      // } else {
+      //   q = query(
+      //     collection(db, "bank_leads"),
+      //     where("supplierId", "==", permission)
+      //   );
+      // }
+      let q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
 
       const querySnapshot = await getDocs(q);
 

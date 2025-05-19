@@ -1,10 +1,10 @@
 import React, {
   forwardRef,
-  useEffect,
+  // useEffect,
   useImperativeHandle,
   useState,
 } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../config/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../../../components/common/button";
@@ -25,8 +25,8 @@ import { getDownloadURL, ref as reff, uploadBytes } from "firebase/storage";
 import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
-import { Pencil, Plus, Trash2 } from "lucide-react";
-import { fetchBankLeadData } from "../../../lib/utils";
+// import { Pencil, Plus, Trash2 } from "lucide-react";
+// import { fetchBankLeadData } from "../../../lib/utils";
 
 const formSchema = z.object({
   documents: z
@@ -44,6 +44,11 @@ const formSchema = z.object({
       ])
     )
     .optional(),
+  Økonomisk: z
+    .string({
+      required_error: "Påkrevd",
+    })
+    .min(1, "Påkrevd"),
 });
 
 export type ProjectAccountingHandle = {
@@ -62,57 +67,57 @@ export const ProjectAccounting = forwardRef<
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
 
-  const [finalData, setFinalData] = useState<any>(null);
-  const husmodellData = finalData?.Prisliste;
-  const [houseId, setHouseId] = useState<String | null>(null);
+  // const [finalData, setFinalData] = useState<any>(null);
+  // const husmodellData = finalData?.Prisliste;
+  // const [houseId, setHouseId] = useState<String | null>(null);
 
-  const [editingPriceIndex, setEditingPriceIndex] = useState<number | null>(
-    null
-  );
-  const [editedPrices, setEditedPrices] = useState<{ [key: number]: string }>(
-    {}
-  );
-  const [editingHeadlineIndex, setEditingHeadlineIndex] = useState<
-    number | null
-  >(null);
-  const [editedHeadlines, setEditedHeadlines] = useState<{
-    [key: number]: string;
-  }>({});
+  // const [editingPriceIndex, setEditingPriceIndex] = useState<number | null>(
+  //   null
+  // );
+  // const [editedPrices, setEditedPrices] = useState<{ [key: number]: string }>(
+  //   {}
+  // );
+  // const [editingHeadlineIndex, setEditingHeadlineIndex] = useState<
+  //   number | null
+  // >(null);
+  // const [editedHeadlines, setEditedHeadlines] = useState<{
+  //   [key: number]: string;
+  // }>({});
 
-  const [editingHeadlineTomIndex, setEditingHeadlineTomIndex] = useState<
-    number | null
-  >(null);
-  const [editedHeadlinesTom, setEditedHeadlinesTom] = useState<{
-    [key: number]: string;
-  }>({});
+  // const [editingHeadlineTomIndex, setEditingHeadlineTomIndex] = useState<
+  //   number | null
+  // >(null);
+  // const [editedHeadlinesTom, setEditedHeadlinesTom] = useState<{
+  //   [key: number]: string;
+  // }>({});
 
-  const [editingPriceTomIndex, setEditingPriceTomIndex] = useState<
-    number | null
-  >(null);
-  const [editedPricesTom, setEditedPricesTom] = useState<{
-    [key: number]: string;
-  }>({});
+  // const [editingPriceTomIndex, setEditingPriceTomIndex] = useState<
+  //   number | null
+  // >(null);
+  // const [editedPricesTom, setEditedPricesTom] = useState<{
+  //   [key: number]: string;
+  // }>({});
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const husmodellDocRef = doc(db, "house_model", String(houseId));
-        const husmodellDocSnap = await getDoc(husmodellDocRef);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const husmodellDocRef = doc(db, "house_model", String(houseId));
+  //       const husmodellDocSnap = await getDoc(husmodellDocRef);
 
-        if (husmodellDocSnap.exists()) {
-          setFinalData(husmodellDocSnap.data());
-        } else {
-          console.error("No document found for husmodell ID.");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-      }
-    };
-    if (houseId) {
-      fetchData();
-    }
-  }, [houseId]);
+  //       if (husmodellDocSnap.exists()) {
+  //         setFinalData(husmodellDocSnap.data());
+  //       } else {
+  //         console.error("No document found for husmodell ID.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     } finally {
+  //     }
+  //   };
+  //   if (houseId) {
+  //     fetchData();
+  //   }
+  // }, [houseId]);
 
   const fileDocumentsInputRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -210,122 +215,122 @@ export const ProjectAccounting = forwardRef<
     setDeleteIndex(null);
   };
 
-  const [showModal, setShowModal] = useState(false);
-  const [newCostType, setNewCostType] = useState<
-    "tomtekost" | "byggekost" | null
-  >(null);
+  // const [showModal, setShowModal] = useState(false);
+  // const [newCostType, setNewCostType] = useState<
+  //   "tomtekost" | "byggekost" | null
+  // >(null);
 
-  const [newCost, setNewCost] = useState({
-    Headline: "",
-    pris: "",
-    IncludingOffer: false,
-  });
+  // const [newCost, setNewCost] = useState({
+  //   Headline: "",
+  //   pris: "",
+  //   IncludingOffer: false,
+  // });
 
-  const openModal = (type: "tomtekost" | "byggekost") => {
-    setNewCostType(type);
-    setShowModal(true);
-    setNewCost({
-      Headline: "",
-      pris: "",
-      IncludingOffer: false,
-    });
-  };
+  // const openModal = (type: "tomtekost" | "byggekost") => {
+  //   setNewCostType(type);
+  //   setShowModal(true);
+  //   setNewCost({
+  //     Headline: "",
+  //     pris: "",
+  //     IncludingOffer: false,
+  //   });
+  // };
 
-  const handleModalPopup = () => {
-    if (showModal) {
-      setShowModal(false);
-    } else {
-      setShowModal(true);
-    }
-  };
+  // const handleModalPopup = () => {
+  //   if (showModal) {
+  //     setShowModal(false);
+  //   } else {
+  //     setShowModal(true);
+  //   }
+  // };
 
-  const [newTomtekostList, setNewTomtekostList] = useState<any>([]);
-  const [newByggekostList, setNewByggekostList] = useState<any>([]);
-  const [apiData, setApiData] = useState<any>();
+  // const [newTomtekostList, setNewTomtekostList] = useState<any>([]);
+  // const [newByggekostList, setNewByggekostList] = useState<any>([]);
+  // const [apiData, setApiData] = useState<any>();
 
-  const [TomtekostHusmodell, setTomtekostHusmodell] = useState<any>({
-    Tomtekost: [],
-  });
+  // const [TomtekostHusmodell, setTomtekostHusmodell] = useState<any>({
+  //   Tomtekost: [],
+  // });
 
-  useEffect(() => {
-    if (husmodellData?.Tomtekost) {
-      const data = {
-        IncludingOffer: false,
-        pris: "0",
-        TomtekostID: new Date().toISOString().split("T")[0],
-        Headline: "Tomtekjøp",
-      };
+  // useEffect(() => {
+  //   if (husmodellData?.Tomtekost) {
+  //     const data = {
+  //       IncludingOffer: false,
+  //       pris: "0",
+  //       TomtekostID: new Date().toISOString().split("T")[0],
+  //       Headline: "Tomtekjøp",
+  //     };
 
-      setTomtekostHusmodell((prevState: any) => ({
-        Tomtekost: [...prevState.Tomtekost, ...husmodellData?.Tomtekost, data],
-      }));
-    }
-  }, []);
+  //     setTomtekostHusmodell((prevState: any) => ({
+  //       Tomtekost: [...prevState.Tomtekost, ...husmodellData?.Tomtekost, data],
+  //     }));
+  //   }
+  // }, []);
 
-  const [ByggekostnaderHusmodell, setByggekostnaderHusmodell] = useState<any>({
-    Byggekostnader: [],
-  });
+  // const [ByggekostnaderHusmodell, setByggekostnaderHusmodell] = useState<any>({
+  //   Byggekostnader: [],
+  // });
 
-  useEffect(() => {
-    if (husmodellData?.Byggekostnader) {
-      const data = {
-        IncludingOffer: false,
-        pris: "0",
-        ByggekostnaderID: new Date().toISOString().split("T")[0],
-        Headline: "Kundens tilvalg",
-      };
+  // useEffect(() => {
+  //   if (husmodellData?.Byggekostnader) {
+  //     const data = {
+  //       IncludingOffer: false,
+  //       pris: "0",
+  //       ByggekostnaderID: new Date().toISOString().split("T")[0],
+  //       Headline: "Kundens tilvalg",
+  //     };
 
-      setByggekostnaderHusmodell((prevState: any) => ({
-        Byggekostnader: [
-          ...prevState.Byggekostnader,
-          ...husmodellData?.Byggekostnader,
-          data,
-        ],
-      }));
-    }
-  }, [husmodellData?.Byggekostnader]);
+  //     setByggekostnaderHusmodell((prevState: any) => ({
+  //       Byggekostnader: [
+  //         ...prevState.Byggekostnader,
+  //         ...husmodellData?.Byggekostnader,
+  //         data,
+  //       ],
+  //     }));
+  //   }
+  // }, [husmodellData?.Byggekostnader]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    const updatedByggekostnader = (
-      apiData
-        ? apiData?.Byggekostnader
-        : ByggekostnaderHusmodell?.Byggekostnader || []
-    ).map((item: any, index: number) => ({
-      ...item,
-      pris: editedPrices[index] ? editedPrices[index] : item.pris,
-      Headline: editedHeadlines[index] ? editedHeadlines[index] : item.Headline,
-    }));
+    // const updatedByggekostnader = (
+    //   apiData
+    //     ? apiData?.Byggekostnader
+    //     : ByggekostnaderHusmodell?.Byggekostnader || []
+    // ).map((item: any, index: number) => ({
+    //   ...item,
+    //   // pris: editedPrices[index] ? editedPrices[index] : item.pris,
+    //   // Headline: editedHeadlines[index] ? editedHeadlines[index] : item.Headline,
+    // }));
 
-    const newByggekostnaderFormatted = newByggekostList.map((item: any) => ({
-      ...item,
-      pris: item.pris,
-    }));
+    // const newByggekostnaderFormatted = newByggekostList.map((item: any) => ({
+    //   ...item,
+    //   pris: item.pris,
+    // }));
 
-    const updatedTomtekost = (
-      apiData ? apiData?.Tomtekost : TomtekostHusmodell?.Tomtekost || []
-    ).map((item: any, index: number) => ({
-      ...item,
-      pris: editedPricesTom[index] ? editedPricesTom[index] : item.pris,
-      Headline: editedHeadlinesTom[index]
-        ? editedHeadlinesTom[index]
-        : item.Headline,
-    }));
+    // const updatedTomtekost = (
+    //   apiData ? apiData?.Tomtekost : TomtekostHusmodell?.Tomtekost || []
+    // ).map((item: any, index: number) => ({
+    //   ...item,
+    //   // pris: editedPricesTom[index] ? editedPricesTom[index] : item.pris,
+    //   // Headline: editedHeadlinesTom[index]
+    //   //   ? editedHeadlinesTom[index]
+    //   //   : item.Headline,
+    // }));
 
-    const newTomtekostFormatted = newTomtekostList.map((item: any) => ({
-      ...item,
-      pris: item.pris,
-    }));
+    // const newTomtekostFormatted = newTomtekostList.map((item: any) => ({
+    //   ...item,
+    //   pris: item.pris,
+    // }));
 
-    const updatedHusmodellData = {
-      ...(apiData ? apiData?.Tomtekost : TomtekostHusmodell),
-      Byggekostnader: [...updatedByggekostnader, ...newByggekostnaderFormatted],
-      Tomtekost: [...updatedTomtekost, ...newTomtekostFormatted],
-    };
+    // const updatedHusmodellData = {
+    //   ...(apiData ? apiData?.Tomtekost : TomtekostHusmodell),
+    //   Byggekostnader: [...updatedByggekostnader, ...newByggekostnaderFormatted],
+    //   Tomtekost: [...updatedTomtekost, ...newTomtekostFormatted],
+    // };
 
     const finalData = {
       ...data,
-      husmodellData: updatedHusmodellData,
-      houseId: houseId,
+      // husmodellData: updatedHusmodellData,
+      // houseId: houseId,
     };
     if (data.documents !== undefined) {
       finalData.documents = data.documents;
@@ -362,90 +367,89 @@ export const ProjectAccounting = forwardRef<
     }
   };
 
-  const handleSubmitNewCost = () => {
-    const newItem = {
-      ...newCost,
-      [newCostType === "tomtekost" ? "TomtekostID" : "ByggekostID"]:
-        new Date().toISOString(),
-    };
+  // const handleSubmitNewCost = () => {
+  //   const newItem = {
+  //     ...newCost,
+  //     [newCostType === "tomtekost" ? "TomtekostID" : "ByggekostID"]:
+  //       new Date().toISOString(),
+  //   };
 
-    if (newCostType === "tomtekost") {
-      setNewTomtekostList((prev: any[]) => [...prev, newItem]);
-    } else if (newCostType === "byggekost") {
-      setNewByggekostList((prev: any[]) => [...prev, newItem]);
-    }
+  //   if (newCostType === "tomtekost") {
+  //     setNewTomtekostList((prev: any[]) => [...prev, newItem]);
+  //   } else if (newCostType === "byggekost") {
+  //     setNewByggekostList((prev: any[]) => [...prev, newItem]);
+  //   }
 
-    setShowModal(false);
-  };
+  //   setShowModal(false);
+  // };
 
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!id) {
+  //     return;
+  //   }
 
-    const getData = async () => {
-      const data = await fetchBankLeadData(id);
+  //   const getData = async () => {
+  //     const data = await fetchBankLeadData(id);
 
-      if (data && data.plotHusmodell) {
-        setHouseId(String(data.plotHusmodell?.house?.housemodell));
-      }
+  //     if (data && data.plotHusmodell) {
+  //       setHouseId(String(data.plotHusmodell?.house?.housemodell));
+  //     }
 
-      if (data && data?.ProjectAccount) {
-        if (
-          data?.plotHusmodell?.house?.housemodell ===
-          data?.ProjectAccount?.houseId
-        ) {
-          Object.entries(data.ProjectAccount).forEach(([key, value]) => {
-            if (value !== undefined && value !== null) {
-              form.setValue(key as any, value);
-            }
-          });
-          setApiData(data?.ProjectAccount?.husmodellData);
-        }
-      }
+  //     if (data && data?.ProjectAccount) {
+  //       if (
+  //         data?.plotHusmodell?.house?.housemodell ===
+  //         data?.ProjectAccount?.houseId
+  //       ) {
+  //         Object.entries(data.ProjectAccount).forEach(([key, value]) => {
+  //           if (value !== undefined && value !== null) {
+  //             form.setValue(key as any, value);
+  //           }
+  //         });
+  //         setApiData(data?.ProjectAccount?.husmodellData);
+  //       }
+  //     }
+  //   };
 
-    };
+  //   getData();
+  // }, [form, id, houseId]);
 
-    getData();
-  }, [form, id, houseId]);
+  // const parsePrice = (value: any): number => {
+  //   if (!value) return 0;
+  //   return parseFloat(
+  //     String(value).replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
+  //   );
+  // };
 
-  const parsePrice = (value: any): number => {
-    if (!value) return 0;
-    return parseFloat(
-      String(value).replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
-    );
-  };
+  // const Byggekostnader =
+  //   apiData?.Byggekostnader ?? ByggekostnaderHusmodell?.Byggekostnader ?? [];
+  // const Tomtekost = apiData?.Tomtekost ?? TomtekostHusmodell?.Tomtekost ?? [];
 
-  const Byggekostnader =
-    apiData?.Byggekostnader ?? ByggekostnaderHusmodell?.Byggekostnader ?? [];
-  const Tomtekost = apiData?.Tomtekost ?? TomtekostHusmodell?.Tomtekost ?? [];
+  // const totalPrisOfByggekostnader = [
+  //   ...Byggekostnader,
+  //   ...newByggekostList,
+  // ].reduce((acc: number, prod: any, index: number) => {
+  //   const value =
+  //     index < Byggekostnader.length
+  //       ? editedPrices[index] ?? prod.pris
+  //       : prod.pris;
+  //   return acc + parsePrice(value);
+  // }, 0);
 
-  const totalPrisOfByggekostnader = [
-    ...Byggekostnader,
-    ...newByggekostList,
-  ].reduce((acc: number, prod: any, index: number) => {
-    const value =
-      index < Byggekostnader.length
-        ? editedPrices[index] ?? prod.pris
-        : prod.pris;
-    return acc + parsePrice(value);
-  }, 0);
+  // const formattedNumberOfByggekostnader =
+  //   totalPrisOfByggekostnader.toLocaleString("nb-NO");
 
-  const formattedNumberOfByggekostnader =
-    totalPrisOfByggekostnader.toLocaleString("nb-NO");
+  // const totalPrisOfTomtekost = [...Tomtekost, ...newTomtekostList].reduce(
+  //   (acc: number, prod: any, index: number) => {
+  //     const value =
+  //       index < Tomtekost.length
+  //         ? editedPricesTom[index] ?? prod.pris
+  //         : prod.pris;
+  //     return acc + parsePrice(value);
+  //   },
+  //   0
+  // );
 
-  const totalPrisOfTomtekost = [...Tomtekost, ...newTomtekostList].reduce(
-    (acc: number, prod: any, index: number) => {
-      const value =
-        index < Tomtekost.length
-          ? editedPricesTom[index] ?? prod.pris
-          : prod.pris;
-      return acc + parsePrice(value);
-    },
-    0
-  );
-
-  const formattedNumber = totalPrisOfTomtekost.toLocaleString("nb-NO");
+  // const formattedNumber = totalPrisOfTomtekost.toLocaleString("nb-NO");
 
   useImperativeHandle(ref, () => ({
     validateForm: async () => {
@@ -465,13 +469,108 @@ export const ProjectAccounting = forwardRef<
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div className="px-6">
-            <div className="p-5 pt-0 border-b border-[#DCDFEA] text-[#111322] text-xl font-semibold">
+            <div className="pb-5 text-[#111322] text-xl font-semibold">
               Økonomisk plan
             </div>
             <div>
-              <h4 className="p-6 pb-3 text-darkBlack font-semibold text-lg">
+              {/* <h4 className="p-6 text-darkBlack font-semibold text-lg">
                 Har du allerede laget en økonomisk plan? Last den opp her.
-              </h4>
+              </h4> */}
+              <div className="mb-[40px]">
+                <FormField
+                  control={form.control}
+                  name={`Økonomisk`}
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="flex items-center gap-5">
+                          <div className="relative flex items-center gap-2">
+                            <input
+                              className={`bg-white rounded-[8px] border text-black
+        ${
+          fieldState?.error ? "border-red" : "border-gray1"
+        } h-4 w-4 accent-primary`}
+                              type="radio"
+                              value={"Last opp en økonomisk plan"}
+                              onChange={(e) => {
+                                form.setValue("Økonomisk", e.target.value);
+                              }}
+                              checked={
+                                field.value === "Last opp en økonomisk plan"
+                              }
+                            />
+                            <p
+                              className={`${
+                                field.value === "Last opp en økonomisk plan"
+                                  ? "text-darkBlack"
+                                  : "text-[#5D6B98]"
+                              }`}
+                            >
+                              <span className="font-bold">Last opp</span> en
+                              økonomisk plan
+                            </p>
+                          </div>
+
+                          <div className="relative flex items-center gap-2">
+                            <input
+                              className={`bg-white rounded-[8px] border text-black
+        ${
+          fieldState?.error ? "border-red" : "border-gray1"
+        } h-4 w-4 accent-primary`}
+                              type="radio"
+                              value={"Opprett en økonomisk plan"}
+                              onChange={(e) => {
+                                form.setValue("Økonomisk", e.target.value);
+                              }}
+                              checked={
+                                field.value === "Opprett en økonomisk plan"
+                              }
+                            />
+                            <p
+                              className={`${
+                                field.value === "Opprett en økonomisk plan"
+                                  ? "text-darkBlack"
+                                  : "text-[#5D6B98]"
+                              }`}
+                            >
+                              <span className="font-bold">Opprett</span> en
+                              økonomisk plan
+                            </p>
+                          </div>
+
+                          <div className="relative flex items-center gap-2">
+                            <input
+                              className={`bg-white rounded-[8px] border text-black
+        ${
+          fieldState?.error ? "border-red" : "border-gray1"
+        } h-4 w-4 accent-primary`}
+                              type="radio"
+                              value={"Ettersend en økonomisk plan"}
+                              onChange={(e) => {
+                                form.setValue("Økonomisk", e.target.value);
+                              }}
+                              checked={
+                                field.value === "Ettersend en økonomisk plan"
+                              }
+                            />
+                            <p
+                              className={`${
+                                field.value === "Ettersend en økonomisk plan"
+                                  ? "text-darkBlack"
+                                  : "text-[#5D6B98]"
+                              }`}
+                            >
+                              <span className="font-bold">Ettersend</span> en
+                              økonomisk plan
+                            </p>
+                          </div>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <div className="grid grid-cols-2 gap-6 mb-[62px]">
                 <FormField
@@ -561,7 +660,7 @@ export const ProjectAccounting = forwardRef<
             </div>
           </div>
 
-          <h4 className="px-6 pb-5 text-darkBlack font-semibold text-lg">
+          {/* <h4 className="px-6 pb-5 text-darkBlack font-semibold text-lg">
             Har du ikke laget en økonomisk plan? Fyll ut den økonomiske planen
             her:
           </h4>
@@ -595,10 +694,6 @@ export const ProjectAccounting = forwardRef<
                           key={index}
                         >
                           <div className="flex items-center gap-2">
-                            {/* <img src={Ic_info_circle} alt="icon" /> */}
-                            {/* <p className="text-gray text-sm font-medium">
-                                  {item?.Headline}
-                                </p> */}
                             {isHeadlineEditing ? (
                               <input
                                 type="text"
@@ -711,7 +806,6 @@ export const ProjectAccounting = forwardRef<
                       key={index}
                     >
                       <div className="flex items-center gap-2">
-                        {/* <img src={Ic_info_circle} alt="icon" /> */}
                         <p className="text-gray text-sm font-medium">
                           {item?.Headline}
                         </p>
@@ -773,7 +867,6 @@ export const ProjectAccounting = forwardRef<
                 <div className="border-t border-gray2"></div>
                 <div className="flex items-center gap-2 justify-between">
                   <div className="flex items-center gap-2">
-                    {/* <img src={Ic_info_circle} alt="icon" /> */}
                     <p className="text-gray text-lg font-bold">
                       Sum byggkostnader
                     </p>
@@ -822,8 +915,6 @@ export const ProjectAccounting = forwardRef<
                         key={index}
                       >
                         <div className="flex items-center gap-2">
-                          {/* <img src={Ic_info_circle} alt="icon" /> */}
-
                           {isHeadlineEditing ? (
                             <input
                               type="text"
@@ -893,7 +984,6 @@ export const ProjectAccounting = forwardRef<
                       key={index}
                     >
                       <div className="flex items-center gap-2">
-                        {/* <img src={Ic_info_circle} alt="icon" /> */}
                         <p className="text-gray text-sm font-medium">
                           {item?.Headline}
                         </p>
@@ -956,7 +1046,6 @@ export const ProjectAccounting = forwardRef<
                 <div className="border-t border-gray2"></div>
                 <div className="flex items-center gap-2 justify-between">
                   <div className="flex items-center gap-2">
-                    {/* <img src={Ic_info_circle} alt="icon" /> */}
                     <p className="text-gray text-lg font-bold">
                       Sum tomtekostnader
                     </p>
@@ -978,7 +1067,7 @@ export const ProjectAccounting = forwardRef<
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="flex justify-end w-full gap-5 items-center fixed bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
             <div onClick={() => setActiveTab(1)} className="w-1/2 sm:w-auto">
               <Button
@@ -1018,7 +1107,7 @@ export const ProjectAccounting = forwardRef<
         </Modal>
       )}
 
-      {showModal && (
+      {/* {showModal && (
         <Modal onClose={handleModalPopup} isOpen={true}>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded-xl w-[400px]">
@@ -1072,7 +1161,7 @@ export const ProjectAccounting = forwardRef<
             </div>
           </div>
         </Modal>
-      )}
+      )} */}
     </>
   );
 });

@@ -652,7 +652,7 @@ export const Kunden = forwardRef<
                                   : "border-gray1"
                               } `}
                                       >
-                                        <SelectValue placeholder="Enter Kundetype" />
+                                        <SelectValue placeholder="Velg kundetype" />
                                       </SelectTrigger>
                                       <SelectContent className="bg-white">
                                         <SelectGroup>

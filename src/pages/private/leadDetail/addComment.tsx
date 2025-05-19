@@ -265,39 +265,6 @@ export const AddComment: React.FC<{
                   )}
                 />
               </div>
-              <div>
-                <FormField
-                  control={form.control}
-                  name={`full_fort_date`}
-                  render={({ field, fieldState }: any) => (
-                    <FormItem>
-                      <p
-                        className={`${
-                          fieldState.error ? "text-red" : ""
-                        } mb-[6px] text-sm`}
-                      >
-                        Forventet oppstart
-                      </p>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            placeholder="Skriv inn Forventet oppstart"
-                            {...field}
-                            className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                            type="date"
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
               <div className="col-span-2">
                 <FormField
                   control={form.control}

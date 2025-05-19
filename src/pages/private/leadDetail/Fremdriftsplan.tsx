@@ -5,7 +5,9 @@ import Stepper from "../../../components/ui/stepper";
 import { ChevronDown, Pencil } from "lucide-react";
 import { isValid, addDays, differenceInCalendarDays } from "date-fns";
 import Modal from "../../../components/common/modal";
+import Img_pdf from "../../../assets/images/Img_pdf.png";
 import { AddComment } from "./addComment";
+import { Payment } from "./payment";
 
 function formatPrice(inputStr: any) {
   let noSuffix = inputStr.replace(" NOK", "");
@@ -69,6 +71,15 @@ export const Fremdriftsplan: React.FC<{
     setOpenStepIndex((prev) => (prev === index ? null : index));
   };
 
+  const [isPDFModalOpen, setIsPDFModalOpen] = useState(false);
+  const handleConfirmPDFPopup = () => {
+    if (isPDFModalOpen) {
+      setIsPDFModalOpen(false);
+    } else {
+      setIsPDFModalOpen(true);
+    }
+  };
+
   return (
     <>
       {loading && <Spinner />}
@@ -126,10 +137,24 @@ export const Fremdriftsplan: React.FC<{
                     </h4>
                     {currIndex > index ? (
                       <div className="flex items-center gap-4">
-                        <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-2 text-xs text-[#00857A]">
-                          Betalt {formatPrice(step.pris)} (
-                          {step.date.split("-").reverse().join(".")})
-                        </div>
+                        {step?.payment ? (
+                          <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-2 text-xs text-[#00857A]">
+                            Betalt {formatPrice(step.pris)} (
+                            {step.date.split("-").reverse().join(".")})
+                          </div>
+                        ) : (
+                          <div
+                            className="bg-[#6941C6] rounded-[16px] py-0.5 px-2 text-xs text-white cursor-pointer"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setIsPDFModalOpen(true);
+                              setSelectIndex(step.name);
+                            }}
+                          >
+                            Pay for this Step
+                          </div>
+                        )}
                         <ChevronDown
                           className={`text-primary transition-transform duration-200 ${
                             openStepIndex === index ? "rotate-180" : ""
@@ -241,6 +266,50 @@ export const Fremdriftsplan: React.FC<{
                       </div>
                     </div>
                   )}
+                  {currIndex > index && openStepIndex === index && (
+                    <div className="border border-[#EAECF0] rounded-lg">
+                      <div className="flex items-center justify-between gap-2 p-4 border-b border-[#EAECF0]">
+                        <h3 className="text-darkBlack font-semibold">
+                          Grunnarbeider: Svar til utbygger
+                        </h3>
+                        <Pencil
+                          className="text-primary cursor-pointer"
+                          onClick={() => {
+                            setIsPDFModalOpen(true);
+                            setSelectIndex(step.name);
+                          }}
+                        />
+                      </div>
+                      <div className="p-4">
+                        <p className="text-[#5D6B98] text-base mb-6">
+                          {step.comment.text}
+                        </p>
+                        <div>
+                          <h4 className="text-darkBlack font-semibold">
+                            Dokumenter
+                          </h4>
+                          {step.comment.photo && (
+                            <div className="mt-5 flex items-center gap-5 flex-wrap">
+                              {step.comment.photo?.map(
+                                (_file: any, index: number) => (
+                                  <div
+                                    className="relative h-[140px] w-[140px]"
+                                    key={index}
+                                  >
+                                    <img
+                                      src={Img_pdf}
+                                      alt="logo"
+                                      className="object-cover w-full h-full rounded-lg"
+                                    />
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -254,6 +323,19 @@ export const Fremdriftsplan: React.FC<{
               <AddComment
                 SelectIndex={SelectIndex}
                 setIsModalOpen={setIsModalOpen}
+                getData={getData}
+              />
+            </div>
+          </div>
+        </Modal>
+      )}
+      {isPDFModalOpen && (
+        <Modal onClose={handleConfirmPDFPopup} isOpen={true}>
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 mx-4">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden w-[80%]">
+              <Payment
+                SelectIndex={SelectIndex}
+                setIsPDFModalOpen={setIsPDFModalOpen}
                 getData={getData}
               />
             </div>

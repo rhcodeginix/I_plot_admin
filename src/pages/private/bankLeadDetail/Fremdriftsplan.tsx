@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "../../../components/Spinner";
 import Stepper from "../../../components/ui/stepper";
 import { ChevronDown, Pencil } from "lucide-react";
+import Img_pdf from "../../../assets/images/Img_pdf.png";
 import Modal from "../../../components/common/modal";
 import { AddComment } from "./addComment";
 import { isValid, addDays, differenceInCalendarDays } from "date-fns";
@@ -230,6 +231,50 @@ export const Fremdriftsplan: React.FC<{
                                   >
                                     <img
                                       src={file}
+                                      alt="logo"
+                                      className="object-cover w-full h-full rounded-lg"
+                                    />
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {currIndex > index && openStepIndex === index && (
+                    <div className="border border-[#EAECF0] rounded-lg">
+                      <div className="flex items-center justify-between gap-2 p-4 border-b border-[#EAECF0]">
+                        <h3 className="text-darkBlack font-semibold">
+                          Grunnarbeider: Svar til utbygger
+                        </h3>
+                        {/* <Pencil
+                          className="text-primary cursor-pointer"
+                          onClick={() => {
+                            setIsPDFModalOpen(true);
+                            setSelectIndex(step.name);
+                          }}
+                        /> */}
+                      </div>
+                      <div className="p-4">
+                        <p className="text-[#5D6B98] text-base mb-6">
+                          {step.comment.text}
+                        </p>
+                        <div>
+                          <h4 className="text-darkBlack font-semibold">
+                            Dokumenter
+                          </h4>
+                          {step.comment.photo && (
+                            <div className="mt-5 flex items-center gap-5 flex-wrap">
+                              {step.comment.photo?.map(
+                                (_file: any, index: number) => (
+                                  <div
+                                    className="relative h-[140px] w-[140px]"
+                                    key={index}
+                                  >
+                                    <img
+                                      src={Img_pdf}
                                       alt="logo"
                                       className="object-cover w-full h-full rounded-lg"
                                     />

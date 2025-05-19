@@ -260,9 +260,13 @@ export const BankTable = () => {
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
                   {row.original.status}
                 </p>
+              ) : row.original.status === "Approved" ? (
+                <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
+                  {row.original.status}
+                </p>
               ) : (
-                row.original.status === "Approved" && (
-                  <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
+                row.original.status === "In Process" && (
+                  <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
                     {row.original.status}
                   </p>
                 )

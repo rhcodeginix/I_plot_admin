@@ -20,7 +20,7 @@ export const Dashboard = () => {
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const email = sessionStorage.getItem("Iplot_admin");
+  const email = localStorage.getItem("Iplot_admin");
   const [permission, setPermission] = useState<any>(null);
 
   useEffect(() => {

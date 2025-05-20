@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: any = {
-  token: sessionStorage.getItem("Iplot_admin") || null,
+  token: localStorage.getItem("Iplot_admin") || null,
 };
 
 export const authSlice = createSlice({
@@ -13,12 +13,12 @@ export const authSlice = createSlice({
       state.token = token;
 
       if (token) {
-        sessionStorage.setItem("Iplot_admin", token);
+        localStorage.setItem("Iplot_admin", token);
       }
     },
     clearCredentials: (state: any) => {
       state.token = null;
-      sessionStorage.removeItem("Iplot_admin");
+      localStorage.removeItem("Iplot_admin");
     },
   },
 });

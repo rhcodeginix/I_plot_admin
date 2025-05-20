@@ -47,7 +47,7 @@ export const SupplierTable = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [permission, setPermission] = useState<any>(null);
-  const email = sessionStorage.getItem("Iplot_admin");
+  const email = localStorage.getItem("Iplot_admin");
 
   useEffect(() => {
     const getData = async () => {

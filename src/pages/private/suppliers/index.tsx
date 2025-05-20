@@ -37,7 +37,7 @@ export const Suppliers = () => {
     };
     reader.readAsBinaryString(file[0]);
   };
-  const email = sessionStorage.getItem("Iplot_admin");
+  const email = localStorage.getItem("Iplot_admin");
 
   return (
     <>

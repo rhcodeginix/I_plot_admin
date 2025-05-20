@@ -5,6 +5,6 @@ export const useAuth = () => {
 };
 
 export const useIsAuthenticated = () => {
-  const token = sessionStorage.getItem("Iplot_admin");
+  const token = localStorage.getItem("Iplot_admin");
   return !!token;
 };

@@ -5,7 +5,7 @@ import { fetchAdminDataByEmail } from "../../../lib/utils";
 
 export const Husmodeller = () => {
   const [isAdd, setIsAdd] = useState(false);
-  const email = sessionStorage.getItem("Iplot_admin");
+  const email = localStorage.getItem("Iplot_admin");
 
   useEffect(() => {
     const getData = async () => {

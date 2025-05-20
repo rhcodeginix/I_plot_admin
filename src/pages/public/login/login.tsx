@@ -64,7 +64,7 @@ export const Login = () => {
             toast.success("Login successfully", {
               position: "top-right",
             });
-            sessionStorage.setItem("Iplot_admin", data.email);
+            localStorage.setItem("Iplot_admin", data.email);
             navigate("/dashboard");
           }
         } else {
@@ -74,7 +74,7 @@ export const Login = () => {
           );
           if (isPasswordCorrect) {
             toast.success("Login successfully", { position: "top-right" });
-            sessionStorage.setItem("Iplot_admin", data.email);
+            localStorage.setItem("Iplot_admin", data.email);
             navigate("/dashboard");
           } else {
             toast.error("Incorrect password", { position: "top-right" });

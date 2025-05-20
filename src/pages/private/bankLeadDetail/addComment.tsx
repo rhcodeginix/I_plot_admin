@@ -81,7 +81,7 @@ export const AddComment: React.FC<{
   //   const [suppliers, setSuppliers] = useState<any>([]);
 
   //   const [permission, setPermission] = useState<any>(null);
-  //   const email = sessionStorage.getItem("Iplot_admin");
+  //   const email = localStorage.getItem("Iplot_admin");
 
   //   useEffect(() => {
   //     const getData = async () => {

@@ -20,7 +20,7 @@ export const Navbar: React.FC = () => {
     setIsDropdownOpen((prev) => !prev);
   };
   useEffect(() => {
-    const user: any = sessionStorage.getItem("Iplot_admin");
+    const user: any = localStorage.getItem("Iplot_admin");
     setLoginUser(user);
   }, [loginUser]);
 
@@ -42,7 +42,7 @@ export const Navbar: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      sessionStorage.removeItem("Iplot_admin");
+      localStorage.removeItem("Iplot_admin");
       setIsDropdownOpen(false);
       navigate("/login");
       toast.success("Logout successfully", { position: "top-right" });
@@ -54,7 +54,7 @@ export const Navbar: React.FC = () => {
 
   const [HusmodellPermission, setHusmodellPermission] = useState<any>(null);
   const [Role, setRole] = useState<any>(null);
-  const email = sessionStorage.getItem("Iplot_admin");
+  const email = localStorage.getItem("Iplot_admin");
 
   useEffect(() => {
     const getData = async () => {

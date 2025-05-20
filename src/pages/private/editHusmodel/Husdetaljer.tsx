@@ -235,7 +235,7 @@ export const Husdetaljer: React.FC<{
   const [createData, setCreateData] = useState<any>(null);
 
   const [permission, setPermission] = useState<any>(null);
-  const email = sessionStorage.getItem("Iplot_admin");
+  const email = localStorage.getItem("Iplot_admin");
 
   useEffect(() => {
     const getData = async () => {

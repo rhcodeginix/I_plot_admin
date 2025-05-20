@@ -80,7 +80,7 @@ export const MyLeads = () => {
     null
   );
 
-  const email = sessionStorage.getItem("Iplot_admin");
+  const email = localStorage.getItem("Iplot_admin");
 
   const fetchLeadsData = async () => {
     setIsLoading(true);

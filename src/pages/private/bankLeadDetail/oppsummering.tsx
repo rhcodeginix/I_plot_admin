@@ -33,40 +33,19 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
   }, [bankData]);
   const plotData = bankData?.plotHusmodell?.plot;
   const houseData = bankData?.plotHusmodell?.house;
-  const projectAccount = bankData?.ProjectAccount?.husmodellData;
 
-  const parsePrice = (value: any): number => {
-    if (!value) return 0;
-    return parseFloat(
-      String(value).replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
-    );
-  };
+  function norwegianToNumber(str: any) {
+    if (typeof str !== "string") return 0;
+    return Number(str.replace(/\s/g, ""));
+  }
 
-  const Byggekostnader = projectAccount?.Byggekostnader ?? [];
-  const Tomtekost = projectAccount?.Tomtekost ?? [];
+  const sum =
+    norwegianToNumber(plotData?.tomtekostnader) +
+    norwegianToNumber(houseData?.byggekostnader);
 
-  const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
-    (acc: number, prod: any, index: number) => {
-      const value = prod?.pris;
-      return acc + parsePrice(value);
-    },
-    0
-  );
-
-  const formattedNumberOfByggekostnader =
-    totalPrisOfByggekostnader.toLocaleString("nb-NO");
-
-  const totalPrisOfTomtekost = [...Tomtekost].reduce(
-    (acc: number, prod: any) => {
-      const value = prod.pris;
-      return acc + parsePrice(value);
-    },
-    0
-  );
-
-  const formattedNumber = totalPrisOfTomtekost.toLocaleString("nb-NO");
-  const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
-  const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
+  function numberToNorwegian(num: any) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
 
   return (
     <>
@@ -177,7 +156,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                 Totale tomtekostnader:
               </div>
               <div className="w-full text-[#000000] font-semibold">
-                {formattedNumberOfByggekostnader} NOK
+                {plotData?.tomtekostnader} NOK
               </div>
             </div>
             <div className="flex gap-3 items-center">
@@ -208,7 +187,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                 Totale byggekostnader:
               </div>
               <div className="w-full text-[#000000] font-semibold">
-                {formattedNumber} NOK
+                {houseData?.byggekostnader} NOK
               </div>
             </div>
             <div className="flex gap-3 items-center mb-3">
@@ -224,7 +203,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                 Sum tomtekostnader
               </div>
               <div className="w-full text-[#000000] font-semibold text-lg flex gap-[60px] items-center">
-                {formattedNumberOfByggekostnader} NOK
+                {plotData?.tomtekostnader} NOK
                 <p className="text-[#00000099] text-base">
                   (prosjektregnskapet oversende banken)
                 </p>
@@ -235,7 +214,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                 Sum byggkostnader
               </div>
               <div className="w-full text-[#000000] font-semibold text-lg flex gap-[60px] items-center">
-                {formattedNumber} NOK
+                {houseData?.byggekostnader} NOK
                 <p className="text-[#00000099] text-base">
                   (prosjektregnskapet oversende banken)
                 </p>
@@ -247,7 +226,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                 Totale kostnader
               </div>
               <div className="w-full text-[#000000] font-semibold text-xl flex gap-[60px] items-center">
-                {formattedGrandTotal} NOK
+                {numberToNorwegian(sum)} NOK
               </div>
             </div>
           </div>

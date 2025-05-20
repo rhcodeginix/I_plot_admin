@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/common/button";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
+import { toast } from "react-hot-toast";
 
 export const Oppsummering: React.FC<{
   setActiveTab: any;
 }> = ({ setActiveTab }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const [bankData, setBankData] = useState<any>();
@@ -99,6 +101,45 @@ export const Oppsummering: React.FC<{
   function numberToNorwegian(num: any) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
+
+  const sendWelcomeEmail = async () => {
+    try {
+      const response = await fetch(
+        "https://nh989m12uk.execute-api.eu-north-1.amazonaws.com/prod/banklead",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: "send-welcome",
+            email: "rudraksh.shukla98@gmail.com",
+            fields: {
+              FNAME: bankData?.Kunden?.Kundeinformasjon[0]?.f_name,
+              LNAME: bankData?.Kunden?.Kundeinformasjon[0]?.l_name,
+              phone: bankData?.Kunden?.Kundeinformasjon[0]?.mobileNummer,
+              email: bankData?.Kunden?.Kundeinformasjon[0]?.EPost,
+              dealer: "BoligPartner",
+              office: "BoligPartner",
+              projectAddress: bankData?.plotHusmodell?.plot?.address,
+              landCost: `${plotData?.tomtekostnader} NOK`,
+              buildingCost: `${houseData?.byggekostnader} NOK`,
+              totalCost: `${numberToNorwegian(sum)} NOK`,
+              link: `https://admin.mintomt.no/leads-detail/${id}`,
+            },
+          }),
+        }
+      );
+
+      const result = await response.json();
+      toast.success(result.message, {
+        position: "top-right",
+      });
+      navigate("/bank-leads");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <>
@@ -339,7 +380,8 @@ export const Oppsummering: React.FC<{
         <Button
           text="Send til bank"
           className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-          onClick={() => setActiveTab(5)}
+          // onClick={() => setActiveTab(5)}
+          onClick={sendWelcomeEmail}
         />
       </div>
     </>

@@ -52,40 +52,53 @@ export const Oppsummering: React.FC<{
   }, [bankData]);
   const plotData = bankData?.plotHusmodell?.plot;
   const houseData = bankData?.plotHusmodell?.house;
-  const projectAccount = bankData?.ProjectAccount?.husmodellData;
+  // const projectAccount = bankData?.ProjectAccount?.husmodellData;
 
-  const parsePrice = (value: any): number => {
-    if (!value) return 0;
-    return parseFloat(
-      String(value).replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
-    );
-  };
+  // const parsePrice = (value: any): number => {
+  //   if (!value) return 0;
+  //   return parseFloat(
+  //     String(value).replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
+  //   );
+  // };
 
-  const Byggekostnader = projectAccount?.Byggekostnader ?? [];
-  const Tomtekost = projectAccount?.Tomtekost ?? [];
+  // const Byggekostnader = projectAccount?.Byggekostnader ?? [];
+  // const Tomtekost = projectAccount?.Tomtekost ?? [];
 
-  const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
-    (acc: number, prod: any, index: number) => {
-      const value = prod?.pris;
-      return acc + parsePrice(value);
-    },
-    0
-  );
+  // const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
+  //   (acc: number, prod: any, index: number) => {
+  //     const value = prod?.pris;
+  //     return acc + parsePrice(value);
+  //   },
+  //   0
+  // );
 
-  const formattedNumberOfByggekostnader =
-    totalPrisOfByggekostnader.toLocaleString("nb-NO");
+  // const formattedNumberOfByggekostnader =
+  //   totalPrisOfByggekostnader.toLocaleString("nb-NO");
 
-  const totalPrisOfTomtekost = [...Tomtekost].reduce(
-    (acc: number, prod: any) => {
-      const value = prod.pris;
-      return acc + parsePrice(value);
-    },
-    0
-  );
+  // const totalPrisOfTomtekost = [...Tomtekost].reduce(
+  //   (acc: number, prod: any) => {
+  //     const value = prod.pris;
+  //     return acc + parsePrice(value);
+  //   },
+  //   0
+  // );
 
-  const formattedNumber = totalPrisOfTomtekost.toLocaleString("nb-NO");
-  const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
-  const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
+  // const formattedNumber = totalPrisOfTomtekost.toLocaleString("nb-NO");
+  // const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
+  // const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
+
+  function norwegianToNumber(str: any) {
+    if (typeof str !== "string") return 0;
+    return Number(str.replace(/\s/g, ""));
+  }
+
+  const sum =
+    norwegianToNumber(plotData?.tomtekostnader) +
+    norwegianToNumber(houseData?.byggekostnader);
+
+  function numberToNorwegian(num: any) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
 
   return (
     <>
@@ -185,7 +198,8 @@ export const Oppsummering: React.FC<{
                   Totale tomtekostnader:
                 </div>
                 <div className="w-full text-darkBlack">
-                  {formattedNumberOfByggekostnader} NOK
+                  {/* {formattedNumberOfByggekostnader} NOK */}
+                  {plotData?.tomtekostnader} NOK
                 </div>
               </div>
               <div className="flex gap-3 items-center">
@@ -213,7 +227,8 @@ export const Oppsummering: React.FC<{
                   Totale byggekostnader:
                 </div>
                 <div className="w-full text-darkBlack">
-                  {formattedNumber} NOK
+                  {/* {formattedNumber} NOK */}
+                  {houseData?.byggekostnader} NOK
                 </div>
               </div>
               <div className="flex gap-3 items-center mb-3">
@@ -282,7 +297,8 @@ export const Oppsummering: React.FC<{
                 Sum tomtekostnader
               </div>
               <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                {formattedNumberOfByggekostnader} NOK
+                {/* {formattedNumberOfByggekostnader} NOK */}
+                {plotData?.tomtekostnader} NOK
                 <p className="text-[#5D6B98] text-base font-normal">
                   (prosjektregnskapet oversendes megler)
                 </p>
@@ -293,7 +309,8 @@ export const Oppsummering: React.FC<{
                 Sum byggkostnader
               </div>
               <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                {formattedNumber} NOK
+                {/* {formattedNumber} NOK */}
+                {houseData?.byggekostnader} NOK
                 <p className="text-[#5D6B98] text-base font-normal">
                   (prosjektregnskapet oversende banken)
                 </p>
@@ -305,14 +322,15 @@ export const Oppsummering: React.FC<{
                 Totale kostnader
               </div>
               <div className="w-full text-darkBlack font-bold text-xl">
-                {formattedGrandTotal} NOK
+                {numberToNorwegian(sum)} NOK
+                {/* {formattedGrandTotal} NOK */}
               </div>
             </div>
           </div>
         </div>
       </div>
       <div className="flex justify-end w-full gap-5 items-center fixed bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-        <div onClick={() => setActiveTab(2)} className="w-1/2 sm:w-auto">
+        <div onClick={() => setActiveTab(3)} className="w-1/2 sm:w-auto">
           <Button
             text="Tilbake"
             className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -321,7 +339,7 @@ export const Oppsummering: React.FC<{
         <Button
           text="Send til bank"
           className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-          onClick={() => setActiveTab(4)}
+          onClick={() => setActiveTab(5)}
         />
       </div>
     </>

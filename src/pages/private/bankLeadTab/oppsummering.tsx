@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/common/button";
-import { UserRoundCheck } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
 import { doc, getDoc } from "firebase/firestore";
@@ -97,176 +96,215 @@ export const Oppsummering: React.FC<{
         }}
       >
         <div className="py-4 px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
-          <UserRoundCheck />
           <span className="text-lg font-semibold">Oppsummering</span>
         </div>
-        <div className="bg-[#F6F4F2] py-3 px-5 text-sm font-semibold">
-          Informasjon om <span className="font-extrabold">kunden:</span>
-        </div>
-        <div className="p-5 grid grid-cols-2 gap-6">
-          {bankData &&
-            bankData?.Kunden?.Kundeinformasjon.length &&
-            bankData?.Kunden?.Kundeinformasjon.map(
-              (item: any, index: number) => {
-                return (
-                  <div className="flex flex-col gap-2" key={index}>
-                    <div className="flex gap-3 items-center">
-                      <div className="w-[150px] text-[#00000099] font-semibold">
-                        Type
-                      </div>
-                      <div className="w-[300px] text-[#000000] font-semibold">
-                        {item?.Kundetype}
-                      </div>
-                    </div>
-                    <div className="flex gap-3 items-center">
-                      <div className="w-[150px] text-[#00000099] font-semibold">
-                        Navn:
-                      </div>
-                      <div className="w-[300px] text-[#000000] font-semibold">
-                        {item?.f_name} {item?.l_name}
-                      </div>
-                    </div>
-                    <div className="flex gap-3 items-center">
-                      <div className="w-[150px] text-[#00000099] font-semibold">
-                        Adresse:
-                      </div>
-                      <div className="w-[300px] text-[#000000] font-semibold">
-                        {item?.Adresse}
-                      </div>
-                    </div>
-                    <div className="flex gap-3 items-center">
-                      <div className="w-[150px] text-[#00000099] font-semibold">
-                        Mobil:
-                      </div>
-                      <div className="w-[300px] text-[#000000] font-semibold">
-                        {item?.mobileNummer}
-                      </div>
-                    </div>
-                    <div className="flex gap-3 items-center">
-                      <div className="w-[150px] text-[#00000099] font-semibold">
-                        E-post:
-                      </div>
-                      <div className="w-[300px] text-[#000000] font-semibold">
-                        {item?.EPost}
-                      </div>
-                    </div>
-                    <div className="flex gap-3 items-center">
-                      <div className="w-[150px] text-[#00000099] font-semibold">
-                        Fødselsdato:
-                      </div>
-                      <div className="w-[300px] text-[#000000] font-semibold">
-                        {item?.dato}
-                      </div>
-                    </div>
-                    <div className="flex gap-3 items-center">
-                      <div className="w-[150px] text-[#00000099] font-semibold">
-                        Personnummer:
-                      </div>
-                      <div className="w-[300px] text-[#000000] font-semibold">
-                        {item?.Personnummer}
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-            )}
-        </div>
-        <div className="bg-[#F6F4F2] py-3 px-5 text-sm font-semibold">
-          Informasjon om <span className="font-extrabold">tomten:</span>
-        </div>
         <div className="p-5">
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-3 items-center">
-              <div className="w-[300px] text-[#00000099] font-semibold">
-                Adresse:
+          <div className="text-lg text-black font-medium">
+            Informasjon om kunden
+          </div>
+          <div className="py-5 grid grid-cols-2 gap-6">
+            {bankData &&
+              bankData?.Kunden?.Kundeinformasjon.length &&
+              bankData?.Kunden?.Kundeinformasjon.map(
+                (item: any, index: number) => {
+                  return (
+                    <div className="flex flex-col gap-2" key={index}>
+                      <div className="flex gap-3 items-center">
+                        <div className="w-[150px] text-[#5D6B98]">Type</div>
+                        <div className="w-[300px] text-darkBlack">
+                          {item?.Kundetype}
+                        </div>
+                      </div>
+                      <div className="flex gap-3 items-center">
+                        <div className="w-[150px] text-[#5D6B98]">Navn:</div>
+                        <div className="w-[300px] text-darkBlack">
+                          {item?.f_name} {item?.l_name}
+                        </div>
+                      </div>
+                      <div className="flex gap-3 items-center">
+                        <div className="w-[150px] text-[#5D6B98]">Adresse:</div>
+                        <div className="w-[300px] text-darkBlack">
+                          {item?.Adresse}
+                        </div>
+                      </div>
+                      <div className="flex gap-3 items-center">
+                        <div className="w-[150px] text-[#5D6B98]">Mobil:</div>
+                        <div className="w-[300px] text-darkBlack">
+                          {item?.mobileNummer}
+                        </div>
+                      </div>
+                      <div className="flex gap-3 items-center">
+                        <div className="w-[150px] text-[#5D6B98]">E-post:</div>
+                        <div className="w-[300px] text-darkBlack">
+                          {item?.EPost}
+                        </div>
+                      </div>
+                      <div className="flex gap-3 items-center">
+                        <div className="w-[150px] text-[#5D6B98]">
+                          Fødselsdato:
+                        </div>
+                        <div className="w-[300px] text-darkBlack">
+                          {item?.dato}
+                        </div>
+                      </div>
+                      <div className="flex gap-3 items-center">
+                        <div className="w-[150px] text-[#5D6B98]">
+                          Personnummer:
+                        </div>
+                        <div className="w-[300px] text-darkBlack">
+                          {item?.Personnummer}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              )}
+          </div>
+          <div className="border-t border-[#DCDFEA] mb-5"></div>
+          <div className="text-lg text-black font-medium">
+            Informasjon om tomten
+          </div>
+          <div className="py-5">
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-3 items-center">
+                <div className="w-[300px] text-[#5D6B98]">Adresse:</div>
+                <div className="w-full text-darkBlack">{plotData?.address}</div>
               </div>
-              <div className="w-full text-[#000000] font-semibold">
-                {plotData?.address}
+              <div className="flex gap-3 items-center">
+                <div className="w-[300px] text-[#5D6B98]">
+                  Kunden eier tomten allerede:
+                </div>
+                <div className="w-full text-darkBlack">
+                  {plotData?.alreadyHavePlot
+                    ? plotData?.alreadyHavePlot
+                    : "Nei"}
+                </div>
               </div>
-            </div>
-            <div className="flex gap-3 items-center">
-              <div className="w-[300px] text-[#00000099] font-semibold">
-                Kunden eier tomten allerede:
+              <div className="flex gap-3 items-center">
+                <div className="w-[300px] text-[#5D6B98]">
+                  Totale tomtekostnader:
+                </div>
+                <div className="w-full text-darkBlack">
+                  {formattedNumberOfByggekostnader} NOK
+                </div>
               </div>
-              <div className="w-full text-[#000000] font-semibold">
-                {plotData?.alreadyHavePlot ? plotData?.alreadyHavePlot : "Nei"}
-              </div>
-            </div>
-            <div className="flex gap-3 items-center">
-              <div className="w-[300px] text-[#00000099] font-semibold">
-                Totale tomtekostnader:
-              </div>
-              <div className="w-full text-[#000000] font-semibold">
-                {formattedNumberOfByggekostnader} NOK
-              </div>
-            </div>
-            <div className="flex gap-3 items-center">
-              <div className="w-[300px] text-[#00000099] font-semibold">
-                Kommentar:
-              </div>
-              <div className="w-full text-[#000000] font-semibold">
-                {plotData?.Kommentar}
+              <div className="flex gap-3 items-center">
+                <div className="w-[300px] text-[#5D6B98]">Kommentar:</div>
+                <div className="w-full text-darkBlack">
+                  {plotData?.Kommentar}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="bg-[#F6F4F2] py-3 px-5 text-sm font-semibold">
-          Informasjon om <span className="font-extrabold">husmodellen:</span>
-        </div>
-        <div className="p-5">
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-3 items-center">
-              <div className="w-[300px] text-[#00000099] font-semibold">
-                Husmodell
+          <div className="border-t border-[#DCDFEA] mb-5"></div>
+          <div className="text-lg text-black font-medium">
+            Informasjon om husmodellen
+          </div>
+          <div className="py-5">
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-3 items-center">
+                <div className="w-[300px] text-[#5D6B98]">Husmodell</div>
+                <div className="w-full text-darkBlack">
+                  {finalData?.Husdetaljer?.husmodell_name}
+                </div>
               </div>
-              <div className="w-full text-[#000000] font-semibold">
-                {finalData?.Husdetaljer?.husmodell_name}
+              <div className="flex gap-3 items-center">
+                <div className="w-[300px] text-[#5D6B98]">
+                  Totale byggekostnader:
+                </div>
+                <div className="w-full text-darkBlack">
+                  {formattedNumber} NOK
+                </div>
               </div>
-            </div>
-            <div className="flex gap-3 items-center">
-              <div className="w-[300px] text-[#00000099] font-semibold">
-                Totale byggekostnader:
-              </div>
-              <div className="w-full text-[#000000] font-semibold">
-                {formattedNumber} NOK
-              </div>
-            </div>
-            <div className="flex gap-3 items-center mb-3">
-              <div className="w-[300px] text-[#00000099] font-semibold">
-                Kommentar:
-              </div>
-              <div className="w-full text-[#000000] font-semibold">
-                {houseData?.Kommentar}
+              <div className="flex gap-3 items-center mb-3">
+                <div className="w-[300px] text-[#5D6B98]">Kommentar:</div>
+                <div className="w-full text-darkBlack">
+                  {houseData?.Kommentar}
+                </div>
               </div>
             </div>
+          </div>
+          <div className="border-t border-[#DCDFEA] mb-5"></div>
+          <div className="text-lg text-black font-medium">
+            Informasjon om økonomisk plan
+          </div>
+          <div className="py-5">
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-3 items-center">
+                <div className="w-[300px] text-[#5D6B98]">Lastet opp</div>
+                <div className="w-full text-darkBlack">
+                  {bankData?.ProjectAccount?.Økonomisk ===
+                  "Last opp en økonomisk plan"
+                    ? "Ja"
+                    : "Nei"}
+                </div>
+              </div>
+              <div className="flex gap-3 items-center">
+                <div className="w-[300px] text-[#5D6B98]">Operettet</div>
+                <div className="w-full text-darkBlack">
+                  {bankData?.ProjectAccount?.Økonomisk ===
+                  "Opprett en økonomisk plan"
+                    ? "Ja"
+                    : "Nei"}
+                </div>
+              </div>
+              <div className="flex gap-3 items-center mb-3">
+                <div className="w-[300px] text-[#5D6B98]">Ettersendes</div>
+                <div className="w-full text-darkBlack">
+                  {bankData?.ProjectAccount?.Økonomisk ===
+                  "Ettersend en økonomisk plan"
+                    ? "Ja"
+                    : "Nei"}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="border-t border-[#DCDFEA] mb-5"></div>
+          <div className="text-lg text-black font-medium">Forhåndstakst</div>
+          <div className="py-5">
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-3 items-center">
+                <div className="w-[300px] text-[#5D6B98]">
+                  Ønskes forhåndstakst?
+                </div>
+                <div className="w-full text-darkBlack">
+                  {bankData?.Forhandstakst?.advance_quote ===
+                  "Ja, jeg ønsker forhåndstakst"
+                    ? "Ja (lead sendes til megler når du sendes inn banktipset)"
+                    : bankData?.Forhandstakst?.advance_quote}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-[#F9F9FB] rounded-lg py-3 px-4 flex flex-col gap-3">
             <div className="flex gap-3 items-center">
-              <div className="w-[300px] text-[#000000] font-semibold text-lg">
+              <div className="w-[300px] text-[#5D6B98] text-base">
                 Sum tomtekostnader
               </div>
-              <div className="w-full text-[#000000] font-semibold text-lg flex gap-[60px] items-center">
+              <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
                 {formattedNumberOfByggekostnader} NOK
-                <p className="text-[#00000099] text-base">
-                  (prosjektregnskapet oversende banken)
+                <p className="text-[#5D6B98] text-base font-normal">
+                  (prosjektregnskapet oversendes megler)
                 </p>
               </div>
             </div>
             <div className="flex gap-3 items-center">
-              <div className="w-[300px] text-[#000000] font-semibold text-lg">
+              <div className="w-[300px] text-[#5D6B98] text-base">
                 Sum byggkostnader
               </div>
-              <div className="w-full text-[#000000] font-semibold text-lg flex gap-[60px] items-center">
+              <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
                 {formattedNumber} NOK
-                <p className="text-[#00000099] text-base">
+                <p className="text-[#5D6B98] text-base font-normal">
                   (prosjektregnskapet oversende banken)
                 </p>
               </div>
             </div>
             <div className="border-t border-[#EAECF0] w-full"></div>
             <div className="flex gap-3 items-center">
-              <div className="w-[300px] text-[#000000] font-semibold text-xl">
+              <div className="w-[300px] text-[#5D6B98] font-medium text-xl">
                 Totale kostnader
               </div>
-              <div className="w-full text-[#000000] font-semibold text-xl flex gap-[60px] items-center">
+              <div className="w-full text-darkBlack font-bold text-xl">
                 {formattedGrandTotal} NOK
               </div>
             </div>

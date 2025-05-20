@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Kunden } from "./kunden";
 import {
   Banknote,
-  ChartPie,
+  // ChartPie,
   ChevronRight,
+  FileText,
   ScrollText,
   User,
 } from "lucide-react";
@@ -12,7 +13,8 @@ import { ProjectAccounting } from "./projectAccounting";
 import { Oppsummering } from "./oppsummering";
 import { useLocation } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
-import { Fremdriftsplan } from "./Fremdriftsplan";
+// import { Fremdriftsplan } from "./Fremdriftsplan";
+import { Forhandstakst } from "./forhandstakst";
 
 export const BankleadsTabs = () => {
   const [activeTab, setActiveTab] = useState<any>(0);
@@ -20,26 +22,38 @@ export const BankleadsTabs = () => {
     { label: "Kunden", icon: <User /> },
     { label: "Tomt og husmodell", icon: <Banknote /> },
     { label: "Prosjektregnskap", icon: <ScrollText /> },
-    { label: "Oppsummering", icon: <Banknote /> },
-    { label: "Fremdriftsplan", icon: <ChartPie /> },
+    { label: "Forhåndstakst", icon: <FileText /> },
+    { label: "Oppsummering", icon: <FileText /> },
+    // { label: "Fremdriftsplan", icon: <ChartPie /> },
   ];
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const [bankData, setBankData] = useState<any>();
 
+  // const getData = async () => {
+  //   const data = await fetchBankLeadData(id);
+  //   setBankData(data);
+  // };
+  const getData = useCallback(async () => {
+    if (!id) return;
+
+    try {
+      const data = await fetchBankLeadData(id);
+      if (data) {
+        setBankData(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  }, [id]);
   useEffect(() => {
     if (!id) {
       return;
     }
 
-    const getData = async () => {
-      const data = await fetchBankLeadData(id);
-      setBankData(data);
-    };
-
     getData();
-  }, [id]);
+  }, [getData]);
   const projectAccount = bankData?.ProjectAccount?.husmodellData;
 
   const parsePrice = (value: any): number => {
@@ -73,6 +87,7 @@ export const BankleadsTabs = () => {
   const kundenRef = useRef<any>(null);
   const plotHusmodellRef = useRef<any>(null);
   const projectAccountingRef = useRef<any>(null);
+  const ForhandstakstRef = useRef<any>(null);
   const FremdriftsplanRef = useRef<any>(null);
 
   const validateBeforeTabChange = async (targetTabIndex: number) => {
@@ -86,6 +101,14 @@ export const BankleadsTabs = () => {
     }
     if (activeTab === 2 && projectAccountingRef.current) {
       const isValid = await projectAccountingRef.current.validateForm();
+      if (!isValid) return;
+    }
+    if (activeTab === 3 && ForhandstakstRef.current) {
+      const isValid = await ForhandstakstRef.current.validateForm();
+      if (!isValid) return;
+    }
+    if (activeTab === 4 && FremdriftsplanRef.current) {
+      const isValid = await FremdriftsplanRef.current.validateForm();
       if (!isValid) return;
     }
 
@@ -206,7 +229,7 @@ export const BankleadsTabs = () => {
                 Prosjektregnskap
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-sm">Oppsummering</span>
+              <span className="text-[#5D6B98] text-sm">Forhåndstakst</span>
             </div>
             <div className="flex items-center justify-between gap-2">
               <div>
@@ -257,10 +280,10 @@ export const BankleadsTabs = () => {
                 className="text-[#7839EE] text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(3)}
               >
-                Oppsummering
+                Forhåndstakst
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-sm">Fremdriftsplan</span>
+              <span className="text-[#5D6B98] text-sm">Oppsummering</span>
             </div>
             <div className="flex items-center justify-between gap-2">
               <div>
@@ -325,15 +348,19 @@ export const BankleadsTabs = () => {
             <ProjectAccounting
               ref={projectAccountingRef}
               setActiveTab={setActiveTab}
+              getData={getData}
             />
           )}
-          {activeTab === 3 && <Oppsummering setActiveTab={setActiveTab} />}
-          {activeTab === 4 && (
+          {activeTab === 3 && (
+            <Forhandstakst setActiveTab={setActiveTab} ref={ForhandstakstRef} />
+          )}
+          {activeTab === 4 && <Oppsummering setActiveTab={setActiveTab} />}
+          {/* {activeTab === 5 && (
             <Fremdriftsplan
               setActiveTab={setActiveTab}
               ref={FremdriftsplanRef}
             />
-          )}
+          )} */}
         </div>
       </div>
     </>

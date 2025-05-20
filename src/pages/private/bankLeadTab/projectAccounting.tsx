@@ -1,12 +1,12 @@
 import React, {
   forwardRef,
-  // useEffect,
+  useEffect,
   useImperativeHandle,
   useState,
 } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../config/firebaseConfig";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Button from "../../../components/common/button";
 import Ic_file from "../../../assets/images/Ic_file.svg";
 import Ic_upload_blue_img from "../../../assets/images/Ic_upload_blue_img.svg";
@@ -25,8 +25,7 @@ import { getDownloadURL, ref as reff, uploadBytes } from "firebase/storage";
 import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
-// import { Pencil, Plus, Trash2 } from "lucide-react";
-// import { fetchBankLeadData } from "../../../lib/utils";
+import { fetchBankLeadData } from "../../../lib/utils";
 
 const formSchema = z.object({
   documents: z
@@ -57,19 +56,19 @@ export type ProjectAccountingHandle = {
 
 export const ProjectAccounting = forwardRef<
   ProjectAccountingHandle,
-  { setActiveTab: (tab: number) => void }
->(({ setActiveTab }, ref) => {
+  { setActiveTab: (tab: number) => void; getData: any }
+>(({ setActiveTab, getData }, ref) => {
   const form = useForm<any>({
     resolver: zodResolver(formSchema),
   });
   const location = useLocation();
-  const navigate = useNavigate();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
 
-  // const [finalData, setFinalData] = useState<any>(null);
-  // const husmodellData = finalData?.Prisliste;
-  // const [houseId, setHouseId] = useState<String | null>(null);
+  const [finalData, setFinalData] = useState<any>(null);
+  const husmodellData = finalData?.Prisliste;
+
+  const [houseId, setHouseId] = useState<String | null>(null);
 
   // const [editingPriceIndex, setEditingPriceIndex] = useState<number | null>(
   //   null
@@ -98,26 +97,26 @@ export const ProjectAccounting = forwardRef<
   //   [key: number]: string;
   // }>({});
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const husmodellDocRef = doc(db, "house_model", String(houseId));
-  //       const husmodellDocSnap = await getDoc(husmodellDocRef);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const husmodellDocRef = doc(db, "house_model", String(houseId));
+        const husmodellDocSnap = await getDoc(husmodellDocRef);
 
-  //       if (husmodellDocSnap.exists()) {
-  //         setFinalData(husmodellDocSnap.data());
-  //       } else {
-  //         console.error("No document found for husmodell ID.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //     }
-  //   };
-  //   if (houseId) {
-  //     fetchData();
-  //   }
-  // }, [houseId]);
+        if (husmodellDocSnap.exists()) {
+          setFinalData(husmodellDocSnap.data());
+        } else {
+          console.error("No document found for husmodell ID.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+      }
+    };
+    if (houseId) {
+      fetchData();
+    }
+  }, [houseId]);
 
   const fileDocumentsInputRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -246,7 +245,7 @@ export const ProjectAccounting = forwardRef<
 
   // const [newTomtekostList, setNewTomtekostList] = useState<any>([]);
   // const [newByggekostList, setNewByggekostList] = useState<any>([]);
-  // const [apiData, setApiData] = useState<any>();
+  const [apiData, setApiData] = useState<any>();
 
   // const [TomtekostHusmodell, setTomtekostHusmodell] = useState<any>({
   //   Tomtekost: [],
@@ -300,6 +299,13 @@ export const ProjectAccounting = forwardRef<
     //   // pris: editedPrices[index] ? editedPrices[index] : item.pris,
     //   // Headline: editedHeadlines[index] ? editedHeadlines[index] : item.Headline,
     // }));
+    const updatedByggekostnader = (
+      apiData ? apiData?.Byggekostnader : husmodellData?.Byggekostnader
+    ).map((item: any, index: number) => ({
+      ...item,
+      // pris: editedPrices[index] ? editedPrices[index] : item.pris,
+      // Headline: editedHeadlines[index] ? editedHeadlines[index] : item.Headline,
+    }));
 
     // const newByggekostnaderFormatted = newByggekostList.map((item: any) => ({
     //   ...item,
@@ -315,6 +321,15 @@ export const ProjectAccounting = forwardRef<
     //   //   ? editedHeadlinesTom[index]
     //   //   : item.Headline,
     // }));
+    const updatedTomtekost = (
+      apiData ? apiData?.Tomtekost : husmodellData?.Tomtekost
+    ).map((item: any, index: number) => ({
+      ...item,
+      // pris: editedPricesTom[index] ? editedPricesTom[index] : item.pris,
+      // Headline: editedHeadlinesTom[index]
+      //   ? editedHeadlinesTom[index]
+      //   : item.Headline,
+    }));
 
     // const newTomtekostFormatted = newTomtekostList.map((item: any) => ({
     //   ...item,
@@ -326,11 +341,19 @@ export const ProjectAccounting = forwardRef<
     //   Byggekostnader: [...updatedByggekostnader, ...newByggekostnaderFormatted],
     //   Tomtekost: [...updatedTomtekost, ...newTomtekostFormatted],
     // };
+    const updatedHusmodellData = {
+      ...(apiData ? apiData?.Tomtekost : husmodellData?.Tomtekost),
+      Byggekostnader: [
+        ...updatedByggekostnader,
+        ...husmodellData?.Byggekostnader,
+      ],
+      Tomtekost: [...updatedTomtekost, ...husmodellData?.Tomtekost],
+    };
 
     const finalData = {
       ...data,
-      // husmodellData: updatedHusmodellData,
-      // houseId: houseId,
+      husmodellData: updatedHusmodellData,
+      houseId: houseId,
     };
     if (data.documents !== undefined) {
       finalData.documents = data.documents;
@@ -357,7 +380,7 @@ export const ProjectAccounting = forwardRef<
       });
       toast.success("Updated successfully", { position: "top-right" });
 
-      navigate(`/edit-bank-leads/${id}`);
+      getData();
       setActiveTab(3);
     } catch (error) {
       console.error("Firestore operation failed:", error);
@@ -383,35 +406,35 @@ export const ProjectAccounting = forwardRef<
   //   setShowModal(false);
   // };
 
-  // useEffect(() => {
-  //   if (!id) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
 
-  //   const getData = async () => {
-  //     const data = await fetchBankLeadData(id);
+    const getData = async () => {
+      const data = await fetchBankLeadData(id);
 
-  //     if (data && data.plotHusmodell) {
-  //       setHouseId(String(data.plotHusmodell?.house?.housemodell));
-  //     }
+      if (data && data.plotHusmodell) {
+        setHouseId(String(data.plotHusmodell?.house?.housemodell));
+      }
 
-  //     if (data && data?.ProjectAccount) {
-  //       if (
-  //         data?.plotHusmodell?.house?.housemodell ===
-  //         data?.ProjectAccount?.houseId
-  //       ) {
-  //         Object.entries(data.ProjectAccount).forEach(([key, value]) => {
-  //           if (value !== undefined && value !== null) {
-  //             form.setValue(key as any, value);
-  //           }
-  //         });
-  //         setApiData(data?.ProjectAccount?.husmodellData);
-  //       }
-  //     }
-  //   };
+      if (data && data?.ProjectAccount) {
+        if (
+          data?.plotHusmodell?.house?.housemodell ===
+          data?.ProjectAccount?.houseId
+        ) {
+          Object.entries(data.ProjectAccount).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+              form.setValue(key as any, value);
+            }
+          });
+          setApiData(data?.ProjectAccount?.husmodellData);
+        }
+      }
+    };
 
-  //   getData();
-  // }, [form, id, houseId]);
+    getData();
+  }, [form, id, houseId]);
 
   // const parsePrice = (value: any): number => {
   //   if (!value) return 0;

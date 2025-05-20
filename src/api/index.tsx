@@ -48,7 +48,7 @@ const ApiUtils = {
 
       return await response.json();
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
     }
   },
 };

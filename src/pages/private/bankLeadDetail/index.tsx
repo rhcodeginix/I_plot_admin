@@ -68,8 +68,9 @@ export const BankLeadsDetails = () => {
           </span>
         </div>
         <div className="text-darkBlack text-[2rem] font-medium">
-          #{id} ( {bankData?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
-          {bankData?.Kunden?.Kundeinformasjon[0]?.l_name})
+          {bankData?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
+          {bankData?.Kunden?.Kundeinformasjon[0]?.l_name}{" "}
+          <span className="text-[#5D6B98] text-xl">({id})</span>
         </div>
       </div>
       <div className="relative">

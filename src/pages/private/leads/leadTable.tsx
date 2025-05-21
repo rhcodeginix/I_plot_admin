@@ -114,7 +114,7 @@ export const LeadTable = () => {
       // }
       let q;
 
-      if (currentPath === "/active-agent-leads") {
+      if (currentPath === "/active-bank-leads") {
         q = query(
           collection(db, "bank_leads"),
           where("status", "==", "Approved")

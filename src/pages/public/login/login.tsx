@@ -72,7 +72,7 @@ export const Login = () => {
                 loginUserData?.role &&
                 loginUserData?.role === "Bankansvarlig"
               ) {
-                navigate("/agent-leads");
+                navigate("/bank-leads");
               } else {
                 navigate("/dashboard");
               }
@@ -92,7 +92,7 @@ export const Login = () => {
                 loginUserData?.role &&
                 loginUserData?.role === "Bankansvarlig"
               ) {
-                navigate("/agent-leads");
+                navigate("/bank-leads");
               } else {
                 navigate("/dashboard");
               }

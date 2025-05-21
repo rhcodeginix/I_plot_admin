@@ -1,32 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Button from "../../../components/common/button";
-import { useLocation, useNavigate } from "react-router-dom";
-import { fetchBankLeadData } from "../../../lib/utils";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { toast } from "react-hot-toast";
 
-export const Oppsummering: React.FC<{
-  setActiveTab: any;
-}> = ({ setActiveTab }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const pathSegments = location.pathname.split("/");
-  const id = pathSegments.length > 2 ? pathSegments[2] : null;
-  const [bankData, setBankData] = useState<any>();
-
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
-
-    const getData = async () => {
-      const data = await fetchBankLeadData(id);
-      setBankData(data);
-    };
-
-    getData();
-  }, [id]);
+export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
+  bankData,
+}) => {
   const [finalData, setFinalData] = useState<any>(null);
 
   useEffect(() => {
@@ -54,40 +32,6 @@ export const Oppsummering: React.FC<{
   }, [bankData]);
   const plotData = bankData?.plotHusmodell?.plot;
   const houseData = bankData?.plotHusmodell?.house;
-  // const projectAccount = bankData?.ProjectAccount?.husmodellData;
-
-  // const parsePrice = (value: any): number => {
-  //   if (!value) return 0;
-  //   return parseFloat(
-  //     String(value).replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
-  //   );
-  // };
-
-  // const Byggekostnader = projectAccount?.Byggekostnader ?? [];
-  // const Tomtekost = projectAccount?.Tomtekost ?? [];
-
-  // const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
-  //   (acc: number, prod: any, index: number) => {
-  //     const value = prod?.pris;
-  //     return acc + parsePrice(value);
-  //   },
-  //   0
-  // );
-
-  // const formattedNumberOfByggekostnader =
-  //   totalPrisOfByggekostnader.toLocaleString("nb-NO");
-
-  // const totalPrisOfTomtekost = [...Tomtekost].reduce(
-  //   (acc: number, prod: any) => {
-  //     const value = prod.pris;
-  //     return acc + parsePrice(value);
-  //   },
-  //   0
-  // );
-
-  // const formattedNumber = totalPrisOfTomtekost.toLocaleString("nb-NO");
-  // const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
-  // const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
 
   function norwegianToNumber(str: any) {
     if (typeof str !== "string") return 0;
@@ -101,50 +45,42 @@ export const Oppsummering: React.FC<{
   function numberToNorwegian(num: any) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
+  const okonomi = bankData?.ProjectAccount?.husmodellData;
 
-  const sendWelcomeEmail = async () => {
-    try {
-      const response = await fetch(
-        "https://nh989m12uk.execute-api.eu-north-1.amazonaws.com/prod/banklead",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            action: "send-welcome",
-            email: "rudraksh.shukla98@gmail.com",
-            fields: {
-              FNAME: bankData?.Kunden?.Kundeinformasjon[0]?.f_name,
-              LNAME: bankData?.Kunden?.Kundeinformasjon[0]?.l_name,
-              phone: bankData?.Kunden?.Kundeinformasjon[0]?.mobileNummer,
-              email: bankData?.Kunden?.Kundeinformasjon[0]?.EPost,
-              dealer: "BoligPartner",
-              office: "BoligPartner",
-              projectAddress: bankData?.plotHusmodell?.plot?.address,
-              landCost: `${plotData?.tomtekostnader} NOK`,
-              buildingCost: `${houseData?.byggekostnader} NOK`,
-              totalCost: `${numberToNorwegian(sum)} NOK`,
-              link: `https://admin.mintomt.no/leads-detail/${id}`,
-            },
-          }),
-        }
-      );
-
-      const result = await response.json();
-      toast.success(result.message, {
-        position: "top-right",
-      });
-      navigate("/bank-leads");
-    } catch (error) {
-      console.error("Error:", error);
-    }
+  const Byggekostnader = okonomi?.Byggekostnader ?? [];
+  const Tomtekost = okonomi?.Tomtekost ?? [];
+  const parsePrice = (value: any): number => {
+    if (!value) return 0;
+    return parseFloat(
+      String(value).replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
+    );
   };
 
+  const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
+    (acc: number, prod: any, index: number) => {
+      const value = index < Byggekostnader.length ? prod.pris : prod.pris;
+      return acc + parsePrice(value);
+    },
+    0
+  );
+
+  const formattedNumberOfByggekostnader =
+    totalPrisOfByggekostnader.toLocaleString("nb-NO");
+
+  const totalPrisOfTomtekost = [...Tomtekost].reduce(
+    (acc: number, prod: any, index: number) => {
+      const value = index < Tomtekost.length ? prod.pris : prod.pris;
+      return acc + parsePrice(value);
+    },
+    0
+  );
+
+  const formattedNumber = totalPrisOfTomtekost.toLocaleString("nb-NO");
+
   return (
-    <>
+    <div className="mb-28 mx-10">
       <div
-        className="mx-10 rounded-lg mb-28"
+        className="rounded-lg mb-6"
         style={{
           boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
         }}
@@ -245,9 +181,7 @@ export const Oppsummering: React.FC<{
               </div>
               <div className="flex gap-3 items-center">
                 <div className="w-[300px] text-[#5D6B98]">Kommentar:</div>
-                <div className="text-darkBlack">
-                  {plotData?.Kommentar}
-                </div>
+                <div className="text-darkBlack">{plotData?.Kommentar}</div>
               </div>
             </div>
           </div>
@@ -274,9 +208,7 @@ export const Oppsummering: React.FC<{
               </div>
               <div className="flex gap-3 items-center mb-3">
                 <div className="w-[300px] text-[#5D6B98]">Kommentar:</div>
-                <div className="text-darkBlack">
-                  {houseData?.Kommentar}
-                </div>
+                <div className="text-darkBlack">{houseData?.Kommentar}</div>
               </div>
             </div>
           </div>
@@ -363,27 +295,109 @@ export const Oppsummering: React.FC<{
                 Totale kostnader
               </div>
               <div className="w-full text-darkBlack font-bold text-xl">
-                {numberToNorwegian(sum)} NOK
+                {sum ? numberToNorwegian(sum) : 0} NOK
                 {/* {formattedGrandTotal} NOK */}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="flex justify-end w-full gap-5 items-center fixed bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-        <div onClick={() => setActiveTab(3)} className="w-1/2 sm:w-auto">
-          <Button
-            text="Tilbake"
-            className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-          />
+      <div>
+        <h4 className="text-darkBlack mb-5 text-lg font-semibold">
+          Økonomisk plan
+        </h4>
+        <div className="flex gap-6">
+          <div
+            className="w-1/2 p-4 border border-gray2 rounded-lg h-max"
+            style={{
+              boxShadow:
+                "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
+            }}
+          >
+            <div className="text-center p-4 text-[#101828] font-medium text-lg bg-[#F9F9FB] mb-5 relative">
+              Byggekostnader
+            </div>
+            <div className="flex flex-col gap-5">
+              {okonomi?.Byggekostnader?.length > 0 && (
+                <div className="flex flex-col gap-5">
+                  {okonomi?.Byggekostnader?.map((item: any, index: number) => {
+                    return (
+                      <div
+                        className="flex items-center gap-2 justify-between"
+                        key={index}
+                      >
+                        <div className="flex items-center gap-2">
+                          <p className="text-gray text-sm font-medium">
+                            {item?.Headline}
+                          </p>
+                        </div>
+
+                        <h4 className="text-black font-medium text-base">
+                          {item?.pris ? `${item.pris} NOK` : "inkl. i tilbud"}
+                        </h4>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              <div className="border-t border-gray2"></div>
+              <div className="flex items-center gap-2 justify-between">
+                <div className="flex items-center gap-2">
+                  <p className="text-gray text-lg font-bold">
+                    Sum byggkostnader
+                  </p>
+                </div>
+                <h4 className="text-black font-bold text-base">
+                  {formattedNumberOfByggekostnader} NOK
+                </h4>
+              </div>
+            </div>
+          </div>
+          <div
+            className="w-1/2 p-4 border border-gray2 rounded-lg h-max"
+            style={{
+              boxShadow:
+                "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
+            }}
+          >
+            <div className="text-center p-4 text-[#101828] font-medium text-lg bg-[#F9F9FB] mb-5 relative">
+              Tomkostnader
+            </div>
+            <div className="flex flex-col gap-5">
+              {okonomi?.Tomtekost.length > 0 &&
+                okonomi?.Tomtekost?.map((item: any, index: number) => {
+                  return (
+                    <div
+                      className="flex items-center gap-2 justify-between"
+                      key={index}
+                    >
+                      <div className="flex items-center gap-2">
+                        <p className="text-gray text-sm font-medium">
+                          {item?.Headline}
+                        </p>
+                      </div>
+                      <h4 className="text-black font-medium text-base">
+                        {item?.pris ? `${item.pris} NOK` : "inkl. i tilbud"}
+                      </h4>
+                    </div>
+                  );
+                })}
+
+              <div className="border-t border-gray2"></div>
+              <div className="flex items-center gap-2 justify-between">
+                <div className="flex items-center gap-2">
+                  <p className="text-gray text-lg font-bold">
+                    Sum tomtekostnader
+                  </p>
+                </div>
+                <h4 className="text-black font-bold text-base">
+                  {formattedNumber} NOK
+                </h4>
+              </div>
+            </div>
+          </div>
         </div>
-        <Button
-          text="Send til bank"
-          className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-          // onClick={() => setActiveTab(5)}
-          onClick={sendWelcomeEmail}
-        />
       </div>
-    </>
+    </div>
   );
 };

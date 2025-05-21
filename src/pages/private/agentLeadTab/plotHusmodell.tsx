@@ -128,7 +128,7 @@ export const PlotHusmodell = forwardRef<
       });
       toast.success("Updated successfully", { position: "top-right" });
 
-      navigate(`/edit-bank-leads/${id}`);
+      navigate(`/edit-agent-leads/${id}`);
       setActiveTab(2);
     } catch (error) {
       console.error("Firestore operation failed:", error);

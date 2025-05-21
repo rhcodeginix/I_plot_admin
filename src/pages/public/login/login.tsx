@@ -16,6 +16,7 @@ import Button from "../../../components/common/button";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import bcrypt from "bcryptjs";
+import { fetchAdminDataByEmail } from "../../../lib/utils";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -65,7 +66,17 @@ export const Login = () => {
               position: "top-right",
             });
             localStorage.setItem("Iplot_admin", data.email);
-            navigate("/dashboard");
+            const loginUserData = await fetchAdminDataByEmail();
+            if (loginUserData) {
+              if (
+                loginUserData?.role &&
+                loginUserData?.role === "Bankansvarlig"
+              ) {
+                navigate("/agent-leads");
+              } else {
+                navigate("/dashboard");
+              }
+            }
           }
         } else {
           const isPasswordCorrect = bcrypt.compareSync(
@@ -75,7 +86,17 @@ export const Login = () => {
           if (isPasswordCorrect) {
             toast.success("Login successfully", { position: "top-right" });
             localStorage.setItem("Iplot_admin", data.email);
-            navigate("/dashboard");
+            const loginUserData = await fetchAdminDataByEmail();
+            if (loginUserData) {
+              if (
+                loginUserData?.role &&
+                loginUserData?.role === "Bankansvarlig"
+              ) {
+                navigate("/agent-leads");
+              } else {
+                navigate("/dashboard");
+              }
+            }
           } else {
             toast.error("Incorrect password", { position: "top-right" });
           }

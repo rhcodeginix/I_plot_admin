@@ -27,9 +27,10 @@ import {
   orderBy,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Button from "../../../components/common/button";
 import Modal from "../../../components/common/modal";
@@ -44,6 +45,8 @@ export const LeadTable = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   const [permission, setPermission] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
@@ -109,8 +112,16 @@ export const LeadTable = () => {
       //     where("supplierId", "==", permission)
       //   );
       // }
-      let q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
+      let q;
 
+      if (currentPath === "/active-agent-leads") {
+        q = query(
+          collection(db, "bank_leads"),
+          where("status", "==", "Approved")
+        );
+      } else {
+        q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
+      }
       const querySnapshot = await getDocs(q);
 
       const data: any = querySnapshot.docs.map((doc) => ({
@@ -128,7 +139,7 @@ export const LeadTable = () => {
 
   useEffect(() => {
     fetchBankLeadData();
-  }, [permission]);
+  }, [permission, currentPath]);
 
   const handleConfirmPopup = () => {
     if (showConfirm) {
@@ -178,7 +189,7 @@ export const LeadTable = () => {
           header: "Id",
           cell: ({ row }: any) => (
             <Link
-              to={`/leads-detail/${row.original?.id}`}
+              to={`/bank-leads-detail/${row.original?.id}`}
               className="text-sm text-darkBlack"
             >
               #{row.original?.id?.substring(0, 4)}...

@@ -222,7 +222,7 @@ export const Kunden = forwardRef<
         toast.success("Updated successfully", {
           position: "top-right",
         });
-        navigate(`/edit-bank-leads/${uniqueId}`);
+        navigate(`/edit-agent-leads/${uniqueId}`);
         setActiveTab(1);
       } else {
         await setDoc(docRef, {
@@ -238,7 +238,7 @@ export const Kunden = forwardRef<
           status: "Sent",
         });
         toast.success("Added successfully", { position: "top-right" });
-        navigate(`/edit-bank-leads/${uniqueId}`);
+        navigate(`/edit-agent-leads/${uniqueId}`);
         setActiveTab(1);
       }
     } catch (error) {
@@ -695,7 +695,7 @@ export const Kunden = forwardRef<
             <Button
               text="Tilbake"
               className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-              onClick={() => navigate("/bank-leads")}
+              onClick={() => navigate("/agent-leads")}
             />
             <div id="submit">
               <Button

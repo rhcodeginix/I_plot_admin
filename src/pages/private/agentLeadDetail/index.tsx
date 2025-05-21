@@ -1,10 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Banknote, ChartPie, ChevronRight } from "lucide-react";
+import {
+  Banknote,
+  BookText,
+  ChartPie,
+  ChevronRight,
+  FileText,
+  ScrollText,
+} from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
 import { Oppsummering } from "./oppsummering";
+import { Forhandstakst } from "./forhandstakst";
 import { Fremdriftsplan } from "./Fremdriftsplan";
+import { FremdriftsplanOg } from "./Fremdriftsplan-og";
+import { Documenters } from "./document";
 
 export const BankLeadsDetails = () => {
   const navigate = useNavigate();
@@ -41,7 +51,10 @@ export const BankLeadsDetails = () => {
 
   const [activeTab, setActiveTab] = useState<any>(0);
   const tabData = [
-    { label: "Oppsummering", icon: <Banknote /> },
+    { label: "Summary", icon: <BookText /> },
+    { label: "Forhåndstakst", icon: <Banknote /> },
+    { label: "Fremdrifts- og faktureringsplan", icon: <ScrollText /> },
+    { label: "Dokumentasjon", icon: <FileText /> },
     { label: "Fremdriftsplan", icon: <ChartPie /> },
   ];
   useEffect(() => {
@@ -58,7 +71,7 @@ export const BankLeadsDetails = () => {
         <div className="flex items-center gap-1">
           <span
             className="text-[#7839EE] text-sm font-medium cursor-pointer"
-            onClick={() => navigate("/bank-leads")}
+            onClick={() => navigate("/agent-leads")}
           >
             Leads sendt til banken
           </span>
@@ -67,10 +80,38 @@ export const BankLeadsDetails = () => {
             Detaljer om potensielle kunder
           </span>
         </div>
-        <div className="text-darkBlack text-[2rem] font-medium">
-          {bankData?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
-          {bankData?.Kunden?.Kundeinformasjon[0]?.l_name}{" "}
-          <span className="text-[#5D6B98] text-xl">({id})</span>
+        <div>
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <div className="text-darkBlack text-[2rem] font-medium">
+              {bankData?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
+              {bankData?.Kunden?.Kundeinformasjon[0]?.l_name}{" "}
+              <span className="text-[#5D6B98] text-xl">({id})</span>
+            </div>
+            <div>
+              {bankData?.status === "Sent" ? (
+                <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
+                  {bankData?.status}
+                </p>
+              ) : bankData?.status === "Rejected" ? (
+                <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
+                  {bankData?.status}
+                </p>
+              ) : bankData?.status === "Approved" ? (
+                <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
+                  {bankData?.status}
+                </p>
+              ) : (
+                bankData?.status === "In Process" && (
+                  <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
+                    {bankData?.status}
+                  </p>
+                )
+              )}
+            </div>
+          </div>
+          <p className="text-[#5D6B98] text-lg font-medium">
+            {bankData?.plotHusmodell?.plot?.address}
+          </p>
         </div>
       </div>
       <div className="relative">
@@ -104,6 +145,17 @@ export const BankLeadsDetails = () => {
           <Oppsummering bankData={bankData} loading={loading} />
         )}
         {activeTab === 1 && (
+          <Forhandstakst
+            bankData={bankData}
+            setActiveTab={setActiveTab}
+            getData={getData}
+          />
+        )}
+        {activeTab === 2 && <FremdriftsplanOg setActiveTab={setActiveTab} />}
+        {activeTab === 3 && (
+          <Documenters setActiveTab={setActiveTab} getData={getData} />
+        )}
+        {activeTab === 4 && (
           <Fremdriftsplan
             bankData={bankData}
             loading={loading}

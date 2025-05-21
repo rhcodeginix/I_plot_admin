@@ -29,7 +29,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Button from "../../../components/common/button";
 import Modal from "../../../components/common/modal";
@@ -44,6 +44,8 @@ export const BankTable = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   const [permission, setPermission] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
@@ -100,14 +102,24 @@ export const BankTable = () => {
     setIsLoading(true);
 
     try {
+      // let q;
+      // if (email === "andre.finger@gmail.com") {
+      //   q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
+      // } else {
+      //   q = query(
+      //     collection(db, "bank_leads"),
+      //     where("supplierId", "==", permission)
+      //   );
+      // }
       let q;
-      if (email === "andre.finger@gmail.com") {
-        q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
-      } else {
+
+      if (currentPath === "/active-agent-leads") {
         q = query(
           collection(db, "bank_leads"),
-          where("supplierId", "==", permission)
+          where("status", "==", "Approved")
         );
+      } else {
+        q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
       }
 
       const querySnapshot = await getDocs(q);
@@ -127,7 +139,7 @@ export const BankTable = () => {
 
   useEffect(() => {
     fetchBankLeadData();
-  }, [permission]);
+  }, [permission, currentPath]);
 
   const handleConfirmPopup = () => {
     if (showConfirm) {
@@ -150,7 +162,7 @@ export const BankTable = () => {
           header: "Id",
           cell: ({ row }: any) => (
             <Link
-              to={`/bank-leads-detail/${row.original?.id}`}
+              to={`/agent-leads-detail/${row.original?.id}`}
               className="text-sm text-darkBlack"
             >
               #{row.original?.id?.substring(0, 4)}...
@@ -267,7 +279,7 @@ export const BankTable = () => {
                 <Pencil
                   className="h-5 w-5 text-primary cursor-pointer"
                   onClick={() =>
-                    navigate(`/edit-bank-leads/${row.original.id}`)
+                    navigate(`/edit-agent-leads/${row.original.id}`)
                   }
                 />
                 <Trash

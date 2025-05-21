@@ -90,116 +90,158 @@ export const Navbar: React.FC = () => {
         }}
       >
         <div className="flex items-center gap-2">
-          <Menu onClick={toggleDrawer} className="desktop:hidden text-primary" />
+          <Menu
+            onClick={toggleDrawer}
+            className="desktop:hidden text-primary"
+          />
 
-          <Link to={"/"}>
+          {!Role || (Role && Role !== "Bankansvarlig") ? (
+            <Link to={"/"}>
+              <img
+                src={Ic_logo}
+                alt="logo"
+                className="w-[90px] md:w-[120px] big:w-auto"
+              />
+            </Link>
+          ) : (
             <img
               src={Ic_logo}
               alt="logo"
               className="w-[90px] md:w-[120px] desktop:w-auto"
             />
-          </Link>
+          )}
         </div>
 
-        <div className="hidden desktop:flex items-center gap-1">
-          <Link
-            to={"/dashboard"}
-            className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-              currentPath === "/dashboard"
-                ? "bg-lightPurple text-primary"
-                : "text-black"
-            }`}
-          >
-            Dashboard
-          </Link>
-          <Link
-            to={"/Leverandorer"}
-            className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-              currentPath === "/Leverandorer" ||
-              currentPath.startsWith("/edit-til-leverandor/") ||
-              currentPath === "/legg-til-leverandor"
-                ? "bg-lightPurple text-primary"
-                : "text-black"
-            }`}
-          >
-            Leverandører
-          </Link>
+        <div className="hidden desktop:flex items-center gap-0.5">
+          {(!Role || (Role && Role !== "Bankansvarlig")) && (
+            <Link
+              to={"/dashboard"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/dashboard"
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Dashboard
+            </Link>
+          )}
+          {(!Role || (Role && Role !== "Bankansvarlig")) && (
+            <Link
+              to={"/Leverandorer"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/Leverandorer" ||
+                currentPath.startsWith("/edit-til-leverandor/") ||
+                currentPath === "/legg-til-leverandor"
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Leverandører
+            </Link>
+          )}
           {(email === "andre.finger@gmail.com" ||
             HusmodellPermission?.add === true ||
             HusmodellPermission?.delete === true ||
-            HusmodellPermission?.edit === true) && (
-            <Link
-              to={"/Husmodeller"}
-              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                currentPath === "/Husmodeller" ||
-                currentPath.startsWith("/se-husmodell/") ||
-                currentPath === "/add-husmodell" ||
-                currentPath.startsWith("/edit-husmodell/")
-                  ? "bg-lightPurple text-primary"
-                  : "text-black"
-              }`}
-            >
-              Husmodeller
-            </Link>
-          )}
-          {loginUser && loginUser === "andre.finger@gmail.com" && (
-            <Link
-              to={"/Brukeradministrasjon"}
-              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                currentPath === "/Brukeradministrasjon" ||
-                currentPath.startsWith("/edit-til-bruker") ||
-                currentPath.startsWith("/legg-til-bruker")
-                  ? "bg-lightPurple text-primary"
-                  : "text-black"
-              }`}
-            >
-              Brukeradministrasjon
-            </Link>
-          )}
-          {email === "andre.finger@gmail.com" && (
-            <Link
-              to={"/my-leads"}
-              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                currentPath === "/my-leads" ||
-                currentPath.startsWith("/my-leads-details/")
-                  ? "bg-lightPurple text-primary"
-                  : "text-black"
-              }`}
-            >
-              Min Lead
-            </Link>
-          )}
+            HusmodellPermission?.edit === true) &&
+            (!Role || (Role && Role !== "Bankansvarlig")) && (
+              <Link
+                to={"/Husmodeller"}
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                  currentPath === "/Husmodeller" ||
+                  currentPath.startsWith("/se-husmodell/") ||
+                  currentPath === "/add-husmodell" ||
+                  currentPath.startsWith("/edit-husmodell/")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+              >
+                Husmodeller
+              </Link>
+            )}
+          {loginUser &&
+            loginUser === "andre.finger@gmail.com" &&
+            (!Role || (Role && Role !== "Bankansvarlig")) && (
+              <Link
+                to={"/Brukeradministrasjon"}
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                  currentPath === "/Brukeradministrasjon" ||
+                  currentPath.startsWith("/edit-til-bruker") ||
+                  currentPath.startsWith("/legg-til-bruker")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+              >
+                Brukeradministrasjon
+              </Link>
+            )}
+          {email === "andre.finger@gmail.com" &&
+            (!Role || (Role && Role !== "Bankansvarlig")) && (
+              <Link
+                to={"/my-leads"}
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                  currentPath === "/my-leads" ||
+                  currentPath.startsWith("/my-leads-details/")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+              >
+                Min Lead
+              </Link>
+            )}
           {Role && Role !== "Bankansvarlig" && (
             <Link
-              to={"/bank-leads"}
-              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                currentPath === "/bank-leads" ||
-                currentPath.startsWith("/add-bank-leads") ||
-                currentPath.startsWith("/edit-bank-leads/") ||
-                currentPath.startsWith("/bank-leads-detail/")
+              to={"/agent-leads"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/agent-leads" ||
+                currentPath.startsWith("/add-agent-leads") ||
+                currentPath.startsWith("/edit-agent-leads/") ||
+                currentPath.startsWith("/agent-leads-detail/")
                   ? "bg-lightPurple text-primary"
                   : "text-black"
               }`}
             >
-              Bank Leads
+              Søknad finansiering
             </Link>
           )}
           {Role && Role === "Bankansvarlig" && (
             <Link
-              to={"/leads"}
-              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                currentPath === "/leads" ||
-                currentPath.startsWith("/leads-detail")
+              to={"/bank-leads"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/bank-leads" ||
+                currentPath.startsWith("/bank-leads-detail")
                   ? "bg-lightPurple text-primary"
                   : "text-black"
               }`}
             >
-              Bank Leads
+              Leads
+            </Link>
+          )}
+          {Role && Role === "Bankansvarlig" ? (
+            <Link
+              to={"/active-bank-leads"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/active-bank-leads"
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Aktive kunder
+            </Link>
+          ) : (
+            <Link
+              to={"/active-agent-leads"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/active-agent-leads"
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Aktive kunder
             </Link>
           )}
         </div>
-        <div className="flex items-center gap-2 md:gap-4 relative">
-          <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2 md:gap-3 relative">
+          <div className="flex items-center gap-0.5">
             <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center">
               <img src={Ic_search} alt="search" />
             </div>
@@ -250,119 +292,148 @@ export const Navbar: React.FC = () => {
         <div className="bg-white h-full px-4 sm:px-5 md:px-8 lg:px-10 big:px-[120px] w-[85%]">
           <div className="flex items-center justify-between py-4 mb-4">
             <div className="gap-[12px] flex items-center">
-              <Link to={"/"} onClick={toggleDrawer}>
-                <img
-                  src={Ic_logo}
-                  alt="logo"
-                  className="w-[90px] md:w-[120px] lg:w-auto"
-                />
-              </Link>
+              <img
+                src={Ic_logo}
+                alt="logo"
+                className="w-[90px] md:w-[120px] big:w-auto"
+              />
             </div>
             <button onClick={toggleDrawer} className="text-3xl">
               <X className="text-primary" />
             </button>
           </div>
           <div className="flex flex-col items-start font-medium gap-3">
-            <Link
-              to={"/dashboard"}
-              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                currentPath === "/dashboard"
-                  ? "bg-lightPurple text-primary"
-                  : "text-black"
-              }`}
-              onClick={toggleDrawer}
-            >
-              Dashboard
-            </Link>
-            <Link
-              to={"/Leverandorer"}
-              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                currentPath === "/Leverandorer" ||
-                currentPath.startsWith("/edit-til-leverandor/") ||
-                currentPath === "/legg-til-leverandor"
-                  ? "bg-lightPurple text-primary"
-                  : "text-black"
-              }`}
-              onClick={toggleDrawer}
-            >
-              Leverandører
-            </Link>
+            {(!Role || (Role && Role !== "Bankansvarlig")) && (
+              <Link
+                to={"/dashboard"}
+                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  currentPath === "/dashboard"
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+                onClick={toggleDrawer}
+              >
+                Dashboard
+              </Link>
+            )}
+            {(!Role || (Role && Role !== "Bankansvarlig")) && (
+              <Link
+                to={"/Leverandorer"}
+                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  currentPath === "/Leverandorer" ||
+                  currentPath.startsWith("/edit-til-leverandor/") ||
+                  currentPath === "/legg-til-leverandor"
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+                onClick={toggleDrawer}
+              >
+                Leverandører
+              </Link>
+            )}
             {(email === "andre.finger@gmail.com" ||
               HusmodellPermission?.add === true ||
               HusmodellPermission?.delete === true ||
-              HusmodellPermission?.edit === true) && (
-              <Link
-                to={"/Husmodeller"}
-                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                  currentPath === "/Husmodeller" ||
-                  currentPath.startsWith("/se-husmodell/") ||
-                  currentPath === "/add-husmodell" ||
-                  currentPath.startsWith("/edit-husmodell/")
-                    ? "bg-lightPurple text-primary"
-                    : "text-black"
-                }`}
-                onClick={toggleDrawer}
-              >
-                Husmodeller
-              </Link>
-            )}
-            {loginUser && loginUser === "andre.finger@gmail.com" && (
-              <Link
-                to={"/Brukeradministrasjon"}
-                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                  currentPath === "/Brukeradministrasjon" ||
-                  currentPath.startsWith("/edit-til-bruker") ||
-                  currentPath.startsWith("/legg-til-bruker")
-                    ? "bg-lightPurple text-primary"
-                    : "text-black"
-                }`}
-                onClick={toggleDrawer}
-              >
-                Brukeradministrasjon
-              </Link>
-            )}
-            {email === "andre.finger@gmail.com" && (
-              <Link
-                to={"/my-leads"}
-                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                  currentPath === "/my-leads" ||
-                  currentPath.startsWith("/my-leads-details/")
-                    ? "bg-lightPurple text-primary"
-                    : "text-black"
-                }`}
-                onClick={toggleDrawer}
-              >
-                Min Lead
-              </Link>
-            )}
+              HusmodellPermission?.edit === true) &&
+              (!Role || (Role && Role !== "Bankansvarlig")) && (
+                <Link
+                  to={"/Husmodeller"}
+                  className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                    currentPath === "/Husmodeller" ||
+                    currentPath.startsWith("/se-husmodell/") ||
+                    currentPath === "/add-husmodell" ||
+                    currentPath.startsWith("/edit-husmodell/")
+                      ? "bg-lightPurple text-primary"
+                      : "text-black"
+                  }`}
+                  onClick={toggleDrawer}
+                >
+                  Husmodeller
+                </Link>
+              )}
+            {loginUser &&
+              loginUser === "andre.finger@gmail.com" &&
+              (!Role || (Role && Role !== "Bankansvarlig")) && (
+                <Link
+                  to={"/Brukeradministrasjon"}
+                  className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                    currentPath === "/Brukeradministrasjon" ||
+                    currentPath.startsWith("/edit-til-bruker") ||
+                    currentPath.startsWith("/legg-til-bruker")
+                      ? "bg-lightPurple text-primary"
+                      : "text-black"
+                  }`}
+                  onClick={toggleDrawer}
+                >
+                  Brukeradministrasjon
+                </Link>
+              )}
+            {email === "andre.finger@gmail.com" &&
+              (!Role || (Role && Role !== "Bankansvarlig")) && (
+                <Link
+                  to={"/my-leads"}
+                  className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                    currentPath === "/my-leads" ||
+                    currentPath.startsWith("/my-leads-details/")
+                      ? "bg-lightPurple text-primary"
+                      : "text-black"
+                  }`}
+                  onClick={toggleDrawer}
+                >
+                  Min Lead
+                </Link>
+              )}
             {Role && Role !== "Bankansvarlig" && (
               <Link
-                to={"/bank-leads"}
+                to={"/agent-leads"}
                 className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                  currentPath === "/bank-leads" ||
-                  currentPath.startsWith("/add-bank-leads") ||
-                  currentPath.startsWith("/edit-bank-leads/") ||
-                  currentPath.startsWith("/bank-leads-detail/")
+                  currentPath === "/agent-leads" ||
+                  currentPath.startsWith("/add-agent-leads") ||
+                  currentPath.startsWith("/edit-agent-leads/") ||
+                  currentPath.startsWith("/agent-leads-detail/")
                     ? "bg-lightPurple text-primary"
                     : "text-black"
                 }`}
                 onClick={toggleDrawer}
               >
-                Bank Leads
+                Søknad finansiering
               </Link>
             )}
             {Role && Role === "Bankansvarlig" && (
               <Link
-                to={"/leads"}
+                to={"/bank-leads"}
                 className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                  currentPath === "/leads" ||
-                  currentPath.startsWith("/leads-detail")
+                  currentPath === "/bank-leads" ||
+                  currentPath.startsWith("/bank-leads-detail")
                     ? "bg-lightPurple text-primary"
                     : "text-black"
                 }`}
                 onClick={toggleDrawer}
               >
-                Bank Leads
+                Leads
+              </Link>
+            )}
+            {Role && Role === "Bankansvarlig" ? (
+              <Link
+                to={"/active-bank-leads"}
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                  currentPath === "/active-bank-leads"
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+              >
+                Aktive kunder
+              </Link>
+            ) : (
+              <Link
+                to={"/active-agent-leads"}
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                  currentPath === "/active-agent-leads"
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+              >
+                Aktive kunder
               </Link>
             )}
           </div>

@@ -30,7 +30,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`${className} text-base whitespace-nowrap px-4 py-[10px] h-[40px] flex items-center justify-center`}
+      className={`${className} text-base whitespace-nowrap px-3 md:px-4 py-[10px] h-[40px] flex items-center justify-center`}
       type={type || "button"}
       onClick={handleClick}
     >

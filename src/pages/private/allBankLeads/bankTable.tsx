@@ -315,13 +315,14 @@ export const BankTable = () => {
 
   return (
     <>
-      <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
-        <div></div>
-        <div className="flex gap-3 items-center">
+      <div className="flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+        <div className="hidden sm:block"></div>
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full sm:w-auto">
           <DateRangePicker
             startDate={startDate}
             endDate={endDate}
             onDateChange={handleDateChange}
+            className="w-full"
           />
           <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
             <img src={Ic_filter} alt="" />
@@ -373,7 +374,7 @@ export const BankTable = () => {
                   className="hover:bg-muted/50"
                 >
                   {row.getVisibleCells().map((cell: any) => (
-                    <TableCell key={cell.id} className="px-6 py-3">
+                    <TableCell key={cell.id} className="px-3 md:px-6 py-3">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

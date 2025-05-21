@@ -7,6 +7,7 @@ import Ic_chevron_up from "../assets/images/Ic_chevron_up.svg";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { fetchAdminDataByEmail } from "../lib/utils";
+import { Menu, X } from "lucide-react";
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
@@ -75,18 +76,32 @@ export const Navbar: React.FC = () => {
 
     getData();
   }, []);
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
   return (
     <>
       <div
-        className="px-6 py-4 flex items-center border-b border-gray2 justify-between sticky top-0 bg-white"
+        className="px-4 md:px-6 py-4 flex items-center border-b border-gray2 justify-between sticky top-0 bg-white"
         style={{
           zIndex: 999,
         }}
       >
-        <Link to={"/"}>
-          <img src={Ic_logo} alt="logo" />
-        </Link>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
+          <Menu onClick={toggleDrawer} className="desktop:hidden text-primary" />
+
+          <Link to={"/"}>
+            <img
+              src={Ic_logo}
+              alt="logo"
+              className="w-[90px] md:w-[120px] desktop:w-auto"
+            />
+          </Link>
+        </div>
+
+        <div className="hidden desktop:flex items-center gap-1">
           <Link
             to={"/dashboard"}
             className={`text-base font-medium py-2 px-3 rounded-[6px] ${
@@ -183,15 +198,15 @@ export const Navbar: React.FC = () => {
             </Link>
           )}
         </div>
-        <div className="flex items-center gap-4 relative">
+        <div className="flex items-center gap-2 md:gap-4 relative">
           <div className="flex items-center gap-1">
-            <div className="h-[40px] w-[40px] flex items-center justify-center">
+            <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center">
               <img src={Ic_search} alt="search" />
             </div>
-            <div className="h-[40px] w-[40px] flex items-center justify-center">
+            <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center">
               <img src={Ic_settings} alt="setting" />
             </div>
-            <div className="h-[40px] w-[40px] flex items-center justify-center">
+            <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center">
               <img src={Ic_bell} alt="bell" />
             </div>
           </div>
@@ -200,7 +215,7 @@ export const Navbar: React.FC = () => {
             onClick={toggleDropdown}
           >
             {isPhoto && (
-              <div className="h-[40px] w-[40px]">
+              <div className="w-8 h-8 md:h-[40px] md:w-[40px]">
                 <img src={isPhoto} alt="profile" className="rounded-full" />
               </div>
             )}
@@ -220,6 +235,137 @@ export const Navbar: React.FC = () => {
               </Link>
             </div>
           )}
+        </div>
+      </div>
+
+      <div
+        style={{
+          transition: "transform 1s, box-shadow 1s",
+          transform: isDrawerOpen ? "translateX(0)" : "translateX(-100%)",
+          background: isDrawerOpen ? "rgba(0, 0, 0, 0.6)" : "",
+          zIndex: 999999,
+        }}
+        className={`fixed top-0 left-0 w-full h-screen z-50`}
+      >
+        <div className="bg-white h-full px-4 sm:px-5 md:px-8 lg:px-10 big:px-[120px] w-[85%]">
+          <div className="flex items-center justify-between py-4 mb-4">
+            <div className="gap-[12px] flex items-center">
+              <Link to={"/"} onClick={toggleDrawer}>
+                <img
+                  src={Ic_logo}
+                  alt="logo"
+                  className="w-[90px] md:w-[120px] lg:w-auto"
+                />
+              </Link>
+            </div>
+            <button onClick={toggleDrawer} className="text-3xl">
+              <X className="text-primary" />
+            </button>
+          </div>
+          <div className="flex flex-col items-start font-medium gap-3">
+            <Link
+              to={"/dashboard"}
+              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                currentPath === "/dashboard"
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+              onClick={toggleDrawer}
+            >
+              Dashboard
+            </Link>
+            <Link
+              to={"/Leverandorer"}
+              className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                currentPath === "/Leverandorer" ||
+                currentPath.startsWith("/edit-til-leverandor/") ||
+                currentPath === "/legg-til-leverandor"
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+              onClick={toggleDrawer}
+            >
+              Leverandører
+            </Link>
+            {(email === "andre.finger@gmail.com" ||
+              HusmodellPermission?.add === true ||
+              HusmodellPermission?.delete === true ||
+              HusmodellPermission?.edit === true) && (
+              <Link
+                to={"/Husmodeller"}
+                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  currentPath === "/Husmodeller" ||
+                  currentPath.startsWith("/se-husmodell/") ||
+                  currentPath === "/add-husmodell" ||
+                  currentPath.startsWith("/edit-husmodell/")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+                onClick={toggleDrawer}
+              >
+                Husmodeller
+              </Link>
+            )}
+            {loginUser && loginUser === "andre.finger@gmail.com" && (
+              <Link
+                to={"/Brukeradministrasjon"}
+                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  currentPath === "/Brukeradministrasjon" ||
+                  currentPath.startsWith("/edit-til-bruker") ||
+                  currentPath.startsWith("/legg-til-bruker")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+                onClick={toggleDrawer}
+              >
+                Brukeradministrasjon
+              </Link>
+            )}
+            {email === "andre.finger@gmail.com" && (
+              <Link
+                to={"/my-leads"}
+                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  currentPath === "/my-leads" ||
+                  currentPath.startsWith("/my-leads-details/")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+                onClick={toggleDrawer}
+              >
+                Min Lead
+              </Link>
+            )}
+            {Role && Role !== "Bankansvarlig" && (
+              <Link
+                to={"/bank-leads"}
+                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  currentPath === "/bank-leads" ||
+                  currentPath.startsWith("/add-bank-leads") ||
+                  currentPath.startsWith("/edit-bank-leads/") ||
+                  currentPath.startsWith("/bank-leads-detail/")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+                onClick={toggleDrawer}
+              >
+                Bank Leads
+              </Link>
+            )}
+            {Role && Role === "Bankansvarlig" && (
+              <Link
+                to={"/leads"}
+                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  currentPath === "/leads" ||
+                  currentPath.startsWith("/leads-detail")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+                onClick={toggleDrawer}
+              >
+                Bank Leads
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </>

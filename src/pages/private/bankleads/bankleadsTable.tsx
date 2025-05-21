@@ -344,7 +344,7 @@ export const BankleadsTable = () => {
                   className="hover:bg-muted/50"
                 >
                   {row.getVisibleCells().map((cell: any) => (
-                    <TableCell key={cell.id} className="px-6 py-3">
+                    <TableCell key={cell.id} className="px-3 md:px-6 py-3">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

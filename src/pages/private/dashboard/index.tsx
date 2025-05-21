@@ -213,31 +213,31 @@ export const Dashboard = () => {
   return (
     <>
       <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
-        <h1 className="text-darkBlack font-medium text-[30px]">
+        <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
           Velkommen tilbake, André
         </h1>
-        <div className="flex items-center justify-between">
-          <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex">
-            <div className="py-[10px] px-4 text-black2 font-medium text-sm">
+        <div className="flex lg:items-center flex-col lg:flex-row gap-2 justify-between">
+          <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max">
+            <div className="p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm">
               12 måneder
             </div>
-            <div className="py-[10px] px-4 text-black2 font-medium text-sm border border-t-0 border-b-0 border-gray1">
+            <div className="p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border border-t-0 border-b-0 border-gray1">
               30 dager
             </div>
-            <div className="py-[10px] px-4 text-black2 font-medium text-sm border-r border-gray1">
+            <div className="p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-r border-gray1">
               7 dager
             </div>
-            <div className="py-[10px] px-4 text-black2 font-medium text-sm">
+            <div className="p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm">
               24 timer
             </div>
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
             <DatePickerComponent
               selectedDate={selectedDate1}
               onDateChange={setSelectedDate1}
               dateFormat="MM/dd/yyyy"
               placeholderText="Select dates"
-              className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] w-max"
+              className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] w-full sm:w-max"
             />
             <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 pr-8 cursor-pointer shadow-shadow1 h-[40px]">
               <img src={Ic_filter} alt="" />
@@ -245,7 +245,7 @@ export const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5 desktop:gap-6">
           {loading ? (
             <>
               <div
@@ -290,7 +290,7 @@ export const Dashboard = () => {
               {data.map((item, index) => {
                 return (
                   <div
-                    className={`shadow-shadow2 border border-gray2 bg-lightPurple rounded-[8px] p-6 flex flex-col gap-2 ${
+                    className={`shadow-shadow2 border border-gray2 bg-lightPurple rounded-[8px] p-3.5 sm:p-4 lg:p-6 flex flex-col gap-2 ${
                       item?.path && "cursor-pointer"
                     }`}
                     key={index}
@@ -308,7 +308,7 @@ export const Dashboard = () => {
                       {/* <img src={Ic_dropdown_menu} alt="menu" /> */}
                     </div>
                     <div className="flex items-center gap-4 justify-between">
-                      <h4 className="text-darkBlack font-semibold text-[30px]">
+                      <h4 className="text-darkBlack font-semibold text-xl md:text-2xl desktop:text-[30px]">
                         {item.value}
                       </h4>
                       {/* <div className="bg-lightGreen py-[2px] px-2 rounded-[16px] flex items-center gap-1">

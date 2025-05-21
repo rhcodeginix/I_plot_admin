@@ -2,7 +2,13 @@
 import { useEffect, useState } from "react";
 import Ic_filter from "../../../assets/images/Ic_filter.svg";
 import DatePickerComponent from "../../../components/ui/datepicker";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  getCountFromServer,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { fetchAdminDataByEmail } from "../../../lib/utils";
@@ -85,32 +91,60 @@ export const Dashboard = () => {
           )
         );
       }
+      // const [
+      //   usersSnapshot,
+      //   husmodellSnapshot,
+      //   plotSnapshot,
+      //   householdLeadsShot,
+      //   kombinasjonerShot,
+      //   constructedPlotSnapshot,
+      //   BankLeadShot,
+      // ] = await Promise.all([
+      //   getDocs(collection(db, "users")),
+      //   getDocs(q),
+      //   getDocs(collection(db, "empty_plot")),
+      //   getDocs(leadTrue),
+      //   getDocs(leadFalse),
+      //   getDocs(collection(db, "plot_building")),
+      //   getDocs(leadBankTrue),
+      // ]);
+
+      // setCounts({
+      //   users: usersSnapshot.size,
+      //   husmodell: husmodellSnapshot.size,
+      //   plot: plotSnapshot.size,
+      //   householdLeads: householdLeadsShot.size,
+      //   kombinasjoner: kombinasjonerShot.size,
+      //   constructedPlot: constructedPlotSnapshot.size,
+      //   bankLeads: BankLeadShot.size,
+      // });
+
       const [
-        usersSnapshot,
-        husmodellSnapshot,
-        plotSnapshot,
-        householdLeadsShot,
-        kombinasjonerShot,
-        constructedPlotSnapshot,
-        BankLeadShot,
+        usersCount,
+        husmodellCount,
+        plotCount,
+        householdLeadsCount,
+        kombinasjonerCount,
+        constructedPlotCount,
+        bankLeadsCount,
       ] = await Promise.all([
-        getDocs(collection(db, "users")),
-        getDocs(q),
-        getDocs(collection(db, "empty_plot")),
-        getDocs(leadTrue),
-        getDocs(leadFalse),
-        getDocs(collection(db, "plot_building")),
-        getDocs(leadBankTrue),
+        getCountFromServer(collection(db, "users")),
+        getCountFromServer(q),
+        getCountFromServer(collection(db, "empty_plot")),
+        getCountFromServer(leadTrue),
+        getCountFromServer(leadFalse),
+        getCountFromServer(collection(db, "plot_building")),
+        getCountFromServer(leadBankTrue),
       ]);
 
       setCounts({
-        users: usersSnapshot.size,
-        husmodell: husmodellSnapshot.size,
-        plot: plotSnapshot.size,
-        householdLeads: householdLeadsShot.size,
-        kombinasjoner: kombinasjonerShot.size,
-        constructedPlot: constructedPlotSnapshot.size,
-        bankLeads: BankLeadShot.size,
+        users: usersCount.data().count,
+        husmodell: husmodellCount.data().count,
+        plot: plotCount.data().count,
+        householdLeads: householdLeadsCount.data().count,
+        kombinasjoner: kombinasjonerCount.data().count,
+        constructedPlot: constructedPlotCount.data().count,
+        bankLeads: bankLeadsCount.data().count,
       });
       setLoading(false);
     } catch (error) {

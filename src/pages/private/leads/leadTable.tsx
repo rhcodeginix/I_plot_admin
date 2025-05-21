@@ -196,29 +196,30 @@ export const LeadTable = () => {
           ),
         },
         {
-          accessorKey: "mobilnummer",
-          header: "Mobilnummer",
+          accessorKey: "Anleggsadresse",
+          header: "Anleggsadresse",
           cell: ({ row }: any) => (
-            <div className="flex items-center text-sm text-darkBlack">
-              {row.original?.Kunden?.Kundeinformasjon[0]?.mobileNummer}
+            <div className="flex items-center text-sm text-darkBlack w-max">
+              {row.original?.plotHusmodell?.plot?.address}
             </div>
           ),
         },
         {
-          accessorKey: "EPost",
-          header: "E-post",
+          accessorKey: "Forhandler",
+          header: "Forhandler",
           cell: ({ row }: any) => (
-            <div className="flex items-center text-sm text-darkBlack">
-              {row.original?.Kunden?.Kundeinformasjon[0]?.EPost}
+            <div className="flex items-center text-sm text-darkBlack w-max">
+              {/* {row.original?.Kunden?.Kundeinformasjon[0]?.EPost} */}
+              BoligPartner
             </div>
           ),
         },
         {
-          accessorKey: "Kundetype",
-          header: "Kundetype",
+          accessorKey: "Konsulent",
+          header: "Konsulent",
           cell: ({ row }: any) => (
-            <div className="flex items-center text-sm text-darkBlack">
-              {row.original?.Kunden?.Kundeinformasjon[0]?.Kundetype}
+            <div className="flex items-center text-sm text-darkBlack w-max">
+              {row.original?.createDataBy?.name}
             </div>
           ),
         },
@@ -235,42 +236,25 @@ export const LeadTable = () => {
           accessorKey: "Tilbudspris",
           header: "Tilbudspris",
           cell: ({ row }: any) => {
-            const projectAccount = row.original?.ProjectAccount?.husmodellData;
+            const plotData = row.original?.plotHusmodell?.plot;
+            const houseData = row.original?.plotHusmodell?.house;
 
-            const parsePrice = (value: any): number => {
-              if (!value) return 0;
-              return parseFloat(
-                String(value)
-                  .replace(/\s/g, "")
-                  .replace(/\./g, "")
-                  .replace(",", ".")
-              );
-            };
+            function norwegianToNumber(str: any) {
+              if (typeof str !== "string") return 0;
+              return Number(str.replace(/\s/g, ""));
+            }
 
-            const Byggekostnader = projectAccount?.Byggekostnader ?? [];
-            const Tomtekost = projectAccount?.Tomtekost ?? [];
+            const sum =
+              norwegianToNumber(plotData?.tomtekostnader) +
+              norwegianToNumber(houseData?.byggekostnader);
 
-            const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
-              (acc: number, prod: any, index: number) => {
-                const value = prod?.pris;
-                return acc + parsePrice(value);
-              },
-              0
-            );
+            function numberToNorwegian(num: any) {
+              return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+            }
 
-            const totalPrisOfTomtekost = [...Tomtekost].reduce(
-              (acc: number, prod: any) => {
-                const value = prod.pris;
-                return acc + parsePrice(value);
-              },
-              0
-            );
-
-            const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
-            const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
             return (
               <p className="text-sm font-semibold text-black w-max">
-                {formattedGrandTotal} NOK
+                {numberToNorwegian(sum)} NOK
               </p>
             );
           },

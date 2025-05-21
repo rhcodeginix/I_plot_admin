@@ -31,10 +31,6 @@ export const BankleadsTabs = () => {
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const [bankData, setBankData] = useState<any>();
 
-  // const getData = async () => {
-  //   const data = await fetchBankLeadData(id);
-  //   setBankData(data);
-  // };
   const getData = useCallback(async () => {
     if (!id) return;
 
@@ -54,35 +50,8 @@ export const BankleadsTabs = () => {
 
     getData();
   }, [getData]);
-  const projectAccount = bankData?.ProjectAccount?.husmodellData;
-
-  const parsePrice = (value: any): number => {
-    if (!value) return 0;
-    return parseFloat(
-      String(value).replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
-    );
-  };
-  const Byggekostnader = projectAccount?.Byggekostnader ?? [];
-  const Tomtekost = projectAccount?.Tomtekost ?? [];
-
-  const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
-    (acc: number, prod: any, index: number) => {
-      const value = prod?.pris;
-      return acc + parsePrice(value);
-    },
-    0
-  );
-
-  const totalPrisOfTomtekost = [...Tomtekost].reduce(
-    (acc: number, prod: any, index: number) => {
-      const value = prod.pris;
-      return acc + parsePrice(value);
-    },
-    0
-  );
-
-  const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
-  const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
+  const plotData = bankData?.plotHusmodell?.plot;
+  const houseData = bankData?.plotHusmodell?.house;
 
   const kundenRef = useRef<any>(null);
   const plotHusmodellRef = useRef<any>(null);
@@ -114,6 +83,19 @@ export const BankleadsTabs = () => {
 
     setActiveTab(targetTabIndex);
   };
+
+  function norwegianToNumber(str: any) {
+    if (typeof str !== "string") return 0;
+    return Number(str.replace(/\s/g, ""));
+  }
+
+  const sum =
+    norwegianToNumber(plotData?.tomtekostnader) +
+    norwegianToNumber(houseData?.byggekostnader);
+
+  function numberToNorwegian(num: any) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
 
   return (
     <>
@@ -158,7 +140,7 @@ export const BankleadsTabs = () => {
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-xl">
-                  {formattedGrandTotal ? formattedGrandTotal : 0} NOK
+                  {sum ? numberToNorwegian(sum) : 0} NOK
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>
@@ -198,7 +180,7 @@ export const BankleadsTabs = () => {
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-xl">
-                  {formattedGrandTotal ? formattedGrandTotal : 0} NOK
+                  {sum ? numberToNorwegian(sum) : 0} NOK
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>
@@ -245,7 +227,7 @@ export const BankleadsTabs = () => {
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-xl">
-                  {formattedGrandTotal ? formattedGrandTotal : 0} NOK
+                  {sum ? numberToNorwegian(sum) : 0} NOK
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>
@@ -299,7 +281,7 @@ export const BankleadsTabs = () => {
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-xl">
-                  {formattedGrandTotal ? formattedGrandTotal : 0} NOK
+                  {sum ? numberToNorwegian(sum) : 0} NOK
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>

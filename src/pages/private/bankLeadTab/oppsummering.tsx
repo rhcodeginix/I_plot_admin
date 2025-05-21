@@ -164,37 +164,37 @@ export const Oppsummering: React.FC<{
                   return (
                     <div className="flex flex-col gap-2" key={index}>
                       <div className="flex gap-3 items-center">
-                        <div className="w-[150px] text-[#5D6B98]">Type</div>
+                        <div className="w-[300px] text-[#5D6B98]">Type</div>
                         <div className="w-[300px] text-darkBlack">
                           {item?.Kundetype}
                         </div>
                       </div>
                       <div className="flex gap-3 items-center">
-                        <div className="w-[150px] text-[#5D6B98]">Navn:</div>
+                        <div className="w-[300px] text-[#5D6B98]">Navn:</div>
                         <div className="w-[300px] text-darkBlack">
                           {item?.f_name} {item?.l_name}
                         </div>
                       </div>
                       <div className="flex gap-3 items-center">
-                        <div className="w-[150px] text-[#5D6B98]">Adresse:</div>
+                        <div className="w-[300px] text-[#5D6B98]">Adresse:</div>
                         <div className="w-[300px] text-darkBlack">
                           {item?.Adresse}
                         </div>
                       </div>
                       <div className="flex gap-3 items-center">
-                        <div className="w-[150px] text-[#5D6B98]">Mobil:</div>
+                        <div className="w-[300px] text-[#5D6B98]">Mobil:</div>
                         <div className="w-[300px] text-darkBlack">
                           {item?.mobileNummer}
                         </div>
                       </div>
                       <div className="flex gap-3 items-center">
-                        <div className="w-[150px] text-[#5D6B98]">E-post:</div>
+                        <div className="w-[300px] text-[#5D6B98]">E-post:</div>
                         <div className="w-[300px] text-darkBlack">
                           {item?.EPost}
                         </div>
                       </div>
                       <div className="flex gap-3 items-center">
-                        <div className="w-[150px] text-[#5D6B98]">
+                        <div className="w-[300px] text-[#5D6B98]">
                           Fødselsdato:
                         </div>
                         <div className="w-[300px] text-darkBlack">
@@ -202,7 +202,7 @@ export const Oppsummering: React.FC<{
                         </div>
                       </div>
                       <div className="flex gap-3 items-center">
-                        <div className="w-[150px] text-[#5D6B98]">
+                        <div className="w-[300px] text-[#5D6B98]">
                           Personnummer:
                         </div>
                         <div className="w-[300px] text-darkBlack">
@@ -222,13 +222,13 @@ export const Oppsummering: React.FC<{
             <div className="flex flex-col gap-2">
               <div className="flex gap-3 items-center">
                 <div className="w-[300px] text-[#5D6B98]">Adresse:</div>
-                <div className="w-full text-darkBlack">{plotData?.address}</div>
+                <div className="text-darkBlack">{plotData?.address}</div>
               </div>
               <div className="flex gap-3 items-center">
                 <div className="w-[300px] text-[#5D6B98]">
                   Kunden eier tomten allerede:
                 </div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {plotData?.alreadyHavePlot
                     ? plotData?.alreadyHavePlot
                     : "Nei"}
@@ -238,14 +238,14 @@ export const Oppsummering: React.FC<{
                 <div className="w-[300px] text-[#5D6B98]">
                   Totale tomtekostnader:
                 </div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {/* {formattedNumberOfByggekostnader} NOK */}
                   {plotData?.tomtekostnader} NOK
                 </div>
               </div>
               <div className="flex gap-3 items-center">
                 <div className="w-[300px] text-[#5D6B98]">Kommentar:</div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {plotData?.Kommentar}
                 </div>
               </div>
@@ -259,7 +259,7 @@ export const Oppsummering: React.FC<{
             <div className="flex flex-col gap-2">
               <div className="flex gap-3 items-center">
                 <div className="w-[300px] text-[#5D6B98]">Husmodell</div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {finalData?.Husdetaljer?.husmodell_name}
                 </div>
               </div>
@@ -267,14 +267,14 @@ export const Oppsummering: React.FC<{
                 <div className="w-[300px] text-[#5D6B98]">
                   Totale byggekostnader:
                 </div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {/* {formattedNumber} NOK */}
                   {houseData?.byggekostnader} NOK
                 </div>
               </div>
               <div className="flex gap-3 items-center mb-3">
                 <div className="w-[300px] text-[#5D6B98]">Kommentar:</div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {houseData?.Kommentar}
                 </div>
               </div>
@@ -288,7 +288,7 @@ export const Oppsummering: React.FC<{
             <div className="flex flex-col gap-2">
               <div className="flex gap-3 items-center">
                 <div className="w-[300px] text-[#5D6B98]">Lastet opp</div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {bankData?.ProjectAccount?.Økonomisk ===
                   "Last opp en økonomisk plan"
                     ? "Ja"
@@ -297,7 +297,7 @@ export const Oppsummering: React.FC<{
               </div>
               <div className="flex gap-3 items-center">
                 <div className="w-[300px] text-[#5D6B98]">Operettet</div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {bankData?.ProjectAccount?.Økonomisk ===
                   "Opprett en økonomisk plan"
                     ? "Ja"
@@ -306,7 +306,7 @@ export const Oppsummering: React.FC<{
               </div>
               <div className="flex gap-3 items-center mb-3">
                 <div className="w-[300px] text-[#5D6B98]">Ettersendes</div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {bankData?.ProjectAccount?.Økonomisk ===
                   "Ettersend en økonomisk plan"
                     ? "Ja"
@@ -323,7 +323,7 @@ export const Oppsummering: React.FC<{
                 <div className="w-[300px] text-[#5D6B98]">
                   Ønskes forhåndstakst?
                 </div>
-                <div className="w-full text-darkBlack">
+                <div className="text-darkBlack">
                   {bankData?.Forhandstakst?.advance_quote ===
                   "Ja, jeg ønsker forhåndstakst"
                     ? "Ja (lead sendes til megler når du sendes inn banktipset)"

@@ -68,10 +68,18 @@ export const UserTable = () => {
     setIsLoading(true);
     try {
       const querySnapshot = await getDocs(collection(db, "admin"));
-      const data: any = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const data: any = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter(
+          (item: any) =>
+            item.role === "Admin" ||
+            item.role === "admin" ||
+            item.role === "Agent" ||
+            item.role === "Bankansvarlig"
+        );
 
       setAdmins(data);
     } catch (error) {
@@ -128,6 +136,13 @@ export const UserTable = () => {
         header: "E-post",
         cell: ({ row }) => (
           <p className="text-sm text-darkBlack">{row.original.email}</p>
+        ),
+      },
+      {
+        accessorKey: "role",
+        header: "Rolle",
+        cell: ({ row }) => (
+          <p className="text-sm text-darkBlack">{row.original.role}</p>
         ),
       },
       {

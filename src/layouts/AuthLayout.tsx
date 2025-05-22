@@ -20,7 +20,6 @@
 
 //     getData();
 //   }, [Role]);
-//   console.log(Role);
 
 //   if (useIsAuthenticated()) {
 //     return (

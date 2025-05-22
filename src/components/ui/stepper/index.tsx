@@ -112,7 +112,7 @@ const Stepper: React.FC<StepperProps> = ({ steps, currIndex, Style }) => {
                         {step.name}
                       </h5>
                       <p className="text-darkBlack text-xs">
-                        {step.date.split("-").reverse().join(".")}
+                        {step.date && step.date.split("-").reverse().join(".")}
                       </p>
                       <p className="text-darkBlack text-xs">
                         Forventet varighet:

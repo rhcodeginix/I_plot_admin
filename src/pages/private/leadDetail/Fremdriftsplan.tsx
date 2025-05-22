@@ -7,10 +7,15 @@ import Modal from "../../../components/common/modal";
 import Img_pdf from "../../../assets/images/Img_pdf.png";
 import { AddComment } from "./addComment";
 import { Payment } from "./payment";
+import Button from "../../../components/common/button";
+import { doc, updateDoc } from "firebase/firestore";
+import { useLocation } from "react-router-dom";
+import { db } from "../../../config/firebaseConfig";
+import { toast } from "react-hot-toast";
 
 function formatPrice(inputStr: any) {
-  let noSuffix = inputStr.replace(" NOK", "");
-  let withDots = noSuffix.replace(/\s+/g, ".");
+  let noSuffix = inputStr && inputStr.replace(" NOK", "");
+  let withDots = noSuffix && noSuffix.replace(/\s+/g, ".");
   return withDots + " NOK";
 }
 
@@ -18,6 +23,10 @@ export const Fremdriftsplan: React.FC<{
   bankData: any;
   getData: any;
 }> = ({ bankData, getData }) => {
+  const location = useLocation();
+  const pathSegments = location.pathname.split("/");
+  const id = pathSegments.length > 2 ? pathSegments[2] : null;
+
   const [currIndex, setCurrIndex] = useState<number>(0);
 
   const order = [
@@ -113,11 +122,21 @@ export const Fremdriftsplan: React.FC<{
                 }
               }
               return (
+                // <div
+                //   key={index}
+                //   className={`py-3 px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-4 ${
+                //     currIndex > index ? "border-[#61C4A4]" : "border-[#FFAFAF]"
+                //   } ${currIndex === index && "border-[#FFB795]"}`}
+                // >
                 <div
                   key={index}
                   className={`py-3 px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-4 ${
-                    currIndex > index ? "border-[#61C4A4]" : "border-[#FFAFAF]"
-                  } ${currIndex === index && "border-[#FFB795]"}`}
+                    step.status === "Approve"
+                      ? "border-[#61C4A4]"
+                      : step.status === "Unpaid" || step.status === "Reject"
+                      ? "border-[#FFAFAF]"
+                      : step.status === "Sent" && "border-[#FFB795]"
+                  }`}
                 >
                   <div
                     className={`flex items-center gap-2 justify-between ${
@@ -131,7 +150,7 @@ export const Fremdriftsplan: React.FC<{
                       Step {index + 1}:{" "}
                       <span className="font-bold">{step.name}</span>
                     </h4>
-                    {currIndex > index ? (
+                    {/* {currIndex > index ? (
                       <div className="flex items-center gap-4">
                         {step?.payment ? (
                           <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-2 text-xs text-[#00857A]">
@@ -178,6 +197,71 @@ export const Fremdriftsplan: React.FC<{
                           Ubetalt
                         </div>
                       )
+                    )} */}
+                    {currIndex > index ? (
+                      <div className="flex items-center gap-4">
+                        {step.status === "Approve" ? (
+                          <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-2 text-xs text-[#00857A]">
+                            Betalt {formatPrice(step.pris)} (
+                            {step.date &&
+                              step.date.split("-").reverse().join(".")}
+                            )
+                          </div>
+                        ) : step.status === "Reject" ? (
+                          <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
+                            Avvis
+                          </div>
+                        ) : (
+                          step.status === "Sent" && (
+                            <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-2 text-xs text-[#C84D00]">
+                              Send Information
+                            </div>
+                          )
+                        )}
+                        {step.status !== "Approve" && !step?.payment && (
+                          <div
+                            className="bg-[#6941C6] rounded-[16px] py-0.5 px-2 text-xs text-white cursor-pointer"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setIsPDFModalOpen(true);
+                              setSelectIndex(step.name);
+                            }}
+                          >
+                            Pay for this Step
+                          </div>
+                        )}
+
+                        <ChevronDown
+                          className={`text-primary transition-transform duration-200 ${
+                            openStepIndex === index ? "rotate-180" : ""
+                          }`}
+                        />
+                      </div>
+                    ) : currIndex === index ? (
+                      <div className="flex items-center gap-4">
+                        <span
+                          className="text-primary text-sm font-semibold cursor-pointer"
+                          onClick={() => {
+                            setIsModalOpen(true);
+                            setSelectIndex(step.name);
+                          }}
+                        >
+                          Fullfør steget
+                        </span>
+                        {/* <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-2 text-xs text-[#C84D00]">
+                          Send Information
+                        </div> */}
+                        <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
+                          Ubetalt
+                        </div>
+                      </div>
+                    ) : (
+                      currIndex < index && (
+                        <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
+                          Ubetalt
+                        </div>
+                      )
                     )}
                   </div>
                   <div className="flex gap-4 items-center">
@@ -186,7 +270,8 @@ export const Fremdriftsplan: React.FC<{
                         Forventet oppstart
                       </p>
                       <h6 className="text-darkBlack font-medium">
-                        {step.date.split("-").reverse().join(".")}
+                        {step?.date &&
+                          step?.date.split("-").reverse().join(".")}
                       </h6>
                     </div>
                     {step?.comment && (
@@ -269,48 +354,128 @@ export const Fremdriftsplan: React.FC<{
                       </div>
                     </div>
                   )}
-                  {currIndex > index && openStepIndex === index && (
-                    <div className="border border-[#EAECF0] rounded-lg">
-                      <div className="flex items-center justify-between gap-2 p-4 border-b border-[#EAECF0]">
-                        <h3 className="text-darkBlack font-semibold">
-                          Grunnarbeider: Svar til utbygger
-                        </h3>
-                        <Pencil
-                          className="text-primary cursor-pointer"
-                          onClick={() => {
-                            setIsPDFModalOpen(true);
-                            setSelectIndex(step.name);
-                          }}
-                        />
-                      </div>
-                      <div className="p-4">
-                        <p className="text-[#5D6B98] text-base mb-6">
-                          {step.comment.text}
-                        </p>
-                        <div>
-                          <h4 className="text-darkBlack font-semibold">
-                            Dokumenter
-                          </h4>
-                          {step.comment.photo && (
-                            <div className="mt-5 flex items-center gap-5 flex-wrap">
-                              {step.comment.photo?.map(
-                                (_file: any, index: number) => (
-                                  <div
-                                    className="relative h-[140px] w-[140px]"
-                                    key={index}
-                                  >
-                                    <img
-                                      src={Img_pdf}
-                                      alt="logo"
-                                      className="object-cover w-full h-full rounded-lg"
-                                    />
-                                  </div>
-                                )
-                              )}
-                            </div>
+                  {currIndex > index &&
+                    openStepIndex === index &&
+                    step?.payment && (
+                      <div className="border border-[#EAECF0] rounded-lg">
+                        <div className="flex items-center justify-between gap-2 p-4 border-b border-[#EAECF0]">
+                          <h3 className="text-darkBlack font-semibold">
+                            Grunnarbeider: Svar til utbygger
+                          </h3>
+                          {step.status !== "Approve" && (
+                            <Pencil
+                              className="text-primary cursor-pointer"
+                              onClick={() => {
+                                setIsPDFModalOpen(true);
+                                setSelectIndex(step.name);
+                              }}
+                            />
                           )}
                         </div>
+                        <div className="p-4">
+                          <p className="text-[#5D6B98] text-base mb-6">
+                            {step.payment.text}
+                          </p>
+                          <div>
+                            <h4 className="text-darkBlack font-semibold">
+                              Dokumenter
+                            </h4>
+                            {step.payment.pdf && (
+                              <div className="mt-5 flex items-center gap-5 flex-wrap">
+                                {step.payment.pdf?.map(
+                                  (_file: any, index: number) => (
+                                    <div
+                                      className="relative h-[140px] w-[140px]"
+                                      key={index}
+                                    >
+                                      <img
+                                        src={Img_pdf}
+                                        alt="logo"
+                                        className="object-cover w-full h-full rounded-lg"
+                                      />
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
+                    )}
+                  {currIndex > index && openStepIndex === index && (
+                    <div className="flex justify-end items-center gap-4">
+                      <Button
+                        text="Avvis"
+                        className="border border-[#A20000] bg-[#A20000] text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                        type="submit"
+                        onClick={async () => {
+                          // setStatus("Reject");
+                          try {
+                            if (id) {
+                              const bankDocRef = doc(
+                                db,
+                                "bank_leads",
+                                String(id)
+                              );
+
+                              const updatePayload: any = {
+                                [`Fremdriftsplan.${step.name}.status`]:
+                                  "Reject",
+                              };
+                              await updateDoc(bankDocRef, updatePayload);
+
+                              toast.success("Status updated successfully", {
+                                position: "top-right",
+                              });
+                              getData();
+                            }
+                          } catch (error) {
+                            console.error("Firestore operation failed:", error);
+                            toast.error(
+                              "Something went wrong. Please try again.",
+                              {
+                                position: "top-right",
+                              }
+                            );
+                          }
+                        }}
+                      />
+                      <Button
+                        text="Godkjenn"
+                        className="border border-[#099250] bg-[#099250] text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                        type="submit"
+                        onClick={async () => {
+                          try {
+                            if (id) {
+                              const bankDocRef = doc(
+                                db,
+                                "bank_leads",
+                                String(id)
+                              );
+
+                              const updatePayload: any = {
+                                [`Fremdriftsplan.${step.name}.status`]:
+                                  "Approve",
+                              };
+
+                              await updateDoc(bankDocRef, updatePayload);
+
+                              toast.success("Status updated successfully", {
+                                position: "top-right",
+                              });
+                              getData();
+                            }
+                          } catch (error) {
+                            console.error("Firestore operation failed:", error);
+                            toast.error(
+                              "Something went wrong. Please try again.",
+                              {
+                                position: "top-right",
+                              }
+                            );
+                          }
+                        }}
+                      />
                     </div>
                   )}
                 </div>

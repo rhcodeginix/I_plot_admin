@@ -162,7 +162,7 @@ export const AddComment: React.FC<{
         //   [`Fremdriftsplan.${SelectIndex}.comment`]: data,
         //   updatedAt: formatDate(new Date()),
         // });
-        const docSnap = await getDoc(bankDocRef);
+        // const docSnap = await getDoc(bankDocRef);
 
         const updatePayload: any = {
           [`Fremdriftsplan.${SelectIndex}.comment`]: data,

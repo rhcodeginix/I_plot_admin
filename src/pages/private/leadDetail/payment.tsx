@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -21,9 +21,8 @@ import { db, storage } from "../../../config/firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import toast from "react-hot-toast";
 import { Input } from "../../../components/ui/input";
-// import { fetchAdminDataByEmail, fetchSupplierData } from "../../../lib/utils";
 
-const formSchema = z.object({
+const formSchema: any = z.object({
   pdf: z
     .array(
       z.union([
@@ -85,6 +84,7 @@ export const Payment: React.FC<{
 
   const filepdfInputRef = React.useRef<HTMLInputElement | null>(null);
   const uploadpdf: any = form.watch("pdf");
+  const [status, setStatus] = useState("");
 
   const handleFileUpload = async (files: FileList, fieldName: any) => {
     if (!files.length) return;
@@ -159,10 +159,13 @@ export const Payment: React.FC<{
       if (id) {
         const bankDocRef = doc(db, "bank_leads", String(id));
 
-        await updateDoc(bankDocRef, {
+        const updatePayload: any = {
           [`Fremdriftsplan.${SelectIndex}.payment`]: data,
           updatedAt: formatDate(new Date()),
-        });
+        };
+        updatePayload[`Fremdriftsplan.${SelectIndex}.status`] = status;
+
+        await updateDoc(bankDocRef, updatePayload);
 
         toast.success("Updated successfully", {
           position: "top-right",
@@ -171,6 +174,7 @@ export const Payment: React.FC<{
       }
 
       setIsPDFModalOpen(false);
+      setStatus("");
     } catch (error) {
       console.error("Firestore operation failed:", error);
       toast.error("Something went wrong. Please try again.", {
@@ -386,9 +390,20 @@ export const Payment: React.FC<{
               onClick={() => setIsPDFModalOpen(false)}
             />
             <Button
-              text="Lagre"
-              className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+              text="Avvis"
+              className="border border-[#A20000] bg-[#A20000] text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
               type="submit"
+              onClick={() => {
+                setStatus("Reject");
+              }}
+            />
+            <Button
+              text="Godkjenn"
+              className="border border-[#099250] bg-[#099250] text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+              type="submit"
+              onClick={() => {
+                setStatus("Approve");
+              }}
             />
           </div>
         </form>

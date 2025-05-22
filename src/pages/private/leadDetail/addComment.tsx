@@ -79,53 +79,6 @@ export const AddComment: React.FC<{
     fetchExistingComment();
   }, [id, SelectIndex]);
 
-  //   const [suppliers, setSuppliers] = useState<any>([]);
-
-  //   const [permission, setPermission] = useState<any>(null);
-  //   const email = localStorage.getItem("Iplot_admin");
-
-  //   useEffect(() => {
-  //     const getData = async () => {
-  //       const data = await fetchAdminDataByEmail();
-  //       if (data) {
-  //         const finalData = data?.supplier;
-  //         setPermission(finalData);
-  //       }
-  //     };
-
-  //     getData();
-  //   }, [permission]);
-
-  //   const fetchSuppliersData = async () => {
-  //     try {
-  //       if ((permission && permission) || email !== "andre.finger@gmail.com") {
-  //         const singleData: any = await fetchSupplierData(permission);
-
-  //         const filterData = [];
-  //         if (singleData) {
-  //           filterData.push(singleData);
-  //         }
-
-  //         if (filterData) {
-  //           setSuppliers(filterData);
-  //         }
-  //       } else {
-  //         const querySnapshot = await getDocs(collection(db, "suppliers"));
-  //         const data: any = querySnapshot.docs.map((doc) => ({
-  //           id: doc.id,
-  //           ...doc.data(),
-  //         }));
-  //         setSuppliers(data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching husmodell data:", error);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     fetchSuppliersData();
-  //   }, [permission]);
-
   const filephotoPhotoInputRef = React.useRef<HTMLInputElement | null>(null);
   const uploadPhoto: any = form.watch("photo");
 
@@ -205,10 +158,14 @@ export const AddComment: React.FC<{
       if (id) {
         const bankDocRef = doc(db, "bank_leads", String(id));
 
-        await updateDoc(bankDocRef, {
+        const updatePayload: any = {
           [`Fremdriftsplan.${SelectIndex}.comment`]: data,
           updatedAt: formatDate(new Date()),
-        });
+        };
+
+        updatePayload[`Fremdriftsplan.${SelectIndex}.status`] = "Sent";
+
+        await updateDoc(bankDocRef, updatePayload);
 
         toast.success("Updated successfully", {
           position: "top-right",

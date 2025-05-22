@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { BookText, ChartPie, ChevronRight } from "lucide-react";
+import { BookText, ChartPie, ChevronRight, FileText } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
 import { Oppsummering } from "./oppsummering";
 import { Fremdriftsplan } from "./Fremdriftsplan";
+import { Documenters } from "./document";
 
 export const LeadsDetails = () => {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ export const LeadsDetails = () => {
   const [activeTab, setActiveTab] = useState<any>(0);
   const tabData = [
     { label: "Summary", icon: <BookText /> },
+    { label: "Dokumentasjon", icon: <FileText /> },
     { label: "Fremdriftsplan", icon: <ChartPie /> },
   ];
   useEffect(() => {
@@ -124,7 +126,8 @@ export const LeadsDetails = () => {
         </div>
 
         {activeTab === 0 && <Oppsummering bankData={bankData} />}
-        {activeTab === 1 && (
+        {activeTab === 1 && <Documenters getData={getData} />}
+        {activeTab === 2 && (
           <Fremdriftsplan bankData={bankData} getData={getData} />
         )}
       </div>

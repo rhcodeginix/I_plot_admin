@@ -68,12 +68,10 @@ export const UserTable = () => {
     setIsLoading(true);
     try {
       const querySnapshot = await getDocs(collection(db, "admin"));
-      const data: any = querySnapshot.docs
-        .map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-        .filter((item: any) => item.role === "admin");
+      const data: any = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
       setAdmins(data);
     } catch (error) {

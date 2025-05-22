@@ -213,7 +213,6 @@ export const AddUserForm = () => {
         if (!adminSnap.exists()) {
           await setDoc(adminDocRef, {
             ...data,
-            role: "admin",
             id: uniqueId,
             password: hashedPassword,
             createdAt: new Date(),

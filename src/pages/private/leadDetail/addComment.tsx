@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Img_pdf from "../../../assets/images/Img_pdf.png";
 import {
   Form,
   FormControl,
@@ -126,14 +127,12 @@ export const AddComment: React.FC<{
   //   }, [permission]);
 
   const filephotoPhotoInputRef = React.useRef<HTMLInputElement | null>(null);
-  const uploadphotoPhoto: any = form.watch("photo");
+  const uploadPhoto: any = form.watch("photo");
 
   const handleFileUpload = async (files: FileList, fieldName: any) => {
     if (!files.length) return;
 
-    const currentImages = Array.isArray(uploadphotoPhoto)
-      ? uploadphotoPhoto
-      : [];
+    const currentImages = Array.isArray(uploadPhoto) ? uploadPhoto : [];
     let newImages = [...currentImages];
 
     const uploadPromises = Array.from(files).map(async (file) => {
@@ -144,7 +143,10 @@ export const AddComment: React.FC<{
         return null;
       }
 
-      const fileType = "images";
+      const extension = file.name.split(".").pop()?.toLowerCase();
+
+      const isPdf = extension === "pdf";
+      const fileType = isPdf ? "documents" : "images";
       const timestamp = Date.now();
       const fileName = `${timestamp}_${file.name}`;
       const storageRef = ref(storage, `${fileType}/${fileName}`);
@@ -243,12 +245,12 @@ export const AddComment: React.FC<{
                           fieldState.error ? "text-red" : ""
                         } mb-[6px] text-sm`}
                       >
-                        Forventet oppstart
+                        Dato fullført av entreprepenør
                       </p>
                       <FormControl>
                         <div className="relative">
                           <Input
-                            placeholder="Skriv inn Forventet oppstart"
+                            placeholder="Skriv inn Dato fullført av entreprepenør"
                             {...field}
                             className={`bg-white rounded-[8px] border text-black
                                           ${
@@ -327,13 +329,13 @@ export const AddComment: React.FC<{
                                 eller dra-og-slipp
                               </p>
                               <p className="text-gray text-sm text-center truncate w-full">
-                                SVG, PNG, JPG or GIF (maks. 800x400px)
+                                SVG, PNG, JPG, PDF or GIF (maks. 800x400px)
                               </p>
                               <input
                                 type="file"
                                 ref={filephotoPhotoInputRef}
                                 className="hidden"
-                                accept=".svg, .png, .jpg, .jpeg, .gif"
+                                accept=".svg, .png, .jpg, .jpeg, .gif, .pdf"
                                 onChange={handlephotoFileChange}
                                 name="photo"
                                 multiple
@@ -347,31 +349,34 @@ export const AddComment: React.FC<{
                   )}
                 />
                 <div>
-                  {uploadphotoPhoto && (
+                  {uploadPhoto && (
                     <div className="mt-5 flex items-center gap-5 flex-wrap">
-                      {uploadphotoPhoto?.map((file: any, index: number) => (
-                        <div
-                          className="relative h-[140px] w-[140px]"
-                          key={index}
-                        >
-                          <img
-                            src={file}
-                            alt="logo"
-                            className="object-cover w-full h-full rounded-lg"
-                          />
+                      {uploadPhoto?.map((file: string, index: number) => {
+                        const isPdf = file.toLowerCase().includes(".pdf");
+                        return (
                           <div
-                            className="absolute top-2 right-2 bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer"
-                            onClick={() => {
-                              const updatedFiles = uploadphotoPhoto.filter(
-                                (_: any, i: number) => i !== index
-                              );
-                              form.setValue("photo", updatedFiles);
-                            }}
+                            className="relative h-[140px] w-[140px]"
+                            key={index}
                           >
-                            <img src={Ic_delete_purple} alt="delete" />
+                            <img
+                              src={isPdf ? Img_pdf : file}
+                              alt={isPdf ? "PDF file" : "Uploaded image"}
+                              className="object-cover w-full h-full rounded-lg"
+                            />
+                            <div
+                              className="absolute top-2 right-2 bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer"
+                              onClick={() => {
+                                const updatedFiles = uploadPhoto.filter(
+                                  (_: any, i: number) => i !== index
+                                );
+                                form.setValue("photo", updatedFiles);
+                              }}
+                            >
+                              <img src={Ic_delete_purple} alt="delete" />
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>

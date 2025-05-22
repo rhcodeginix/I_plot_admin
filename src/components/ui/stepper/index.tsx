@@ -52,10 +52,11 @@ const Stepper: React.FC<StepperProps> = ({ steps, currIndex, Style }) => {
                       fullFortDate,
                       expectedDate
                     );
+
                     diffText = (
                       <span
                         style={{
-                          color: dayDifference === -1 ? "#00857A" : "#A20000",
+                          color: dayDifference < 0 ? "#00857A" : "#A20000",
                           fontWeight: "600",
                         }}
                       >

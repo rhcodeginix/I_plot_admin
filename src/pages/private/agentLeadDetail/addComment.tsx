@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import Button from "../../../components/common/button";
+import Img_pdf from "../../../assets/images/Img_pdf.png";
 import Ic_upload_photo from "../../../assets/images/Ic_upload_photo.svg";
 import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
 import { TextArea } from "../../../components/ui/textarea";
@@ -78,62 +79,13 @@ export const AddComment: React.FC<{
     fetchExistingComment();
   }, [id, SelectIndex]);
 
-  //   const [suppliers, setSuppliers] = useState<any>([]);
-
-  //   const [permission, setPermission] = useState<any>(null);
-  //   const email = localStorage.getItem("Iplot_admin");
-
-  //   useEffect(() => {
-  //     const getData = async () => {
-  //       const data = await fetchAdminDataByEmail();
-  //       if (data) {
-  //         const finalData = data?.supplier;
-  //         setPermission(finalData);
-  //       }
-  //     };
-
-  //     getData();
-  //   }, [permission]);
-
-  //   const fetchSuppliersData = async () => {
-  //     try {
-  //       if ((permission && permission) || email !== "andre.finger@gmail.com") {
-  //         const singleData: any = await fetchSupplierData(permission);
-
-  //         const filterData = [];
-  //         if (singleData) {
-  //           filterData.push(singleData);
-  //         }
-
-  //         if (filterData) {
-  //           setSuppliers(filterData);
-  //         }
-  //       } else {
-  //         const querySnapshot = await getDocs(collection(db, "suppliers"));
-  //         const data: any = querySnapshot.docs.map((doc) => ({
-  //           id: doc.id,
-  //           ...doc.data(),
-  //         }));
-  //         setSuppliers(data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching husmodell data:", error);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     fetchSuppliersData();
-  //   }, [permission]);
-
   const filephotoPhotoInputRef = React.useRef<HTMLInputElement | null>(null);
-  const uploadphotoPhoto: any = form.watch("photo");
+  const uploadPhoto: any = form.watch("photo");
 
   const handleFileUpload = async (files: FileList, fieldName: any) => {
     if (!files.length) return;
 
-    const currentImages = Array.isArray(uploadphotoPhoto)
-      ? uploadphotoPhoto
-      : [];
+    const currentImages = Array.isArray(uploadPhoto) ? uploadPhoto : [];
     let newImages = [...currentImages];
 
     const uploadPromises = Array.from(files).map(async (file) => {
@@ -143,8 +95,11 @@ export const AddComment: React.FC<{
         });
         return null;
       }
+      const extension = file.name.split(".").pop()?.toLowerCase();
 
-      const fileType = "images";
+      const isPdf = extension === "pdf";
+      const fileType = isPdf ? "documents" : "images";
+      // const fileType = "images";
       const timestamp = Date.now();
       const fileName = `${timestamp}_${file.name}`;
       const storageRef = ref(storage, `${fileType}/${fileName}`);
@@ -203,10 +158,29 @@ export const AddComment: React.FC<{
       if (id) {
         const bankDocRef = doc(db, "bank_leads", String(id));
 
-        await updateDoc(bankDocRef, {
+        // await updateDoc(bankDocRef, {
+        //   [`Fremdriftsplan.${SelectIndex}.comment`]: data,
+        //   updatedAt: formatDate(new Date()),
+        // });
+        const docSnap = await getDoc(bankDocRef);
+
+        const updatePayload: any = {
           [`Fremdriftsplan.${SelectIndex}.comment`]: data,
           updatedAt: formatDate(new Date()),
-        });
+        };
+
+        // if (docSnap.exists() && docSnap.data().status === "Unpaid") {
+        //   updatePayload.status = "Sent";
+        // }
+        // const fremdriftsplan = docSnap.data()?.Fremdriftsplan;
+        // const currentStep = fremdriftsplan?.[SelectIndex];
+        // const currentStatus = currentStep?.status;
+
+        // if (!docSnap.exists() || currentStatus === "Unpaid") {
+        updatePayload[`Fremdriftsplan.${SelectIndex}.status`] = "Sent";
+        // }
+
+        await updateDoc(bankDocRef, updatePayload);
 
         toast.success("Updated successfully", {
           position: "top-right",
@@ -243,12 +217,12 @@ export const AddComment: React.FC<{
                           fieldState.error ? "text-red" : ""
                         } mb-[6px] text-sm`}
                       >
-                        Forventet oppstart
+                        Dato fullført av entreprepenør
                       </p>
                       <FormControl>
                         <div className="relative">
                           <Input
-                            placeholder="Skriv inn Forventet oppstart"
+                            placeholder="Skriv inn Dato fullført av entreprepenør"
                             {...field}
                             className={`bg-white rounded-[8px] border text-black
                                           ${
@@ -327,13 +301,13 @@ export const AddComment: React.FC<{
                                 eller dra-og-slipp
                               </p>
                               <p className="text-gray text-sm text-center truncate w-full">
-                                SVG, PNG, JPG or GIF (maks. 800x400px)
+                                SVG, PNG, JPG, PDF or GIF (maks. 800x400px)
                               </p>
                               <input
                                 type="file"
                                 ref={filephotoPhotoInputRef}
                                 className="hidden"
-                                accept=".svg, .png, .jpg, .jpeg, .gif"
+                                accept=".svg, .png, .jpg, .jpeg, .gif, .pdf"
                                 onChange={handlephotoFileChange}
                                 name="photo"
                                 multiple
@@ -347,31 +321,34 @@ export const AddComment: React.FC<{
                   )}
                 />
                 <div>
-                  {uploadphotoPhoto && (
+                  {uploadPhoto && (
                     <div className="mt-5 flex items-center gap-5 flex-wrap">
-                      {uploadphotoPhoto?.map((file: any, index: number) => (
-                        <div
-                          className="relative h-[140px] w-[140px]"
-                          key={index}
-                        >
-                          <img
-                            src={file}
-                            alt="logo"
-                            className="object-cover w-full h-full rounded-lg"
-                          />
+                      {uploadPhoto?.map((file: string, index: number) => {
+                        const isPdf = file.toLowerCase().includes(".pdf");
+                        return (
                           <div
-                            className="absolute top-2 right-2 bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer"
-                            onClick={() => {
-                              const updatedFiles = uploadphotoPhoto.filter(
-                                (_: any, i: number) => i !== index
-                              );
-                              form.setValue("photo", updatedFiles);
-                            }}
+                            className="relative h-[140px] w-[140px]"
+                            key={index}
                           >
-                            <img src={Ic_delete_purple} alt="delete" />
+                            <img
+                              src={isPdf ? Img_pdf : file}
+                              alt={isPdf ? "PDF file" : "Uploaded image"}
+                              className="object-cover w-full h-full rounded-lg"
+                            />
+                            <div
+                              className="absolute top-2 right-2 bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer"
+                              onClick={() => {
+                                const updatedFiles = uploadPhoto.filter(
+                                  (_: any, i: number) => i !== index
+                                );
+                                form.setValue("photo", updatedFiles);
+                              }}
+                            >
+                              <img src={Ic_delete_purple} alt="delete" />
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>

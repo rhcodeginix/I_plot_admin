@@ -108,9 +108,19 @@ export const Fremdriftsplan: React.FC<{
                 <div
                   key={index}
                   className={`py-3 px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-4 ${
-                    currIndex > index ? "border-[#61C4A4]" : "border-[#FFAFAF]"
-                  } ${currIndex === index && "border-[#FFB795]"}`}
+                    step.status === "Approve"
+                      ? "border-[#61C4A4]"
+                      : step.status === "Unpaid" || step.status === "Reject"
+                      ? "border-[#FFAFAF]"
+                      : step.status === "Sent" && "border-[#FFB795]"
+                  }`}
                 >
+                  {/* // <div
+                //   key={index}
+                //   className={`py-3 px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-4 ${
+                //     currIndex > index ? "border-[#61C4A4]" : "border-[#FFAFAF]"
+                //   } ${currIndex === index && "border-[#FFB795]"}`}
+                // > */}
                   <div
                     className={`flex items-center gap-2 justify-between ${
                       currIndex > index && "cursor-pointer"
@@ -125,10 +135,23 @@ export const Fremdriftsplan: React.FC<{
                     </h4>
                     {currIndex > index ? (
                       <div className="flex items-center gap-4">
-                        <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-2 text-xs text-[#00857A]">
-                          Betalt {formatPrice(step.pris)} (
-                          {step.date.split("-").reverse().join(".")})
-                        </div>
+                        {step.status === "Approve" ? (
+                          <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-2 text-xs text-[#00857A]">
+                            Betalt {formatPrice(step.pris)} (
+                            {step.date.split("-").reverse().join(".")})
+                          </div>
+                        ) : step.status === "Reject" ? (
+                          <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
+                            Avvis
+                          </div>
+                        ) : (
+                          step.status === "Sent" && (
+                            <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-2 text-xs text-[#C84D00]">
+                              Send Information
+                            </div>
+                          )
+                        )}
+
                         <ChevronDown
                           className={`text-primary transition-transform duration-200 ${
                             openStepIndex === index ? "rotate-180" : ""
@@ -146,8 +169,11 @@ export const Fremdriftsplan: React.FC<{
                         >
                           Fullfør steget
                         </span>
-                        <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-2 text-xs text-[#C84D00]">
+                        {/* <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-2 text-xs text-[#C84D00]">
                           Send Information
+                        </div> */}
+                        <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
+                          Ubetalt
                         </div>
                       </div>
                     ) : (
@@ -202,18 +228,20 @@ export const Fremdriftsplan: React.FC<{
                         <h3 className="text-darkBlack font-semibold">
                           Grunnarbeider: Kommentar fra utbygger
                         </h3>
-                        <Pencil
-                          className="text-primary cursor-pointer"
-                          onClick={() => {
-                            setIsModalOpen(true);
-                            setSelectIndex(step.name);
-                          }}
-                        />
+                        {step.status !== "Approve" && (
+                          <Pencil
+                            className="text-primary cursor-pointer"
+                            onClick={() => {
+                              setIsModalOpen(true);
+                              setSelectIndex(step.name);
+                            }}
+                          />
+                        )}
                       </div>
                       <div className="p-4">
-                        <p className="text-[#5D6B98] text-base mb-6">
+                        <div className="text-[#5D6B98] text-base mb-6">
                           {step.comment.text}
-                        </p>
+                        </div>
                         <div>
                           <h4 className="text-darkBlack font-semibold">
                             Bilder fra jobben:
@@ -221,18 +249,25 @@ export const Fremdriftsplan: React.FC<{
                           {step.comment.photo && (
                             <div className="mt-5 flex items-center gap-5 flex-wrap">
                               {step.comment.photo?.map(
-                                (file: any, index: number) => (
-                                  <div
-                                    className="relative h-[140px] w-[140px]"
-                                    key={index}
-                                  >
-                                    <img
-                                      src={file}
-                                      alt="logo"
-                                      className="object-cover w-full h-full rounded-lg"
-                                    />
-                                  </div>
-                                )
+                                (file: string, index: number) => {
+                                  const isPdf = file
+                                    .toLowerCase()
+                                    .includes(".pdf");
+                                  return (
+                                    <div
+                                      className="relative h-[140px] w-[140px]"
+                                      key={index}
+                                    >
+                                      <img
+                                        src={isPdf ? Img_pdf : file}
+                                        alt={
+                                          isPdf ? "PDF file" : "Uploaded image"
+                                        }
+                                        className="object-cover w-full h-full rounded-lg"
+                                      />
+                                    </div>
+                                  );
+                                }
                               )}
                             </div>
                           )}
@@ -240,50 +275,52 @@ export const Fremdriftsplan: React.FC<{
                       </div>
                     </div>
                   )}
-                  {currIndex > index && openStepIndex === index && (
-                    <div className="border border-[#EAECF0] rounded-lg">
-                      <div className="flex items-center justify-between gap-2 p-4 border-b border-[#EAECF0]">
-                        <h3 className="text-darkBlack font-semibold">
-                          Grunnarbeider: Svar til utbygger
-                        </h3>
-                        {/* <Pencil
+                  {currIndex > index &&
+                    openStepIndex === index &&
+                    step?.payment && (
+                      <div className="border border-[#EAECF0] rounded-lg">
+                        <div className="flex items-center justify-between gap-2 p-4 border-b border-[#EAECF0]">
+                          <h3 className="text-darkBlack font-semibold">
+                            Grunnarbeider: Svar til utbygger
+                          </h3>
+                          {/* <Pencil
                           className="text-primary cursor-pointer"
                           onClick={() => {
                             setIsPDFModalOpen(true);
                             setSelectIndex(step.name);
                           }}
                         /> */}
-                      </div>
-                      <div className="p-4">
-                        <p className="text-[#5D6B98] text-base mb-6">
-                          {step.comment.text}
-                        </p>
-                        <div>
-                          <h4 className="text-darkBlack font-semibold">
-                            Dokumenter
-                          </h4>
-                          {step.comment.photo && (
-                            <div className="mt-5 flex items-center gap-5 flex-wrap">
-                              {step.comment.photo?.map(
-                                (_file: any, index: number) => (
-                                  <div
-                                    className="relative h-[140px] w-[140px]"
-                                    key={index}
-                                  >
-                                    <img
-                                      src={Img_pdf}
-                                      alt="logo"
-                                      className="object-cover w-full h-full rounded-lg"
-                                    />
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          )}
+                        </div>
+                        <div className="p-4">
+                          <p className="text-[#5D6B98] text-base mb-6">
+                            {step.payment.text}
+                          </p>
+                          <div>
+                            <h4 className="text-darkBlack font-semibold">
+                              Dokumenter
+                            </h4>
+                            {step.payment.pdf && (
+                              <div className="mt-5 flex items-center gap-5 flex-wrap">
+                                {step.payment.pdf?.map(
+                                  (_file: any, index: number) => (
+                                    <div
+                                      className="relative h-[140px] w-[140px]"
+                                      key={index}
+                                    >
+                                      <img
+                                        src={Img_pdf}
+                                        alt="logo"
+                                        className="object-cover w-full h-full rounded-lg"
+                                      />
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               );
             })}

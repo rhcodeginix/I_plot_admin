@@ -65,6 +65,18 @@ export const BankLeadsDetails = () => {
     return () => clearTimeout(timeout);
   }, [activeTab]);
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const step = searchParams.get("step");
+    if (step) {
+      setActiveTab(Number(step));
+      searchParams.delete("step");
+
+      navigate(`${location.pathname}?${searchParams.toString()}`, {
+        replace: true,
+      });
+    }
+  }, []);
   return (
     <>
       <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
@@ -151,7 +163,9 @@ export const BankLeadsDetails = () => {
             getData={getData}
           />
         )}
-        {activeTab === 2 && <FremdriftsplanOg setActiveTab={setActiveTab} />}
+        {activeTab === 2 && (
+          <FremdriftsplanOg setActiveTab={setActiveTab} getData={getData} />
+        )}
         {activeTab === 3 && (
           <Documenters setActiveTab={setActiveTab} getData={getData} />
         )}

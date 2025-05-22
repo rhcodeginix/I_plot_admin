@@ -243,18 +243,25 @@ export const Fremdriftsplan: React.FC<{
                           {step.comment.photo && (
                             <div className="mt-5 flex items-center gap-5 flex-wrap">
                               {step.comment.photo?.map(
-                                (file: any, index: number) => (
-                                  <div
-                                    className="relative h-[140px] w-[140px]"
-                                    key={index}
-                                  >
-                                    <img
-                                      src={file}
-                                      alt="logo"
-                                      className="object-cover w-full h-full rounded-lg"
-                                    />
-                                  </div>
-                                )
+                                (file: string, index: number) => {
+                                  const isPdf = file
+                                    .toLowerCase()
+                                    .includes(".pdf");
+                                  return (
+                                    <div
+                                      className="relative h-[140px] w-[140px]"
+                                      key={index}
+                                    >
+                                      <img
+                                        src={isPdf ? Img_pdf : file}
+                                        alt={
+                                          isPdf ? "PDF file" : "Uploaded image"
+                                        }
+                                        className="object-cover w-full h-full rounded-lg"
+                                      />
+                                    </div>
+                                  );
+                                }
                               )}
                             </div>
                           )}

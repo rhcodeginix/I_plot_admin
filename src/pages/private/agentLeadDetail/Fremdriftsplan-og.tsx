@@ -25,52 +25,22 @@ import { useLocation } from "react-router-dom";
 import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
 import toast from "react-hot-toast";
 
+const sectionSchema = z.object({
+  date: z.string().min(1, "Forventet oppstart er påkrevd"),
+  day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
+  pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
+});
+
 const formSchema = z.object({
-  Byggekontrakt: z.object({
-    date: z.string().min(1, "Forventet oppstart er påkrevd"),
-    day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
-    pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
-  }),
-  Grunnarbeider: z.object({
-    date: z.string().min(1, "Forventet oppstart er påkrevd"),
-    day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
-    pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
-  }),
-  Betongarbeid: z.object({
-    date: z.string().min(1, "Forventet oppstart er påkrevd"),
-    day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
-    pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
-  }),
-  LeveringByggesett: z.object({
-    date: z.string().min(1, "Forventet oppstart er påkrevd"),
-    day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
-    pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
-  }),
-  TettBygg: z.object({
-    date: z.string().min(1, "Forventet oppstart er påkrevd"),
-    day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
-    pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
-  }),
-  FerdigUte: z.object({
-    date: z.string().min(1, "Forventet oppstart er påkrevd"),
-    day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
-    pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
-  }),
-  FerdigInne: z.object({
-    date: z.string().min(1, "Forventet oppstart er påkrevd"),
-    day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
-    pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
-  }),
-  Forhåndsbefaring: z.object({
-    date: z.string().min(1, "Forventet oppstart er påkrevd"),
-    day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
-    pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
-  }),
-  Overtakelse: z.object({
-    date: z.string().min(1, "Forventet oppstart er påkrevd"),
-    day: z.string().min(1, "Antatt antall dager til å fullføre er påkrevd"),
-    pris: z.string().min(1, "Utbetaling ihht. faktureringsplan er påkrevd"),
-  }),
+  Byggekontrakt: sectionSchema,
+  Grunnarbeider: sectionSchema,
+  Betongarbeid: sectionSchema,
+  LeveringByggesett: sectionSchema,
+  TettBygg: sectionSchema,
+  FerdigUte: sectionSchema,
+  FerdigInne: sectionSchema,
+  Forhåndsbefaring: sectionSchema,
+  Overtakelse: sectionSchema,
 });
 
 export type FremdriftsplanHandle = {
@@ -79,7 +49,8 @@ export type FremdriftsplanHandle = {
 
 export const FremdriftsplanOg: React.FC<{
   setActiveTab: any;
-}> = ({ setActiveTab }) => {
+  getData: any;
+}> = ({ setActiveTab, getData }) => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
@@ -91,9 +62,26 @@ export const FremdriftsplanOg: React.FC<{
     try {
       const docRef = doc(db, "bank_leads", String(id));
 
+      // const BankData = {
+      //   ...data,
+      //   id: id,
+      // };
+      const addStatus = (section: any) => ({
+        ...section,
+        status: "Unpaid",
+      });
+
       const BankData = {
-        ...data,
-        id: id,
+        Byggekontrakt: addStatus(data.Byggekontrakt),
+        Grunnarbeider: addStatus(data.Grunnarbeider),
+        Betongarbeid: addStatus(data.Betongarbeid),
+        LeveringByggesett: addStatus(data.LeveringByggesett),
+        TettBygg: addStatus(data.TettBygg),
+        FerdigUte: addStatus(data.FerdigUte),
+        FerdigInne: addStatus(data.FerdigInne),
+        Forhåndsbefaring: addStatus(data.Forhåndsbefaring),
+        Overtakelse: addStatus(data.Overtakelse),
+        id,
       };
       const formatDate = (date: Date) => {
         return date
@@ -107,6 +95,7 @@ export const FremdriftsplanOg: React.FC<{
       toast.success("Updated successfully", { position: "top-right" });
 
       setActiveTab(3);
+      getData();
     } catch (error) {
       console.error("Firestore operation failed:", error);
       toast.error("Something went wrong. Please try again.", {

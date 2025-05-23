@@ -1,6 +1,8 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Layout } from "./layouts";
 import {
+  AddAgentUserForm,
+  AddBankUserForm,
   AddSuppliers,
   AddUsers,
   AllBankLeads,
@@ -58,8 +60,8 @@ export const routes = createBrowserRouter([
       { path: "/se-user/*", element: <UserDetail /> },
       { path: "/property", element: <PropertyDetail /> },
       { path: "/Brukeradministrasjon", element: <UserManagement /> },
-      { path: "/legg-til-bruker", element: <AddUsers /> },
-      { path: "/edit-til-bruker/*", element: <AddUsers /> },
+      { path: "/legg-user", element: <AddUsers /> },
+      { path: "/edit-user/*", element: <AddUsers /> },
       { path: "/se-husleads", element: <Husleads /> },
       { path: "/se-kombinasjoner", element: <Kombinasjoner /> },
       { path: "/constructed-plot", element: <ConstructedPlot /> },
@@ -75,6 +77,10 @@ export const routes = createBrowserRouter([
       { path: "/bank-leads", element: <AllLeads /> },
       { path: "/active-bank-leads", element: <AllLeads /> },
       { path: "/bank-leads-detail/*", element: <LeadsDetails /> },
+      { path: "/add-bank-user", element: <AddBankUserForm /> },
+      { path: "/edit-bank-user/*", element: <AddBankUserForm /> },
+      { path: "/add-agent-user", element: <AddAgentUserForm /> },
+      { path: "/edit-agent-user/*", element: <AddAgentUserForm /> },
     ],
   },
 ]);
@@ -163,8 +169,8 @@ export const routes = createBrowserRouter([
 //   { path: "/se-user/*", element: <UserDetail /> },
 //   { path: "/property", element: <PropertyDetail /> },
 //   { path: "/Brukeradministrasjon", element: <UserManagement /> },
-//   { path: "/legg-til-bruker", element: <AddUsers /> },
-//   { path: "/edit-til-bruker/*", element: <AddUsers /> },
+//   { path: "/legg-user", element: <AddUsers /> },
+//   { path: "/edit-user/*", element: <AddUsers /> },
 //   { path: "/se-husleads", element: <Husleads /> },
 //   { path: "/se-kombinasjoner", element: <Kombinasjoner /> },
 //   { path: "/constructed-plot", element: <ConstructedPlot /> },

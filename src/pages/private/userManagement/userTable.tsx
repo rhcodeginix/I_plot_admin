@@ -22,7 +22,6 @@ import {
   collection,
   deleteDoc,
   getDocs,
-  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -32,7 +31,7 @@ import toast from "react-hot-toast";
 import Button from "../../../components/common/button";
 import Modal from "../../../components/common/modal";
 
-export const UserTable = () => {
+export const UserTable: React.FC<{ role: any }> = ({ role }) => {
   const [page, setPage] = useState(1);
   const [admins, setAdmins] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -43,11 +42,7 @@ export const UserTable = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const q = query(
-        collection(db, "admin"),
-        where("id", "==", id),
-        orderBy("updatedAt", "desc")
-      );
+      const q = query(collection(db, "admin"), where("id", "==", id));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
@@ -75,10 +70,11 @@ export const UserTable = () => {
         }))
         .filter(
           (item: any) =>
-            item.role === "Admin" ||
-            item.role === "admin" ||
-            item.role === "Agent" ||
-            item.role === "Bankansvarlig"
+            // item.role === "Admin" ||
+            // item.role === "admin" ||
+            // item.role === "Agent" ||
+            // item.role === "Bankansvarlig"
+            item.role === role
         );
 
       setAdmins(data);
@@ -98,7 +94,7 @@ export const UserTable = () => {
 
   useEffect(() => {
     fetchAdminData();
-  }, []);
+  }, [role]);
 
   const handleConfirmPopup = () => {
     if (showConfirm) {
@@ -153,7 +149,15 @@ export const UserTable = () => {
             <div className="flex items-center justify-center gap-3">
               <Pencil
                 className="h-5 w-5 text-primary cursor-pointer"
-                onClick={() => navigate(`/edit-til-bruker/${row.original.id}`)}
+                onClick={() => {
+                  if (role === "Admin") {
+                    navigate(`/edit-user/${row.original.id}`);
+                  } else if (role === "Bankansvarlig") {
+                    navigate(`/edit-bank-user/${row.original.id}`);
+                  } else if (role === "Agent") {
+                    navigate(`/edit-agent-user/${row.original.id}`);
+                  }
+                }}
               />
               <Trash
                 className="h-5 w-5 text-primary cursor-pointer"
@@ -164,7 +168,7 @@ export const UserTable = () => {
         ),
       },
     ],
-    [navigate]
+    [navigate, role]
   );
 
   const pageSize = 10;

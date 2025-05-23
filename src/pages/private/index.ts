@@ -23,3 +23,5 @@ export { AllBankLeads } from "./allagentLeads";
 export { BankLeadsDetails } from "./agentLeadDetail";
 export { AllLeads } from "./leads";
 export { LeadsDetails } from "./leadDetail";
+export { AddBankUserForm } from "./addUsers/addBankUserForm";
+export { AddAgentUserForm } from "./addUsers/addAgentUserForm";

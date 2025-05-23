@@ -37,57 +37,54 @@ import {
 } from "../../../components/ui/select";
 import Modal from "../../../components/common/modal";
 
-// const formSchema = z.object({
-//   photo: z.union([
-//     z
-//       .instanceof(File)
-//       .refine((file: any) => file === null || file.size <= 10 * 1024 * 1024, {
-//         message: "Filstørrelsen må være mindre enn 10 MB.",
-//       }),
-//     z.string(),
-//   ]),
-//   name: z.string().min(1, {
-//     message: "Navn må bestå av minst 2 tegn.",
-//   }),
-//   email: z
-//     .string()
-//     .email({ message: "Vennligst skriv inn en gyldig e-postadresse." })
-//     .min(1, { message: "E-posten må være på minst 2 tegn." }),
-//   modulePermissions: z
-//     .array(
-//       z.object({
-//         id: z.number(),
-//         name: z.string(),
-//         permissions: z.object({
-//           all: z.boolean(),
-//           add: z.boolean(),
-//           edit: z.boolean(),
-//           delete: z.boolean(),
-//           duplicate: z.boolean().optional(),
-//         }),
-//       })
-//     )
-//     .min(1, "At least one permission is required"),
-//   supplier: z.string().min(1, {
-//     message: "Leverandør må velges",
-//   }),
-//   password: z
-//     .string()
-//     .min(8, { message: "Passordet må være minst 8 tegn langt." })
-//     .regex(/[A-Z]/, {
-//       message: "Passordet må inneholde minst én stor bokstav.",
-//     })
-//     .regex(/[a-z]/, {
-//       message: "Passordet må inneholde minst én liten bokstav.",
-//     })
-//     .regex(/[0-9]/, { message: "Passordet må inneholde minst ett tall." })
-//     .regex(/[@$!%*?&]/, {
-//       message: "Passordet må inneholde minst ett spesialtegn.",
-//     }),
-//   role: z.string().min(1, {
-//     message: "rolle må velges",
-//   }),
-// });
+const formSchema = z.object({
+  photo: z.union([
+    z
+      .instanceof(File)
+      .refine((file: any) => file === null || file.size <= 10 * 1024 * 1024, {
+        message: "Filstørrelsen må være mindre enn 10 MB.",
+      }),
+    z.string(),
+  ]),
+  name: z.string().min(1, {
+    message: "Navn må bestå av minst 2 tegn.",
+  }),
+  email: z
+    .string()
+    .email({ message: "Vennligst skriv inn en gyldig e-postadresse." })
+    .min(1, { message: "E-posten må være på minst 2 tegn." }),
+  modulePermissions: z
+    .array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        permissions: z.object({
+          all: z.boolean(),
+          add: z.boolean(),
+          edit: z.boolean(),
+          delete: z.boolean(),
+          duplicate: z.boolean().optional(),
+        }),
+      })
+    )
+    .min(1, "At least one permission is required"),
+  supplier: z.string().min(1, {
+    message: "Leverandør må velges",
+  }),
+  password: z
+    .string()
+    .min(8, { message: "Passordet må være minst 8 tegn langt." })
+    .regex(/[A-Z]/, {
+      message: "Passordet må inneholde minst én stor bokstav.",
+    })
+    .regex(/[a-z]/, {
+      message: "Passordet må inneholde minst én liten bokstav.",
+    })
+    .regex(/[0-9]/, { message: "Passordet må inneholde minst ett tall." })
+    .regex(/[@$!%*?&]/, {
+      message: "Passordet må inneholde minst ett spesialtegn.",
+    }),
+});
 
 function hashPassword(password: any) {
   if (bcrypt.getRounds(password)) {
@@ -98,103 +95,16 @@ function hashPassword(password: any) {
 }
 
 export const AddUserForm = () => {
-  const getFormSchema = (role: string) =>
-    z.object({
-      photo: z.union([
-        z
-          .instanceof(File)
-          .refine(
-            (file: any) => file === null || file.size <= 10 * 1024 * 1024,
-            {
-              message: "Filstørrelsen må være mindre enn 10 MB.",
-            }
-          ),
-        z.string(),
-      ]),
-      name: z.string().min(1, {
-        message: "Navn må bestå av minst 2 tegn.",
-      }),
-      email: z
-        .string()
-        .email({ message: "Vennligst skriv inn en gyldig e-postadresse." })
-        .min(1, { message: "E-posten må være på minst 2 tegn." }),
-      modulePermissions:
-        role === "Bankansvarlig"
-          ? z.any().optional()
-          : z
-              .array(
-                z.object({
-                  id: z.number(),
-                  name: z.string(),
-                  permissions: z.object({
-                    all: z.boolean(),
-                    add: z.boolean(),
-                    edit: z.boolean(),
-                    delete: z.boolean(),
-                    duplicate: z.boolean().optional(),
-                  }),
-                })
-              )
-              .min(1, "At least one permission is required"),
-      supplier:
-        role === "Bankansvarlig"
-          ? z.string().optional()
-          : z.string().min(1, {
-              message: "Leverandør må velges",
-            }),
-      password: z
-        .string()
-        .min(8, { message: "Passordet må være minst 8 tegn langt." })
-        .regex(/[A-Z]/, {
-          message: "Passordet må inneholde minst én stor bokstav.",
-        })
-        .regex(/[a-z]/, {
-          message: "Passordet må inneholde minst én liten bokstav.",
-        })
-        .regex(/[0-9]/, { message: "Passordet må inneholde minst ett tall." })
-        .regex(/[@$!%*?&]/, {
-          message: "Passordet må inneholde minst ett spesialtegn.",
-        }),
-      role: z.string().min(1, {
-        message: "rolle må velges",
-      }),
-    });
-
-  const [roleValue, setRoleValue] = useState("");
-  const [schema, setSchema] = useState(() => getFormSchema(""));
-
-  const form = useForm<z.infer<ReturnType<typeof getFormSchema>>>({
-    resolver: zodResolver(schema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       email: "",
       modulePermissions: [],
       supplier: "",
       password: "",
-      role: "",
     },
   });
-  useEffect(() => {
-    const subscription = form.watch((values: any) => {
-      if (values.role && values.role !== roleValue) {
-        setRoleValue(values.role);
-        setSchema(() => getFormSchema(values.role));
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [form, roleValue]);
-
-  // const form = useForm<z.infer<typeof formSchema>>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     name: "",
-  //     email: "",
-  //     modulePermissions: [],
-  //     supplier: "",
-  //     password: "",
-  //     role: "",
-  //   },
-  // });
 
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const location = useLocation();
@@ -272,16 +182,12 @@ export const AddUserForm = () => {
   };
   const uploadPhoto = form.watch("photo");
 
-  const onSubmit = async (data: z.infer<typeof schema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const adminDocRef = doc(db, "admin", data.email);
       const adminSnap = await getDoc(adminDocRef);
       const uniqueId = id ? id : uuidv4();
       const hashedPassword = hashPassword(data.password);
-      if (data.role === "Bankansvarlig") {
-        delete data.supplier;
-        delete data.modulePermissions;
-      }
 
       if (id) {
         await updateDoc(adminDocRef, {
@@ -289,6 +195,7 @@ export const AddUserForm = () => {
           id: uniqueId,
           password: hashedPassword,
           updatedAt: new Date(),
+          role: "Admin",
         });
         toast.success("Updated successfully", {
           position: "top-right",
@@ -306,6 +213,7 @@ export const AddUserForm = () => {
             id: uniqueId,
             password: hashedPassword,
             createdAt: new Date(),
+            role: "Admin",
             updatedAt: new Date(),
           });
 
@@ -552,10 +460,101 @@ export const AddUserForm = () => {
                   )}
                 />
               </div>
+              <div className="col-span-2">
+                <p className={`text-black mb-[6px] text-lg font-medium`}>
+                  Informasjon om tilgangsnivå
+                </p>
+                <div className="border border-gray1 border-r-0 border-b-0 rounded shadow-sm overflow-x-auto">
+                  <table className="min-w-full bg-white border-r border-gray1">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray1">
+                        <th className="py-3 px-4 text-left font-medium text-gray-500 tracking-wider border-r border-gray1 text-black">
+                          #/Modules
+                        </th>
+                        {permissionTypes.map((permission) => (
+                          <th
+                            key={permission.key}
+                            className="py-3 px-4 text-center font-medium text-gray-500 tracking-wider border-r border-gray1 text-black"
+                          >
+                            {permission.label}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {modulePermissions.map((module: any, index) => (
+                        <tr
+                          key={module.id}
+                          className={
+                            index === 2
+                              ? "border-t-2 border-b-2 border-primary"
+                              : "border-b border-gray1"
+                          }
+                        >
+                          <td className="py-3 px-4 border-r border-gray1 text-black">
+                            {module.name}
+                          </td>
+                          {permissionTypes.map((permission) => (
+                            <td
+                              key={`${module.id}-${permission.key}`}
+                              className="text-center py-2 px-4 border-r border-gray1"
+                            >
+                              <label className="inline-flex items-center justify-center cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  className="hidden"
+                                  checked={module.permissions[permission.key]}
+                                  onChange={() =>
+                                    handlePermissionChange(
+                                      module.id,
+                                      permission.key
+                                    )
+                                  }
+                                />
+                                <div
+                                  className={`w-6 h-6 border rounded flex items-center justify-center ${
+                                    module.permissions[permission.key]
+                                      ? "bg-primary border-[#fff]"
+                                      : "bg-white border-gray1"
+                                  }`}
+                                >
+                                  {module.permissions[permission.key] && (
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                      className="w-4 h-4 text-white"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M5 13l4 4L19 7"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                              </label>
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {typeof form.formState.errors.modulePermissions?.message ===
+                  "string" && (
+                  <div className="text-red text-xs mt-2">
+                    {form.formState.errors.modulePermissions?.message}
+                  </div>
+                )}
+              </div>
               <div>
                 <FormField
                   control={form.control}
-                  name="role"
+                  name="supplier"
                   render={({ field, fieldState }) => (
                     <FormItem>
                       <p
@@ -563,42 +562,13 @@ export const AddUserForm = () => {
                           fieldState.error ? "text-red" : "text-black"
                         } mb-[6px] text-sm font-medium`}
                       >
-                        Rolle
+                        Leverandører
                       </p>
                       <FormControl>
                         <div className="relative">
                           <Select
                             onValueChange={(value) => {
                               field.onChange(value);
-                              if (value === "Bankansvarlig") {
-                                form.setValue("modulePermissions", [
-                                  {
-                                    id: 1,
-                                    name: "Husmodell",
-                                    permissions: {
-                                      all: false,
-                                      add: false,
-                                      edit: false,
-                                      delete: false,
-                                      duplicate: false,
-                                    },
-                                  },
-                                ]);
-                                setModulePermissions([
-                                  {
-                                    id: 1,
-                                    name: "Husmodell",
-                                    permissions: {
-                                      all: false,
-                                      add: false,
-                                      edit: false,
-                                      delete: false,
-                                      duplicate: false,
-                                    },
-                                  },
-                                ]);
-                                form.setValue("supplier", undefined);
-                              }
                             }}
                             value={field.value}
                           >
@@ -610,15 +580,17 @@ export const AddUserForm = () => {
                                   : "border-gray1"
                               } `}
                             >
-                              <SelectValue placeholder="Select rolle" />
+                              <SelectValue placeholder="Select Leverandører" />
                             </SelectTrigger>
                             <SelectContent className="bg-white">
                               <SelectGroup>
-                                <SelectItem value="Admin">Admin</SelectItem>
-                                <SelectItem value="Agent">Agent</SelectItem>
-                                <SelectItem value="Bankansvarlig">
-                                  Bankansvarlig
-                                </SelectItem>
+                                {suppliers?.map((sup: any, index) => {
+                                  return (
+                                    <SelectItem value={sup?.id} key={index}>
+                                      {sup?.company_name}
+                                    </SelectItem>
+                                  );
+                                })}
                               </SelectGroup>
                             </SelectContent>
                           </Select>
@@ -629,152 +601,6 @@ export const AddUserForm = () => {
                   )}
                 />
               </div>
-              {form.watch("role") !== "Bankansvarlig" && (
-                <div className="col-span-2">
-                  <p className={`text-black mb-[6px] text-lg font-medium`}>
-                    Informasjon om tilgangsnivå
-                  </p>
-                  <div className="border border-gray1 border-r-0 border-b-0 rounded shadow-sm overflow-x-auto">
-                    <table className="min-w-full bg-white border-r border-gray1">
-                      <thead>
-                        <tr className="bg-gray-50 border-b border-gray1">
-                          <th className="py-3 px-4 text-left font-medium text-gray-500 tracking-wider border-r border-gray1 text-black">
-                            #/Modules
-                          </th>
-                          {permissionTypes.map((permission) => (
-                            <th
-                              key={permission.key}
-                              className="py-3 px-4 text-center font-medium text-gray-500 tracking-wider border-r border-gray1 text-black"
-                            >
-                              {permission.label}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {modulePermissions.map((module: any, index) => (
-                          <tr
-                            key={module.id}
-                            className={
-                              index === 2
-                                ? "border-t-2 border-b-2 border-primary"
-                                : "border-b border-gray1"
-                            }
-                          >
-                            <td className="py-3 px-4 border-r border-gray1 text-black">
-                              {module.name}
-                            </td>
-                            {permissionTypes.map((permission) => (
-                              <td
-                                key={`${module.id}-${permission.key}`}
-                                className="text-center py-2 px-4 border-r border-gray1"
-                              >
-                                <label className="inline-flex items-center justify-center cursor-pointer">
-                                  <input
-                                    type="checkbox"
-                                    className="hidden"
-                                    checked={module.permissions[permission.key]}
-                                    onChange={() =>
-                                      handlePermissionChange(
-                                        module.id,
-                                        permission.key
-                                      )
-                                    }
-                                  />
-                                  <div
-                                    className={`w-6 h-6 border rounded flex items-center justify-center ${
-                                      module.permissions[permission.key]
-                                        ? "bg-primary border-[#fff]"
-                                        : "bg-white border-gray1"
-                                    }`}
-                                  >
-                                    {module.permissions[permission.key] && (
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        className="w-4 h-4 text-white"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth="2"
-                                          d="M5 13l4 4L19 7"
-                                        />
-                                      </svg>
-                                    )}
-                                  </div>
-                                </label>
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {roleValue !== "Bankansvarlig" &&
-                    typeof form.formState.errors.modulePermissions?.message ===
-                      "string" && (
-                      <div className="text-red text-xs mt-2">
-                        {form.formState.errors.modulePermissions?.message}
-                      </div>
-                    )}
-                </div>
-              )}
-              {form.watch("role") !== "Bankansvarlig" && (
-                <div>
-                  <FormField
-                    control={form.control}
-                    name="supplier"
-                    render={({ field, fieldState }) => (
-                      <FormItem>
-                        <p
-                          className={`${
-                            fieldState.error ? "text-red" : "text-black"
-                          } mb-[6px] text-sm font-medium`}
-                        >
-                          Leverandører
-                        </p>
-                        <FormControl>
-                          <div className="relative">
-                            <Select
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                              }}
-                              value={field.value}
-                            >
-                              <SelectTrigger
-                                className={`bg-white rounded-[8px] border text-black
-                              ${
-                                fieldState?.error
-                                  ? "border-red"
-                                  : "border-gray1"
-                              } `}
-                              >
-                                <SelectValue placeholder="Select Leverandører" />
-                              </SelectTrigger>
-                              <SelectContent className="bg-white">
-                                <SelectGroup>
-                                  {suppliers?.map((sup: any, index) => {
-                                    return (
-                                      <SelectItem value={sup?.id} key={index}>
-                                        {sup?.company_name}
-                                      </SelectItem>
-                                    );
-                                  })}
-                                </SelectGroup>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              )}
               <div>
                 <FormField
                   control={form.control}

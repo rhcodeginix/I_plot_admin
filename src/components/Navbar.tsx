@@ -165,8 +165,12 @@ export const Navbar: React.FC = () => {
                 to={"/Brukeradministrasjon"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                   currentPath === "/Brukeradministrasjon" ||
-                  currentPath.startsWith("/edit-til-bruker") ||
-                  currentPath.startsWith("/legg-til-bruker")
+                  currentPath.startsWith("/edit-user") ||
+                  currentPath.startsWith("/edit-bank-user") ||
+                  currentPath.startsWith("/edit-agent-user") ||
+                  currentPath.startsWith("/legg-user") ||
+                  currentPath.startsWith("/add-agent-user") ||
+                  currentPath.startsWith("/add-bank-user")
                     ? "bg-lightPurple text-primary"
                     : "text-black"
                 }`}
@@ -358,8 +362,8 @@ export const Navbar: React.FC = () => {
                   to={"/Brukeradministrasjon"}
                   className={`text-base font-medium py-2 px-3 rounded-[6px] ${
                     currentPath === "/Brukeradministrasjon" ||
-                    currentPath.startsWith("/edit-til-bruker") ||
-                    currentPath.startsWith("/legg-til-bruker")
+                    currentPath.startsWith("/edit-user") ||
+                    currentPath.startsWith("/legg-user")
                       ? "bg-lightPurple text-primary"
                       : "text-black"
                   }`}

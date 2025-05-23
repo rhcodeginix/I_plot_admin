@@ -62,7 +62,7 @@ export const AuthLayout = () => {
   if (isAuthenticated && !loading) {
     return (
       <Navigate
-        to={role === "Bankansvarlig" ? "/agent-leads" : "/dashboard"}
+        to={role === "Bankansvarlig" ? "/bank-leads" : "/dashboard"}
         replace
       />
     );

@@ -92,7 +92,7 @@ export const FremdriftsplanOg: React.FC<{
         Fremdriftsplan: BankData,
         updatedAt: formatDate(new Date()),
       });
-      toast.success("Updated successfully", { position: "top-right" });
+      toast.success("Lagret", { position: "top-right" });
 
       setActiveTab(3);
       getData();

@@ -111,7 +111,7 @@ export const Fremdriftsplan = forwardRef<
         Fremdriftsplan: BankData,
         updatedAt: formatDate(new Date()),
       });
-      toast.success("Updated successfully", { position: "top-right" });
+      toast.success("Lagret", { position: "top-right" });
 
       navigate(`/agent-leads`);
       setActiveTab(2);

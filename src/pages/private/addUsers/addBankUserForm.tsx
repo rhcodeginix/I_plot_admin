@@ -140,7 +140,7 @@ export const AddBankUserForm = () => {
           updatedAt: new Date(),
           role: "Bankansvarlig",
         });
-        toast.success("Updated successfully", {
+        toast.success("Lagret", {
           position: "top-right",
         });
         if (hashedPassword === data.password) {

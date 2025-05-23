@@ -223,7 +223,7 @@ export const AddSuppliersForm = () => {
           id: uniqueId,
           updatedAt: formatter.format(new Date()),
         });
-        toast.success("Updated successfully", {
+        toast.success("Lagret", {
           position: "top-right",
         });
       } else {

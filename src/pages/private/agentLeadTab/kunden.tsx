@@ -219,7 +219,7 @@ export const Kunden = forwardRef<
           Kunden: BankData,
           updatedAt: formatDate(new Date()),
         });
-        toast.success("Updated successfully", {
+        toast.success("Lagret", {
           position: "top-right",
         });
         navigate(`/edit-agent-leads/${uniqueId}`);

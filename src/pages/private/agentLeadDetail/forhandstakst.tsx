@@ -157,7 +157,7 @@ export const Forhandstakst: React.FC<{
         Forhandstakst: BankData,
         updatedAt: formatDate(new Date()),
       });
-      toast.success("Updated successfully", { position: "top-right" });
+      toast.success("Lagret", { position: "top-right" });
       setActiveTab(2);
       getData();
     } catch (error) {

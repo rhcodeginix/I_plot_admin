@@ -104,7 +104,7 @@ export const CreateNewOffice: React.FC<{
           id: uniqueId,
           updatedAt: formatDate(new Date()),
         });
-        toast.success("Updated successfully", {
+        toast.success("Lagret", {
           position: "top-right",
         });
       } else {

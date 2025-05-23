@@ -358,7 +358,7 @@ export const ProjectAccounting = forwardRef<
         ProjectAccount: BankData,
         updatedAt: formatDate(new Date()),
       });
-      toast.success("Updated successfully", { position: "top-right" });
+      toast.success("Lagret", { position: "top-right" });
 
       getData();
       setActiveTab(3);

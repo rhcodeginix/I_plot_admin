@@ -143,7 +143,7 @@ export const Documenters: React.FC<{
         Documenter: BankData,
         updatedAt: formatDate(new Date()),
       });
-      toast.success("Updated successfully", { position: "top-right" });
+      toast.success("Lagret", { position: "top-right" });
       setActiveTab(4);
       getData();
     } catch (error) {

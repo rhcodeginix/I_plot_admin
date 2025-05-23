@@ -167,7 +167,7 @@ export const Payment: React.FC<{
 
         await updateDoc(bankDocRef, updatePayload);
 
-        toast.success("Updated successfully", {
+        toast.success("Lagret", {
           position: "top-right",
         });
         getData();

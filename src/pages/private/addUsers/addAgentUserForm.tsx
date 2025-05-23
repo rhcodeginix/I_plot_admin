@@ -235,7 +235,7 @@ export const AddAgentUserForm = () => {
           updatedAt: new Date(),
           role: "Agent",
         });
-        toast.success("Updated successfully", {
+        toast.success("Lagret", {
           position: "top-right",
         });
         if (hashedPassword === data.password) {

@@ -1,51 +1,12 @@
-// import { Navigate, Outlet } from "react-router-dom";
-// import { useIsAuthenticated } from "../hooks/useAuth";
-// import { useEffect, useState } from "react";
-// import { fetchAdminDataByEmail } from "../lib/utils";
-
-// export const AuthLayout = () => {
-//   const [Role, setRole] = useState<any>(null);
-
-//   useEffect(() => {
-//     const getData = async () => {
-//       const data = await fetchAdminDataByEmail();
-//       console.log(data);
-
-//       if (data) {
-//         if (data?.role) {
-//           setRole(data?.role);
-//         }
-//       }
-//     };
-
-//     getData();
-//   }, [Role]);
-
-//   if (useIsAuthenticated()) {
-//     return (
-//       <Navigate
-//         to={
-//           !Role || (Role && Role !== "Bankansvarlig")
-//             ? "/dashboard"
-//             : "/agent-leads"
-//         }
-//         replace
-//       />
-//     );
-//   }
-
-//   return <Outlet />;
-// };
-
 import { Navigate, Outlet } from "react-router-dom";
 import { useIsAuthenticated } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { fetchAdminDataByEmail } from "../lib/utils";
 
 export const AuthLayout = () => {
-  const isAuthenticated = useIsAuthenticated(); // call hooks at top level
+  const isAuthenticated = useIsAuthenticated();
   const [role, setRole] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true); // add loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {

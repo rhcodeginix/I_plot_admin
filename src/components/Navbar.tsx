@@ -189,7 +189,7 @@ export const Navbar: React.FC = () => {
                     : "text-black"
                 }`}
               >
-                Min Lead
+                Mine leads
               </Link>
             )}
           {Role && Role !== "Bankansvarlig" && (
@@ -384,13 +384,13 @@ export const Navbar: React.FC = () => {
                   }`}
                   onClick={toggleDrawer}
                 >
-                  Min Lead
+                  Mine leads
                 </Link>
               )}
             {Role && Role !== "Bankansvarlig" && (
               <Link
                 to={"/agent-leads"}
-                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                   currentPath === "/agent-leads" ||
                   currentPath.startsWith("/add-agent-leads") ||
                   currentPath.startsWith("/edit-agent-leads/") ||
@@ -398,7 +398,6 @@ export const Navbar: React.FC = () => {
                     ? "bg-lightPurple text-primary"
                     : "text-black"
                 }`}
-                onClick={toggleDrawer}
               >
                 Søknad finansiering
               </Link>
@@ -406,13 +405,12 @@ export const Navbar: React.FC = () => {
             {Role && Role === "Bankansvarlig" && (
               <Link
                 to={"/bank-leads"}
-                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                   currentPath === "/bank-leads" ||
                   currentPath.startsWith("/bank-leads-detail")
                     ? "bg-lightPurple text-primary"
                     : "text-black"
                 }`}
-                onClick={toggleDrawer}
               >
                 Leads
               </Link>

@@ -170,7 +170,7 @@ export const Forhandstakst = forwardRef<
         Forhandstakst: BankData,
         updatedAt: formatDate(new Date()),
       });
-      toast.success("Updated successfully", { position: "top-right" });
+      toast.success("Lagret", { position: "top-right" });
       setActiveTab(4);
     } catch (error) {
       console.error("Firestore operation failed:", error);

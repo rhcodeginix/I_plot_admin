@@ -182,7 +182,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
         Prisliste: husdetaljerData,
         updatedAt: formatDate(new Date()),
       });
-      toast.success("Updated successfully", { position: "top-right" });
+      toast.success("Lagret", { position: "top-right" });
 
       navigate(`/Husmodeller`);
     } catch (error) {

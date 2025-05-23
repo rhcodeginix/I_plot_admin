@@ -424,7 +424,7 @@ export const Fremdriftsplan: React.FC<{
                               };
                               await updateDoc(bankDocRef, updatePayload);
 
-                              toast.success("Status updated successfully", {
+                              toast.success("Status Lagret", {
                                 position: "top-right",
                               });
                               getData();
@@ -460,7 +460,7 @@ export const Fremdriftsplan: React.FC<{
 
                               await updateDoc(bankDocRef, updatePayload);
 
-                              toast.success("Status updated successfully", {
+                              toast.success("Status Lagret", {
                                 position: "top-right",
                               });
                               getData();

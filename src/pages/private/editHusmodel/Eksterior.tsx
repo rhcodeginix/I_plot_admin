@@ -142,7 +142,7 @@ export const Eksterior: React.FC<{
         Huskonfigurator: husdetaljerData,
         updatedAt: formatDate(new Date()),
       });
-      toast.success("Updated successfully", { position: "top-right" });
+      toast.success("Lagret", { position: "top-right" });
 
       navigate(`/edit-husmodell/${id}`);
       setActiveTab(2);

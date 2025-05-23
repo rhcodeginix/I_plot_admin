@@ -197,7 +197,7 @@ export const AddUserForm = () => {
           updatedAt: new Date(),
           role: "Admin",
         });
-        toast.success("Updated successfully", {
+        toast.success("Lagret", {
           position: "top-right",
         });
         if (hashedPassword === data.password) {

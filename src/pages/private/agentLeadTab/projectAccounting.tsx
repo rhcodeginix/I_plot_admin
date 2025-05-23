@@ -223,9 +223,9 @@ export const ProjectAccounting = forwardRef<
     "tomtekost" | "byggekost" | null
   >(null);
 
-  const [newCost, setNewCost] = useState({
+  const [newCost, setNewCost] = useState<any>({
     Headline: "",
-    pris: "",
+    pris: null,
     IncludingOffer: false,
   });
 
@@ -1132,7 +1132,9 @@ export const ProjectAccounting = forwardRef<
             </>
           )}
           {okonomi === "Ettersend en økonomisk plan" && (
-            <p className="text-darkBlack px-6 text-lg font-medium">Du vil ettersende økonomisk plan</p>
+            <p className="text-darkBlack px-6 text-lg font-medium">
+              Du vil ettersende økonomisk plan
+            </p>
           )}
           <div className="flex justify-end w-full gap-5 items-center fixed bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
             <div onClick={() => setActiveTab(1)} className="w-1/2 sm:w-auto">
@@ -1189,27 +1191,62 @@ export const ProjectAccounting = forwardRef<
                 onChange={(e) =>
                   setNewCost({ ...newCost, Headline: e.target.value })
                 }
-                className="w-full mb-2 border border-gray1 p-2 rounded"
-              />
-
-              <input
-                type="text"
-                placeholder="Pris"
-                inputMode="numeric"
-                value={newCost.pris}
-                onChange={({ target: { value } }: any) =>
-                  setNewCost({
-                    ...newCost,
-
-                    pris: value.replace(/\D/g, "")
-                      ? new Intl.NumberFormat("no-NO").format(
-                          Number(value.replace(/\D/g, ""))
-                        )
-                      : "",
-                  })
-                }
                 className="w-full mb-4 border border-gray1 p-2 rounded"
               />
+
+              <div className="mb-2">
+                <div className="flex items-center justify-end gap-2 mb-[6px]">
+                  <div className="flex items-center gap-3 text-black text-sm font-medium">
+                    inkl. i tilbud
+                    <div className="toggle-container">
+                      <input
+                        type="checkbox"
+                        id="toggleTomtekSwitch"
+                        className="toggle-input"
+                        checked={newCost.IncludingOffer}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+                          setNewCost((prev: any) => ({
+                            ...prev,
+                            IncludingOffer: checked,
+                            pris: checked ? null : "",
+                          }));
+                        }}
+                      />
+                      <label
+                        htmlFor="toggleTomtekSwitch"
+                        className="toggle-label"
+                      ></label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <input
+                    placeholder="Skriv inn Pris fra"
+                    className="w-full mb-4 border border-gray1 p-2 rounded disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[#F5F5F5]"
+                    inputMode="numeric"
+                    type="text"
+                    value={
+                      newCost.pris === null
+                        ? "-"
+                        : newCost.pris?.toString() || ""
+                    }
+                    onChange={({ target: { value } }) => {
+                      const numericValue = value.replace(/\D/g, "");
+                      setNewCost((prev: any) => ({
+                        ...prev,
+                        pris: numericValue
+                          ? new Intl.NumberFormat("no-NO").format(
+                              Number(numericValue)
+                            )
+                          : "",
+                      }));
+                    }}
+                    disabled={newCost.IncludingOffer}
+                  />
+                </div>
+              </div>
               <div className="flex justify-center gap-3">
                 <div onClick={() => setShowModal(false)}>
                   <Button

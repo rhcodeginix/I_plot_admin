@@ -32,7 +32,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           value={
             startDate && endDate
               ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
-              : "Select date range"
+              : "Velg periode"
           }
           readOnly
           className="text-sm font-medium w-[200px] focus:outline-none"

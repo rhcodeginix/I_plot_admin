@@ -93,7 +93,7 @@ export const LeadTable = () => {
       await deleteDoc(doc(db, "bank_leads", id));
       fetchBankLeadData();
       setShowConfirm(false);
-      toast.success("Delete successfully", { position: "top-right" });
+      toast.success("Slettet", { position: "top-right" });
     } catch (error) {
       console.error("Error deleting document:", error);
     }

@@ -71,7 +71,7 @@ export const SupplierTable = () => {
       await deleteDoc(doc(db, "suppliers", id));
       fetchSuppliersData();
       setShowConfirm(false);
-      toast.success("Delete successfully", { position: "top-right" });
+      toast.success("Slettet", { position: "top-right" });
     } catch (error) {
       console.error("Error deleting document:", error);
     }

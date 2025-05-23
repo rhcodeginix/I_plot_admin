@@ -96,7 +96,7 @@ export const HusmodellerTable = () => {
         ),
       });
       await deleteDoc(doc(db, "house_model", id));
-      toast.success("Delete successfully", { position: "top-right" });
+      toast.success("Slettet", { position: "top-right" });
       fetchHusmodellData();
       setShowConfirm(false);
     } catch (error) {

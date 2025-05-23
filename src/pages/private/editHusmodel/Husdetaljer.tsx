@@ -113,8 +113,11 @@ const formSchema = z.object({
   Gesimshøyde: z.number().min(1, {
     message: "Gesimshøyde areal må bestå av minst 2 tegn.",
   }),
-  LB: z.string().min(1, {
-    message: "LB areal må bestå av minst 2 tegn.",
+  Lengde: z.string().min(1, {
+    message: "Lengde areal må bestå av minst 2 tegn.",
+  }),
+  Bredde: z.string().min(1, {
+    message: "Bredde areal må bestå av minst 2 tegn.",
   }),
   Takvinkel: z.number().min(1, {
     message: "Takvinkel areal må bestå av minst 2 tegn.",
@@ -1362,7 +1365,7 @@ export const Husdetaljer: React.FC<{
                   <div>
                     <FormField
                       control={form.control}
-                      name="LB"
+                      name="Lengde"
                       render={({ field, fieldState }) => (
                         <FormItem>
                           <p
@@ -1370,12 +1373,45 @@ export const Husdetaljer: React.FC<{
                               fieldState.error ? "text-red" : "text-black"
                             } mb-[6px] text-sm font-medium`}
                           >
-                            L x B
+                            Lengde
                           </p>
                           <FormControl>
                             <div className="relative">
                               <Input
-                                placeholder="Skriv inn L x B"
+                                placeholder="Skriv inn Lengde"
+                                {...field}
+                                className={`bg-white rounded-[8px] border text-black
+                                          ${
+                                            fieldState?.error
+                                              ? "border-red"
+                                              : "border-gray1"
+                                          } `}
+                                type="text"
+                              />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="Bredde"
+                      render={({ field, fieldState }) => (
+                        <FormItem>
+                          <p
+                            className={`${
+                              fieldState.error ? "text-red" : "text-black"
+                            } mb-[6px] text-sm font-medium`}
+                          >
+                            Bredde
+                          </p>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                placeholder="Skriv inn Bredde"
                                 {...field}
                                 className={`bg-white rounded-[8px] border text-black
                                           ${
@@ -1620,7 +1656,7 @@ export const Husdetaljer: React.FC<{
                               </SelectTrigger>
                               <SelectContent className="bg-white">
                                 <SelectGroup>
-                                  <SelectItem value="Flat">Flat</SelectItem>
+                                  <SelectItem value="Flat tomt">Flat tomt</SelectItem>
                                   <SelectItem value="Skrånet">
                                     Skrånet
                                   </SelectItem>

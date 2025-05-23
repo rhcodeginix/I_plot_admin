@@ -11,11 +11,11 @@ export const AddUsers = () => {
             to={"/Brukeradministrasjon"}
             className="text-gray text-sm font-medium"
           >
-            Brukers
+            Brukere
           </Link>
           <ChevronRight className="text-gray2 w-4 h-4" />
           <span className="text-primary text-sm font-medium">
-            Legg til nye brukers
+            Legg til nye brukere
           </span>
         </div>
         <h1 className="text-darkBlack font-medium text-[30px]">

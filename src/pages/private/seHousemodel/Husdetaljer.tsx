@@ -294,7 +294,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                   </tr>
                   <tr>
                     <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
-                      L x B:
+                    Lengde
                     </td>
                     {loading ? (
                       <div
@@ -303,7 +303,22 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                       ></div>
                     ) : (
                       <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
-                        {husmodellData?.LB}
+                        {husmodellData?.Lengde}
+                      </td>
+                    )}
+                  </tr>
+                  <tr>
+                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    Bredde
+                    </td>
+                    {loading ? (
+                      <div
+                        className="w-[300px] h-[30px] rounded-md custom-shimmer"
+                        style={{ borderRadius: "8px" }}
+                      ></div>
+                    ) : (
+                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                        {husmodellData?.Bredde}
                       </td>
                     )}
                   </tr>

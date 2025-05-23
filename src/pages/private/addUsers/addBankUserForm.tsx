@@ -32,8 +32,11 @@ const formSchema = z.object({
       }),
     z.string(),
   ]),
-  name: z.string().min(1, {
-    message: "Navn må bestå av minst 2 tegn.",
+  f_name: z.string().min(1, {
+    message: "Fornavn må bestå av minst 2 tegn.",
+  }),
+  l_name: z.string().min(1, {
+    message: "Etternavn må bestå av minst 2 tegn.",
   }),
   email: z
     .string()
@@ -159,7 +162,24 @@ export const AddBankUserForm = () => {
             createdAt: new Date(),
             updatedAt: new Date(),
           });
-
+          await fetch(
+            "https://nh989m12uk.execute-api.eu-north-1.amazonaws.com/prod/banklead",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                action: "send-login",
+                email: data.email,
+                firstName: data.f_name,
+                lastName: data.l_name,
+                password: data.password,
+                link: "https://admin.mintomt.no/",
+                company: "Mintomt",
+              }),
+            }
+          );
           toast.success("Admin created successfully!", {
             position: "top-right",
           });
@@ -287,7 +307,7 @@ export const AddBankUserForm = () => {
                     <div>
                       <FormField
                         control={form.control}
-                        name="name"
+                        name="f_name"
                         render={({ field, fieldState }) => (
                           <FormItem>
                             <p
@@ -295,12 +315,45 @@ export const AddBankUserForm = () => {
                                 fieldState.error ? "text-red" : "text-black"
                               } mb-[6px] text-sm font-medium`}
                             >
-                              Navn
+                              Fornavn
                             </p>
                             <FormControl>
                               <div className="relative">
                                 <Input
-                                  placeholder="Skriv inn Navn"
+                                  placeholder="Skriv inn Fornavn"
+                                  {...field}
+                                  className={`bg-white rounded-[8px] border text-black
+                                          ${
+                                            fieldState?.error
+                                              ? "border-red"
+                                              : "border-gray1"
+                                          } `}
+                                  type="text"
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name="l_name"
+                        render={({ field, fieldState }) => (
+                          <FormItem>
+                            <p
+                              className={`${
+                                fieldState.error ? "text-red" : "text-black"
+                              } mb-[6px] text-sm font-medium`}
+                            >
+                              Etternavn
+                            </p>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  placeholder="Skriv inn Etternavn"
                                   {...field}
                                   className={`bg-white rounded-[8px] border text-black
                                           ${

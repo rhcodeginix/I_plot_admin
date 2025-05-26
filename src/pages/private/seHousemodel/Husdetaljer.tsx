@@ -1,7 +1,7 @@
 import Ic_download_primary from "../../../assets/images/Ic_download_primary.svg";
 import Ic_close from "../../../assets/images/Ic_close.svg";
 import { File } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { formatCurrency } from "../../../lib/utils";
 import Modal from "../../../components/common/modal";
 import FileInfo from "../../../components/FileInfo";
@@ -40,20 +40,12 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
       ? `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&controls=0&disablekb=1&fs=0`
       : "";
   };
-  const textareaRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  }, [husmodellData?.OmHusmodellen]);
 
   const [isOpen, setIsOpen] = useState(false);
 
   const images = husmodellData?.photo3D || [];
-  const displayedImages = images.slice(0, 4);
-  const extraImagesCount = images.length - 4;
+  const displayedImages = images.slice(0, 6);
+  const extraImagesCount = images.length - 6;
 
   const handlePopup = () => {
     if (isOpen) {
@@ -64,28 +56,31 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
   };
   return (
     <>
-      <div className="flex gap-6 h-[333px] mb-[74px]">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:h-[333px] mb-6 md:mb-9 desktop:mb-[74px]">
         {loading ? (
           <div
-            className="w-2/3 h-full rounded-md custom-shimmer"
+            className="w-full md:w-2/3 h-full rounded-md custom-shimmer"
             style={{ borderRadius: "8px" }}
           ></div>
         ) : (
-          <div className="w-2/3 h-full">
-            <h4 className="mb-4 text-darkBlack text-lg font-semibold">
+          <div className="w-full md:w-2/3 h-full">
+            <h4 className="mb-2 md:mb-4 text-darkBlack text-sm md:text-base desktop:text-lg font-semibold">
               Illustrasjoner
             </h4>
             <div className="h-[calc(100%-40px)]">
-              <div className="w-1/2 grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-3 gap-2 md:gap-6 h-full">
                 {displayedImages.map((image: any, index: number) => (
-                  <div key={index} className="relative overflow-hidden h-full">
+                  <div
+                    key={index}
+                    className="relative overflow-hidden h-full w-full"
+                  >
                     <img
                       src={image}
                       alt="product"
-                      className="w-full h-full object-fill rounded-lg"
+                      className="w-full h-full object-cover rounded-lg"
                     />
 
-                    {index === 3 && extraImagesCount > 0 && (
+                    {index === 5 && extraImagesCount > 0 && (
                       <div
                         className="absolute inset-0 bg-black bg-opacity-35 flex items-center justify-center text-white text-base font-bold cursor-pointer rounded-lg"
                         onClick={() => setIsOpen(true)}
@@ -101,15 +96,15 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
         )}
         {loading ? (
           <div
-            className="w-1/3 h-full rounded-md custom-shimmer"
+            className="w-full md:w-1/3 h-full rounded-md custom-shimmer"
             style={{ borderRadius: "8px" }}
           ></div>
         ) : (
-          <div className="w-1/3 border border-gray2 shadow-shadow2 rounded-lg h-full">
-            <div className="px-4 py-5 border-b border-gray2 text-darkBlack text-base font-semibold">
+          <div className="w-full md:w-1/3 border border-gray2 shadow-shadow2 rounded-lg h-full">
+            <div className="px-3 md:px-4 py-3 md:py-5 border-b border-gray2 text-darkBlack text-sm md:text-base font-semibold">
               Dokumenter
             </div>
-            <div className="p-4 flex flex-col gap-4 overflow-y-auto h-[calc(100%-65px)] overFlowAutoY">
+            <div className="p-3 md:p-4 flex flex-col gap-4 overflow-y-auto h-[calc(100%-65px)] overFlowAutoY">
               {husmodellData?.documents &&
               husmodellData?.documents.length > 0 ? (
                 husmodellData?.documents.map((doc: any, index: number) => {
@@ -144,15 +139,15 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
           </div>
         )}
       </div>
-      <div className="w-full flex gap-[60px] mt-8">
-        <div className="w-[43%]">
+      <div className="w-full flex flex-col md:flex-row gap-6 lg:gap-[60px] mt-8">
+        <div className="w-full md:w-[43%]">
           {loading ? (
             <div
               className="w-[300px] h-[30px] rounded-md custom-shimmer mb-6"
               style={{ borderRadius: "8px" }}
             ></div>
           ) : (
-            <h4 className="text-darkBlack mb-6 font-semibold text-2xl">
+            <h4 className="text-darkBlack mb-4 md:mb-6 font-semibold text-lg md:text-xl desktop:text-2xl">
               {husmodellData?.husmodell_name}
             </h4>
           )}
@@ -170,28 +165,28 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
               />
             )}
           </div>
-          <div className="my-[20px] flex items-center justify-between">
+          <div className="my-4 md:my-5 flex items-center justify-between gap-1">
             <div className="flex flex-col gap-2">
-              <p className="text-gray text-base">Pris fra</p>
+              <p className="text-gray text-sm md:text-base">Pris fra</p>
               {loading ? (
                 <div
                   className="w-[300px] h-[30px] rounded-md custom-shimmer"
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <h4 className="text-xl font-semibold text-darkBlack">
+                <h4 className="text-base md:text-lg desktop:text-xl font-semibold text-darkBlack">
                   {husmodellData?.pris && formatCurrency(husmodellData?.pris)}
                 </h4>
               )}
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               {loading ? (
                 <div
                   className="w-[300px] h-[30px] rounded-md custom-shimmer"
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <div className="text-gray text-sm">
+                <div className="text-gray text-xs md:text-sm">
                   <span className="text-darkBlack font-semibold">
                     {husmodellData?.BRATotal}
                   </span>{" "}
@@ -205,7 +200,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <div className="text-gray text-sm">
+                <div className="text-gray text-xs md:text-sm">
                   <span className="text-darkBlack font-semibold">
                     {husmodellData?.Soverom}
                   </span>{" "}
@@ -219,7 +214,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <div className="text-gray text-sm">
+                <div className="text-gray text-xs md:text-sm">
                   <span className="text-darkBlack font-semibold">
                     {husmodellData?.Bad}
                   </span>{" "}
@@ -228,12 +223,12 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
               )}
             </div>
           </div>
-          <div className="w-full flex gap-8 mb-[60px]">
-            <div className="w-1/2 border-t-2 border-b-0 border-l-0 border-r-0 border-purple pt-4">
+          <div className="w-full flex flex-col sm:flex-row gap-4 md:flex-col lg:flex-row lg:gap-8 mb-8 md:mb-[60px]">
+            <div className="w-full lg:w-1/2 border-t-2 border-b-0 border-l-0 border-r-0 border-purple pt-3 md:pt-4">
               <table className="table-auto border-0 w-full text-left property_detail_tbl">
                 <tbody>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       BRA total (bruksareal)
                     </td>
                     {loading ? (
@@ -242,13 +237,13 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.BRATotal} m<sup>2</sup>
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       BRA bolig
                     </td>
                     {loading ? (
@@ -257,13 +252,13 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.BebygdAreal} m<sup>2</sup>
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       GUA (Gulvareal):
                     </td>
                     {loading ? (
@@ -272,13 +267,13 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.PRom} m<sup>2</sup>
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       Bebygd areal (BYA)
                     </td>
                     {loading ? (
@@ -287,14 +282,14 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.BebygdAreal} m<sup>2</sup>
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
-                    Lengde
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
+                      Lengde
                     </td>
                     {loading ? (
                       <div
@@ -302,14 +297,14 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.Lengde}
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
-                    Bredde
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
+                      Bredde
                     </td>
                     {loading ? (
                       <div
@@ -317,13 +312,13 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.Bredde}
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       Soverom
                     </td>
                     {loading ? (
@@ -332,7 +327,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.Soverom}
                       </td>
                     )}
@@ -340,11 +335,11 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                 </tbody>
               </table>
             </div>
-            <div className="w-1/2 border-t-2 border-b-0 border-l-0 border-r-0 border-purple pt-4">
+            <div className="w-full lg:w-1/2 border-t-2 border-b-0 border-l-0 border-r-0 border-purple pt-3 md:pt-4">
               <table className="table-auto border-0 w-full text-left property_detail_tbl">
                 <tbody>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       Bad
                     </td>
                     {loading ? (
@@ -353,13 +348,13 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.Bad}
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       Innvendig bod
                     </td>
                     {loading ? (
@@ -368,13 +363,13 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.InnvendigBod}
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       Energimerking
                     </td>
                     {loading ? (
@@ -383,13 +378,13 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.Energimerking}
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       Tilgjengelig bolig
                     </td>
                     {loading ? (
@@ -398,13 +393,13 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.TilgjengeligBolig}
                       </td>
                     )}
                   </tr>
                   <tr>
-                    <td className="text-left pb-[16px] text-gray text-sm whitespace-nowrap">
+                    <td className="text-left pb-3 md:pb-4 text-gray text-sm whitespace-nowrap">
                       Tomtetype
                     </td>
                     {loading ? (
@@ -413,7 +408,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <td className="text-left pb-[16px] text-darkBlack text-sm font-semibold whitespace-nowrap">
+                      <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
                         {husmodellData?.Tomtetype}
                       </td>
                     )}
@@ -422,7 +417,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
               </table>
             </div>
           </div>
-          <h2 className="mb-6 text-darkBlack text-2xl font-semibold">
+          <h2 className="mb-6 text-darkBlack text-lg md:text-xl desktop:text-2xl font-semibold">
             Plantegninger og fasader
           </h2>
           {loading ? (
@@ -438,30 +433,27 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
             />
           )}
         </div>
-        <div className="w-[57%]">
+        <div className="w-full md:w-[57%]">
           {loading ? (
             <div
               className="w-[300px] h-[30px] rounded-md custom-shimmer mb-4"
               style={{ borderRadius: "8px" }}
             ></div>
           ) : (
-            <h2 className="text-darkBlack text-2xl font-semibold mb-4 truncate">
+            <h2 className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-semibold mb-2 md:mb-4 truncate">
               {husmodellData?.Hustittel}
             </h2>
           )}
-          <div className="flex flex-col gap-4 mb-[60px]">
+          <div className="flex flex-col gap-4 mb-8 md:mb-[60px]">
             {loading ? (
               <div
                 className="w-full h-[100px] rounded-md custom-shimmer"
                 style={{ borderRadius: "8px" }}
               ></div>
             ) : (
-              <textarea
-                value={husmodellData?.OmHusmodellen}
-                className="text-base text-gray h-full focus-within:outline-none resize-none"
-                ref={textareaRef}
-                readOnly
-              ></textarea>
+              <p className="text-sm md:text-base text-gray h-full focus-within:outline-none resize-none">
+                {husmodellData?.OmHusmodellen}
+              </p>
             )}
           </div>
           {loading ? (
@@ -470,7 +462,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
               style={{ borderRadius: "8px" }}
             ></div>
           ) : (
-            <h2 className="text-darkBlack text-2xl font-semibold mb-4">
+            <h2 className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-semibold mb-4">
               {husmodellData?.TittelVideo}
             </h2>
           )}
@@ -506,7 +498,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
 
       {isOpen && (
         <Modal isOpen={true} onClose={handlePopup}>
-          <div className="bg-white p-6 rounded-lg max-w-4xl w-full relative">
+          <div className="bg-white p-6 rounded-lg max-w-4xl w-full relative h-[90vh] overflow-y-auto">
             <button
               className="absolute top-3 right-3"
               onClick={() => setIsOpen(false)}
@@ -514,13 +506,13 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
               <img src={Ic_close} alt="close" />
             </button>
 
-            <div className="grid grid-cols-3 gap-2 my-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 my-4">
               {images.map((image: any, index: number) => (
                 <img
                   key={index}
                   src={image}
                   alt="product"
-                  className="w-full h-[200px]"
+                  className="w-full h-[150px] md:h-[200px]"
                 />
               ))}
             </div>

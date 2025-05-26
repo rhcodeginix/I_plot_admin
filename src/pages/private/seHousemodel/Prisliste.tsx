@@ -33,9 +33,9 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
 
   return (
     <>
-      <div className="flex gap-6">
+      <div className="flex flex-col md:flex-row gap-4 lg:gap-6">
         <div
-          className="w-1/2 p-4 border border-gray2 rounded-lg h-max"
+          className="w-full md:w-1/2 p-3 md:p-4 border border-gray2 rounded-lg h-max"
           style={{
             boxShadow:
               "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
@@ -93,7 +93,7 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
           )}
         </div>
         <div
-          className="w-1/2 p-4 border border-gray2 rounded-lg h-max"
+          className="w-full md:w-1/2 p-4 border border-gray2 rounded-lg h-max"
           style={{
             boxShadow:
               "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",

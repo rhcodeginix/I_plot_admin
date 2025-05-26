@@ -22,9 +22,9 @@ export const Husmodeller = () => {
   }, []);
   return (
     <>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
+      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-darkBlack font-medium text-[30px]">
+          <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
             Alle hus- og hyttemodeller
           </h1>
           {(isAdd || email === "andre.finger@gmail.com") && (

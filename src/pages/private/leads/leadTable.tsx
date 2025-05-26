@@ -458,7 +458,7 @@ export const LeadTable = () => {
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
                 <div
                   onClick={() => setShowConfirm(false)}
-                  className="w-1/2 sm:w-auto"
+                  
                 >
                   <Button
                     text="Avbryt"
@@ -535,7 +535,7 @@ export const LeadTable = () => {
                 <div className="flex justify-center mt-5 w-full gap-5 items-center">
                   <div
                     onClick={() => setShowModal(false)}
-                    className="w-1/2 sm:w-auto"
+                    
                   >
                     <Button
                       text="Avbryt"

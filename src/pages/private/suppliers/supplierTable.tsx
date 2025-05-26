@@ -150,14 +150,16 @@ export const SupplierTable = () => {
           accessorKey: "logo",
           header: "Logo",
           cell: ({ row }: any) => (
-            <img src={row.original.photo} alt="logo" className="h-5" />
+            <div className="w-[140px]">
+              <img src={row.original.photo} alt="logo" className="w-full" />
+            </div>
           ),
         },
         {
           accessorKey: "selskapsnavn",
           header: "Selskapsnavn",
           cell: ({ row }: any) => (
-            <p className="font-semibold text-sm text-darkBlack">
+            <p className="font-semibold text-sm text-darkBlack w-max">
               {row.original.company_name}
             </p>
           ),
@@ -166,7 +168,7 @@ export const SupplierTable = () => {
           accessorKey: "type",
           header: "Type",
           cell: ({ row }: any) => (
-            <p className="text-sm text-darkBlack">
+            <p className="text-sm text-darkBlack w-max">
               {row.original.type_partner}
             </p>
           ),
@@ -175,14 +177,16 @@ export const SupplierTable = () => {
           accessorKey: "Produkter",
           header: "Produkter",
           cell: ({ row }: any) => (
-            <p className="text-sm text-darkBlack">{row.original.Produkter}</p>
+            <p className="text-sm text-darkBlack w-max">
+              {row.original.Produkter}
+            </p>
           ),
         },
         {
           accessorKey: "Sistendret",
           header: "Sist endret",
           cell: ({ row }: any) => (
-            <p className="text-sm font-semibold text-black">
+            <p className="text-sm font-semibold text-black w-max">
               {row.original.updatedAt}
             </p>
           ),
@@ -192,7 +196,7 @@ export const SupplierTable = () => {
           header: "Adresse",
           cell: ({ row }: any) => (
             <div>
-              <p className="text-black text-sm mb-[2px]">
+              <p className="text-black text-sm mb-[2px] w-max">
                 {row.original.Adresse}
               </p>
             </div>
@@ -257,18 +261,18 @@ export const SupplierTable = () => {
 
   return (
     <>
-      <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+      <div className="flex md:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 md:px-4 flex-col md:flex-row gap-2">
         <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
           <img src={Ic_search} alt="search" />
           <input
             type="text"
             placeholder="Søk"
-            className="focus-within:outline-none"
+            className="focus-within:outline-none w-full"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="flex gap-3 items-center">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
           <DateRangePicker
             startDate={startDate}
             endDate={endDate}
@@ -366,10 +370,7 @@ export const SupplierTable = () => {
                 Er du sikker på at du vil slette?
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div
-                  onClick={() => setShowConfirm(false)}
-                  className="w-1/2 sm:w-auto"
-                >
+                <div onClick={() => setShowConfirm(false)}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

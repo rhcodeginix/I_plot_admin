@@ -881,7 +881,7 @@ export const Eksterior: React.FC<{
                 onClick={() => {
                   setActiveTab(0);
                 }}
-                className="w-1/2 sm:w-auto"
+                
               >
                 <Button
                   text="Avbryt"

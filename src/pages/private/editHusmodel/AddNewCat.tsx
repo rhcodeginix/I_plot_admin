@@ -143,7 +143,7 @@ export const AddNewCat: React.FC<{
             <div onClick={() => {
           form.reset();
           onClose();
-        }} className="w-1/2 sm:w-auto">
+        }} >
               <Button
                 text="Avbryt"
                 className="border border-lightPurple bg-lightPurple text-purple text-sm rounded-[8px] h-[40px] font-medium relative px-12 py-2 flex items-center gap-2"

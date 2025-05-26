@@ -208,7 +208,7 @@ export const AddTomtekost: React.FC<{
               </div>
             </div>
             <div className="flex justify-end items-center gap-4">
-              <div onClick={() => form.reset()} className="w-1/2 sm:w-auto">
+              <div onClick={() => form.reset()} >
                 <Button
                   text="Avbryt"
                   className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

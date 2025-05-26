@@ -30,6 +30,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Button from "../../../components/common/button";
 import Modal from "../../../components/common/modal";
+import { fetchAdminDataByEmail } from "../../../lib/utils";
 
 export const UserTable: React.FC<{ role: any }> = ({ role }) => {
   const [page, setPage] = useState(1);
@@ -39,6 +40,25 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedId, setSelectedId] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [supplier, setSupplier] = useState<any>(null);
+  const [Role, setRole] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+
+      if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+        if (data?.supplier) {
+          setSupplier(data?.supplier);
+        }
+      }
+    };
+
+    getData();
+  }, []);
 
   const handleDelete = async (id: string) => {
     try {
@@ -63,19 +83,15 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
     setIsLoading(true);
     try {
       const querySnapshot = await getDocs(collection(db, "admin"));
-      const data: any = querySnapshot.docs
+      let data: any = querySnapshot.docs
         .map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }))
-        .filter(
-          (item: any) =>
-            // item.role === "Admin" ||
-            // item.role === "admin" ||
-            // item.role === "Agent" ||
-            // item.role === "Bankansvarlig"
-            item.role === role
-        );
+        .filter((item: any) => item.role === role);
+      if (Role && Role === "Agent") {
+        data = data.filter((item: any) => item.supplier === supplier);
+      }
 
       setAdmins(data);
     } catch (error) {
@@ -88,13 +104,15 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
   const filteredData = useMemo(() => {
     if (admins.length === 0) return [];
     return admins.filter((model: any) =>
-      model?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+      (model?.name || model?.f_name || model?.l_name)
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase())
     );
   }, [admins, searchTerm]);
 
   useEffect(() => {
     fetchAdminData();
-  }, [role]);
+  }, [role, Role]);
 
   const handleConfirmPopup = () => {
     if (showConfirm) {
@@ -123,7 +141,9 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
         header: "Navn",
         cell: ({ row }) => (
           <p className="font-semibold text-sm text-darkBlack">
-            {row.original.name}
+            {!row.original.f_name
+              ? row.original.name
+              : `${row.original.f_name} ${row.original.l_name}`}
           </p>
         ),
       },
@@ -308,10 +328,7 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
                 Er du sikker på at du vil slette?
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div
-                  onClick={() => setShowConfirm(false)}
-                  className="w-1/2 sm:w-auto"
-                >
+                <div onClick={() => setShowConfirm(false)}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

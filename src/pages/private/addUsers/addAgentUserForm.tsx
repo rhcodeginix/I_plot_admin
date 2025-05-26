@@ -28,7 +28,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { fetchAdminData } from "../../../lib/utils";
+import { fetchAdminData, fetchAdminDataByEmail } from "../../../lib/utils";
 import {
   Select,
   SelectContent,
@@ -81,6 +81,8 @@ const formSchema = z.object({
   office: z.string().min(1, {
     message: "Kontor må velges",
   }),
+  // is_admin: z.literal(true, { required_error: "Påkrevd" }),
+  is_admin: z.boolean(),
   password: z
     .string()
     .min(8, { message: "Passordet må være minst 8 tegn langt." })
@@ -114,6 +116,7 @@ export const AddAgentUserForm = () => {
       modulePermissions: [],
       supplier: "",
       office: "",
+      is_admin: false,
       password: "",
     },
   });
@@ -151,13 +154,36 @@ export const AddAgentUserForm = () => {
     }
   };
 
+  const [supplier, setSupplier] = useState<any>(null);
+  const [Role, setRole] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+
+      if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+        if (data?.supplier) {
+          setSupplier(data?.supplier);
+        }
+      }
+    };
+
+    getData();
+  }, []);
+
   const fetchSuppliersData = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "suppliers"));
-      const data: any = querySnapshot.docs.map((doc) => ({
+      let data: any = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+      if (Role && Role === "Agent") {
+        data = data.filter((item: any) => item.id === supplier);
+      }
       setSuppliers(data);
     } catch (error) {
       console.error("Error fetching husmodell data:", error);
@@ -166,7 +192,7 @@ export const AddAgentUserForm = () => {
 
   useEffect(() => {
     fetchSuppliersData();
-  }, []);
+  }, [Role]);
   const [offices, setOffices] = useState([]);
   const fetchOfficeData = async () => {
     try {
@@ -825,10 +851,37 @@ export const AddAgentUserForm = () => {
                         )}
                       />
                     </div>
+                    <div className="col-span-2">
+                      <div>
+                        <FormField
+                          control={form.control}
+                          name="is_admin"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <div className="relative flex items-center gap-2">
+                                  <input
+                                    type="checkbox"
+                                    id="is_admin"
+                                    checked={field.value}
+                                    onChange={field.onChange}
+                                    className="accent-primary h-[18px] w-[18px]"
+                                  />
+                                  <label htmlFor="is_admin">
+                                    Give access as a super admin?
+                                  </label>
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4">
-                  <div onClick={() => form.reset()} className="w-1/2 sm:w-auto">
+                  <div onClick={() => form.reset()}>
                     <Button
                       text="Avbryt"
                       className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -864,10 +917,7 @@ export const AddAgentUserForm = () => {
                 og passord. vennligst send dette passordet til denne brukeren.
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div
-                  onClick={() => setIsPopup(false)}
-                  className="w-1/2 sm:w-auto"
-                >
+                <div onClick={() => setIsPopup(false)}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

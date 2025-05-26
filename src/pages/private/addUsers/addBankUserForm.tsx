@@ -439,7 +439,7 @@ export const AddBankUserForm = () => {
                   </div>
                 </div>
                 <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4">
-                  <div onClick={() => form.reset()} className="w-1/2 sm:w-auto">
+                  <div onClick={() => form.reset()} >
                     <Button
                       text="Avbryt"
                       className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -477,7 +477,7 @@ export const AddBankUserForm = () => {
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
                 <div
                   onClick={() => setIsPopup(false)}
-                  className="w-1/2 sm:w-auto"
+                  
                 >
                   <Button
                     text="Avbryt"

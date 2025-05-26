@@ -36,32 +36,37 @@ export const SeHouseModel = () => {
 
   return (
     <>
-      <div className="bg-lightPurple py-4 px-6">
-        <div className="flex items-center gap-3 mb-6">
-          <Link to={"/Husmodeller"} className="text-gray text-sm font-medium">
+      <div className="bg-lightPurple py-4 px-4 md:px-6">
+        <div className="flex items-center gap-1.5 md:gap-3 mb-6">
+          <Link
+            to={"/Husmodeller"}
+            className="text-gray text-xs md:text-sm font-medium"
+          >
             Husmodeller
           </Link>
           <ChevronRight className="text-gray2 w-4 h-4" />
-          <span className="text-primary text-sm font-medium">Se husmodell</span>
+          <span className="text-primary text-xs md:text-sm font-medium">
+            Se husmodell
+          </span>
         </div>
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex gap-4 items-center">
+        <div className="flex flex-col items-start justify-between gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center">
             {loading ? (
               <div
-                className="w-[180px] h-[113px] rounded-md custom-shimmer mb-2"
+                className="w-full sm:w-[180px] h-[300px] sm:h-[113px] rounded-md custom-shimmer mb-2"
                 style={{ borderRadius: "8px" }}
               ></div>
             ) : (
               <img
                 src={husmodellData?.Husdetaljer?.photo}
                 alt="plot-image"
-                className="w-[180px] h-[113px] rounded-lg"
+                className="w-full sm:w-[180px] h-auto sm:h-[113px] rounded-lg"
               />
             )}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2 md:gap-4">
               {loading ? (
                 <div
-                  className="w-[300px] h-[30px] rounded-md custom-shimmer mb-2"
+                  className="w-[300px] h-[30px] rounded-md custom-shimmer"
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
@@ -72,7 +77,7 @@ export const SeHouseModel = () => {
               <div className="flex items-center gap-4">
                 {loading ? (
                   <div
-                    className="w-[100px] h-[30px] rounded-md custom-shimmer mb-2"
+                    className="w-[100px] h-[30px] rounded-md custom-shimmer"
                     style={{ borderRadius: "8px" }}
                   ></div>
                 ) : (
@@ -86,7 +91,7 @@ export const SeHouseModel = () => {
                 <div className="h-3 border-l border-gray2"></div>
                 {loading ? (
                   <div
-                    className="w-[100px] h-[30px] rounded-md custom-shimmer mb-2"
+                    className="w-[100px] h-[30px] rounded-md custom-shimmer"
                     style={{ borderRadius: "8px" }}
                   ></div>
                 ) : (
@@ -125,7 +130,7 @@ export const SeHouseModel = () => {
           </div>
         </div>
       </div>
-      <div className="py-4 px-6">
+      <div className="py-4 px-4 md:px-6">
         <div className="border-b border-gray2 flex items-center justify-between gap-2 mb-6">
           <Tabs
             tabs={tabData}

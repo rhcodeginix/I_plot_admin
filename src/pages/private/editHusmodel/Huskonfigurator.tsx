@@ -157,7 +157,7 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
                 onClick={() => {
                   setActiveTab(0);
                 }}
-                className="w-1/2 sm:w-auto"
+                
               >
                 <Button
                   text="Avbryt"

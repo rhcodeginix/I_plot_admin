@@ -158,26 +158,25 @@ export const Navbar: React.FC = () => {
                 Husmodeller
               </Link>
             )}
-          {loginUser &&
-            loginUser === "andre.finger@gmail.com" &&
-            (!Role || (Role && Role !== "Bankansvarlig")) && (
-              <Link
-                to={"/Brukeradministrasjon"}
-                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
-                  currentPath === "/Brukeradministrasjon" ||
-                  currentPath.startsWith("/edit-user") ||
-                  currentPath.startsWith("/edit-bank-user") ||
-                  currentPath.startsWith("/edit-agent-user") ||
-                  currentPath.startsWith("/legg-user") ||
-                  currentPath.startsWith("/add-agent-user") ||
-                  currentPath.startsWith("/add-bank-user")
-                    ? "bg-lightPurple text-primary"
-                    : "text-black"
-                }`}
-              >
-                Brukeradministrasjon
-              </Link>
-            )}
+          {((loginUser && loginUser === "andre.finger@gmail.com") ||
+            (Role && Role === "Agent")) && (
+            <Link
+              to={"/Brukeradministrasjon"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/Brukeradministrasjon" ||
+                currentPath.startsWith("/edit-user") ||
+                currentPath.startsWith("/edit-bank-user") ||
+                currentPath.startsWith("/edit-agent-user") ||
+                currentPath.startsWith("/legg-user") ||
+                currentPath.startsWith("/add-agent-user") ||
+                currentPath.startsWith("/add-bank-user")
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Brukeradministrasjon
+            </Link>
+          )}
           {email === "andre.finger@gmail.com" &&
             (!Role || (Role && Role !== "Bankansvarlig")) && (
               <Link
@@ -355,23 +354,22 @@ export const Navbar: React.FC = () => {
                   Husmodeller
                 </Link>
               )}
-            {loginUser &&
-              loginUser === "andre.finger@gmail.com" &&
-              (!Role || (Role && Role !== "Bankansvarlig")) && (
-                <Link
-                  to={"/Brukeradministrasjon"}
-                  className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                    currentPath === "/Brukeradministrasjon" ||
-                    currentPath.startsWith("/edit-user") ||
-                    currentPath.startsWith("/legg-user")
-                      ? "bg-lightPurple text-primary"
-                      : "text-black"
-                  }`}
-                  onClick={toggleDrawer}
-                >
-                  Brukeradministrasjon
-                </Link>
-              )}
+            {((loginUser && loginUser === "andre.finger@gmail.com") ||
+              (Role && Role === "Agent")) && (
+              <Link
+                to={"/Brukeradministrasjon"}
+                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  currentPath === "/Brukeradministrasjon" ||
+                  currentPath.startsWith("/edit-user") ||
+                  currentPath.startsWith("/legg-user")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+                onClick={toggleDrawer}
+              >
+                Brukeradministrasjon
+              </Link>
+            )}
             {email === "andre.finger@gmail.com" &&
               (!Role || (Role && Role !== "Bankansvarlig")) && (
                 <Link

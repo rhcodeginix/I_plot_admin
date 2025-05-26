@@ -218,7 +218,7 @@ export const HusmodellerTable = () => {
         accessorKey: "husmodell",
         header: "Husmodell",
         cell: ({ row }) => (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-max">
             <img
               src={row.original.Husdetaljer.photo}
               alt="Husmodell"
@@ -245,11 +245,11 @@ export const HusmodellerTable = () => {
           }, [row.original.Husdetaljer.Leverandører]);
 
           return (
-            <div>
+            <div className="w-[140px]">
               <img
                 src={leverandorData?.photo}
                 alt="leverandor"
-                className="h-5"
+                className="w-full"
               />
             </div>
           );
@@ -258,13 +258,15 @@ export const HusmodellerTable = () => {
       {
         accessorKey: "kategori",
         header: "Kategori",
-        cell: ({ row }) => <p className="text-sm text-gray">Herskapelig</p>,
+        cell: ({ row }) => (
+          <p className="text-sm text-gray w-max">Herskapelig</p>
+        ),
       },
       {
         accessorKey: "husdetaljer",
         header: "Husdetaljer",
         cell: ({ row }) => (
-          <p className="text-sm text-gray">
+          <p className="text-sm text-gray w-max">
             <span className="font-bold">
               {row.original.Husdetaljer.BRATotal}
             </span>{" "}
@@ -282,7 +284,7 @@ export const HusmodellerTable = () => {
         accessorKey: "sisteoppdatertav",
         header: "Siste oppdatert av",
         cell: ({ row }) => (
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3 w-max">
             <img
               src={row.original?.createDataBy?.photo}
               alt="avatar"
@@ -381,7 +383,7 @@ export const HusmodellerTable = () => {
 
   return (
     <>
-      <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+      <div className="flex sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 md:px-4 flex-col sm:flex-row gap-2">
         <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
           <img src={Ic_search} alt="search" />
           <input
@@ -483,10 +485,7 @@ export const HusmodellerTable = () => {
                 Er du sikker på at du vil slette?
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div
-                  onClick={() => setShowConfirm(false)}
-                  className="w-1/2 sm:w-auto"
-                >
+                <div onClick={() => setShowConfirm(false)}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -512,10 +511,7 @@ export const HusmodellerTable = () => {
                 Er du sikker på at du vil kopiere?
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div
-                  onClick={() => setShowConfirmCopy(false)}
-                  className="w-1/2 sm:w-auto"
-                >
+                <div onClick={() => setShowConfirmCopy(false)}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

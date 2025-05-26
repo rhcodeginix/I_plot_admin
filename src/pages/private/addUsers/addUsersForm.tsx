@@ -19,22 +19,22 @@ import bcrypt from "bcryptjs";
 import { db, storage } from "../../../config/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  collection,
+  // collection,
   doc,
   getDoc,
-  getDocs,
+  // getDocs,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { fetchAdminData } from "../../../lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectGroup,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "../../../components/ui/select";
 import Modal from "../../../components/common/modal";
 
 const formSchema = z.object({
@@ -71,9 +71,9 @@ const formSchema = z.object({
       })
     )
     .min(1, "At least one permission is required"),
-  supplier: z.string().min(1, {
-    message: "Leverandør må velges",
-  }),
+  // supplier: z.string().min(1, {
+  //   message: "Leverandør må velges",
+  // }),
   password: z
     .string()
     .min(8, { message: "Passordet må være minst 8 tegn langt." })
@@ -105,7 +105,7 @@ export const AddUserForm = () => {
       l_name: "",
       email: "",
       modulePermissions: [],
-      supplier: "",
+      // supplier: "",
       password: "",
     },
   });
@@ -115,7 +115,7 @@ export const AddUserForm = () => {
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const navigate = useNavigate();
-  const [suppliers, setSuppliers] = useState([]);
+  // const [suppliers, setSuppliers] = useState([]);
   const [isPopup, setIsPopup] = useState(false);
 
   const uploadFile = async (file: File, fieldName: any) => {
@@ -143,22 +143,22 @@ export const AddUserForm = () => {
     }
   };
 
-  const fetchSuppliersData = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "suppliers"));
-      const data: any = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setSuppliers(data);
-    } catch (error) {
-      console.error("Error fetching husmodell data:", error);
-    }
-  };
+  // const fetchSuppliersData = async () => {
+  //   try {
+  //     const querySnapshot = await getDocs(collection(db, "suppliers"));
+  //     const data: any = querySnapshot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }));
+  //     setSuppliers(data);
+  //   } catch (error) {
+  //     console.error("Error fetching husmodell data:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchSuppliersData();
-  }, []);
+  // useEffect(() => {
+  //   fetchSuppliersData();
+  // }, []);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -212,9 +212,9 @@ export const AddUserForm = () => {
         }
       } else {
         if (!adminSnap.exists()) {
-          const supplier: any = suppliers.find(
-            (off: any) => off.id === data.supplier
-          );
+          // const supplier: any = suppliers.find(
+          //   (off: any) => off.id === data.supplier
+          // );
 
           await setDoc(adminDocRef, {
             ...data,
@@ -239,7 +239,8 @@ export const AddUserForm = () => {
                 lastName: data.l_name,
                 password: data.password,
                 link: "https://admin.mintomt.no/",
-                company: supplier?.id,
+                // company: supplier?.id,
+                company: "Mintomt",
               }),
             }
           );
@@ -610,7 +611,7 @@ export const AddUserForm = () => {
                   </div>
                 )}
               </div>
-              <div>
+              {/* <div>
                 <FormField
                   control={form.control}
                   name="supplier"
@@ -659,7 +660,7 @@ export const AddUserForm = () => {
                     </FormItem>
                   )}
                 />
-              </div>
+              </div> */}
               <div>
                 <FormField
                   control={form.control}
@@ -696,7 +697,7 @@ export const AddUserForm = () => {
             </div>
           </div>
           <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4">
-            <div onClick={() => form.reset()} className="w-1/2 sm:w-auto">
+            <div onClick={() => form.reset()}>
               <Button
                 text="Avbryt"
                 className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -729,10 +730,7 @@ export const AddUserForm = () => {
                 og passord. vennligst send dette passordet til denne brukeren.
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div
-                  onClick={() => setIsPopup(false)}
-                  className="w-1/2 sm:w-auto"
-                >
+                <div onClick={() => setIsPopup(false)}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

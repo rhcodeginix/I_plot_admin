@@ -256,10 +256,10 @@ export const AddSuppliersForm = () => {
       {/* h-[500px] overflow-y-auto */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <div className="p-5 laptop:p-6">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="col-span-2 flex gap-6 items-center">
-                <div className="w-1/2">
+          <div className="p-4 md:p-5 laptop:p-6">
+            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4 md:gap-6">
+              <div className="md:col-span-2 flex flex-col md:flex-row gap-4 md:gap-6 md:items-center">
+                <div className="w-full md:w-1/2">
                   <FormField
                     control={form.control}
                     name="photo"
@@ -268,19 +268,19 @@ export const AddSuppliersForm = () => {
                         <FormControl>
                           <div className="relative">
                             <div
-                              className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer"
+                              className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-2 md:gap-3 cursor-pointer"
                               onDragOver={handleDragOver}
                               onClick={handleClick}
                               onDrop={handleDrop}
                             >
                               <img src={Ic_upload_photo} alt="upload" />
-                              <p className="text-gray text-sm text-center truncate w-full">
+                              <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                 <span className="text-primary font-medium truncate">
                                   Klikk for opplasting
                                 </span>{" "}
                                 eller dra-og-slipp
                               </p>
-                              <p className="text-gray text-sm text-center truncate w-full">
+                              <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                 SVG, PNG, JPG or GIF (maks. 800x400px)
                               </p>
                               <input
@@ -299,7 +299,7 @@ export const AddSuppliersForm = () => {
                     )}
                   />
                 </div>
-                <div className="w-1/2">
+                <div className="w-full md:w-1/2">
                   {typeof uploadPhoto === "string" && (
                     <img
                       src={uploadPhoto}
@@ -766,7 +766,7 @@ export const AddSuppliersForm = () => {
             </div>
           </div>
           <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4">
-            <div onClick={() => form.reset()} className="w-1/2 sm:w-auto">
+            <div onClick={() => form.reset()}>
               <Button
                 text="Avbryt"
                 className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

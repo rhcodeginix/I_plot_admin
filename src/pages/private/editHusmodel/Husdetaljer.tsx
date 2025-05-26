@@ -2470,7 +2470,7 @@ export const Husdetaljer: React.FC<{
             </div>
           </div>
           <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-            <Link to={"/Husmodeller"} className="w-1/2 sm:w-auto">
+            <Link to={"/Husmodeller"} >
               <Button
                 text="Avbryt"
                 className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -2491,7 +2491,7 @@ export const Husdetaljer: React.FC<{
             <div className="bg-white p-6 rounded-lg">
               <p className="mb-4">Er du sikker på at du vil slette?</p>
               <div className="flex justify-center gap-4">
-                <div onClick={handleCancelDelete} className="w-1/2 sm:w-auto">
+                <div onClick={handleCancelDelete} >
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

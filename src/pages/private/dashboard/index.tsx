@@ -212,7 +212,7 @@ export const Dashboard = () => {
   ];
   return (
     <>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
+      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-6">
         <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
           Velkommen tilbake, André
         </h1>

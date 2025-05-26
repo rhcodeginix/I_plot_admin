@@ -33,19 +33,19 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
 
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 lg:gap-6">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
         <div
-          className="w-full md:w-1/2 p-3 md:p-4 border border-gray2 rounded-lg h-max"
+          className="w-full lg:w-1/2 p-3 md:p-4 border border-gray2 rounded-lg h-max"
           style={{
             boxShadow:
               "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
           }}
         >
-          <div className="text-center p-4 text-black font-medium text-lg bg-lightPurple mb-5">
+          <div className="text-center p-3 md:p-4 text-black font-medium text-base desktop:text-lg bg-lightPurple mb-3 md:mb-5">
             Byggekostnader
           </div>
           {husmodellData?.Byggekostnader?.length > 0 && (
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-3 md:gap-5">
               {husmodellData?.Byggekostnader?.map(
                 (item: any, index: number) => {
                   return (
@@ -66,26 +66,15 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
                   );
                 }
               )}
-              <div className="bg-[#F7F1FF] flex items-center justify-between gap-2 p-2">
-                <div className="flex items-center gap-2">
-                  <img src={Ic_info_circle} alt="icon" />
-                  <p className="text-gray text-sm font-medium">
-                    Antatt prisstigning til den 15.i den måned tømrerne starter
-                  </p>
-                </div>
-                <div className="border border-gray2 rounded-lg bg-white py-[10px] px-[14px] flex items-center justify-center text-darkBlack font-medium text-base">
-                  221.800 NOK
-                </div>
-              </div>
               <div className="border-t border-gray2"></div>
               <div className="flex items-center gap-2 justify-between">
                 <div className="flex items-center gap-2">
                   <img src={Ic_info_circle} alt="icon" />
-                  <p className="text-gray text-lg font-bold">
+                  <p className="text-gray text-base md:text-lg font-bold">
                     Sum byggkostnader
                   </p>
                 </div>
-                <h4 className="text-black font-bold text-base">
+                <h4 className="text-black font-bold text-sm md:text-base">
                   {formattedNumberOfByggekostnader} NOK
                 </h4>
               </div>
@@ -93,16 +82,16 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
           )}
         </div>
         <div
-          className="w-full md:w-1/2 p-4 border border-gray2 rounded-lg h-max"
+          className="w-full lg:w-1/2 p-3 md:p-4 border border-gray2 rounded-lg h-max"
           style={{
             boxShadow:
               "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
           }}
         >
-          <div className="text-center p-4 text-black font-medium text-lg bg-lightPurple mb-5">
+          <div className="text-center p-3 md:p-4 text-black font-medium text-base desktop:text-lg bg-lightPurple mb-3 md:mb-5">
             Tomkostnader
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-3 md:gap-5">
             <div className="flex items-center gap-2 justify-between">
               <div className="flex items-center gap-2">
                 <img src={Ic_info_circle} alt="icon" />
@@ -137,11 +126,11 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
             <div className="flex items-center gap-2 justify-between">
               <div className="flex items-center gap-2">
                 <img src={Ic_info_circle} alt="icon" />
-                <p className="text-gray text-lg font-bold">
+                <p className="text-gray text-base md:text-lg font-bold">
                   Sum tomtekostnader
                 </p>
               </div>
-              <h4 className="text-black font-bold text-base">
+              <h4 className="text-black font-bold text-sm md:text-base">
                 {formattedNumber} NOK
               </h4>
             </div>

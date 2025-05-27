@@ -265,8 +265,8 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <div className="w-full bg-white sticky top-[80px] shadow-shadow1 py-2 z-50">
-            <div className="bg-lightPurple flex items-center gap-2 rounded-lg p-[6px] mx-6 w-max">
+          <div className="w-full bg-white sticky top-[70px] md:top-[80px] shadow-shadow1 py-2 z-50">
+            <div className="bg-lightPurple flex items-center gap-2 rounded-lg p-[6px] mx-4 md:mx-6 w-max">
               <div
                 className={`cursor-pointer px-5 py-2 text-sm rounded-lg ${
                   currentDiv === "byggekostnader" &&
@@ -293,23 +293,26 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
               </div>
             </div>
           </div>
-          <div className="p-6 mb-[100px] z-40 relative">
-            <div className="flex flex-col gap-8">
-              <div className="flex gap-8" id="byggekostnader">
-                <div className="w-[20%]">
+          <div className="p-4 md:p-6 mb-10 md:mb-14 desktop:mb-20 relative">
+            <div className="flex flex-col gap-5 desktop:gap-8">
+              <div
+                className="flex flex-col lg:flex-row gap-5 desktop:gap-8"
+                id="byggekostnader"
+              >
+                <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">
                     Byggekostnader
                   </h5>
-                  <p className="text-gray text-sm whitespace-nowrap">
+                  <p className="text-gray text-sm whitespace-nowrap truncate">
                     Update photos and House details.
                   </p>
                 </div>
-                <div className="w-[80%] shadow-shadow2 px-6 py-5 rounded-lg flex flex-col gap-6">
+                <div className="w-full lg:w-[70%] desktop:w-[80%] shadow-shadow2 px-4 lg:px-6 py-4 md:py-5 rounded-lg flex flex-col gap-6">
                   <div className="flex flex-col gap-4">
                     <h5 className="text-black font-semibold text-base">
                       Sum byggkostnader
                     </h5>
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col md:grid grid-cols-2 gap-4 md:gap-6">
                       <div>
                         <FormField
                           control={form.control}
@@ -349,13 +352,13 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                     </div>
                   </div>
                   <div className="border-t border-gray2"></div>
-                  <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-5 desktop:gap-8">
                     {fields.map((product, index) => {
                       return (
                         <div key={product.id}>
                           {product.byggkostnaderID ? (
-                            <div className="flex flex-col gap-[18px]">
-                              <div className="flex items-center gap-3 justify-between">
+                            <div className="flex flex-col gap-4 md:gap-[18px]">
+                              <div className="flex items-center gap-1.5 md:gap-3 justify-between">
                                 {/* <h4 className="text-darkBlack text-base font-semibold">
                                   {Byggekostnader[index].Headline}
                                 </h4> */}
@@ -395,7 +398,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                   />
                                 </div>
                                 <div
-                                  className={`w-max whitespace-nowrap flex items-center gap-1 font-medium ${
+                                  className={`w-max text-sm md:text-base whitespace-nowrap flex items-center gap-1 font-medium ${
                                     fields.length === 1
                                       ? "text-gray cursor-not-allowed text-opacity-55"
                                       : "text-purple cursor-pointer"
@@ -406,10 +409,11 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                     }
                                   }}
                                 >
-                                  <X /> Slett produkt
+                                  <X className="w-4 h-4 md:w-6 md:h-6" /> Slett
+                                  produkt
                                 </div>
                               </div>
-                              <div className="grid grid-cols-2 gap-6">
+                              <div className="flex flex-col md:grid grid-cols-2 gap-4 md:gap-6">
                                 <div>
                                   <FormField
                                     control={form.control}
@@ -580,21 +584,24 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                   </div>
                 </div>
               </div>
-              <div className="flex gap-8" id="tomkostnader">
-                <div className="w-[20%]">
+              <div
+                className="flex flex-col lg:flex-row gap-5 desktop:gap-8"
+                id="tomkostnader"
+              >
+                <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">
                     Tomkostnader
                   </h5>
-                  <p className="text-gray text-sm whitespace-nowrap">
+                  <p className="text-gray text-sm whitespace-nowrap truncate">
                     Update photos and House details.
                   </p>
                 </div>
-                <div className="w-[80%] shadow-shadow2 px-6 py-5 rounded-lg flex flex-col gap-6">
+                <div className="w-full lg:w-[70%] desktop:w-[80%] shadow-shadow2 px-4 lg:px-6 py-4 md:py-5 rounded-lg flex flex-col gap-6">
                   <div className="flex flex-col gap-4">
                     <h5 className="text-black font-semibold text-base">
                       Sum tomtekostnader
                     </h5>
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col md:grid grid-cols-2 gap-4 md:gap-6">
                       <div>
                         <FormField
                           control={form.control}
@@ -634,13 +641,13 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                     </div>
                   </div>
                   <div className="border-t border-gray2"></div>
-                  <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-5 desktop:gap-8">
                     {TomtekostFields.map((product, index) => {
                       return (
                         <div key={product.id}>
                           {product.TomtekostID ? (
-                            <div className="flex flex-col gap-[18px]">
-                              <div className="flex items-center gap-3 justify-between">
+                            <div className="flex flex-col gap-4 md:gap-[18px]">
+                              <div className="flex items-center gap-1.5 md:gap-3 justify-between">
                                 {/* <h4 className="text-darkBlack text-base font-semibold">
                                   {Tomtekost[index].Headline}
                                 </h4> */}
@@ -680,7 +687,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                   />
                                 </div>
                                 <div
-                                  className={`flex whitespace-nowrap w-max items-center gap-1 font-medium ${
+                                  className={`flex text-sm md:text-base whitespace-nowrap w-max items-center gap-1 font-medium ${
                                     TomtekostFields.length === 1
                                       ? "text-gray cursor-not-allowed text-opacity-55"
                                       : "text-purple cursor-pointer"
@@ -691,10 +698,11 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                     }
                                   }}
                                 >
-                                  <X /> Slett produkt
+                                  <X className="w-4 h-4 md:w-6 md:h-6" /> Slett
+                                  produkt
                                 </div>
                               </div>
-                              <div className="grid grid-cols-2 gap-6">
+                              <div className="flex flex-col md:grid grid-cols-2 gap-4 md:gap-6">
                                 <div>
                                   <FormField
                                     control={form.control}
@@ -865,7 +873,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
             </div>
           </div>
           <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-            <div onClick={() => setActiveTab(1)} >
+            <div onClick={() => setActiveTab(1)}>
               <Button
                 text="Avbryt"
                 className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

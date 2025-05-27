@@ -231,22 +231,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #099250;
   background-color: #099250;
 }
-/* @media only screen and (max-width: 575px) {
-  .stepper_main {
-    overflow-x: auto;
+@media only screen and (max-width: 1279px) {
+  .overFlowAutoY::-webkit-scrollbar {
+    height: 6px;
+    border-radius: 24px;
   }
-  .stepper-wrapper {
-    width: 1050px;
+  .overFlowAutoY::-webkit-scrollbar-track {
+    border-radius: 24px;
   }
-  .screen-indicator-span span {
-    font-size: 12px;
+  .overFlowAutoY::-webkit-scrollbar-thumb {
+    border-radius: 24px;
+    background: #d2d5d8;
+    margin: 10px 2px;
   }
-  .screen-index {
-    width: 20px;
-    height: 20px;
+  .overFlowAutoY::-webkit-scrollbar-thumb:hover {
+    border-radius: 24px;
   }
 }
-@media only screen and (min-width: 576px) and (max-width: 767px) {
+/* @media only screen and (min-width: 576px) and (max-width: 767px) {
   .stepper_main {
     overflow-x: auto;
   }

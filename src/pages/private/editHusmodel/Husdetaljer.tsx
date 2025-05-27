@@ -689,8 +689,8 @@ export const Husdetaljer: React.FC<{
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div className="p-4 md:p-6 mb-10 md:mb-14 desktop:mb-20">
-            <div className="flex flex-col gap-6 lg:gap-8">
-              <div className="flex flex-col lg:flex-row gap-6 desktop:gap-8">
+            <div className="flex flex-col gap-5 lg:gap-8">
+              <div className="flex flex-col lg:flex-row gap-5 desktop:gap-8">
                 <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">
                     Grunninformasjon
@@ -1677,7 +1677,7 @@ export const Husdetaljer: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-6 desktop:gap-8">
+              <div className="flex flex-col lg:flex-row gap-5 desktop:gap-8">
                 <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">Dokumenter</h5>
                   <p className="text-gray text-sm whitespace-nowrap truncate">
@@ -1764,7 +1764,7 @@ export const Husdetaljer: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-6 desktop:gap-8">
+              <div className="flex flex-col lg:flex-row gap-5 desktop:gap-8">
                 <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">
                     Tidskalkulering
@@ -2241,7 +2241,7 @@ export const Husdetaljer: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-6 desktop:gap-8">
+              <div className="flex flex-col lg:flex-row gap-5 desktop:gap-8">
                 <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">
                     Husbeskrivelse og plantegninger

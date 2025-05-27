@@ -137,7 +137,6 @@ export const routes = createBrowserRouter([
 
 //   return role;
 // };
-// console.log(AppRouter);
 
 // const commonRoutes = [
 //   { path: "/", element: <Navigate to="/login" replace /> },

@@ -300,11 +300,11 @@ export const Eksterior: React.FC<{
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
             <div className="flex items-center justify-between gap-2 mb-2">
-              <h4 className="text-darkBlack font-semibold text-xl">
+              <h4 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl">
                 {labelName}
               </h4>
               <h5
-                className="text-purple font-semibold text-base cursor-pointer"
+                className="text-purple font-semibold text-sm md:text-base cursor-pointer"
                 onClick={() => setActiveTab(2)}
               >
                 Hopp over steget
@@ -364,20 +364,20 @@ export const Eksterior: React.FC<{
                 );
               }}
             />
-            <div className="mt-2 border-b border-gray2 flex items-center gap-6 h-[48px] mb-8">
+            <div className="mt-2 border-b border-gray2 flex items-center gap-4 md:gap-6 h-[40px] md:h-[48px] mb-4 md:mb-8">
               {hovedkategorinavn?.length > 0 && (
-                <div className="flex items-center gap-4 overflow-x-auto overflowXAuto">
+                <div className="flex items-center gap-2 md:gap-4 overflow-x-auto overflowXAuto">
                   {hovedkategorinavn?.map((cat: any, index: number) => (
                     <div
                       key={index}
-                      className={`cursor-pointer font-semibold gap-1 h-full flex items-center border-b-[3px] text-darkBlack py-3 px-5 whitespace-nowrap ${
+                      className={`cursor-pointer font-semibold gap-1 h-full flex items-center border-b-[3px] text-darkBlack py-3 px-3 pr-6 md:pr-5 md:px-5 whitespace-nowrap ${
                         activeSubTabData === index
                           ? "border-primary font-semibold"
                           : "border-transparent"
                       }`}
                       onClick={() => setActiveSubTabData(index)}
                     >
-                      <span className="text-sm">{cat.navn}</span>
+                      <span className="text-xs md:text-sm">{cat.navn}</span>
                       <div
                         onClick={(e) => {
                           e.preventDefault();
@@ -386,7 +386,7 @@ export const Eksterior: React.FC<{
                           setAddSubCategory(true);
                         }}
                       >
-                        <Pencil className="w-5 h-5 text-primary" />
+                        <Pencil className="w-4 md:w-5 h-4 md:h-5 text-primary" />
                       </div>
                       <img
                         src={Ic_x_circle}
@@ -420,22 +420,22 @@ export const Eksterior: React.FC<{
               )}
 
               <div
-                className="text-purple font-semibold text-sm flex items-center gap-1 cursor-pointer h-full whitespace-nowrap"
+                className="text-purple font-semibold text-xs md:text-sm flex items-center gap-1 cursor-pointer h-full whitespace-nowrap"
                 onClick={() => setAddSubCategory(true)}
               >
-                <Plus />
+                <Plus className="w-4 h-5 md:w-6 md:h-6" />
                 Legg til kategori
               </div>
             </div>
             {hovedkategorinavn?.length > 0 && (
-              <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-4 md:gap-8">
                 {produkter?.map((_product, index) => {
                   const upload3DPhoto = form.watch(
                     `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.Hovedbilde`
                   );
                   return (
                     <div
-                      className="flex flex-col gap-8 cursor-move"
+                      className="flex flex-col gap-4 md:gap-8 cursor-move"
                       key={index}
                       draggable
                       onDragStart={() => setDraggingProductIndex(index)}
@@ -446,18 +446,18 @@ export const Eksterior: React.FC<{
                       onDrop={() => handleDrop()}
                     >
                       <div
-                        className="flex flex-col gap-[18px] p-4 rounded-lg bg-white"
+                        className="flex flex-col gap-4 md:gap-[18px] p-3 md:p-4 rounded-lg bg-white"
                         style={{
                           boxShadow:
                             "0px 2px 4px -2px #1018280F, 0px 4px 8px -2px #1018281A",
                         }}
                       >
-                        <div className="flex items-center gap-3 justify-between">
-                          <h4 className="text-darkBlack text-base font-semibold">
+                        <div className="flex items-center gap-2 md:gap-3 justify-between">
+                          <h4 className="text-darkBlack text-sm md:text-base font-semibold">
                             Produktdetaljer
                           </h4>
                           <div
-                            className={`flex items-center gap-1 font-medium ${
+                            className={`flex text-sm md:text-base items-center gap-1 font-medium ${
                               produkter.length === 1
                                 ? "text-gray cursor-not-allowed text-opacity-55"
                                 : "text-purple cursor-pointer"
@@ -468,10 +468,11 @@ export const Eksterior: React.FC<{
                               }
                             }}
                           >
-                            <X /> Slett produkt
+                            <X className="h-4 w-4 md:h-6 md:w-6" /> Slett
+                            produkt
                           </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6">
                           <div>
                             <FormField
                               control={form.control}
@@ -749,7 +750,7 @@ export const Eksterior: React.FC<{
                         </div>
                         <div>
                           {upload3DPhoto && (
-                            <div className="mt-5 flex items-center gap-5">
+                            <div className="flex items-center gap-3 md:gap-5">
                               {upload3DPhoto?.map(
                                 (file: any, imgIndex: number) => (
                                   <div
@@ -864,24 +865,25 @@ export const Eksterior: React.FC<{
               </div>
             )}
           </div>
-          <div className="flex justify-between w-full gap-5 items-center fixed bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-            <div className="flex items-center gap-4">
-              <span className="text-gray text-base mb-4">Totalpris</span>
+          <div className="flex justify-between w-full gap-2.5 md:gap-5 items-center fixed bottom-0 bg-white z-50 border-t border-gray2 p-3 md:p-4 left-0">
+            <div className="flex items-center gap-2 md:gap-4">
+              <span className="text-gray text-sm md:text-base mb-4">
+                Totalpris
+              </span>
               <div>
                 <h3 className="mb-[2px] text-darkBlack font-semibold text-lg md:text-xl desktop:text-2xl">
                   {totalPris} NOK
                 </h3>
-                <h6 className="text-purple text-sm font-semibold">
+                <h6 className="text-purple text-xs md:text-sm font-semibold">
                   Se oppstilling
                 </h6>
               </div>
             </div>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-3 md:gap-5">
               <div
                 onClick={() => {
                   setActiveTab(0);
                 }}
-                
               >
                 <Button
                   text="Avbryt"

@@ -70,11 +70,11 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
 
   return (
     <>
-      <h3 className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-semibold mb-8 px-4 md:px-6">
+      <h3 className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-semibold mb-4 md:mb-8 px-4 md:px-6">
         Her konfigurerer du husmodellen
       </h3>
-      <div className="flex gap-6 px-4 md:px-6 relative">
-        <div className="w-[20%] flex flex-col bg-[#F9FAFB] p-3 pb-0 rounded-lg gap-3 h-full max-h-[690px] overflow-y-auto overFlowAutoY sticky top-[80px]">
+      <div className="flex flex-col desktop:flex-row gap-4 lg:gap-6 px-4 md:px-6 relative">
+        <div className="w-full desktop:w-[20%] flex desktop:flex-col bg-[#F9FAFB] p-2 md:p-3 pb-0 rounded-lg gap-3 h-full desktop:max-h-[690px] overflow-y-auto overFlowAutoY sticky top-[80px] z-40">
           {Category.map((tab: any, index: number) => (
             <div
               key={index}
@@ -82,15 +82,15 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
               onDragStart={() => handleDragStart(index)}
               onDragOver={handleDragOver}
               onDrop={() => handleDrop(index)}
-              className={`bg-white cursor-pointer rounded-lg flex items-center justify-between gap-2 px-5 ${
+              className={`bg-white cursor-pointer rounded-lg flex items-center justify-between gap-2 px-3 md:px-5 ${
                 activeTabData === index
                   ? "border-2 border-primary bg-lightPurple rounded-t-[12px]"
                   : "border border-gray2"
               }`}
               onClick={() => setActiveTabData(index)}
             >
-              <div className="text-sm text-darkBlack py-3 flex items-center gap-2 font-semibold">
-                <span className="w-5 h-5 rounded-full bg-lightPurple flex items-center justify-center text-darkBlack font-semibold text-xs">
+              <div className="text-xs md:text-sm text-darkBlack py-1.5 md:py-3 flex items-center gap-1 md:gap-2 font-semibold">
+                <span className="w-5 h-5 rounded-full bg-lightPurple flex items-center justify-center text-darkBlack font-semibold text-[10px] md:text-xs">
                   {index + 1}
                 </span>
                 {tab.navn}
@@ -104,7 +104,7 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
                     setAddCategory(true);
                   }}
                 >
-                  <Pencil className="w-5 h-5 text-primary" />
+                  <Pencil className="w-4 h-4 md:w-5 md:h-5 text-primary" />
                 </div>
 
                 <div
@@ -116,7 +116,7 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
                     );
                     setActiveTabData(0);
                   }}
-                  className="w-5 h-5"
+                  className="w-4 h-4 md:w-5 md:h-5"
                 >
                   <img src={Ic_trash} alt="delete" className="w-full h-full" />
                 </div>
@@ -124,18 +124,20 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
             </div>
           ))}
           <div
-            className="sticky bottom-0 mb-3 bg-purple border-gray2 rounded-lg p-3 flex items-center gap-2 text-white font-semibold text-sm cursor-pointer"
+            className="desktop:sticky bottom-0 desktop:mb-3 bg-purple border-gray2 rounded-lg p-1.5 md:p-3 flex items-center gap-2 text-white font-semibold text-xs md:text-sm cursor-pointer"
             onClick={() => setAddCategory(true)}
           >
-            <div className="w-5 h-5 rounded-full flex items-center justify-center text-darkBlack text-xs font-semibold bg-white">
-              +
+            <div className="w-5 h-5">
+              <div className="w-5 h-5 rounded-full flex items-center justify-center text-darkBlack text-xs font-semibold bg-white">
+                +
+              </div>
             </div>
             Legg til nytt rom/kategori
           </div>
         </div>
 
         {Category.length > 0 ? (
-          <div className="w-[80%] mb-[130px]">
+          <div className="w-full desktop:w-[80%] mb-[130px] relative">
             <Eksterior
               setActiveTab={setActiveTab}
               labelName={Category[activeTabData]?.navn || ""}
@@ -145,7 +147,7 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
             />
           </div>
         ) : (
-          <div className="w-full">
+          <div className="w-full desktop:w-[80%] relative z-40">
             <div
               className="text-purple font-semibold text-base cursor-pointer flex justify-end w-full"
               onClick={() => setActiveTab(2)}

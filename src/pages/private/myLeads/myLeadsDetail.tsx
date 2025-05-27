@@ -5,6 +5,7 @@ import Ic_close from "../../../assets/images/Ic_close.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   convertTimestamp,
+  fetchAdminDataByEmail,
   fetchLeadData,
   fetchSupplierData,
   formatTimestamp,
@@ -37,6 +38,7 @@ import { LogRow } from "./logRow";
 import MultiSelect from "../../../components/ui/multiSelect";
 import Modal from "../../../components/common/modal";
 import { AddFollowupForm } from "./addFollowUp";
+import { fetchHusmodellData as singleHouseModelData } from "../../../lib/utils";
 
 const formSchema = z.object({
   Husmodell: z
@@ -54,6 +56,20 @@ export const MyLeadsDetail = () => {
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const [leadData, setLeadData] = useState<any>(null);
+  const email = localStorage.getItem("Iplot_admin");
+  const [permission, setPermission] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        const finalData = data?.supplier;
+        setPermission(finalData);
+      }
+    };
+
+    getData();
+  }, [permission]);
 
   useEffect(() => {
     if (!id) {
@@ -76,10 +92,19 @@ export const MyLeadsDetail = () => {
   const [houseModels, setHouseModels] = useState([]);
   const fetchHusmodellData = async () => {
     try {
-      let q = query(
-        collection(db, "house_model"),
-        orderBy("updatedAt", "desc")
-      );
+      // let q = query(
+      //   collection(db, "house_model"),
+      //   orderBy("updatedAt", "desc")
+      // );
+      let q;
+      if (email === "andre.finger@gmail.com") {
+        q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
+      } else {
+        q = query(
+          collection(db, "house_model"),
+          where("Husdetaljer.Leverandører", "==", permission)
+        );
+      }
 
       const querySnapshot = await getDocs(q);
 
@@ -130,10 +155,16 @@ export const MyLeadsDetail = () => {
   const fetchSuppliersData = async () => {
     try {
       // let q = query(collection(db, "suppliers"));
-      const q = query(
-        collection(db, "suppliers"),
-        where("id", "==", "065f9498-6cdb-469b-8601-bb31114d7c95")
-      );
+      let q;
+      if (email === "andre.finger@gmail.com") {
+        q = query(collection(db, "suppliers"));
+      } else {
+        q = query(
+          collection(db, "suppliers"),
+          where("id", "==", String(permission))
+        );
+      }
+
       const querySnapshot = await getDocs(q);
 
       const data: any = querySnapshot.docs.map((doc) => ({
@@ -151,7 +182,7 @@ export const MyLeadsDetail = () => {
     fetchCitiesData();
     fetchHusmodellData();
     fetchSuppliersData();
-  }, []);
+  }, [permission]);
   useEffect(() => {
     const fetchPreferredHouse = async () => {
       if (!id) return;
@@ -353,6 +384,38 @@ export const MyLeadsDetail = () => {
       setIsPopupOpen(true);
     }
   };
+  const [finalData, setFinalData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchPreferredHouse = async () => {
+      if (!id) return;
+
+      const subDocRef = doc(
+        db,
+        "leads_from_supplier",
+        String(id),
+        "preferred_house_model",
+        String(id)
+      );
+
+      const subDocSnap = await getDoc(subDocRef);
+
+      if (subDocSnap.exists()) {
+        const data: any = subDocSnap.data();
+        if (data?.Husmodell[0]) {
+          const HouseData: any = await singleHouseModelData(
+            String(data?.Husmodell[0])
+          );
+          if (HouseData && HouseData.Husdetaljer) {
+            setFinalData(HouseData);
+          }
+        }
+      }
+    };
+
+    fetchPreferredHouse();
+  }, [id]);
+
   return (
     <>
       <div className="bg-lightPurple py-4 px-6">
@@ -365,9 +428,14 @@ export const MyLeadsDetail = () => {
             Leadsdetaljer
           </span>
         </div>
-        <div className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-medium">
-          Lead for <span className="font-bold">Spåtind 66</span>
-        </div>
+        {finalData && (
+          <div className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-medium">
+            Lead for{" "}
+            <span className="font-bold">
+              {finalData?.Husdetaljer?.husmodell_name}
+            </span>
+          </div>
+        )}
       </div>
       <div className="p-6 flex flex-col gap-6">
         <div className="flex gap-6 items-center justify-between">

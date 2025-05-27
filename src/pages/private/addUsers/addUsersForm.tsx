@@ -367,10 +367,10 @@ export const AddUserForm = () => {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <div className="p-5 laptop:p-6">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="col-span-2 flex gap-6 items-center">
-                <div className="w-1/2">
+          <div className="p-4 laptop:p-6">
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6">
+              <div className="col-span-2 flex flex-col md:flex-row gap-4 md:gap-6 items-center">
+                <div className="w-full md:w-1/2">
                   <FormField
                     control={form.control}
                     name="photo"
@@ -379,19 +379,19 @@ export const AddUserForm = () => {
                         <FormControl>
                           <div className="relative">
                             <div
-                              className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer"
+                              className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-1.5 md:gap-3 cursor-pointer"
                               onDragOver={handleDragOver}
                               onClick={handleClick}
                               onDrop={handleDrop}
                             >
                               <img src={Ic_upload_photo} alt="upload" />
-                              <p className="text-gray text-sm text-center truncate w-full">
+                              <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                 <span className="text-primary font-medium truncate">
                                   Klikk for opplasting
                                 </span>{" "}
                                 eller dra-og-slipp
                               </p>
-                              <p className="text-gray text-sm text-center truncate w-full">
+                              <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                 SVG, PNG, JPG or GIF (maks. 800x400px)
                               </p>
                               <input
@@ -521,20 +521,22 @@ export const AddUserForm = () => {
                 />
               </div>
               <div className="col-span-2">
-                <p className={`text-black mb-[6px] text-sm md:text-base desktop:text-lg font-medium`}>
+                <p
+                  className={`text-black mb-[6px] text-sm md:text-base desktop:text-lg font-medium`}
+                >
                   Informasjon om tilgangsnivå
                 </p>
                 <div className="border border-gray1 border-r-0 border-b-0 rounded shadow-sm overflow-x-auto">
                   <table className="min-w-full bg-white border-r border-gray1">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray1">
-                        <th className="py-3 px-4 text-left font-medium text-gray-500 tracking-wider border-r border-gray1 text-black">
+                        <th className="py-3 px-3 md:px-4 text-sm md:text-base text-left font-medium text-gray-500 tracking-wider border-r border-gray1 text-black">
                           #/Modules
                         </th>
                         {permissionTypes.map((permission) => (
                           <th
                             key={permission.key}
-                            className="py-3 px-4 text-center font-medium text-gray-500 tracking-wider border-r border-gray1 text-black"
+                            className="py-3 px-3 md:px-4 text-sm md:text-base text-center font-medium text-gray-500 tracking-wider border-r border-gray1 text-black"
                           >
                             {permission.label}
                           </th>
@@ -551,13 +553,13 @@ export const AddUserForm = () => {
                               : "border-b border-gray1"
                           }
                         >
-                          <td className="py-3 px-4 border-r border-gray1 text-black">
+                          <td className="py-3 px-3 md:px-4 border-r border-gray1 text-black text-sm md:text-base">
                             {module.name}
                           </td>
                           {permissionTypes.map((permission) => (
                             <td
                               key={`${module.id}-${permission.key}`}
-                              className="text-center py-2 px-4 border-r border-gray1"
+                              className="text-center py-2 px-3 md:px-4 border-r border-gray1"
                             >
                               <label className="inline-flex items-center justify-center cursor-pointer">
                                 <input

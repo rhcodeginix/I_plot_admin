@@ -79,7 +79,7 @@ export const Users = () => {
         header: "Navn",
         cell: ({ row }) => {
           return (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 w-max">
               <div className="w-9 h-9 rounded-full flex items-center justify-center border-gray1 border bg-gray3">
                 {row.original.name[0]}
               </div>
@@ -193,8 +193,10 @@ export const Users = () => {
   });
   return (
     <>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
-        <h1 className="text-darkBlack font-medium text-[30px]">Alle brukere</h1>
+      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
+        <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
+          Alle brukere
+        </h1>
         <div>
           <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">

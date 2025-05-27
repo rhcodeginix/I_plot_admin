@@ -186,7 +186,7 @@ export const Plot = () => {
   return (
     <>
       <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
-        <h1 className="text-darkBlack font-medium text-[30px]">Alle tomter</h1>
+        <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">Alle tomter</h1>
         <div>
           <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">

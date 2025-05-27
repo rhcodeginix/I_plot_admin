@@ -29,12 +29,13 @@ import { db } from "../../../config/firebaseConfig";
 import { Link, useNavigate } from "react-router-dom";
 import {
   convertToFullDateString,
-  fetchSupplierData,
+  // fetchSupplierData,
   formatDateOnly,
   formatTimestamp,
 } from "../../../lib/utils";
 import { HouseModelCell } from "./houseRow";
 import { StatusCell } from "./statusRow";
+import { BrokerCell } from "./brokerRow";
 
 const calculateDateRange = (range: string) => {
   const currentDate = new Date();
@@ -140,12 +141,12 @@ export const MyLeads = () => {
   useEffect(() => {
     fetchLeadsData();
   }, []);
-  const getData = async (id: string) => {
-    const data = await fetchSupplierData(id);
-    if (data) {
-      return data;
-    }
-  };
+  // const getData = async (id: string) => {
+  //   const data = await fetchSupplierData(id);
+  //   if (data) {
+  //     return data;
+  //   }
+  // };
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -195,33 +196,34 @@ export const MyLeads = () => {
       {
         accessorKey: "Broker",
         header: "Broker",
-        cell: ({ row }) => {
-          const [leverandorData, setLeverandorData] = useState<any>(null);
+        // cell: ({ row }) => {
+        //   const [leverandorData, setLeverandorData] = useState<any>(null);
 
-          useEffect(() => {
-            const fetchData = async () => {
-              const data = await getData(row.original.supplierId);
-              setLeverandorData(data);
-            };
-            fetchData();
-          }, [row.original.supplierId]);
+        //   useEffect(() => {
+        //     const fetchData = async () => {
+        //       const data = await getData(row.original.Tildelt);
+        //       setLeverandorData(data);
+        //     };
+        //     fetchData();
+        //   }, [row.original.supplierId]);
 
-          return (
-            <div className="flex items-start gap-3 w-max">
-              <div className="w-8 h-8 rounded-full border border-gray1 bg-gray3 flex items-center justify-center">
-                {leverandorData?.Kontaktperson[0]}
-              </div>
-              <div>
-                <p className="font-medium text-black text-sm mb-[2px]">
-                  {leverandorData?.Kontaktperson}
-                </p>
-                <p className="text-xs text-gray">
-                  {leverandorData?.KontaktpersonEPost}
-                </p>
-              </div>
-            </div>
-          );
-        },
+        //   return (
+        //     <div className="flex items-start gap-3 w-max">
+        //       <div className="w-8 h-8 rounded-full border border-gray1 bg-gray3 flex items-center justify-center">
+        //         {leverandorData?.Kontaktperson[0]}
+        //       </div>
+        //       <div>
+        //         <p className="font-medium text-black text-sm mb-[2px]">
+        //           {leverandorData?.Kontaktperson}
+        //         </p>
+        //         <p className="text-xs text-gray">
+        //           {leverandorData?.KontaktpersonEPost}
+        //         </p>
+        //       </div>
+        //     </div>
+        //   );
+        // },
+        cell: ({ row }) => <BrokerCell id={row.original.id} />,
       },
       {
         accessorKey: "adresse",
@@ -320,14 +322,14 @@ export const MyLeads = () => {
   };
   return (
     <>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
-        <h1 className="text-darkBlack font-medium text-[30px]">
-          Lead List for Fiellheimhytta
+      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
+        <h1 className="text-darkBlack font-medium text-lg md:text-xl desktop:text-2xl">
+          Leads for Fjellheimhytta
         </h1>
-        <div className="flex items-center justify-between">
-          <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex">
+        <div className="flex lg:items-center flex-col lg:flex-row gap-2 justify-between">
+          <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max">
             <div
-              className={`py-[10px] px-4 text-black2 font-medium text-sm cursor-pointer ${
+              className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
                 selectedDateRange === "12 måneder" && "bg-gray2"
               }`}
               onClick={() => setSelectedDateRange("12 måneder")}
@@ -335,7 +337,7 @@ export const MyLeads = () => {
               12 måneder
             </div>
             <div
-              className={`py-[10px] px-4 text-black2 font-medium text-sm border border-t-0 border-b-0 border-gray1 cursor-pointer ${
+              className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border border-t-0 border-b-0 border-gray1 cursor-pointer ${
                 selectedDateRange === "30 dager" && "bg-gray2"
               }`}
               onClick={() => setSelectedDateRange("30 dager")}
@@ -343,7 +345,7 @@ export const MyLeads = () => {
               30 dager
             </div>
             <div
-              className={`py-[10px] px-4 text-black2 font-medium text-sm cursor-pointer border-r border-gray1 ${
+              className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer border-r border-gray1 ${
                 selectedDateRange === "7 dager" && "bg-gray2"
               }`}
               onClick={() => setSelectedDateRange("7 dager")}
@@ -351,7 +353,7 @@ export const MyLeads = () => {
               7 dager
             </div>
             <div
-              className={`py-[10px] px-4 text-black2 font-medium text-sm cursor-pointer ${
+              className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
                 selectedDateRange === "24 timer" && "bg-gray2"
               }`}
               onClick={() => setSelectedDateRange("24 timer")}
@@ -359,21 +361,17 @@ export const MyLeads = () => {
               24 timer
             </div>
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
             <DatePickerComponent
               selectedDate={selectedDate1}
               onDateChange={setSelectedDate1}
               dateFormat="MM/dd/yyyy"
               placeholderText="Select dates"
-              className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] w-max"
+              className="border border-gray1 rounded-[8px] flex gap-2 items-center p-2.5 md:py-[10px] md:px-4 cursor-pointer shadow-shadow1 h-[40px] w-max"
             />
-            <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px]">
-              <img src={Ic_filter} alt="" />
-              <span className="text-black font-medium text-sm">Filters</span>
-            </div>
           </div>
         </div>
-        <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+        <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 gap-2 md:px-4">
           <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
             <img src={Ic_search} alt="search" />
             <input
@@ -386,13 +384,13 @@ export const MyLeads = () => {
           </div>
           <div className="flex gap-3 items-center">
             <div
-              className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]"
+              className="border border-gray1 rounded-[8px] flex gap-2 items-center p-2.5 md:py-[10px] md:px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]"
               onClick={downloadExcel}
             >
               <img src={Ic_download} alt="" />
               <span className="text-black font-medium text-sm">Eksporter</span>
             </div>
-            <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
+            <div className="border border-gray1 rounded-[8px] flex gap-2 items-center p-2.5 md:py-[10px] md:px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
               <img src={Ic_filter} alt="" />
               <span className="text-black font-medium text-sm">Filter</span>
             </div>

@@ -42,15 +42,19 @@ export const UserManagement = () => {
 
   return (
     <>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
+      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <h1 className="text-darkBlack font-medium text-[30px]">Brukere</h1>
-            <p className="text-gray">Liste over alle bruker</p>
+            <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
+              Brukere
+            </h1>
+            <p className="text-gray text-sm md:text-base">
+              Liste over alle bruker
+            </p>
           </div>
         </div>
-        <div className="flex items-center justify-between gap-2">
-          <div className="">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex gap-1.5">
             {[
               Role && Role !== "Agent" && "Admin",
               "Boligkonsulenter",
@@ -65,7 +69,7 @@ export const UserManagement = () => {
                       tab as "Admin" | "Boligkonsulenter" | "Bankansvarlig"
                     )
                   }
-                  className={`px-4 py-2 text-sm font-medium ${
+                  className={`px-2 md:px-4 py-2 text-sm font-medium ${
                     activeTab === tab
                       ? "border-b-2 border-purple text-purple"
                       : "text-gray-500"

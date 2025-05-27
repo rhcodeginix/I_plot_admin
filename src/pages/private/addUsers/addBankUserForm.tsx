@@ -225,23 +225,23 @@ export const AddBankUserForm = () => {
 
   return (
     <>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
-        <div className="flex items-center gap-3">
+      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
+        <div className="flex items-center gap-1.5 md:gap-3">
           <Link
             to={"/Brukeradministrasjon"}
-            className="text-gray text-sm font-medium"
+            className="text-gray text-xs md:text-sm font-medium"
           >
             Brukere
           </Link>
           <ChevronRight className="text-gray2 w-4 h-4" />
-          <span className="text-primary text-sm font-medium">
+          <span className="text-primary text-xs md:text-sm font-medium">
             Legg til nye brukere
           </span>
         </div>
-        <h1 className="text-darkBlack font-medium text-[30px]">
+        <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
           Legg til bruker
         </h1>
-        <div className="flex items-start gap-8">
+        <div className="flex flex-col md:flex-row md:items-start gap-4 lg:gap-8">
           <div className="w-max">
             <h5 className="text-black text-sm font-medium whitespace-nowrap mr-16">
               Brukerdetaljer
@@ -250,10 +250,10 @@ export const AddBankUserForm = () => {
           <div className="w-full shadow-shadow2 rounded-lg overflow-hidden relative">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-                <div className="p-5 laptop:p-6">
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="col-span-2 flex gap-6 items-center">
-                      <div className="w-1/2">
+                <div className="p-4 laptop:p-6">
+                  <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6">
+                    <div className="col-span-2 flex flex-col md:flex-row gap-4 md:gap-6 items-center">
+                      <div className="w-full md:w-1/2">
                         <FormField
                           control={form.control}
                           name="photo"
@@ -262,19 +262,19 @@ export const AddBankUserForm = () => {
                               <FormControl>
                                 <div className="relative">
                                   <div
-                                    className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer"
+                                    className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-1.5 md:gap-3 cursor-pointer"
                                     onDragOver={handleDragOver}
                                     onClick={handleClick}
                                     onDrop={handleDrop}
                                   >
                                     <img src={Ic_upload_photo} alt="upload" />
-                                    <p className="text-gray text-sm text-center truncate w-full">
+                                    <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                       <span className="text-primary font-medium truncate">
                                         Klikk for opplasting
                                       </span>{" "}
                                       eller dra-og-slipp
                                     </p>
-                                    <p className="text-gray text-sm text-center truncate w-full">
+                                    <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                       SVG, PNG, JPG or GIF (maks. 800x400px)
                                     </p>
                                     <input
@@ -439,7 +439,7 @@ export const AddBankUserForm = () => {
                   </div>
                 </div>
                 <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4">
-                  <div onClick={() => form.reset()} >
+                  <div onClick={() => form.reset()}>
                     <Button
                       text="Avbryt"
                       className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -462,11 +462,15 @@ export const AddBankUserForm = () => {
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <div className="flex gap-2 items-center">
-                <p className="text-sm md:text-base desktop:text-lg font-bold">E-post:</p>
+                <p className="text-sm md:text-base desktop:text-lg font-bold">
+                  E-post:
+                </p>
                 <span className="text-base">{form.getValues("email")}</span>
               </div>
               <div className="flex gap-2 items-center">
-                <p className="text-sm md:text-base desktop:text-lg font-bold">Password:</p>
+                <p className="text-sm md:text-base desktop:text-lg font-bold">
+                  Password:
+                </p>
                 <span className="text-base">{form.getValues("password")}</span>
               </div>
               <br />
@@ -475,10 +479,7 @@ export const AddBankUserForm = () => {
                 og passord. vennligst send dette passordet til denne brukeren.
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div
-                  onClick={() => setIsPopup(false)}
-                  
-                >
+                <div onClick={() => setIsPopup(false)}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

@@ -294,6 +294,13 @@ export const Eksterior: React.FC<{
   );
   const [editSubCatIndex, setEditSubCatIndex] = useState<number | null>(null);
 
+  const [draggingSubCatIndex, setDraggingSubCatIndex] = useState<number | null>(
+    null
+  );
+  const [dragOverSubCatIndex, setDragOverSubCatIndex] = useState<number | null>(
+    null
+  );
+
   return (
     <>
       <Form {...form}>
@@ -370,6 +377,47 @@ export const Eksterior: React.FC<{
                   {hovedkategorinavn?.map((cat: any, index: number) => (
                     <div
                       key={index}
+                      draggable
+                      onDragStart={() => setDraggingSubCatIndex(index)}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setDragOverSubCatIndex(index);
+                      }}
+                      onDrop={() => {
+                        if (
+                          draggingSubCatIndex === null ||
+                          dragOverSubCatIndex === null ||
+                          draggingSubCatIndex === dragOverSubCatIndex
+                        )
+                          return;
+
+                        const updatedSubCats = [
+                          ...form.getValues(
+                            `hovedkategorinavn.${activeTabData}.Kategorinavn`
+                          ),
+                        ];
+                        const draggedItem = updatedSubCats[draggingSubCatIndex];
+
+                        updatedSubCats.splice(draggingSubCatIndex, 1);
+                        updatedSubCats.splice(
+                          dragOverSubCatIndex,
+                          0,
+                          draggedItem
+                        );
+
+                        form.setValue(
+                          `hovedkategorinavn.${activeTabData}.Kategorinavn`,
+                          updatedSubCats,
+                          { shouldValidate: true }
+                        );
+
+                        setCategory((prev: any) => {
+                          const updatedCategory = [...prev];
+                          updatedCategory[activeTabData].Kategorinavn =
+                            updatedSubCats;
+                          return updatedCategory;
+                        });
+                      }}
                       className={`cursor-pointer font-semibold gap-1 h-full flex items-center border-b-[3px] text-darkBlack py-3 px-3 pr-6 md:pr-5 md:px-5 whitespace-nowrap ${
                         activeSubTabData === index
                           ? "border-primary font-semibold"

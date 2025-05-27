@@ -2,7 +2,7 @@
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import Ic_close from "../../../assets/images/Ic_close.svg";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   convertTimestamp,
   fetchLeadData,
@@ -29,6 +29,7 @@ import {
   query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import toast from "react-hot-toast";
@@ -49,6 +50,7 @@ const formSchema = z.object({
 
 export const MyLeadsDetail = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const [leadData, setLeadData] = useState<any>(null);
@@ -127,8 +129,11 @@ export const MyLeadsDetail = () => {
 
   const fetchSuppliersData = async () => {
     try {
-      let q = query(collection(db, "suppliers"));
-
+      // let q = query(collection(db, "suppliers"));
+      const q = query(
+        collection(db, "suppliers"),
+        where("id", "==", "065f9498-6cdb-469b-8601-bb31114d7c95")
+      );
       const querySnapshot = await getDocs(q);
 
       const data: any = querySnapshot.docs.map((doc) => ({
@@ -163,6 +168,7 @@ export const MyLeadsDetail = () => {
 
       if (subDocSnap.exists()) {
         const data = subDocSnap.data();
+
         Object.entries(data).forEach(([key, value]) => {
           if (value !== undefined && value !== null)
             form.setValue(key as any, value);
@@ -227,14 +233,17 @@ export const MyLeadsDetail = () => {
         toast.success("Preferred house info updated.", {
           position: "top-right",
         });
+        navigate("/my-leads");
       } else {
         await setDoc(subDocRef, {
           ...data,
           createdAt: formatter.format(new Date()),
+          updatedAt: formatter.format(new Date()),
         });
         toast.success("Preferred house info created.", {
           position: "top-right",
         });
+        navigate("/my-leads");
       }
     } catch (error) {
       console.error("Firestore operation failed:", error);
@@ -294,10 +303,22 @@ export const MyLeadsDetail = () => {
     try {
       const logsSnapshot = await getDocs(logsCollectionRef);
 
-      const fetchedLogs: any = logsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const fetchedLogs: any = logsSnapshot.docs.map((doc) => {
+        const data = doc.data();
+
+        const timestamp =
+          data.updatedAt?.toMillis?.() ??
+          data.createdAt?.toMillis?.() ??
+          new Date(data.date).getTime();
+
+        return {
+          id: doc.id,
+          ...data,
+          _sortTimestamp: timestamp,
+        };
+      });
+
+      fetchedLogs.sort((a: any, b: any) => b._sortTimestamp - a._sortTimestamp);
 
       setLogs(fetchedLogs);
     } catch (error) {
@@ -480,7 +501,7 @@ export const MyLeadsDetail = () => {
 
                               field.onChange(data);
                             }}
-                            placeholder="Velg Ønsket bygget i"
+                            placeholder="Velg fylke"
                             className={`${
                               fieldState?.error ? "border-red" : "border-gray1"
                             } `}
@@ -654,106 +675,7 @@ export const MyLeadsDetail = () => {
             </div>
           </div>
         </div>
-        {/* <Form {...form}>
-          <form
-            onSubmit={HistorikkForm.handleSubmit(onHistorikkSubmit)}
-            className="relative"
-          >
-            {HurtigvalgValue &&
-              HurtigvalgValue !== "" &&
-              HurtigvalgValue !== "Email Sent" &&
-              HurtigvalgValue !== "Signert" && (
-                <div className="mt-6">
-                  <h5 className="text-darkBlack text-base font-bold mb-4">
-                    {HurtigvalgValue}
-                  </h5>
-                  <div className="grid grid-cols-2 gap-4">
-                    {HurtigvalgValue !== "Start prosess" && (
-                      <FormField
-                        control={HistorikkForm.control}
-                        name="date"
-                        render={({ field, fieldState }) => (
-                          <FormItem>
-                            <p
-                              className={`${
-                                fieldState.error ? "text-red" : "text-black"
-                              } mb-[6px] text-sm font-medium`}
-                            >
-                              Book {HurtigvalgValue}
-                            </p>
-                            <FormControl>
-                              <div className="relative w-full">
-                                <DateTimePickerComponent
-                                  selectedDate={
-                                    field.value ? field.value : null
-                                  }
-                                  onDateChange={(date: Date | null) => {
-                                    if (date) {
-                                      field.onChange(date);
-                                    }
-                                  }}
-                                  className="border border-gray1 rounded-lg px-[14px] py-[10px] w-full"
-                                  placeholderText="Pick a date & time"
-                                  dateFormat="dd.MM.yyyy | HH:mm"
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-                    <div>
-                      <FormField
-                        control={HistorikkForm.control}
-                        name="notat"
-                        render={({ field, fieldState }) => (
-                          <FormItem>
-                            <p
-                              className={`${
-                                fieldState.error ? "text-red" : "text-black"
-                              } mb-[6px] text-sm font-medium`}
-                            >
-                              Notat
-                            </p>
-                            <FormControl>
-                              <div className="relative">
-                                <TextArea
-                                  placeholder="Fyll inn kommentar"
-                                  {...field}
-                                  className={`h-[100px] bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
 
-            <div className="flex justify-end w-full gap-5 items-center mt-8">
-              <div onClick={() => form.reset()} >
-                <Button
-                  text="Tilbake"
-                  className="border border-lightPurple bg-lightPurple text-primary text-base rounded-[8px] h-[48px] font-medium relative py-[10px] flex items-center gap-2 px-[50px]"
-                />
-              </div>
-              <Button
-                text="Lagre"
-                className="border border-green2 bg-green2 text-white text-base rounded-[8px] h-[48px] font-medium relative px-[50px] py-[10px] flex items-center gap-2"
-                type="submit"
-              />
-            </div>
-          </form>
-        </Form> */}
         <div>
           <h3 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-5">
             Logg
@@ -778,7 +700,10 @@ export const MyLeadsDetail = () => {
                   return (
                     <tr className="border-b border-gray2" key={index}>
                       <td className="px-4 py-6 text-sm text-black font-medium">
-                        {log?.createdAt || formatTimestamp(log?.date)}
+                        {/* {log?.updatedAt || */}
+                        {log?.updatedAt ||
+                          log?.createdAt ||
+                          formatTimestamp(log?.date)}
                       </td>
                       <td className="px-4 py-6 text-sm text-black font-medium">
                         {log?.Hurtigvalg || log?.type}

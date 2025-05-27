@@ -178,7 +178,7 @@ export const PropertyDetail = () => {
 
   return (
     <>
-      <div className="bg-lightPurple py-[20px] relative px-6">
+      <div className="bg-lightPurple py-4 md:py-5 relative px-4 md:px-6">
         <img
           src={Img_line_bg}
           alt="images"
@@ -186,7 +186,7 @@ export const PropertyDetail = () => {
           style={{ zIndex: 1 }}
         />
         <div
-          className="flex items-center justify-between relative"
+          className="flex flex-col sm:flex-row sm:items-center justify-between relative gap-2"
           style={{ zIndex: 9 }}
         >
           <div>
@@ -196,7 +196,7 @@ export const PropertyDetail = () => {
                 style={{ borderRadius: "8px" }}
               ></div>
             ) : (
-              <h2 className="text-black text-[32px] font-semibold mb-2">
+              <h2 className="text-black text-2xl md:text-[28px] desktop:text-[32px] font-semibold mb-2">
                 {CadastreDataFromApi?.presentationAddressApi?.response?.item
                   ?.formatted?.line1 || data?.getAddress?.adressetekst}
               </h2>
@@ -207,14 +207,14 @@ export const PropertyDetail = () => {
                 style={{ borderRadius: "8px" }}
               ></div>
             ) : (
-              <p className="text-gray text-xl">
+              <p className="text-gray text-base md:text-lg desktop:text-xl">
                 {CadastreDataFromApi?.presentationAddressApi?.response?.item
                   ?.formatted?.line2 ||
                   `${data?.getAddress?.kommunenummer} ${data?.getAddress?.kommunenavn}`}
               </p>
             )}
           </div>
-          <div className="flex items-center gap-[24px]">
+          <div className="flex items-center gap-3 md:gap-6">
             <div className="flex items-center gap-4">
               {loading ? (
                 <div
@@ -222,7 +222,7 @@ export const PropertyDetail = () => {
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <div className="text-gray text-base">
+                <div className="text-gray text-sm md:text-base">
                   Gnr:{" "}
                   <span className="text-black font-semibold">
                     {lamdaDataFromApi?.searchParameters?.gardsnummer}
@@ -235,7 +235,7 @@ export const PropertyDetail = () => {
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <div className="text-gray text-base">
+                <div className="text-gray text-sm md:text-base">
                   Bnr:{" "}
                   <span className="text-black font-semibold">
                     {lamdaDataFromApi?.searchParameters?.bruksnummer}
@@ -246,38 +246,40 @@ export const PropertyDetail = () => {
           </div>
         </div>
       </div>
-      <div className="bg-[#125D56] py-5 relative px-6">
+      <div className="bg-[#125D56] py-5 relative px-4 md:px-6">
         {loading ? (
           <div
-            className="w-[300px] h-[30px] rounded-md custom-shimmer mb-2"
+            className="w-full h-[30px] rounded-md custom-shimmer mb-2"
             style={{ borderRadius: "8px" }}
           ></div>
         ) : (
-          <div className="flex gap-[70px] justify-between">
-            <div className="w-1/4 flex items-start gap-3">
+          <div className="flex flex-col sm:flex-row flex-wrap md:flex-nowrap gap-4 lg:gap-8 desktop:gap-[70px] justify-between">
+            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
               <img src={Ic_check_green_icon} alt="check" />
               <div className="flex flex-col gap-1">
-                <p className="text-white text-sm">Eiendommen er</p>
-                <p className="text-white text-base font-semibold">
+                <p className="text-white text-xs md:text-sm">Eiendommen er</p>
+                <p className="text-white text-sm md:text-base font-semibold">
                   ferdig regulert til boligformål
                 </p>
               </div>
             </div>
-            <div className="w-1/4 flex items-start gap-3">
+            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
               <img src={Ic_check_green_icon} alt="check" />
               <div className="flex flex-col gap-1">
-                <p className="text-white text-sm">Eiendommen har en</p>
-                <p className="text-white text-base font-semibold">
+                <p className="text-white text-xs md:text-sm">
+                  Eiendommen har en
+                </p>
+                <p className="text-white text-sm md:text-base font-semibold">
                   Utnyttelsesgrad på{" "}
                   {askData?.bya_calculations?.input?.bya_percentage}%
                 </p>
               </div>
             </div>
-            <div className="w-1/4 flex items-start gap-3">
+            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
               <img src={Ic_check_green_icon} alt="check" />
               <div className="flex flex-col gap-1">
-                <p className="text-white text-sm">Ekisterende BYA</p>
-                <p className="text-white text-base font-semibold">
+                <p className="text-white text-xs md:text-sm">Ekisterende BYA</p>
+                <p className="text-white text-sm md:text-base font-semibold">
                   Utnyttelsesgrad på{" "}
                   {(() => {
                     const data =
@@ -310,7 +312,7 @@ export const PropertyDetail = () => {
                     }
                   })()}
                 </p>
-                <p className="text-white text-sm">
+                <p className="text-white text-xs md:text-sm">
                   Tilgjengelig BYA{" "}
                   {(() => {
                     const data =
@@ -345,16 +347,18 @@ export const PropertyDetail = () => {
                 </p>
               </div>
             </div>
-            <div className="w-1/4 flex items-start gap-3">
+            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
               <img src={Ic_check_green_icon} alt="check" />
               <div className="flex flex-col gap-1">
-                <p className="text-white text-sm">Boligen kan ha en</p>
-                <p className="text-white text-base font-semibold">
+                <p className="text-white text-xs md:text-sm">
+                  Boligen kan ha en
+                </p>
+                <p className="text-white text-sm md:text-base font-semibold">
                   Grunnflate på{" "}
                   {askData?.bya_calculations?.results?.available_building_area}{" "}
                   m<sup>2</sup>
                 </p>
-                <p className="text-white text-sm">
+                <p className="text-white text-xs md:text-sm">
                   Tilgjengelig{" "}
                   {(() => {
                     const data =
@@ -390,7 +394,7 @@ export const PropertyDetail = () => {
           </div>
         )}
       </div>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
+      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
         <div
           className="p-6 rounded-lg"
           style={{
@@ -879,11 +883,6 @@ export const PropertyDetail = () => {
                 </div>
               </div>
               <div className="rounded-[12px] overflow-hidden w-[407px]">
-                {/* <GoogleMapComponent
-                      coordinates={
-                        lamdaDataFromApi?.coordinates?.convertedCoordinates
-                      }
-                    /> */}
                 {loading ? (
                   <div
                     className="w-full h-full rounded-md custom-shimmer"
@@ -1215,7 +1214,6 @@ export const PropertyDetail = () => {
                       </div>
                     )}
                   </div>
-                  {/* )} */}
                 </div>
               </>
             )}

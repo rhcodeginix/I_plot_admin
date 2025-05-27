@@ -14,6 +14,11 @@ export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
   const [editedNote, setEditedNote] = useState(log?.notat || "");
 
   const handleSave = async () => {
+    const formatter = new Intl.DateTimeFormat("nb-NO", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
     try {
       const logDocRef = doc(
         db,
@@ -24,6 +29,7 @@ export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
       );
       await updateDoc(logDocRef, {
         notat: editedNote,
+        updatedAt: formatter.format(new Date()),
       });
       setIsEditing(false);
       await fetchLogs();

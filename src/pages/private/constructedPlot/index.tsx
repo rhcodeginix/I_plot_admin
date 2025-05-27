@@ -188,7 +188,7 @@ export const ConstructedPlot = () => {
   return (
     <>
       <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
-        <h1 className="text-darkBlack font-medium text-[30px]">
+        <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
           Antall bygget tomt teller
         </h1>
         <div>

@@ -64,7 +64,7 @@ export const UserDetail = () => {
 
   return (
     <>
-      <div className="bg-lightPurple py-[20px] relative px-6">
+      <div className="bg-lightPurple py-4 md:py-5 relative px-4 md:px-6">
         <img
           src={Img_line_bg}
           alt="images"
@@ -78,7 +78,7 @@ export const UserDetail = () => {
               style={{ borderRadius: "8px" }}
             ></div>
           ) : (
-            <h2 className="text-black text-[32px] font-semibold mb-2">
+            <h2 className="text-black text-2xl md:text-[28px] desktop:text-[32px] font-semibold mb-2">
               {data?.name}
             </h2>
           )}
@@ -88,12 +88,14 @@ export const UserDetail = () => {
               style={{ borderRadius: "8px" }}
             ></div>
           ) : (
-            <p className="text-gray text-xl">{data?.email}</p>
+            <p className="text-gray text-base md:text-lg desktop:text-xl">
+              {data?.email}
+            </p>
           )}
         </div>
       </div>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
-        <h4 className="text-gray text-xl">
+      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
+        <h4 className="text-gray text-base md:text-lg desktop:text-xl">
           Søk Eiendom Count:{" "}
           <span className="text-black font-semibold">
             {data?.properties?.length}
@@ -125,11 +127,12 @@ export const UserDetail = () => {
               <div
                 className="w-full h-[400px] rounded-md custom-shimmer mb-2"
                 style={{ borderRadius: "8px" }}
-              ></div><div
-              className="w-full h-[400px] rounded-md custom-shimmer mb-2"
-              style={{ borderRadius: "8px" }}
-            ></div>
-            <div
+              ></div>
+              <div
+                className="w-full h-[400px] rounded-md custom-shimmer mb-2"
+                style={{ borderRadius: "8px" }}
+              ></div>
+              <div
                 className="w-full h-[400px] rounded-md custom-shimmer mb-2"
                 style={{ borderRadius: "8px" }}
               ></div>

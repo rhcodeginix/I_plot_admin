@@ -133,14 +133,16 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
         accessorKey: "photo",
         header: "Avatar",
         cell: ({ row }) => (
-          <img src={row.original.photo} alt="logo" className="h-5" />
+          <div className="w-10">
+            <img src={row.original.photo} alt="logo" className="w-full" />
+          </div>
         ),
       },
       {
         accessorKey: "Navn",
         header: "Navn",
         cell: ({ row }) => (
-          <p className="font-semibold text-sm text-darkBlack">
+          <p className="font-semibold text-sm text-darkBlack w-max">
             {!row.original.f_name
               ? row.original.name
               : `${row.original.f_name} ${row.original.l_name}`}
@@ -224,7 +226,7 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
 
   return (
     <>
-      <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 justify-between bg-lightPurple rounded-[12px] py-3 px-3 md:px-4">
         <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
           <img src={Ic_search} alt="search" />
           <input

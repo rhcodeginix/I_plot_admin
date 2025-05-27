@@ -401,7 +401,7 @@ export const PropertyDetail = () => {
             className="flex items-center justify-between gap-2 cursor-pointer"
             onClick={toggleAccordion}
           >
-            <h3 className="text-black text-2xl font-semibold">
+            <h3 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
               Eiendomsinformasjon
             </h3>
             {isOpen ? (
@@ -934,7 +934,7 @@ export const PropertyDetail = () => {
                       <div className="relative w-1/2">
                         <div>
                           <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-black text-2xl font-semibold">
+                            <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
                               Reguleringsplan
                             </h2>
                             <img src={Ic_generelt} alt="images" />
@@ -1184,7 +1184,7 @@ export const PropertyDetail = () => {
                     ) : (
                       <div className="relative w-1/2">
                         <div className="flex justify-between items-center mb-6">
-                          <h2 className="text-black text-2xl font-semibold">
+                          <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
                             Kommuneplan for{" "}
                             {
                               CadastreDataFromApi?.presentationAddressApi

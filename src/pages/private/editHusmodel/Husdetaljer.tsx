@@ -2228,7 +2228,7 @@ export const Husdetaljer: React.FC<{
                         FRA LEAD TIL OVERTAKELSE
                       </span>
                     </h3>
-                    <p className="text-2xl font-semibold text-black">
+                    <p className="text-lg md:text-xl desktop:text-2xl font-semibold text-black">
                       {totalDays}{" "}
                       <span className="text-[#34405499]">dager</span>
                     </p>

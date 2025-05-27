@@ -103,7 +103,7 @@ export const BankleadsTabs = () => {
         {activeTab === 0 && (
           <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
             <div>
-              <h3 className="text-[#111322] font-bold text-2xl mb-2">
+              <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                 Registrer lead til bank
               </h3>
               <p className="text-[#4D4D4D] text-sm">
@@ -128,7 +128,7 @@ export const BankleadsTabs = () => {
             </div>
             <div className="flex items-center justify-between gap-2">
               <div>
-                <h3 className="text-[#111322] font-bold text-2xl mb-2">
+                <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
                 <p className="text-[#4D4D4D] text-sm">
@@ -168,7 +168,7 @@ export const BankleadsTabs = () => {
             </div>
             <div className="flex items-center justify-between gap-2">
               <div>
-                <h3 className="text-[#111322] font-bold text-2xl mb-2">
+                <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
                 <p className="text-[#4D4D4D] text-sm">
@@ -215,7 +215,7 @@ export const BankleadsTabs = () => {
             </div>
             <div className="flex items-center justify-between gap-2">
               <div>
-                <h3 className="text-[#111322] font-bold text-2xl mb-2">
+                <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
                 <p className="text-[#4D4D4D] text-sm">
@@ -269,7 +269,7 @@ export const BankleadsTabs = () => {
             </div>
             <div className="flex items-center justify-between gap-2">
               <div>
-                <h3 className="text-[#111322] font-bold text-2xl mb-2">
+                <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
                 <p className="text-[#4D4D4D] text-sm">

@@ -70,7 +70,7 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
 
   return (
     <>
-      <h3 className="text-darkBlack text-2xl font-semibold mb-8 px-6">
+      <h3 className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-semibold mb-8 px-6">
         Her konfigurerer du husmodellen
       </h3>
       <div className="flex gap-6 px-6 relative">

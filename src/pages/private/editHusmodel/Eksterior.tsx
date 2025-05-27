@@ -868,7 +868,7 @@ export const Eksterior: React.FC<{
             <div className="flex items-center gap-4">
               <span className="text-gray text-base mb-4">Totalpris</span>
               <div>
-                <h3 className="mb-[2px] text-darkBlack font-semibold text-2xl">
+                <h3 className="mb-[2px] text-darkBlack font-semibold text-lg md:text-xl desktop:text-2xl">
                   {totalPris} NOK
                 </h3>
                 <h6 className="text-purple text-sm font-semibold">

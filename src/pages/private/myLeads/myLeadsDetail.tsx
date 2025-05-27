@@ -344,7 +344,7 @@ export const MyLeadsDetail = () => {
             Leadsdetaljer
           </span>
         </div>
-        <div className="text-darkBlack text-2xl font-medium">
+        <div className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-medium">
           Lead for <span className="font-bold">Spåtind 66</span>
         </div>
       </div>

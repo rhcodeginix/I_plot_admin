@@ -403,7 +403,7 @@ export const ConstructedPlotDetail = () => {
       </div>
       <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
         <div>
-          <h2 className="text-black text-2xl font-semibold mb-3">
+          <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold mb-3">
             Seerdetaljer
           </h2>
           {viewerData?.length > 0 ? (
@@ -448,7 +448,7 @@ export const ConstructedPlotDetail = () => {
             className="flex items-center justify-between gap-2 cursor-pointer"
             onClick={toggleAccordion}
           >
-            <h3 className="text-black text-2xl font-semibold">
+            <h3 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
               Eiendomsinformasjon
             </h3>
             {isOpen ? (
@@ -981,7 +981,7 @@ export const ConstructedPlotDetail = () => {
                       <div className="relative w-1/2">
                         <div>
                           <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-black text-2xl font-semibold">
+                            <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
                               Reguleringsplan
                             </h2>
                             <img src={Ic_generelt} alt="images" />
@@ -1231,7 +1231,7 @@ export const ConstructedPlotDetail = () => {
                     ) : (
                       <div className="relative w-1/2">
                         <div className="flex justify-between items-center mb-6">
-                          <h2 className="text-black text-2xl font-semibold">
+                          <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
                             Kommuneplan for{" "}
                             {
                               CadastreDataFromApi?.presentationAddressApi
@@ -1282,7 +1282,7 @@ export const ConstructedPlotDetail = () => {
                     0 ? (
                       <>
                         <div className="flex items-center justify-between">
-                          <h2 className="text-black text-2xl font-semibold mb-6">
+                          <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold mb-6">
                             Eksisterende bebyggelse
                           </h2>
                         </div>

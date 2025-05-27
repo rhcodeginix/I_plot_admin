@@ -35,25 +35,28 @@ export const EditHouseModel = () => {
 
   return (
     <>
-      <div className="py-4 px-6">
-        <div className="flex items-center gap-3 mb-6">
-          <Link to={"/Husmodeller"} className="text-gray text-sm font-medium">
+      <div className="py-4 px-4 md:px-6">
+        <div className="flex items-center gap-1.5 md:gap-3 mb-3 md:mb-6">
+          <Link
+            to={"/Husmodeller"}
+            className="text-gray text-xs md:text-sm font-medium"
+          >
             Husmodeller
           </Link>
           <ChevronRight className="text-gray2 w-4 h-4" />
-          <span className="text-primary text-sm font-medium">
+          <span className="text-primary text-xs md:text-sm font-medium">
             Endre husmodell
           </span>
         </div>
-        <div className="flex items-center justify-between mb-5">
-          <h1 className="text-darkBlack font-medium text-[24px]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-3 md:mb-5">
+          <h1 className="text-darkBlack font-medium text-lg md:text-xl desktop:text-2xl">
             Endre husmodell
           </h1>
           <div className="flex gap-3 items-center">
             <p className="text-gray text-lg">
               Sum antatte anleggskostnader inkl. mva.
             </p>
-            <h1 className="text-darkBlack font-bold text-[24px]">
+            <h1 className="text-darkBlack font-bold text-lg md:text-xl desktop:text-2xl">
               {house && house?.pris ? formatCurrency(house?.pris) : "0 NOK"}
             </h1>
           </div>

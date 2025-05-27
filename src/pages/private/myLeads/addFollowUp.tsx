@@ -152,7 +152,7 @@ export const AddFollowupForm: React.FC<{
 
   return (
     <>
-      <h3 className="text-2xl mb-4 text-darkBlack font-semibold">
+      <h3 className="text-lg md:text-xl desktop:text-2xl mb-4 text-darkBlack font-semibold">
         Legg til oppfølging
       </h3>
       <Form {...form}>

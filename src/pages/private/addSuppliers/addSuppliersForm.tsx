@@ -253,7 +253,6 @@ export const AddSuppliersForm = () => {
 
   return (
     <>
-      {/* h-[500px] overflow-y-auto */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div className="p-4 md:p-5 laptop:p-6">

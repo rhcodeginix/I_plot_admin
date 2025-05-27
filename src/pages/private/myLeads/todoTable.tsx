@@ -269,7 +269,7 @@ export const TODOTable = () => {
         accessorKey: "todo_status",
         header: "TODO Status",
         cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black w-[500px]">
+          <p className="text-sm font-semibold text-black w-max">
             {row.original.followups?.Hurtigvalg || row.original.followups?.type}
           </p>
         ),

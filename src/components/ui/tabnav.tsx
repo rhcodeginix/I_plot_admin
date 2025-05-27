@@ -16,7 +16,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs, setActiveTab, activeTab }) => {
       {tabs.map((tab, index) => (
         <button
           key={index}
-          className={`text-sm md:text-base border-b-[3px] text-darkBlack py-2 md:py-3 px-4 md:px-5 ${
+          className={`text-sm md:text-base border-b-[3px] text-darkBlack py-2 md:py-3 px-3 md:px-5 ${
             activeTab === index
               ? "border-primary font-semibold bg-lightPurple rounded-t-[12px]"
               : "border-transparent"

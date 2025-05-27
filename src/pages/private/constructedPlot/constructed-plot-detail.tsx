@@ -461,7 +461,7 @@ export const ConstructedPlotDetail = () => {
             <div className="flex gap-6 justify-between">
               <div className="grid grid-cols-3 gap-6">
                 <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
-                  <h2 className="text-black text-lg font-semibold flex items-center gap-2">
+                  <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Tomteopplysninger
                   </h2>
                   <div className="flex flex-col gap-2">
@@ -550,7 +550,7 @@ export const ConstructedPlotDetail = () => {
                   </div>
                 </div>
                 <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
-                  <h2 className="text-black text-lg font-semibold flex items-center gap-2">
+                  <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Kommunale data
                   </h2>
                   <div className="flex flex-col gap-2">
@@ -616,7 +616,7 @@ export const ConstructedPlotDetail = () => {
                   </div>
                 </div>
                 <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
-                  <h2 className="text-black text-lg font-semibold flex items-center gap-2">
+                  <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Eiendomsstatus
                   </h2>
                   <div className="flex flex-col gap-2">
@@ -688,7 +688,7 @@ export const ConstructedPlotDetail = () => {
                   </div>
                 </div>
                 <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
-                  <h2 className="text-black text-lg font-semibold flex items-center gap-2">
+                  <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Parkeringsinformasjon
                   </h2>
                   <div className="flex flex-col gap-2">
@@ -763,7 +763,7 @@ export const ConstructedPlotDetail = () => {
                   </div>
                 </div>
                 <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
-                  <h2 className="text-black text-lg font-semibold flex items-center gap-2">
+                  <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Ytterligere eiendomsforhold
                   </h2>
                   <div className="flex flex-col gap-2">
@@ -841,7 +841,7 @@ export const ConstructedPlotDetail = () => {
                   </div>
                 </div>
                 <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
-                  <h2 className="text-black text-lg font-semibold flex items-center gap-2">
+                  <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Spesielle registreringer
                   </h2>
                   <div className="flex flex-col gap-2">
@@ -957,7 +957,7 @@ export const ConstructedPlotDetail = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-black border-b-[3px] text-lg transition-colors duration-300 ${
+                className={`px-4 py-2 text-black border-b-[3px] text-sm md:text-base desktop:text-lg transition-colors duration-300 ${
                   activeTab === tab.id
                     ? "border-[#6941C6] font-semibold"
                     : "border-transparent"

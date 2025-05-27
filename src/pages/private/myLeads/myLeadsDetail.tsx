@@ -371,14 +371,14 @@ export const MyLeadsDetail = () => {
                 <span className="flex items-center gap-4">
                   {leadData?.leadData?.email && (
                     <>
-                      <span className="text-gray text-lg">
+                      <span className="text-gray text-sm md:text-base desktop:text-lg">
                         {leadData?.leadData?.email}
                       </span>
                       <div className="border-l border-gray2 h-[14px]"></div>
                     </>
                   )}
                 </span>
-                <span className="text-gray text-lg">
+                <span className="text-gray text-sm md:text-base desktop:text-lg">
                   {leadData?.leadData?.telefon}
                 </span>
               </div>
@@ -418,7 +418,7 @@ export const MyLeadsDetail = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
             <div className="shadow-shadow3 border border-gray2 rounded-lg p-6">
-              <h4 className="text-darkBlack text-lg font-semibold mb-5">
+              <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-5">
                 Leadsinformasjon
               </h4>
               <div className="grid grid-cols-2 gap-x-5 gap-y-8">
@@ -557,7 +557,7 @@ export const MyLeadsDetail = () => {
                 </div> */}
               </div>
               <div className="flex justify-end w-full gap-5 items-center mt-8">
-                <div onClick={() => form.reset()} >
+                <div onClick={() => form.reset()}>
                   <Button
                     text="Tilbake"
                     className="border border-lightPurple bg-lightPurple text-primary text-base rounded-[8px] h-[48px] font-medium relative py-[10px] flex items-center gap-2 px-[50px]"
@@ -573,7 +573,7 @@ export const MyLeadsDetail = () => {
           </form>
         </Form>
         <div className="shadow-shadow3 border border-gray2 rounded-lg p-6">
-          <h4 className="text-darkBlack text-lg font-semibold mb-5">
+          <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-5">
             Historikk
           </h4>
           <div className="w-full mb-5">
@@ -755,7 +755,9 @@ export const MyLeadsDetail = () => {
           </form>
         </Form> */}
         <div>
-          <h3 className="text-darkBlack text-lg font-semibold mb-5">Logg</h3>
+          <h3 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-5">
+            Logg
+          </h3>
           <table className="min-w-full rounded-md overflow-hidden">
             <thead className="bg-[#F9FAFB]">
               <tr>

@@ -52,8 +52,8 @@ export const EditHouseModel = () => {
           <h1 className="text-darkBlack font-medium text-lg md:text-xl desktop:text-2xl">
             Endre husmodell
           </h1>
-          <div className="flex gap-3 items-center">
-            <p className="text-gray text-lg">
+          <div className="flex gap-1 flex-wrap sm:gap-3 items-center">
+            <p className="text-gray text-sm md:text-base desktop:text-lg">
               Sum antatte anleggskostnader inkl. mva.
             </p>
             <h1 className="text-darkBlack font-bold text-lg md:text-xl desktop:text-2xl">
@@ -62,23 +62,25 @@ export const EditHouseModel = () => {
           </div>
         </div>
         {house && (
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
             <img
               src={house?.photo}
               alt="house"
-              className="w-[160px] rounded-lg"
+              className="w-full sm:w-[160px] rounded-lg"
             />
             <div>
-              <h2 className="text-darkBlack font-semibold text-[20px]">
+              <h2 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl">
                 {house?.husmodell_name}
               </h2>
-              <p className="text-gray w-[900px]">{house?.Hustittel}</p>
+              <p className="text-gray desktop:w-[900px] text-sm md:text-base">
+                {house?.Hustittel}
+              </p>
             </div>
           </div>
         )}
       </div>
       <div>
-        <div className="border-b border-gray2 flex items-center justify-between gap-2 mb-6 px-6">
+        <div className="border-b border-gray2 flex items-center justify-between gap-2 mb-4 md:mb-6 px-4 md:px-6">
           <Tabs
             tabs={tabData}
             activeTab={activeTab}

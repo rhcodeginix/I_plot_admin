@@ -452,7 +452,7 @@ export const LeadTable = () => {
         <Modal onClose={handleConfirmPopup} isOpen={true}>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <p className="text-lg font-bold">
+              <p className="text-sm md:text-base desktop:text-lg font-bold">
                 Er du sikker på at du vil slette?
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
@@ -482,7 +482,7 @@ export const LeadTable = () => {
           <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-xl w-[300px] shadow-lg relative">
               <form onSubmit={handleSubmit}>
-                <h2 className="text-lg font-semibold mb-4">Change Status</h2>
+                <h2 className="text-sm md:text-base desktop:text-lg font-semibold mb-4">Change Status</h2>
 
                 <div className="space-y-2">
                   <label className="flex items-center gap-2">

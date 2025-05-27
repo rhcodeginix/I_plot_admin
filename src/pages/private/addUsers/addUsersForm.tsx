@@ -521,7 +521,7 @@ export const AddUserForm = () => {
                 />
               </div>
               <div className="col-span-2">
-                <p className={`text-black mb-[6px] text-lg font-medium`}>
+                <p className={`text-black mb-[6px] text-sm md:text-base desktop:text-lg font-medium`}>
                   Informasjon om tilgangsnivå
                 </p>
                 <div className="border border-gray1 border-r-0 border-b-0 rounded shadow-sm overflow-x-auto">

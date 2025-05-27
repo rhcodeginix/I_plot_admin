@@ -481,7 +481,7 @@ export const HusmodellerTable = () => {
         <Modal onClose={handleConfirmPopup} isOpen={true}>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <p className="text-lg font-bold">
+              <p className="text-sm md:text-base desktop:text-lg font-bold">
                 Er du sikker på at du vil slette?
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
@@ -507,7 +507,7 @@ export const HusmodellerTable = () => {
         <Modal onClose={handleConfirmCopyPopup} isOpen={true}>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <p className="text-lg font-bold">
+              <p className="text-sm md:text-base desktop:text-lg font-bold">
                 Er du sikker på at du vil kopiere?
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">

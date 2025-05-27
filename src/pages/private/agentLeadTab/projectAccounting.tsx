@@ -688,7 +688,7 @@ export const ProjectAccounting = forwardRef<
           </div>
           {okonomi === "Opprett en økonomisk plan" && (
             <>
-              <h4 className="px-6 pb-5 text-darkBlack font-semibold text-lg">
+              <h4 className="px-6 pb-5 text-darkBlack font-semibold text-sm md:text-base desktop:text-lg">
                 Har du ikke laget en økonomisk plan? Fyll ut den økonomiske
                 planen her:
               </h4>
@@ -700,7 +700,7 @@ export const ProjectAccounting = forwardRef<
                       "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
                   }}
                 >
-                  <div className="text-center p-4 text-[#101828] font-medium text-lg bg-[#F9F9FB] mb-5 relative">
+                  <div className="text-center p-4 text-[#101828] font-medium text-sm md:text-base desktop:text-lg bg-[#F9F9FB] mb-5 relative">
                     Byggekostnader
                     <Pencil className="text-primary absolute top-5 right-4" />
                   </div>
@@ -913,7 +913,7 @@ export const ProjectAccounting = forwardRef<
                     <div className="border-t border-gray2"></div>
                     <div className="flex items-center gap-2 justify-between">
                       <div className="flex items-center gap-2">
-                        <p className="text-gray text-lg font-bold">
+                        <p className="text-gray text-sm md:text-base desktop:text-lg font-bold">
                           Sum byggkostnader
                         </p>
                       </div>
@@ -941,7 +941,7 @@ export const ProjectAccounting = forwardRef<
                       "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
                   }}
                 >
-                  <div className="text-center p-4 text-[#101828] font-medium text-lg bg-[#F9F9FB] mb-5 relative">
+                  <div className="text-center p-4 text-[#101828] font-medium text-sm md:text-base desktop:text-lg bg-[#F9F9FB] mb-5 relative">
                     Tomkostnader
                     <Pencil className="text-primary absolute top-5 right-4" />
                   </div>
@@ -1107,7 +1107,7 @@ export const ProjectAccounting = forwardRef<
                     <div className="border-t border-gray2"></div>
                     <div className="flex items-center gap-2 justify-between">
                       <div className="flex items-center gap-2">
-                        <p className="text-gray text-lg font-bold">
+                        <p className="text-gray text-sm md:text-base desktop:text-lg font-bold">
                           Sum tomtekostnader
                         </p>
                       </div>
@@ -1132,7 +1132,7 @@ export const ProjectAccounting = forwardRef<
             </>
           )}
           {okonomi === "Ettersend en økonomisk plan" && (
-            <p className="text-darkBlack px-6 text-lg font-medium">
+            <p className="text-darkBlack px-6 text-sm md:text-base desktop:text-lg font-medium">
               Du vil ettersende økonomisk plan
             </p>
           )}

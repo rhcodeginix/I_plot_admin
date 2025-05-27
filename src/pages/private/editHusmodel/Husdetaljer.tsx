@@ -688,18 +688,18 @@ export const Husdetaljer: React.FC<{
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <div className="p-6 mb-[100px]">
-            <div className="flex flex-col gap-8">
-              <div className="flex gap-8">
-                <div className="w-[20%]">
+          <div className="p-4 md:p-6 mb-10 md:mb-14 desktop:mb-20">
+            <div className="flex flex-col gap-6 lg:gap-8">
+              <div className="flex flex-col lg:flex-row gap-6 desktop:gap-8">
+                <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">
                     Grunninformasjon
                   </h5>
-                  <p className="text-gray text-sm whitespace-nowrap">
+                  <p className="text-gray text-sm whitespace-nowrap truncate">
                     Legg til bilder og husdetaljer
                   </p>
                 </div>
-                <div className="grid grid-cols-2 gap-6 w-[80%] shadow-shadow2 px-6 py-5 rounded-lg">
+                <div className="md:grid flex flex-col md:grid-cols-2 gap-4 lg:gap-6 w-full lg:w-[70%] desktop:w-[80%] shadow-shadow2 px-4 lg:px-6 py-4 md:py-5 rounded-lg">
                   <div>
                     <FormField
                       control={form.control}
@@ -765,7 +765,7 @@ export const Husdetaljer: React.FC<{
                     >
                       Type objekt
                     </p>
-                    <div className="flex gap-4 items-center">
+                    <div className="flex flex-wrap gap-2 lg:gap-4 items-center">
                       {[
                         {
                           label: "Bolig",
@@ -791,8 +791,12 @@ export const Husdetaljer: React.FC<{
                               : "border-gray1"
                           }`}
                         >
-                          <div className="bg-[#F9FAFB] rounded-[8px] h-[125px] w-[198px] flex items-center justify-center mb-2">
-                            <img src={item.icon} alt={item.label} />
+                          <div className="bg-[#F9FAFB] rounded-[8px] h-[60px] md:h-[90px] lg:h-[125px] w-[110px] md:w-[150px] lg:w-[160px] desktop:w-[198px] flex items-center justify-center mb-2">
+                            <img
+                              src={item.icon}
+                              alt={item.label}
+                              className="w-[40px] md:w-[55px] lg:w-auto"
+                            />
                           </div>
                           <div className="text-darkBlack text-sm text-center font-medium">
                             {item.label}
@@ -812,11 +816,11 @@ export const Husdetaljer: React.FC<{
                       name={`VelgBoligtype`}
                       render={({ field, fieldState }) => (
                         <FormItem>
-                          <p className="text-black mb-3 text-base font-semibold">
+                          <p className="text-black mb-1.5 md:mb-3 text-base font-semibold">
                             Velg boligtype
                           </p>
                           <FormControl>
-                            <div className="flex items-center gap-5">
+                            <div className="flex items-center flex-wrap gap-3 lg:gap-5">
                               {VelgboligType.map((option) => (
                                 <div
                                   key={option}
@@ -857,11 +861,11 @@ export const Husdetaljer: React.FC<{
                       name={`VelgEgenskaperBoligtype`}
                       render={({ field, fieldState }) => (
                         <FormItem>
-                          <p className="text-black mb-3 text-base font-semibold">
+                          <p className="text-black mb-1.5 md:mb-3 text-base font-semibold">
                             Velg egenskaper til boligtype
                           </p>
                           <FormControl>
-                            <div className="flex items-center gap-5">
+                            <div className="flex items-center flex-wrap gap-3 lg:gap-5">
                               {boligOptions.map((option) => (
                                 <div
                                   key={option}
@@ -987,7 +991,7 @@ export const Husdetaljer: React.FC<{
                       )}
                     />
                   </div>
-                  <div className="col-span-2 flex gap-6 items-center">
+                  <div className="col-span-2 flex gap-4 lg:gap-6 items-center">
                     <FormField
                       control={form.control}
                       name="photo"
@@ -1001,7 +1005,7 @@ export const Husdetaljer: React.FC<{
                             Hovedbilde
                           </p>
                           <FormControl>
-                            <div className="flex items-center gap-5 w-full">
+                            <div className="flex flex-col items-center gap-5 w-full">
                               {uploadPhoto && (
                                 <img
                                   src={uploadPhoto}
@@ -1012,19 +1016,19 @@ export const Husdetaljer: React.FC<{
                               )}
                               <div className="relative w-full">
                                 <div
-                                  className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer w-full"
+                                  className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-2 lg:gap-3 cursor-pointer w-full"
                                   onDragOver={handleDragOver}
                                   onClick={handleClick}
                                   onDrop={handleDrop}
                                 >
                                   <img src={Ic_upload_photo} alt="upload" />
-                                  <p className="text-gray text-sm text-center truncate w-full">
+                                  <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                     <span className="text-primary font-medium truncate">
                                       Klikk for opplasting
                                     </span>{" "}
                                     eller dra-og-slipp
                                   </p>
-                                  <p className="text-gray text-sm text-center truncate w-full">
+                                  <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                     SVG, PNG, JPG or GIF (maks. 800x400px)
                                   </p>
                                   <input
@@ -1048,7 +1052,7 @@ export const Husdetaljer: React.FC<{
                     <p className={`text-black mb-[6px] text-sm font-medium`}>
                       Illustrasjoner
                     </p>
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col md:grid grid-cols-2 gap-4 lg:gap-6">
                       <div>
                         <FormField
                           control={form.control}
@@ -1125,7 +1129,7 @@ export const Husdetaljer: React.FC<{
                       />
                     </div>
                     {upload3DPhoto && (
-                      <div className="mt-5 flex items-center gap-5 flex-wrap">
+                      <div className="mt-3 md:mt-5 flex items-center gap-3 lg:gap-5 flex-wrap">
                         {upload3DPhoto?.map((file: any, index: number) => (
                           <div
                             className="relative h-[140px] w-[140px]"
@@ -1656,7 +1660,9 @@ export const Husdetaljer: React.FC<{
                               </SelectTrigger>
                               <SelectContent className="bg-white">
                                 <SelectGroup>
-                                  <SelectItem value="Flat tomt">Flat tomt</SelectItem>
+                                  <SelectItem value="Flat tomt">
+                                    Flat tomt
+                                  </SelectItem>
                                   <SelectItem value="Skrånet">
                                     Skrånet
                                   </SelectItem>
@@ -1671,41 +1677,41 @@ export const Husdetaljer: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex gap-8">
-                <div className="w-[20%]">
+              <div className="flex flex-col lg:flex-row gap-6 desktop:gap-8">
+                <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">Dokumenter</h5>
-                  <p className="text-gray text-sm whitespace-nowrap">
+                  <p className="text-gray text-sm whitespace-nowrap truncate">
                     Legg til dokument for huset
                   </p>
                 </div>
-                <div className="grid grid-cols-2 gap-6 w-[80%] shadow-shadow2 px-6 py-5 rounded-lg">
+                <div className="md:grid flex flex-col md:grid-cols-2 gap-4 lg:gap-6 w-full lg:w-[70%] desktop:w-[80%] shadow-shadow2 px-4 lg:px-6 py-4 md:py-5 rounded-lg">
                   <div className="col-span-2">
                     <p className={`text-black mb-[6px] text-sm font-medium`}>
                       Dokumenter
                     </p>
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="flex flex-col md:grid grid-cols-2 gap-4 lg:gap-6">
                       <FormField
                         control={form.control}
                         name="documents"
                         render={() => (
                           <FormItem className="w-full">
                             <FormControl>
-                              <div className="flex items-center gap-5 w-full">
+                              <div className="flex items-center gap-3 lg:gap-5 w-full">
                                 <div className="relative w-full">
                                   <div
-                                    className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer w-full"
+                                    className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-1.5 lg:gap-3 cursor-pointer w-full"
                                     onDragOver={handleDocumentsDragOver}
                                     onClick={handleDocumentsClick}
                                     onDrop={handleDocumentsDrop}
                                   >
                                     <img src={Ic_upload_photo} alt="upload" />
-                                    <p className="text-gray text-sm text-center truncate w-full">
+                                    <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                       <span className="text-primary font-medium truncate">
                                         Klikk for opplasting
                                       </span>{" "}
                                       eller dra-og-slipp
                                     </p>
-                                    <p className="text-gray text-sm text-center truncate w-full">
+                                    <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                       PDF (maks. 800x400px)
                                     </p>
                                     <input
@@ -1758,21 +1764,21 @@ export const Husdetaljer: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex gap-8">
-                <div className="w-[20%]">
+              <div className="flex flex-col lg:flex-row gap-6 desktop:gap-8">
+                <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">
                     Tidskalkulering
                   </h5>
-                  <p className="text-gray text-sm whitespace-nowrap">
+                  <p className="text-gray text-sm whitespace-nowrap truncate">
                     Legg til forventet søknad og byggerperiode.
                   </p>
                 </div>
-                <div className="grid grid-cols-2 gap-6 w-[80%] shadow-shadow2 px-6 py-5 rounded-lg">
+                <div className="md:grid flex flex-col md:grid-cols-2 gap-4 lg:gap-6 w-full lg:w-[70%] desktop:w-[80%] shadow-shadow2 px-4 lg:px-6 py-4 md:py-5 rounded-lg">
                   <div>
-                    <h4 className="text-[#111322] font-semibold text-lg mb-4">
+                    <h4 className="text-[#111322] font-semibold text-sm md:text-base desktop:text-lg mb-2 md:mb-4">
                       Antall dager fra lead til byggestart
                     </h4>
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-4 lg:gap-6">
                       <div>
                         <FormField
                           control={form.control}
@@ -1938,10 +1944,10 @@ export const Husdetaljer: React.FC<{
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-[#111322] font-semibold text-lg mb-4">
+                    <h4 className="text-[#111322] font-semibold text-sm md:text-base desktop:text-lg mb-2 md:mb-4">
                       Antall dager fra byggestart til overtakelse
                     </h4>
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-4 lg:gap-6">
                       <div>
                         <FormField
                           control={form.control}
@@ -2221,8 +2227,8 @@ export const Husdetaljer: React.FC<{
                       </div>
                     </div>
                   </div>
-                  <div className="col-span-2 flex flex-col gap-6 items-center justify-center">
-                    <h3 className="text-black text-sm">
+                  <div className="col-span-2 flex flex-col gap-4 lg:gap-6 items-center justify-center">
+                    <h3 className="text-black text-xs md:text-sm text-center">
                       TOTALT ANTALL DAGER{" "}
                       <span className="font-bold">
                         FRA LEAD TIL OVERTAKELSE
@@ -2235,16 +2241,16 @@ export const Husdetaljer: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex gap-8">
-                <div className="w-[20%]">
+              <div className="flex flex-col lg:flex-row gap-6 desktop:gap-8">
+                <div className="w-full lg:w-[30%] desktop:w-[20%]">
                   <h5 className="text-black text-sm font-medium">
                     Husbeskrivelse og plantegninger
                   </h5>
-                  <p className="text-gray text-sm whitespace-nowrap">
+                  <p className="text-gray text-sm whitespace-nowrap truncate">
                     Legg til bilder og husbeskrivelse
                   </p>
                 </div>
-                <div className="grid grid-cols-2 gap-6 w-[80%] shadow-shadow2 px-6 py-5 rounded-lg">
+                <div className="md:grid flex flex-col md:grid-cols-2 gap-4 lg:gap-6 w-full lg:w-[70%] desktop:w-[80%] shadow-shadow2 px-4 lg:px-6 py-4 md:py-5 rounded-lg">
                   <div className="col-span-2">
                     <FormField
                       control={form.control}
@@ -2324,10 +2330,10 @@ export const Husdetaljer: React.FC<{
                             Plantegninger og fasader
                           </p>
                           <FormControl>
-                            <div className="flex items-center gap-5 w-full">
+                            <div className="flex items-center gap-3 lg:gap-5 w-full">
                               <div className="relative w-full">
                                 <div
-                                  className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer w-full"
+                                  className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-1 lg:gap-3 cursor-pointer w-full"
                                   onDragOver={
                                     handlePlantegningerFasaderDragOver
                                   }
@@ -2335,13 +2341,13 @@ export const Husdetaljer: React.FC<{
                                   onDrop={handlePlantegningerFasaderDrop}
                                 >
                                   <img src={Ic_upload_photo} alt="upload" />
-                                  <p className="text-gray text-sm text-center truncate w-full">
+                                  <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                     <span className="text-primary font-medium truncate">
                                       Klikk for opplasting
                                     </span>{" "}
                                     eller dra-og-slipp
                                   </p>
-                                  <p className="text-gray text-sm text-center truncate w-full">
+                                  <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                     SVG, PNG, JPG or GIF (maks. 800x400px)
                                   </p>
                                   <input
@@ -2366,7 +2372,7 @@ export const Husdetaljer: React.FC<{
                   </div>
                   <div>
                     {uploadPlantegningerFasaderPhoto && (
-                      <div className="mt-5 flex items-center gap-5 flex-wrap">
+                      <div className="flex items-center gap-3 lg:gap-5 flex-wrap">
                         {uploadPlantegningerFasaderPhoto?.map(
                           (file: any, index: number) => (
                             <div
@@ -2470,7 +2476,7 @@ export const Husdetaljer: React.FC<{
             </div>
           </div>
           <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-            <Link to={"/Husmodeller"} >
+            <Link to={"/Husmodeller"}>
               <Button
                 text="Avbryt"
                 className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -2491,7 +2497,7 @@ export const Husdetaljer: React.FC<{
             <div className="bg-white p-6 rounded-lg">
               <p className="mb-4">Er du sikker på at du vil slette?</p>
               <div className="flex justify-center gap-4">
-                <div onClick={handleCancelDelete} >
+                <div onClick={handleCancelDelete}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

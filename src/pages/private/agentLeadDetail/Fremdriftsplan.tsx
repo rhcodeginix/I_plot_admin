@@ -129,7 +129,7 @@ export const Fremdriftsplan: React.FC<{
                       if (currIndex > index) toggleAccordion(index);
                     }}
                   >
-                    <h4 className="text-darkBlack font-medium text-lg">
+                    <h4 className="text-darkBlack font-medium text-sm md:text-base desktop:text-lg">
                       Step {index + 1}:{" "}
                       <span className="font-bold">{step.name}</span>
                     </h4>

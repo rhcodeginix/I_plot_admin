@@ -234,7 +234,7 @@ export const Fremdriftsplan = forwardRef<
 
             <div className="p-5 flex flex-col gap-5">
               <div className="flex flex-col gap-4">
-                <h4 className="font-medium text-lg text-black">
+                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 1: <span className="font-bold">Byggekontrakt</span>
                 </h4>
                 <div className="grid grid-cols-4 gap-5">
@@ -354,7 +354,7 @@ export const Fremdriftsplan = forwardRef<
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <h4 className="font-medium text-lg text-black">
+                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 2: <span className="font-bold">Grunnarbeider</span>
                 </h4>
                 <div className="grid grid-cols-4 gap-5">
@@ -474,7 +474,7 @@ export const Fremdriftsplan = forwardRef<
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <h4 className="font-medium text-lg text-black">
+                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 3: <span className="font-bold">Betongarbeid</span>
                 </h4>
                 <div className="grid grid-cols-4 gap-5">
@@ -594,7 +594,7 @@ export const Fremdriftsplan = forwardRef<
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <h4 className="font-medium text-lg text-black">
+                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 4: <span className="font-bold">Levering byggesett</span>
                 </h4>
                 <div className="grid grid-cols-4 gap-5">
@@ -714,7 +714,7 @@ export const Fremdriftsplan = forwardRef<
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <h4 className="font-medium text-lg text-black">
+                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 5: <span className="font-bold">Tett bygg</span>
                 </h4>
                 <div className="grid grid-cols-4 gap-5">
@@ -834,7 +834,7 @@ export const Fremdriftsplan = forwardRef<
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <h4 className="font-medium text-lg text-black">
+                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 6: <span className="font-bold">Ferdig ute</span>
                 </h4>
                 <div className="grid grid-cols-4 gap-5">
@@ -954,7 +954,7 @@ export const Fremdriftsplan = forwardRef<
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <h4 className="font-medium text-lg text-black">
+                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 7: <span className="font-bold">Ferdig inne</span>
                 </h4>
                 <div className="grid grid-cols-4 gap-5">
@@ -1074,7 +1074,7 @@ export const Fremdriftsplan = forwardRef<
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <h4 className="font-medium text-lg text-black">
+                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 8: <span className="font-bold">Forhåndsbefaring</span>
                 </h4>
                 <div className="grid grid-cols-4 gap-5">
@@ -1194,7 +1194,7 @@ export const Fremdriftsplan = forwardRef<
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <h4 className="font-medium text-lg text-black">
+                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 9: <span className="font-bold">Overtakelse</span>
                 </h4>
                 <div className="grid grid-cols-4 gap-5">

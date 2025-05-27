@@ -70,10 +70,10 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
 
   return (
     <>
-      <h3 className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-semibold mb-8 px-6">
+      <h3 className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-semibold mb-8 px-4 md:px-6">
         Her konfigurerer du husmodellen
       </h3>
-      <div className="flex gap-6 px-6 relative">
+      <div className="flex gap-6 px-4 md:px-6 relative">
         <div className="w-[20%] flex flex-col bg-[#F9FAFB] p-3 pb-0 rounded-lg gap-3 h-full max-h-[690px] overflow-y-auto overFlowAutoY sticky top-[80px]">
           {Category.map((tab: any, index: number) => (
             <div
@@ -157,7 +157,6 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
                 onClick={() => {
                   setActiveTab(0);
                 }}
-                
               >
                 <Button
                   text="Avbryt"

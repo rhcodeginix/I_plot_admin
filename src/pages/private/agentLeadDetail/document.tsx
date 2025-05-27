@@ -353,7 +353,7 @@ export const Documenters: React.FC<{
             </div>
             <div className="p-5 flex flex-col gap-5">
               <div>
-                <h4 className="text-darkBlack text-lg font-semibold mb-4">
+                <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-4">
                   Entreprenørgaranti
                 </h4>
                 <div className="grid grid-cols-2 gap-6">
@@ -453,7 +453,7 @@ export const Documenters: React.FC<{
               </div>
               <div className="border-t border-[#DCDFEA]"></div>
               <div>
-                <h4 className="text-darkBlack text-lg font-semibold mb-4">
+                <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-4">
                   Forsikringsbevis
                 </h4>
                 <div className="grid grid-cols-2 gap-6">
@@ -553,7 +553,7 @@ export const Documenters: React.FC<{
               </div>
               <div className="border-t border-[#DCDFEA]"></div>
               <div>
-                <h4 className="text-darkBlack text-lg font-semibold mb-4">
+                <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-4">
                   Kontrakt{" "}
                   <span className="text-[#5D6B98]">(eks. NS-3425)</span>
                 </h4>

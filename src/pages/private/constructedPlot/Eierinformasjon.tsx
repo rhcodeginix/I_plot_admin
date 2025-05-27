@@ -20,7 +20,9 @@ const Eierinformasjon: React.FC<{ data: any }> = ({ data }) => {
           boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
         }}
       >
-        <h5 className="text-black text-lg font-semibold mb-8">Eierskap</h5>
+        <h5 className="text-black text-sm md:text-base desktop:text-lg font-semibold mb-8">
+          Eierskap
+        </h5>
         <EierinformasjonChart chartData={EierinformasjonData} />
       </div>
       <div className="w-2/3">
@@ -37,7 +39,7 @@ const Eierinformasjon: React.FC<{ data: any }> = ({ data }) => {
                   key={index}
                 >
                   <div>
-                    <h5 className="text-black text-lg font-semibold mb-2">
+                    <h5 className="text-black text-sm md:text-base desktop:text-lg font-semibold mb-2">
                       ID: {item?.eierId}
                     </h5>
                     <h6 className="text-black text-sm font-medium">

@@ -424,7 +424,7 @@ export const Forhandstakst = forwardRef<
               </div>
               {advanceQuote === "Ja, jeg ønsker forhåndstakst" ? (
                 <>
-                  <div className="text-lg font-medium text-darkBlack">
+                  <div className="text-sm md:text-base desktop:text-lg font-medium text-darkBlack">
                     Informasjon om kunden
                   </div>
                   <div className="py-5 grid grid-cols-2 gap-6">
@@ -496,7 +496,7 @@ export const Forhandstakst = forwardRef<
                       )}
                   </div>
                   <div className="border-t border-[#DCDFEA]"></div>
-                  <div className="text-lg font-medium text-darkBlack pt-5">
+                  <div className="text-sm md:text-base desktop:text-lg font-medium text-darkBlack pt-5">
                     Informasjon om tomten
                   </div>
                   <div className="py-5">
@@ -536,7 +536,7 @@ export const Forhandstakst = forwardRef<
                     </div>
                   </div>
                   <div className="border-t border-[#DCDFEA]"></div>
-                  <div className="text-lg font-medium text-darkBlack pt-5">
+                  <div className="text-sm md:text-base desktop:text-lg font-medium text-darkBlack pt-5">
                     Informasjon om husmodellen
                   </div>
                   <div className="py-5">
@@ -704,7 +704,7 @@ export const Forhandstakst = forwardRef<
                   </div>
                   <div className="border-t border-[#DCDFEA]"></div>
                   <div className="pt-5">
-                    <h4 className="text-darkBlack text-lg font-medium mb-4">
+                    <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium mb-4">
                       Har du ytterligere informasjon som kan være lurt å dele
                       med megler?
                     </h4>
@@ -749,7 +749,7 @@ export const Forhandstakst = forwardRef<
                   </div>
                 </>
               ) : (
-                <p className="text-darkBlack text-lg font-medium">
+                <p className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
                   Du kan bestille kostnadsfri forhåndstakst sendere ved å gå inn
                   på dette leadet etter at du har sendt inn til banken.
                 </p>

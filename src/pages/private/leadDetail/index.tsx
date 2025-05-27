@@ -93,7 +93,7 @@ export const LeadsDetails = () => {
               )}
             </div>
           </div>
-          <p className="text-[#5D6B98] text-lg font-medium">
+          <p className="text-[#5D6B98] text-sm md:text-base desktop:text-lg font-medium">
             {bankData?.plotHusmodell?.plot?.address}
           </p>
         </div>

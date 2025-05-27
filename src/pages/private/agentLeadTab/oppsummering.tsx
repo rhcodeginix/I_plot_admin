@@ -150,10 +150,10 @@ export const Oppsummering: React.FC<{
         }}
       >
         <div className="py-4 px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
-          <span className="text-lg font-semibold">Oppsummering</span>
+          <span className="text-sm md:text-base desktop:text-lg font-semibold">Oppsummering</span>
         </div>
         <div className="p-5">
-          <div className="text-lg text-black font-medium">
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
             Informasjon om kunden
           </div>
           <div className="py-5 grid grid-cols-2 gap-6">
@@ -215,7 +215,7 @@ export const Oppsummering: React.FC<{
               )}
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-lg text-black font-medium">
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
             Informasjon om tomten
           </div>
           <div className="py-5">
@@ -252,7 +252,7 @@ export const Oppsummering: React.FC<{
             </div>
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-lg text-black font-medium">
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
             Informasjon om husmodellen
           </div>
           <div className="py-5">
@@ -281,7 +281,7 @@ export const Oppsummering: React.FC<{
             </div>
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-lg text-black font-medium">
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
             Informasjon om økonomisk plan
           </div>
           <div className="py-5">
@@ -316,7 +316,7 @@ export const Oppsummering: React.FC<{
             </div>
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-lg text-black font-medium">Forhåndstakst</div>
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">Forhåndstakst</div>
           <div className="py-5">
             <div className="flex flex-col gap-2">
               <div className="flex gap-3 items-center">

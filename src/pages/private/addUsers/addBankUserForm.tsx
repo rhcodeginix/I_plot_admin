@@ -462,11 +462,11 @@ export const AddBankUserForm = () => {
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg">
               <div className="flex gap-2 items-center">
-                <p className="text-lg font-bold">E-post:</p>
+                <p className="text-sm md:text-base desktop:text-lg font-bold">E-post:</p>
                 <span className="text-base">{form.getValues("email")}</span>
               </div>
               <div className="flex gap-2 items-center">
-                <p className="text-lg font-bold">Password:</p>
+                <p className="text-sm md:text-base desktop:text-lg font-bold">Password:</p>
                 <span className="text-base">{form.getValues("password")}</span>
               </div>
               <br />

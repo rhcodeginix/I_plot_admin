@@ -86,10 +86,10 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
         }}
       >
         <div className="py-4 px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
-          <span className="text-lg font-semibold">Oppsummering</span>
+          <span className="text-sm md:text-base desktop:text-lg font-semibold">Oppsummering</span>
         </div>
         <div className="p-5">
-          <div className="text-lg text-black font-medium">
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
             Informasjon om kunden
           </div>
           <div className="py-5 grid grid-cols-2 gap-6">
@@ -151,7 +151,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
               )}
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-lg text-black font-medium">
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
             Informasjon om tomten
           </div>
           <div className="py-5">
@@ -186,7 +186,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
             </div>
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-lg text-black font-medium">
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
             Informasjon om husmodellen
           </div>
           <div className="py-5">
@@ -213,7 +213,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
             </div>
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-lg text-black font-medium">
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
             Informasjon om økonomisk plan
           </div>
           <div className="py-5">
@@ -248,7 +248,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
             </div>
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-lg text-black font-medium">Forhåndstakst</div>
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">Forhåndstakst</div>
           <div className="py-5">
             <div className="flex flex-col gap-2">
               <div className="flex gap-3 items-center">
@@ -303,7 +303,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
         </div>
       </div>
       <div>
-        <h4 className="text-darkBlack mb-5 text-lg font-semibold">
+        <h4 className="text-darkBlack mb-5 text-sm md:text-base desktop:text-lg font-semibold">
           Økonomisk plan
         </h4>
         <div className="flex gap-6">
@@ -314,7 +314,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                 "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
             }}
           >
-            <div className="text-center p-4 text-[#101828] font-medium text-lg bg-[#F9F9FB] mb-5 relative">
+            <div className="text-center p-4 text-[#101828] font-medium text-sm md:text-base desktop:text-lg bg-[#F9F9FB] mb-5 relative">
               Byggekostnader
             </div>
             <div className="flex flex-col gap-5">
@@ -343,7 +343,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
               <div className="border-t border-gray2"></div>
               <div className="flex items-center gap-2 justify-between">
                 <div className="flex items-center gap-2">
-                  <p className="text-gray text-lg font-bold">
+                  <p className="text-gray text-sm md:text-base desktop:text-lg font-bold">
                     Sum byggkostnader
                   </p>
                 </div>
@@ -360,7 +360,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                 "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
             }}
           >
-            <div className="text-center p-4 text-[#101828] font-medium text-lg bg-[#F9F9FB] mb-5 relative">
+            <div className="text-center p-4 text-[#101828] font-medium text-sm md:text-base desktop:text-lg bg-[#F9F9FB] mb-5 relative">
               Tomkostnader
             </div>
             <div className="flex flex-col gap-5">
@@ -386,7 +386,7 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
               <div className="border-t border-gray2"></div>
               <div className="flex items-center gap-2 justify-between">
                 <div className="flex items-center gap-2">
-                  <p className="text-gray text-lg font-bold">
+                  <p className="text-gray text-sm md:text-base desktop:text-lg font-bold">
                     Sum tomtekostnader
                   </p>
                 </div>

@@ -300,7 +300,7 @@ export const Kunden = forwardRef<
           >
             <div className="py-4 px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
               <UserRoundCheck />
-              <span className="text-lg font-semibold">
+              <span className="text-sm md:text-base desktop:text-lg font-semibold">
                 Registrering av kunde
               </span>
             </div>

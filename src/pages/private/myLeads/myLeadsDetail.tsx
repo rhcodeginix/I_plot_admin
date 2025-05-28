@@ -538,10 +538,10 @@ export const MyLeadsDetail = () => {
                 <p className="text-sm text-gray">
                   {formatTimestamp(leadData?.createdAt)}
                 </p>
-                <div className="bg-lightGreen rounded-[16px] py-1.5 px-4 flex items-center gap-1.5 h-[30px]">
+                {/* <div className="bg-lightGreen rounded-[16px] py-1.5 px-4 flex items-center gap-1.5 h-[30px]">
                   <div className="w-1.5 h-1.5 rounded-full bg-green"></div>
                   <span className="text-darkGreen text-sm font-medium">Ny</span>
-                </div>
+                </div> */}
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-gray text-sm">Kilde:</span>

@@ -47,24 +47,6 @@ const Eierinformasjon: React.FC<{ data: any }> = ({ data }) => {
                     </h6>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
-                    {/* <div>
-                      <p className="text-gray text-xs mb-1">Navn</p>
-                      <h6 className="text-black text-sm font-medium">
-                        {item?.name}
-                      </h6>
-                    </div>
-                    <div>
-                      <p className="text-gray text-xs mb-1">Kjønn</p>
-                      <h6 className="text-black text-sm font-medium">
-                        {item?.sex}
-                      </h6>
-                    </div>
-                    <div>
-                      <p className="text-gray text-xs mb-1">Alder</p>
-                      <h6 className="text-black text-sm font-medium">
-                        {item?.age}
-                      </h6>
-                    </div> */}
                     <div>
                       <p className="text-gray text-xs mb-1">Eierandel</p>
                       <h6 className="text-black text-sm font-medium">
@@ -72,34 +54,6 @@ const Eierinformasjon: React.FC<{ data: any }> = ({ data }) => {
                       </h6>
                     </div>
                   </div>
-                  {/* <div className="w-full border-t border-[#EFF1F5]"></div>
-                  <div>
-                    <h6 className="text-black text-sm font-medium mb-1">
-                      Type eierskap
-                    </h6>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="flex gap-1 items-center">
-                        <p className="text-gray text-xs">
-                          Boligkredittselskap
-                        </p>
-                        <h6 className="text-black text-sm font-medium">
-                          {item?.isCoveredBondsInstitution === false
-                            ? "Nei"
-                            : "Ja"}
-                        </h6>
-                      </div>
-                      <div className="flex gap-1 items-center">
-                        <p className="text-gray text-xs">
-                          Livsforsikringsselskap
-                        </p>
-                        <h6 className="text-black text-sm font-medium">
-                          {item?.isLifeInsuranceInstitution === false
-                            ? "Nei"
-                            : "Ja"}
-                        </h6>
-                      </div>
-                    </div>
-                  </div> */}
                 </div>
               );
             })}

@@ -955,12 +955,6 @@ export const Eksterior: React.FC<{
                 ? "Rediger underkategori"
                 : "Legg til ny underkategori"}
             </h4>
-            {/* <AddNewSubCat
-              onClose={handleToggleSubCategoryPopup}
-              formData={form}
-              activeTabData={activeTabData}
-              setCategory={setCategory}
-            /> */}
             <AddNewSubCat
               onClose={() => {
                 setAddSubCategory(false);

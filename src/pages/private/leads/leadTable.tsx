@@ -220,7 +220,6 @@ export const LeadTable = () => {
           header: "Forhandler",
           cell: ({ row }: any) => (
             <div className="flex items-center text-sm text-darkBlack w-max">
-              {/* {row.original?.Kunden?.Kundeinformasjon[0]?.EPost} */}
               BoligPartner
             </div>
           ),
@@ -456,10 +455,7 @@ export const LeadTable = () => {
                 Er du sikker på at du vil slette?
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div
-                  onClick={() => setShowConfirm(false)}
-                  
-                >
+                <div onClick={() => setShowConfirm(false)}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -482,7 +478,9 @@ export const LeadTable = () => {
           <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center">
             <div className="bg-white p-6 rounded-xl w-[300px] shadow-lg relative">
               <form onSubmit={handleSubmit}>
-                <h2 className="text-sm md:text-base desktop:text-lg font-semibold mb-4">Change Status</h2>
+                <h2 className="text-sm md:text-base desktop:text-lg font-semibold mb-4">
+                  Change Status
+                </h2>
 
                 <div className="space-y-2">
                   <label className="flex items-center gap-2">
@@ -533,10 +531,7 @@ export const LeadTable = () => {
                 </div>
 
                 <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                  <div
-                    onClick={() => setShowModal(false)}
-                    
-                  >
+                  <div onClick={() => setShowModal(false)}>
                     <Button
                       text="Avbryt"
                       className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

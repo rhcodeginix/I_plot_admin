@@ -193,7 +193,6 @@ export const BankTable = () => {
           header: "Forhandler",
           cell: ({ row }: any) => (
             <div className="flex items-center text-sm text-darkBlack w-max">
-              {/* {row.original?.Kunden?.Kundeinformasjon[0]?.EPost} */}
               BoligPartner
             </div>
           ),
@@ -437,10 +436,7 @@ export const BankTable = () => {
                 Er du sikker på at du vil slette?
               </p>
               <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div
-                  onClick={() => setShowConfirm(false)}
-                  
-                >
+                <div onClick={() => setShowConfirm(false)}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

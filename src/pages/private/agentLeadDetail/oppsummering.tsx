@@ -86,7 +86,9 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
         }}
       >
         <div className="py-4 px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
-          <span className="text-sm md:text-base desktop:text-lg font-semibold">Oppsummering</span>
+          <span className="text-sm md:text-base desktop:text-lg font-semibold">
+            Oppsummering
+          </span>
         </div>
         <div className="p-5">
           <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
@@ -175,7 +177,6 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                   Totale tomtekostnader:
                 </div>
                 <div className="text-darkBlack">
-                  {/* {formattedNumberOfByggekostnader} NOK */}
                   {plotData?.tomtekostnader} NOK
                 </div>
               </div>
@@ -202,7 +203,6 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                   Totale byggekostnader:
                 </div>
                 <div className="text-darkBlack">
-                  {/* {formattedNumber} NOK */}
                   {houseData?.byggekostnader} NOK
                 </div>
               </div>
@@ -248,7 +248,9 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
             </div>
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">Forhåndstakst</div>
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
+            Forhåndstakst
+          </div>
           <div className="py-5">
             <div className="flex flex-col gap-2">
               <div className="flex gap-3 items-center">
@@ -270,7 +272,6 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                 Sum tomtekostnader
               </div>
               <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                {/* {formattedNumberOfByggekostnader} NOK */}
                 {plotData?.tomtekostnader} NOK
                 <p className="text-[#5D6B98] text-base font-normal">
                   (prosjektregnskapet oversendes megler)
@@ -282,7 +283,6 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
                 Sum byggkostnader
               </div>
               <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                {/* {formattedNumber} NOK */}
                 {houseData?.byggekostnader} NOK
                 <p className="text-[#5D6B98] text-base font-normal">
                   (prosjektregnskapet oversende banken)
@@ -296,7 +296,6 @@ export const Oppsummering: React.FC<{ bankData: any; loading: any }> = ({
               </div>
               <div className="w-full text-darkBlack font-bold text-xl">
                 {sum ? numberToNorwegian(sum) : 0} NOK
-                {/* {formattedGrandTotal} NOK */}
               </div>
             </div>
           </div>

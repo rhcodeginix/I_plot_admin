@@ -94,7 +94,6 @@ export const UserManagement = () => {
             />
           </div>
         </div>
-        {/* <UserTable /> */}
         {renderTable()}
       </div>
     </>

@@ -925,11 +925,6 @@ export const PlotDetail = () => {
                 </div>
               </div>
               <div className="rounded-[12px] overflow-hidden w-[407px]">
-                {/* <GoogleMapComponent
-                      coordinates={
-                        lamdaDataFromApi?.coordinates?.convertedCoordinates
-                      }
-                    /> */}
                 {loading ? (
                   <div
                     className="w-full h-full rounded-md custom-shimmer"
@@ -1261,7 +1256,6 @@ export const PlotDetail = () => {
                       </div>
                     )}
                   </div>
-                  {/* )} */}
                 </div>
               </>
             )}

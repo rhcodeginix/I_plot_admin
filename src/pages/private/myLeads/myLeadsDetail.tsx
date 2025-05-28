@@ -648,38 +648,6 @@ export const MyLeadsDetail = () => {
                     </div>
                   )}
                 </div>
-                {/* <div className="col-span-2">
-                  <FormField
-                    control={form.control}
-                    name="LeadsNotat"
-                    render={({ field, fieldState }) => (
-                      <FormItem>
-                        <p
-                          className={`${
-                            fieldState.error ? "text-red" : "text-black"
-                          } mb-[6px] text-sm font-medium`}
-                        >
-                          Notat
-                        </p>
-                        <FormControl>
-                          <div className="relative">
-                            <TextArea
-                              placeholder="Fyll inn kommentar"
-                              {...field}
-                              className={`h-[100px] bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                            />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div> */}
               </div>
               <div className="flex justify-end w-full gap-5 items-center mt-8">
                 <div onClick={() => form.reset()}>
@@ -804,7 +772,6 @@ export const MyLeadsDetail = () => {
                   return (
                     <tr className="border-b border-gray2" key={index}>
                       <td className="px-4 py-6 text-sm text-black font-medium">
-                        {/* {log?.updatedAt || */}
                         {log?.updatedAt ||
                           log?.createdAt ||
                           formatTimestamp(log?.date)}

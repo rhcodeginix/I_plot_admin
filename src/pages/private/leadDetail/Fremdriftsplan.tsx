@@ -150,54 +150,7 @@ export const Fremdriftsplan: React.FC<{
                       Step {index + 1}:{" "}
                       <span className="font-bold">{step.name}</span>
                     </h4>
-                    {/* {currIndex > index ? (
-                      <div className="flex items-center gap-4">
-                        {step?.payment ? (
-                          <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-2 text-xs text-[#00857A]">
-                            Betalt {formatPrice(step.pris)} (
-                            {step.date.split("-").reverse().join(".")})
-                          </div>
-                        ) : (
-                          <div
-                            className="bg-[#6941C6] rounded-[16px] py-0.5 px-2 text-xs text-white cursor-pointer"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setIsPDFModalOpen(true);
-                              setSelectIndex(step.name);
-                            }}
-                          >
-                            Pay for this Step
-                          </div>
-                        )}
-                        <ChevronDown
-                          className={`text-primary transition-transform duration-200 ${
-                            openStepIndex === index ? "rotate-180" : ""
-                          }`}
-                        />
-                      </div>
-                    ) : currIndex === index ? (
-                      <div className="flex items-center gap-4">
-                        <span
-                          className="text-primary text-sm font-semibold cursor-pointer"
-                          onClick={() => {
-                            setIsModalOpen(true);
-                            setSelectIndex(step.name);
-                          }}
-                        >
-                          Fullfør steget
-                        </span>
-                        <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-2 text-xs text-[#C84D00]">
-                          Send Information
-                        </div>
-                      </div>
-                    ) : (
-                      currIndex < index && (
-                        <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
-                          Ubetalt
-                        </div>
-                      )
-                    )} */}
+
                     {currIndex > index ? (
                       <div className="flex items-center gap-4">
                         {step.status === "Approve" ? (
@@ -249,9 +202,6 @@ export const Fremdriftsplan: React.FC<{
                         >
                           Fullfør steget
                         </span>
-                        {/* <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-2 text-xs text-[#C84D00]">
-                          Send Information
-                        </div> */}
                         <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
                           Ubetalt
                         </div>

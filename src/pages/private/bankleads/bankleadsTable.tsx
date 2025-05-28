@@ -185,12 +185,6 @@ export const BankleadsTable = () => {
         cell: ({ row }) => (
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-full overflow-hidden">
-              {/* <GoogleMapComponent
-                coordinates={
-                  row.original.finalData.plot.lamdaDataFromApi?.coordinates
-                    ?.convertedCoordinates
-                }
-              /> */}
               {row.original.finalData.plot.lamdaDataFromApi?.coordinates
                 ?.convertedCoordinates && (
                 <NorkartMap

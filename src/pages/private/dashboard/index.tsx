@@ -278,18 +278,11 @@ export const Dashboard = () => {
                           </span>
                         )}
                       </span>
-                      {/* <img src={Ic_dropdown_menu} alt="menu" /> */}
                     </div>
                     <div className="flex items-center gap-4 justify-between">
                       <h4 className="text-darkBlack font-semibold text-xl md:text-2xl desktop:text-[30px]">
                         {item.value}
                       </h4>
-                      {/* <div className="bg-lightGreen py-[2px] px-2 rounded-[16px] flex items-center gap-1">
-                    <img src={Ic_green_up_arrow} alt="arrow" />
-                    <span className="text-sm font-medium text-darkGreen">
-                      {item.percentage}%
-                    </span>
-                  </div> */}
                     </div>
                   </div>
                 );

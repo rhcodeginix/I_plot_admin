@@ -359,9 +359,6 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                           {product.byggkostnaderID ? (
                             <div className="flex flex-col gap-4 md:gap-[18px]">
                               <div className="flex items-center gap-1.5 md:gap-3 justify-between">
-                                {/* <h4 className="text-darkBlack text-base font-semibold">
-                                  {Byggekostnader[index].Headline}
-                                </h4> */}
                                 <div className="w-full">
                                   <FormField
                                     control={form.control}
@@ -648,9 +645,6 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                           {product.TomtekostID ? (
                             <div className="flex flex-col gap-4 md:gap-[18px]">
                               <div className="flex items-center gap-1.5 md:gap-3 justify-between">
-                                {/* <h4 className="text-darkBlack text-base font-semibold">
-                                  {Tomtekost[index].Headline}
-                                </h4> */}
                                 <div className="w-full">
                                   <FormField
                                     control={form.control}

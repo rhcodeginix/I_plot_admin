@@ -26,7 +26,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  orderBy,
   query,
   setDoc,
   updateDoc,
@@ -49,7 +48,20 @@ const formSchema = z.object({
     .min(1, { message: "Minst én by må velges." }),
   Tildelt: z.string().min(1, { message: "Tildelt i must må spesifiseres." }),
 });
-
+export const monthMap: Record<string, string> = {
+  januar: "January",
+  februar: "February",
+  märz: "March",
+  april: "April",
+  mai: "May",
+  juni: "June",
+  juli: "July",
+  august: "August",
+  september: "September",
+  oktober: "October",
+  november: "November",
+  dezember: "December",
+};
 export const MyLeadsDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -98,7 +110,15 @@ export const MyLeadsDetail = () => {
       // );
       let q;
       if (email === "andre.finger@gmail.com") {
-        q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
+        q = query(
+          collection(db, "house_model"),
+          where(
+            "Husdetaljer.Leverandører",
+            "==",
+            "065f9498-6cdb-469b-8601-bb31114d7c95"
+          )
+        );
+        // q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
       } else {
         q = query(
           collection(db, "house_model"),
@@ -157,7 +177,11 @@ export const MyLeadsDetail = () => {
       // let q = query(collection(db, "suppliers"));
       let q;
       if (email === "andre.finger@gmail.com") {
-        q = query(collection(db, "suppliers"));
+        // q = query(collection(db, "suppliers"));
+        q = query(
+          collection(db, "suppliers"),
+          where("id", "==", "065f9498-6cdb-469b-8601-bb31114d7c95")
+        );
       } else {
         q = query(
           collection(db, "suppliers"),
@@ -337,19 +361,31 @@ export const MyLeadsDetail = () => {
       const fetchedLogs: any = logsSnapshot.docs.map((doc) => {
         const data = doc.data();
 
-        const timestamp =
-          data.updatedAt?.toMillis?.() ??
-          data.createdAt?.toMillis?.() ??
-          new Date(data.date).getTime();
+        let timestamp: number | undefined = undefined;
+
+        if (typeof data.updatedAt === "string") {
+          const [datePart, timePart] = data.updatedAt
+            .split("|")
+            .map((s) => s.trim());
+          const [day, monthName, year] = datePart.split(" ");
+          const engMonth = monthMap[monthName.toLowerCase()] || monthName;
+
+          const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+          timestamp = new Date(dateStr).getTime();
+        } else if (data.updatedAt?.toMillis) {
+          timestamp = data.updatedAt.toMillis();
+        } else {
+          timestamp = 0;
+        }
 
         return {
           id: doc.id,
           ...data,
-          _sortTimestamp: timestamp,
+          _sortTime: timestamp,
         };
       });
 
-      fetchedLogs.sort((a: any, b: any) => b._sortTimestamp - a._sortTimestamp);
+      fetchedLogs.sort((a: any, b: any) => b._sortTime - a._sortTime);
 
       setLogs(fetchedLogs);
     } catch (error) {

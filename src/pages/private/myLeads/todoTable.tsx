@@ -36,6 +36,7 @@ import {
 import { HouseModelCell } from "./houseRow";
 import { StatusCell } from "./statusRow";
 import { BrokerCell } from "./brokerRow";
+import { monthMap } from "./myLeadsDetail";
 
 const calculateDateRange = (range: string) => {
   const currentDate = new Date();
@@ -83,6 +84,93 @@ export const TODOTable = () => {
 
   const email = localStorage.getItem("Iplot_admin");
 
+  // const fetchLeadsData = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const leadsSnapshot = await getDocs(
+  //       query(
+  //         collection(db, "leads_from_supplier"),
+  //         orderBy("updatedAt", "desc")
+  //       )
+  //     );
+
+  //     const leadsWithFollowupsPromises = leadsSnapshot.docs.map(
+  //       async (leadDoc) => {
+  //         const leadId = leadDoc.id;
+  //         const leadData = leadDoc.data();
+
+  //         const followupsRef = collection(
+  //           db,
+  //           "leads_from_supplier",
+  //           leadId,
+  //           "followups"
+  //         );
+  //         const followupsSnapshot = await getDocs(followupsRef);
+
+  //         const followups = followupsSnapshot.docs.map((doc) => ({
+  //           id: doc.id,
+  //           ...doc.data(),
+  //         }));
+
+  //         if (followups.length > 1) {
+  //           const sortedFollowups = [...followups].sort((a: any, b: any) => {
+  //             const getTimestamp = (item: any): number => {
+  //               if (typeof item.updatedAt === "string") {
+  //                 const [datePart, timePart] = item.updatedAt
+  //                   .split("|")
+  //                   .map((s: string) => s.trim());
+  //                 const [day, monthName, year] = datePart.split(" ");
+  //                 const engMonth =
+  //                   monthMap[monthName.toLowerCase()] || monthName;
+
+  //                 const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+  //                 const parsed = new Date(dateStr).getTime();
+  //                 return isNaN(parsed) ? 0 : parsed;
+  //               } else if (item.updatedAt?.toMillis) {
+  //                 return item.updatedAt.toMillis();
+  //               } else {
+  //                 return item.date?.seconds ? item.date.seconds * 1000 : 0;
+  //               }
+  //             };
+
+  //             return getTimestamp(b) - getTimestamp(a);
+  //           });
+
+  //           const lastFollowup = sortedFollowups[0];
+
+  //           return {
+  //             id: leadId,
+  //             ...leadData,
+  //             followups: lastFollowup,
+  //           };
+  //         } else if (followups.length === 1) {
+  //           const f: any = followups[0];
+  //           if (f.Hurtigvalg !== "initial" && f.type !== "initial") {
+  //             return {
+  //               id: leadId,
+  //               ...leadData,
+  //               followups: followups[0],
+  //             };
+  //           } else {
+  //             return null;
+  //           }
+  //         } else {
+  //           return null;
+  //         }
+  //       }
+  //     );
+
+  //     const resolvedLeads = await Promise.all(leadsWithFollowupsPromises);
+  //     const leadsWithFollowups: any = resolvedLeads.filter(Boolean);
+
+  //     setLeads(leadsWithFollowups);
+  //   } catch (error) {
+  //     console.error("Error fetching leads with followups:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const fetchLeadsData = async () => {
     setIsLoading(true);
     try {
@@ -113,9 +201,26 @@ export const TODOTable = () => {
 
           if (followups.length > 1) {
             const sortedFollowups = [...followups].sort((a: any, b: any) => {
-              const aSeconds = a.date?.seconds || 0;
-              const bSeconds = b.date?.seconds || 0;
-              return bSeconds - aSeconds;
+              const getTimestamp = (item: any): number => {
+                if (typeof item.updatedAt === "string") {
+                  const [datePart, timePart] = item.updatedAt
+                    .split("|")
+                    .map((s: string) => s.trim());
+                  const [day, monthName, year] = datePart.split(" ");
+                  const engMonth =
+                    monthMap[monthName.toLowerCase()] || monthName;
+
+                  const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+                  const parsed = new Date(dateStr).getTime();
+                  return isNaN(parsed) ? 0 : parsed;
+                } else if (item.updatedAt?.toMillis) {
+                  return item.updatedAt.toMillis();
+                } else {
+                  return item.date?.seconds ? item.date.seconds * 1000 : 0;
+                }
+              };
+
+              return getTimestamp(b) - getTimestamp(a);
             });
 
             const lastFollowup = sortedFollowups[0];
@@ -144,6 +249,32 @@ export const TODOTable = () => {
 
       const resolvedLeads = await Promise.all(leadsWithFollowupsPromises);
       const leadsWithFollowups: any = resolvedLeads.filter(Boolean);
+
+      const getTimestamp = (item: any): number => {
+        const updatedAt = item.followups?.updatedAt;
+
+        if (typeof updatedAt === "string") {
+          const [datePart, timePart] = updatedAt
+            .split("|")
+            .map((s: string) => s.trim());
+          const [day, monthName, year] = datePart.split(" ");
+          const engMonth = monthMap[monthName.toLowerCase()] || monthName;
+
+          const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+          const parsed = new Date(dateStr).getTime();
+          return isNaN(parsed) ? 0 : parsed;
+        } else if (updatedAt?.toMillis) {
+          return updatedAt.toMillis();
+        } else {
+          return item.followups?.date?.seconds
+            ? item.followups.date.seconds * 1000
+            : 0;
+        }
+      };
+
+      leadsWithFollowups.sort(
+        (a: any, b: any) => getTimestamp(b) - getTimestamp(a)
+      );
 
       setLeads(leadsWithFollowups);
     } catch (error) {

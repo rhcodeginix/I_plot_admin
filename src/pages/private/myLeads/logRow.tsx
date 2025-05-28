@@ -11,14 +11,9 @@ type LogItemProps = {
 
 export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedNote, setEditedNote] = useState(log?.notat || "");
+  const [editedNote, setEditedNote] = useState(log?.notat || log?.notes || "");
 
   const handleSave = async () => {
-    const formatter = new Intl.DateTimeFormat("nb-NO", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
     try {
       const logDocRef = doc(
         db,
@@ -27,11 +22,28 @@ export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
         "followups",
         log.id
       );
+      const now = new Date();
+
+      const datePart = new Intl.DateTimeFormat("nb-NO", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(now);
+
+      const timePart = new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      }).format(now);
+
+      const formattedDateTime = `${datePart} | ${timePart}`;
+
       await updateDoc(logDocRef, {
         notat: editedNote,
-        updatedAt: formatter.format(new Date()),
+        updatedAt: formattedDateTime,
       });
       setIsEditing(false);
+      setEditedNote("");
       await fetchLogs();
     } catch (err) {
       console.error("Failed to update note", err);

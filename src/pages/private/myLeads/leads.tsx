@@ -145,6 +145,11 @@ export const MyLeadsTable = () => {
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
+        accessorKey: "Status",
+        header: "Status",
+        cell: ({ row }) => <StatusCell id={row.original.id} />,
+      },
+      {
         accessorKey: "kunde",
         header: "Kunde",
         cell: ({ row }) => (
@@ -212,11 +217,6 @@ export const MyLeadsTable = () => {
             )}
           </>
         ),
-      },
-      {
-        accessorKey: "Status",
-        header: "Status",
-        cell: ({ row }) => <StatusCell id={row.original.id} />,
       },
       {
         accessorKey: "Oppdatert kl",

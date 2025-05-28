@@ -401,6 +401,11 @@ export const TODOTable = () => {
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
+        accessorKey: "Status",
+        header: "Status",
+        cell: ({ row }) => <StatusCell id={row.original.id} />,
+      },
+      {
         accessorKey: "kunde",
         header: "Kunde",
         cell: ({ row }) => (
@@ -468,11 +473,6 @@ export const TODOTable = () => {
             )}
           </>
         ),
-      },
-      {
-        accessorKey: "Status",
-        header: "Status",
-        cell: ({ row }) => <StatusCell id={row.original.id} />,
       },
       {
         accessorKey: "todo_status",

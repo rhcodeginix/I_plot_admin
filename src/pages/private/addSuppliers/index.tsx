@@ -11,7 +11,7 @@ export const AddSuppliers = () => {
             to={"/Leverandorer"}
             className="text-gray text-xs md:text-sm font-medium"
           >
-            Leverandorer
+            Leverandører
           </Link>
           <ChevronRight className="text-gray2 w-4 h-4" />
           <span className="text-primary text-xs md:text-sm font-medium">

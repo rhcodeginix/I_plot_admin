@@ -23,6 +23,7 @@ export const Dashboard = () => {
     kombinasjoner: 0,
     constructedPlot: 0,
     bankLeads: 0,
+    supplier: 0,
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ export const Dashboard = () => {
       let leadTrue;
       let leadFalse;
       let leadBankTrue;
+      let suppliers;
 
       if (email === "andre.finger@gmail.com") {
         q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
@@ -57,6 +59,7 @@ export const Dashboard = () => {
           collection(db, "leads"),
           where("IsoptForBank", "==", true)
         );
+        suppliers = query(collection(db, "suppliers"));
       } else {
         q = query(
           collection(db, "house_model"),
@@ -90,6 +93,10 @@ export const Dashboard = () => {
             String(permission)
           )
         );
+        suppliers = query(
+          collection(db, "suppliers"),
+          where("id", "==", String(permission))
+        );
       }
 
       const [
@@ -100,6 +107,7 @@ export const Dashboard = () => {
         kombinasjonerCount,
         constructedPlotCount,
         bankLeadsCount,
+        supplierCount,
       ] = await Promise.all([
         getCountFromServer(collection(db, "users")),
         getCountFromServer(q),
@@ -108,6 +116,7 @@ export const Dashboard = () => {
         getCountFromServer(leadFalse),
         getCountFromServer(collection(db, "plot_building")),
         getCountFromServer(leadBankTrue),
+        getCountFromServer(suppliers),
       ]);
 
       setCounts({
@@ -118,6 +127,7 @@ export const Dashboard = () => {
         kombinasjoner: kombinasjonerCount.data().count,
         constructedPlot: constructedPlotCount.data().count,
         bankLeads: bankLeadsCount.data().count,
+        supplier: supplierCount.data().count,
       });
       setLoading(false);
     } catch (error) {
@@ -182,6 +192,12 @@ export const Dashboard = () => {
       percentage: 10,
       path: "/constructed-plot",
     },
+    {
+      title: "Leverandorer",
+      value: counts.supplier,
+      percentage: 10,
+      path: "/Leverandorer",
+    },
   ];
   return (
     <>
@@ -221,6 +237,10 @@ export const Dashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5 desktop:gap-6">
           {loading ? (
             <>
+              <div
+                className="w-full h-[125px] rounded-md custom-shimmer"
+                style={{ borderRadius: "8px" }}
+              ></div>
               <div
                 className="w-full h-[125px] rounded-md custom-shimmer"
                 style={{ borderRadius: "8px" }}

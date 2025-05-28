@@ -18,23 +18,8 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import bcrypt from "bcryptjs";
 import { db, storage } from "../../../config/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  // collection,
-  doc,
-  getDoc,
-  // getDocs,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { fetchAdminData } from "../../../lib/utils";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectGroup,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "../../../components/ui/select";
 import Modal from "../../../components/common/modal";
 
 const formSchema = z.object({
@@ -71,9 +56,6 @@ const formSchema = z.object({
       })
     )
     .min(1, "At least one permission is required"),
-  // supplier: z.string().min(1, {
-  //   message: "Leverandør må velges",
-  // }),
   password: z
     .string()
     .min(8, { message: "Passordet må være minst 8 tegn langt." })
@@ -105,7 +87,6 @@ export const AddUserForm = () => {
       l_name: "",
       email: "",
       modulePermissions: [],
-      // supplier: "",
       password: "",
     },
   });
@@ -115,7 +96,6 @@ export const AddUserForm = () => {
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const navigate = useNavigate();
-  // const [suppliers, setSuppliers] = useState([]);
   const [isPopup, setIsPopup] = useState(false);
 
   const uploadFile = async (file: File, fieldName: any) => {
@@ -142,23 +122,6 @@ export const AddUserForm = () => {
       console.error(`Error uploading file for ${fieldName}:`, error);
     }
   };
-
-  // const fetchSuppliersData = async () => {
-  //   try {
-  //     const querySnapshot = await getDocs(collection(db, "suppliers"));
-  //     const data: any = querySnapshot.docs.map((doc) => ({
-  //       id: doc.id,
-  //       ...doc.data(),
-  //     }));
-  //     setSuppliers(data);
-  //   } catch (error) {
-  //     console.error("Error fetching husmodell data:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchSuppliersData();
-  // }, []);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -212,10 +175,6 @@ export const AddUserForm = () => {
         }
       } else {
         if (!adminSnap.exists()) {
-          // const supplier: any = suppliers.find(
-          //   (off: any) => off.id === data.supplier
-          // );
-
           await setDoc(adminDocRef, {
             ...data,
             id: uniqueId,
@@ -239,7 +198,6 @@ export const AddUserForm = () => {
                 lastName: data.l_name,
                 password: data.password,
                 link: "https://admin.mintomt.no/",
-                // company: supplier?.id,
                 company: "Mintomt",
               }),
             }
@@ -613,56 +571,6 @@ export const AddUserForm = () => {
                   </div>
                 )}
               </div>
-              {/* <div>
-                <FormField
-                  control={form.control}
-                  name="supplier"
-                  render={({ field, fieldState }) => (
-                    <FormItem>
-                      <p
-                        className={`${
-                          fieldState.error ? "text-red" : "text-black"
-                        } mb-[6px] text-sm font-medium`}
-                      >
-                        Leverandører
-                      </p>
-                      <FormControl>
-                        <div className="relative">
-                          <Select
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                            }}
-                            value={field.value}
-                          >
-                            <SelectTrigger
-                              className={`bg-white rounded-[8px] border text-black
-                              ${
-                                fieldState?.error
-                                  ? "border-red"
-                                  : "border-gray1"
-                              } `}
-                            >
-                              <SelectValue placeholder="Select Leverandører" />
-                            </SelectTrigger>
-                            <SelectContent className="bg-white">
-                              <SelectGroup>
-                                {suppliers?.map((sup: any, index) => {
-                                  return (
-                                    <SelectItem value={sup?.id} key={index}>
-                                      {sup?.company_name}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div> */}
               <div>
                 <FormField
                   control={form.control}

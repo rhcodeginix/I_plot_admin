@@ -81,7 +81,6 @@ const formSchema = z.object({
   office: z.string().min(1, {
     message: "Kontor må velges",
   }),
-  // is_admin: z.literal(true, { required_error: "Påkrevd" }),
   is_admin: z.boolean(),
   password: z
     .string()

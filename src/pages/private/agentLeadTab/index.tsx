@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Kunden } from "./kunden";
 import {
   Banknote,
-  // ChartPie,
   ChevronRight,
   FileText,
   ScrollText,

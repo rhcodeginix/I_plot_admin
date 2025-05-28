@@ -21,7 +21,6 @@ import { db, storage } from "../../../config/firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import toast from "react-hot-toast";
 import { Input } from "../../../components/ui/input";
-// import { fetchAdminDataByEmail, fetchSupplierData } from "../../../lib/utils";
 
 const formSchema = z.object({
   photo: z

@@ -2,19 +2,6 @@ import React, { useEffect, useRef } from "react";
 import Tick from "../../../assets/images/Tick.svg";
 import { isValid, addDays, differenceInCalendarDays } from "date-fns";
 
-// function getDaysDifference(plannedDateStr: any) {
-//   const plannedDate: any = new Date(plannedDateStr);
-//   const today: any = new Date();
-
-//   plannedDate.setHours(0, 0, 0, 0);
-//   today.setHours(0, 0, 0, 0);
-
-//   const diffTime = plannedDate - today;
-//   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-//   return diffDays;
-// }
-
 interface StepperProps {
   steps: any;
   currIndex: any;

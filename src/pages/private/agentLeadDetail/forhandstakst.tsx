@@ -47,10 +47,7 @@ const formSchema = z
         required_error: "Påkrevd",
       })
       .min(1, "Påkrevd"),
-    //   Kommentar: z.string().min(1, {
-    //     message: "Kommentar til megler må bestå av minst 2 tegn.",
-    //   }),
-    // });
+
     Kommentar: z.string().optional(),
   })
   .superRefine((data, ctx) => {
@@ -732,7 +729,7 @@ export const Forhandstakst: React.FC<{
             </div>
           </div>
           <div className="flex justify-end w-full gap-5 items-center fixed bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-            <div onClick={() => setActiveTab(2)} >
+            <div onClick={() => setActiveTab(2)}>
               <Button
                 text="Tilbake"
                 className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -741,7 +738,6 @@ export const Forhandstakst: React.FC<{
             <Button
               text="Neste"
               className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-              // onClick={() => setActiveTab(4)}
               type="submit"
             />
           </div>
@@ -754,7 +750,7 @@ export const Forhandstakst: React.FC<{
             <div className="bg-white p-6 rounded-lg">
               <p className="mb-4">Er du sikker på at du vil slette?</p>
               <div className="flex justify-center gap-4">
-                <div onClick={handleCancelDelete} >
+                <div onClick={handleCancelDelete}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

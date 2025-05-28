@@ -91,33 +91,6 @@ export const Dashboard = () => {
           )
         );
       }
-      // const [
-      //   usersSnapshot,
-      //   husmodellSnapshot,
-      //   plotSnapshot,
-      //   householdLeadsShot,
-      //   kombinasjonerShot,
-      //   constructedPlotSnapshot,
-      //   BankLeadShot,
-      // ] = await Promise.all([
-      //   getDocs(collection(db, "users")),
-      //   getDocs(q),
-      //   getDocs(collection(db, "empty_plot")),
-      //   getDocs(leadTrue),
-      //   getDocs(leadFalse),
-      //   getDocs(collection(db, "plot_building")),
-      //   getDocs(leadBankTrue),
-      // ]);
-
-      // setCounts({
-      //   users: usersSnapshot.size,
-      //   husmodell: husmodellSnapshot.size,
-      //   plot: plotSnapshot.size,
-      //   householdLeads: householdLeadsShot.size,
-      //   kombinasjoner: kombinasjonerShot.size,
-      //   constructedPlot: constructedPlotSnapshot.size,
-      //   bankLeads: BankLeadShot.size,
-      // });
 
       const [
         usersCount,

@@ -21,7 +21,6 @@ import { db, storage } from "../../../config/firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import toast from "react-hot-toast";
 import { Input } from "../../../components/ui/input";
-// import { fetchAdminDataByEmail, fetchSupplierData } from "../../../lib/utils";
 
 const formSchema = z.object({
   photo: z
@@ -99,7 +98,6 @@ export const AddComment: React.FC<{
 
       const isPdf = extension === "pdf";
       const fileType = isPdf ? "documents" : "images";
-      // const fileType = "images";
       const timestamp = Date.now();
       const fileName = `${timestamp}_${file.name}`;
       const storageRef = ref(storage, `${fileType}/${fileName}`);
@@ -158,27 +156,12 @@ export const AddComment: React.FC<{
       if (id) {
         const bankDocRef = doc(db, "bank_leads", String(id));
 
-        // await updateDoc(bankDocRef, {
-        //   [`Fremdriftsplan.${SelectIndex}.comment`]: data,
-        //   updatedAt: formatDate(new Date()),
-        // });
-        // const docSnap = await getDoc(bankDocRef);
-
         const updatePayload: any = {
           [`Fremdriftsplan.${SelectIndex}.comment`]: data,
           updatedAt: formatDate(new Date()),
         };
 
-        // if (docSnap.exists() && docSnap.data().status === "Unpaid") {
-        //   updatePayload.status = "Sent";
-        // }
-        // const fremdriftsplan = docSnap.data()?.Fremdriftsplan;
-        // const currentStep = fremdriftsplan?.[SelectIndex];
-        // const currentStatus = currentStep?.status;
-
-        // if (!docSnap.exists() || currentStatus === "Unpaid") {
         updatePayload[`Fremdriftsplan.${SelectIndex}.status`] = "Sent";
-        // }
 
         await updateDoc(bankDocRef, updatePayload);
 

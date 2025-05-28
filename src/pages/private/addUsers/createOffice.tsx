@@ -253,7 +253,7 @@ export const CreateNewOffice: React.FC<{
                             value={field.value}
                             onOpenChange={(open) => {
                               setIsDropdownOpen(open);
-                              setDropdownOpen(open); // 👈 pass to parent
+                              setDropdownOpen(open);
                             }}
                             open={isDropdownOpen}
                           >

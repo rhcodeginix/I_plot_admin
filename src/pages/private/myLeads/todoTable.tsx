@@ -475,15 +475,6 @@ export const TODOTable = () => {
         ),
       },
       {
-        accessorKey: "todo_status",
-        header: "TODO Status",
-        cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black w-max">
-            {row.original.followups?.Hurtigvalg || row.original.followups?.type}
-          </p>
-        ),
-      },
-      {
         accessorKey: "Oppdatert kl",
         header: "Oppdatert kl",
         cell: ({ row }) => (

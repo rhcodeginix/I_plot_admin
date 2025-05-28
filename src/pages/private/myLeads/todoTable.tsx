@@ -433,7 +433,7 @@ export const TODOTable = () => {
         ),
       },
     ],
-    [email, navigate]
+    [email, navigate, page]
   );
 
   const pageSize = 10;

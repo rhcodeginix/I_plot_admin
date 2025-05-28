@@ -190,33 +190,6 @@ export const MyLeadsTable = () => {
       {
         accessorKey: "Broker",
         header: "Broker",
-        // cell: ({ row }) => {
-        //   const [leverandorData, setLeverandorData] = useState<any>(null);
-
-        //   useEffect(() => {
-        //     const fetchData = async () => {
-        //       const data = await getData(row.original.Tildelt);
-        //       setLeverandorData(data);
-        //     };
-        //     fetchData();
-        //   }, [row.original.supplierId]);
-
-        //   return (
-        //     <div className="flex items-start gap-3 w-max">
-        //       <div className="w-8 h-8 rounded-full border border-gray1 bg-gray3 flex items-center justify-center">
-        //         {leverandorData?.Kontaktperson[0]}
-        //       </div>
-        //       <div>
-        //         <p className="font-medium text-black text-sm mb-[2px]">
-        //           {leverandorData?.Kontaktperson}
-        //         </p>
-        //         <p className="text-xs text-gray">
-        //           {leverandorData?.KontaktpersonEPost}
-        //         </p>
-        //       </div>
-        //     </div>
-        //   );
-        // },
         cell: ({ row }) => <BrokerCell id={row.original.id} />,
       },
       {
@@ -273,7 +246,7 @@ export const MyLeadsTable = () => {
         ),
       },
     ],
-    [email, navigate]
+    [email, navigate, page]
   );
 
   const pageSize = 10;

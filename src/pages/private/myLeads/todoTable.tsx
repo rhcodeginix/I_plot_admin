@@ -29,6 +29,7 @@ import { db } from "../../../config/firebaseConfig";
 import { Link, useNavigate } from "react-router-dom";
 import {
   convertToFullDateString,
+  fetchAdminDataByEmail,
   // fetchSupplierData,
   formatDateOnly,
   formatTimestamp,
@@ -83,6 +84,21 @@ export const TODOTable = () => {
   );
 
   const email = localStorage.getItem("Iplot_admin");
+  const [LoginUserId, setLoginUserId] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+
+      if (data) {
+        if (data?.id) {
+          setLoginUserId(data?.id);
+        }
+      }
+    };
+
+    getData();
+  }, []);
 
   // const fetchLeadsData = async () => {
   //   setIsLoading(true);
@@ -163,6 +179,32 @@ export const TODOTable = () => {
   //     const resolvedLeads = await Promise.all(leadsWithFollowupsPromises);
   //     const leadsWithFollowups: any = resolvedLeads.filter(Boolean);
 
+  //     const getTimestamp = (item: any): number => {
+  //       const updatedAt = item.followups?.updatedAt;
+
+  //       if (typeof updatedAt === "string") {
+  //         const [datePart, timePart] = updatedAt
+  //           .split("|")
+  //           .map((s: string) => s.trim());
+  //         const [day, monthName, year] = datePart.split(" ");
+  //         const engMonth = monthMap[monthName.toLowerCase()] || monthName;
+
+  //         const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+  //         const parsed = new Date(dateStr).getTime();
+  //         return isNaN(parsed) ? 0 : parsed;
+  //       } else if (updatedAt?.toMillis) {
+  //         return updatedAt.toMillis();
+  //       } else {
+  //         return item.followups?.date?.seconds
+  //           ? item.followups.date.seconds * 1000
+  //           : 0;
+  //       }
+  //     };
+
+  //     leadsWithFollowups.sort(
+  //       (a: any, b: any) => getTimestamp(b) - getTimestamp(a)
+  //     );
+
   //     setLeads(leadsWithFollowups);
   //   } catch (error) {
   //     console.error("Error fetching leads with followups:", error);
@@ -181,11 +223,40 @@ export const TODOTable = () => {
         )
       );
 
-      const leadsWithFollowupsPromises = leadsSnapshot.docs.map(
-        async (leadDoc) => {
-          const leadId = leadDoc.id;
-          const leadData = leadDoc.data();
+      const filterLeadsPromises = leadsSnapshot.docs.map(async (leadDoc) => {
+        const leadId = leadDoc.id;
+        const leadData = leadDoc.data();
 
+        const houseRef = collection(
+          db,
+          "leads_from_supplier",
+          leadId,
+          "preferred_house_model"
+        );
+        const houseSnapshot = await getDocs(houseRef);
+
+        const house: any = houseSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const isAssignedToUser = house.some((hou: any) => {
+          return String(hou?.Tildelt) === String(LoginUserId);
+        });
+
+        if (isAssignedToUser) {
+          return { leadId, leadData };
+        } else {
+          return null;
+        }
+      });
+
+      const resolvedFilteredLeads: any = await Promise.all(filterLeadsPromises);
+
+      const filteredLeadsOnly: any = resolvedFilteredLeads.filter(Boolean);
+
+      const leadsWithFollowupsPromises = filteredLeadsOnly.map(
+        async ({ leadId, leadData }: any) => {
           const followupsRef = collection(
             db,
             "leads_from_supplier",
@@ -209,7 +280,6 @@ export const TODOTable = () => {
                   const [day, monthName, year] = datePart.split(" ");
                   const engMonth =
                     monthMap[monthName.toLowerCase()] || monthName;
-
                   const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
                   const parsed = new Date(dateStr).getTime();
                   return isNaN(parsed) ? 0 : parsed;
@@ -231,18 +301,24 @@ export const TODOTable = () => {
               followups: lastFollowup,
             };
           } else if (followups.length === 1) {
-            const f: any = followups[0];
-            if (f.Hurtigvalg !== "initial" && f.type !== "initial") {
-              return {
-                id: leadId,
-                ...leadData,
-                followups: followups[0],
-              };
-            } else {
-              return null;
-            }
+            // const f: any = followups[0];
+            // if (f.Hurtigvalg !== "initial" && f.type !== "initial") {
+            return {
+              id: leadId,
+              ...leadData,
+              followups: followups[0],
+            };
+            // }
+            // else {
+            //   return null;
+            // }
           } else {
-            return null;
+            // return null;
+            return {
+              id: leadId,
+              ...leadData,
+              followups: [],
+            };
           }
         }
       );
@@ -250,6 +326,7 @@ export const TODOTable = () => {
       const resolvedLeads = await Promise.all(leadsWithFollowupsPromises);
       const leadsWithFollowups: any = resolvedLeads.filter(Boolean);
 
+      // Optional final sorting
       const getTimestamp = (item: any): number => {
         const updatedAt = item.followups?.updatedAt;
 
@@ -259,7 +336,6 @@ export const TODOTable = () => {
             .map((s: string) => s.trim());
           const [day, monthName, year] = datePart.split(" ");
           const engMonth = monthMap[monthName.toLowerCase()] || monthName;
-
           const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
           const parsed = new Date(dateStr).getTime();
           return isNaN(parsed) ? 0 : parsed;
@@ -317,8 +393,10 @@ export const TODOTable = () => {
   }, [leads, searchTerm, selectedDate1, selectedDateRange]);
 
   useEffect(() => {
-    fetchLeadsData();
-  }, []);
+    if (LoginUserId) {
+      fetchLeadsData();
+    }
+  }, [LoginUserId]);
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [

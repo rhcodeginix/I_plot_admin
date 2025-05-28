@@ -24,6 +24,14 @@ import {
 import DateTimePickerComponent from "../../../components/ui/datetimepicker";
 import { TextArea } from "../../../components/ui/textarea";
 import { Input } from "../../../components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 const formSchema = z.object({
   date: z.coerce.date({
@@ -155,7 +163,7 @@ export const AddFollowupForm: React.FC<{
   return (
     <>
       <h3 className="text-lg md:text-xl desktop:text-2xl mb-4 text-darkBlack font-semibold">
-        Legg til oppfølging
+        Legg til ny oppfølgning
       </h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
@@ -176,18 +184,53 @@ export const AddFollowupForm: React.FC<{
                       </p>
                       <FormControl>
                         <div className="relative">
-                          <Input
-                            placeholder="Skriv inn Tittel"
-                            {...field}
-                            className={`bg-white rounded-[8px] border text-black
+                          {SelectHistoryValue ? (
+                            <Input
+                              placeholder="Hva gjelder det?"
+                              {...field}
+                              className={`bg-white rounded-[8px] border text-black
                                           ${
                                             fieldState?.error
                                               ? "border-red"
                                               : "border-gray1"
                                           } `}
-                            type="text"
-                            disable={SelectHistoryValue}
-                          />
+                              type="text"
+                              disable={SelectHistoryValue}
+                            />
+                          ) : (
+                            <Select
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                              }}
+                              value={field.value}
+                            >
+                              <SelectTrigger
+                                className={`bg-white rounded-[8px] border text-black
+                              ${
+                                fieldState?.error
+                                  ? "border-red"
+                                  : "border-gray1"
+                              } `}
+                              >
+                                <SelectValue placeholder="Select Leverandører" />
+                              </SelectTrigger>
+                              <SelectContent className="bg-white">
+                                <SelectGroup>
+                                  <SelectItem value="Telefon">
+                                    Telefon
+                                  </SelectItem>
+                                  <SelectItem value="Møte">Møte</SelectItem>
+                                  <SelectItem value="Videomøte">
+                                    Videomøte
+                                  </SelectItem>
+                                  <SelectItem value="Befaring">
+                                    Befaring
+                                  </SelectItem>
+                                  <SelectItem value="Annet">Annet</SelectItem>
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          )}
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -206,7 +249,7 @@ export const AddFollowupForm: React.FC<{
                           fieldState.error ? "text-red" : "text-black"
                         } mb-[6px] text-sm font-medium`}
                       >
-                        Book
+                        Sett oppfølgning til
                       </p>
                       <FormControl>
                         <div className="relative w-full">
@@ -218,7 +261,7 @@ export const AddFollowupForm: React.FC<{
                               }
                             }}
                             className="border border-gray1 rounded-lg px-[14px] py-[10px] w-full"
-                            placeholderText="Pick a date & time"
+                            placeholderText="Velg tidspunkt/frist"
                             dateFormat="dd.MM.yyyy | HH:mm"
                           />
                         </div>

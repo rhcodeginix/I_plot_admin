@@ -38,14 +38,24 @@ import MultiSelect from "../../../components/ui/multiSelect";
 import Modal from "../../../components/common/modal";
 import { AddFollowupForm } from "./addFollowUp";
 import { fetchHusmodellData as singleHouseModelData } from "../../../lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 const formSchema = z.object({
   Husmodell: z
     .array(z.string().min(1, { message: "Husmodell må spesifiseres." }))
-    .min(1, { message: "Minst én husmodell må velges." }),
+    .min(1, { message: "Minst én husmodell må velges." })
+    .optional(),
   City: z
     .array(z.string().min(1, { message: "Ønsket bygget i må spesifiseres." }))
-    .min(1, { message: "Minst én by må velges." }),
+    .min(1, { message: "Minst én by må velges." })
+    .optional(),
   Tildelt: z.string().min(1, { message: "Tildelt i must må spesifiseres." }),
 });
 export const monthMap: Record<string, string> = {
@@ -179,13 +189,13 @@ export const MyLeadsDetail = () => {
       if (email === "andre.finger@gmail.com") {
         // q = query(collection(db, "suppliers"));
         q = query(
-          collection(db, "suppliers"),
-          where("id", "==", "065f9498-6cdb-469b-8601-bb31114d7c95")
+          collection(db, "admin"),
+          where("supplier", "==", "065f9498-6cdb-469b-8601-bb31114d7c95")
         );
       } else {
         q = query(
-          collection(db, "suppliers"),
-          where("id", "==", String(permission))
+          collection(db, "admin"),
+          where("supplier", "==", String(permission))
         );
       }
 
@@ -279,6 +289,12 @@ export const MyLeadsDetail = () => {
         String(id)
       );
       const subDocSnap = await getDoc(subDocRef);
+      if (data.City === undefined) {
+        delete data.City;
+      }
+      if (data.Husmodell === undefined) {
+        delete data.Husmodell;
+      }
 
       if (subDocSnap.exists()) {
         await updateDoc(subDocRef, {
@@ -531,7 +547,7 @@ export const MyLeadsDetail = () => {
         </div>
         <div className="flex justify-end">
           <Button
-            text="Legg til oppfølging"
+            text="Legg til ny oppfølgning"
             className="border border-green2 bg-green2 text-white text-base rounded-[8px] h-[48px] font-medium relative px-[30px] py-[10px] flex items-center gap-2"
             type="button"
             onClick={() => {
@@ -617,8 +633,9 @@ export const MyLeadsDetail = () => {
                     )}
                   />
                 </div>
-                <div className="col-span-2">
-                  <div className="flex items-center gap-3">
+                {/* <div className="col-span-2"> */}
+                <div className="">
+                  {/* <div className="flex items-center gap-3">
                     <span className="text-gray text-xs font-medium">
                       Tildelt:
                     </span>
@@ -627,7 +644,7 @@ export const MyLeadsDetail = () => {
                       suppliers.map((sup: any, index) => {
                         return (
                           <Button
-                            text={`+ ${sup?.Kontaktperson}`}
+                            text={`+ ${sup?.f_name} ${sup?.l_name}`}
                             className={`border-2 border-purple text-xs rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2 ${
                               form.watch("Tildelt") === sup?.id
                                 ? "bg-purple text-white"
@@ -646,7 +663,59 @@ export const MyLeadsDetail = () => {
                     <div className="text-red text-sm mt-2">
                       {form.formState.errors.Tildelt?.message}
                     </div>
-                  )}
+                  )} */}
+
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="Tildelt"
+                      render={({ field, fieldState }) => (
+                        <FormItem>
+                          <p
+                            className={`${
+                              fieldState.error ? "text-red" : "text-black"
+                            } mb-[6px] text-sm font-medium`}
+                          >
+                            Tildelt
+                          </p>
+                          <FormControl>
+                            <div className="relative">
+                              <Select
+                                onValueChange={(value) => {
+                                  field.onChange(value);
+                                }}
+                                value={field.value}
+                              >
+                                <SelectTrigger
+                                  className={`bg-white rounded-[8px] border text-black
+                              ${
+                                fieldState?.error
+                                  ? "border-red"
+                                  : "border-gray1"
+                              } `}
+                                >
+                                  <SelectValue placeholder="Select Leverandører" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white">
+                                  <SelectGroup>
+                                    {suppliers?.map((sup: any, index) => {
+                                      return (
+                                        <SelectItem value={sup?.id} key={index}>
+                                          {/* {sup?.company_name} */}
+                                          {sup?.f_name} {sup?.l_name}
+                                        </SelectItem>
+                                      );
+                                    })}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="flex justify-end w-full gap-5 items-center mt-8">

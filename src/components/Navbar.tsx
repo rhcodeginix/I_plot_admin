@@ -177,20 +177,19 @@ export const Navbar: React.FC = () => {
               Brukeradministrasjon
             </Link>
           )}
-          {email === "andre.finger@gmail.com" &&
-            (!Role || (Role && Role !== "Bankansvarlig")) && (
-              <Link
-                to={"/my-leads"}
-                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
-                  currentPath === "/my-leads" ||
-                  currentPath.startsWith("/my-leads-details/")
-                    ? "bg-lightPurple text-primary"
-                    : "text-black"
-                }`}
-              >
-                Mine leads
-              </Link>
-            )}
+          {email && (!Role || (Role && Role !== "Bankansvarlig")) && (
+            <Link
+              to={"/my-leads"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/my-leads" ||
+                currentPath.startsWith("/my-leads-details/")
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Mine leads
+            </Link>
+          )}
           {Role && Role !== "Bankansvarlig" && (
             <Link
               to={"/agent-leads"}
@@ -370,21 +369,20 @@ export const Navbar: React.FC = () => {
                 Brukeradministrasjon
               </Link>
             )}
-            {email === "andre.finger@gmail.com" &&
-              (!Role || (Role && Role !== "Bankansvarlig")) && (
-                <Link
-                  to={"/my-leads"}
-                  className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                    currentPath === "/my-leads" ||
-                    currentPath.startsWith("/my-leads-details/")
-                      ? "bg-lightPurple text-primary"
-                      : "text-black"
-                  }`}
-                  onClick={toggleDrawer}
-                >
-                  Mine leads
-                </Link>
-              )}
+            {email && (!Role || (Role && Role !== "Bankansvarlig")) && (
+              <Link
+                to={"/my-leads"}
+                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  currentPath === "/my-leads" ||
+                  currentPath.startsWith("/my-leads-details/")
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+                onClick={toggleDrawer}
+              >
+                Mine leads
+              </Link>
+            )}
             {Role && Role !== "Bankansvarlig" && (
               <Link
                 to={"/agent-leads"}

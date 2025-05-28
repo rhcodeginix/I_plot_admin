@@ -11,7 +11,6 @@ import Ic_chevron_right from "../../../assets/images/Ic_chevron_right.svg";
 import Ic_check_green_icon from "../../../assets/images/Ic_check_green_icon.svg";
 import Img_line_bg from "../../../assets/images/Img_line_bg.png";
 import { formatDateToDDMMYYYY } from "../../../lib/utils";
-// import GoogleMapComponent from "../../../components/ui/map";
 import Eierinformasjon from "../plot/Eierinformasjon";
 import NorkartMap from "../../../components/map";
 
@@ -396,7 +395,7 @@ export const PropertyDetail = () => {
       </div>
       <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
         <div
-          className="p-6 rounded-lg"
+          className="p-4 md:p-6 rounded-lg"
           style={{
             boxShadow: "0px 2px 4px -2px #1018280F, 0px 4px 8px -2px #1018281A",
           }}
@@ -415,8 +414,8 @@ export const PropertyDetail = () => {
             )}
           </div>
           <div className={`mt-6 ${isOpen ? "block" : "hidden"}`}>
-            <div className="flex gap-6 justify-between">
-              <div className="grid grid-cols-3 gap-6">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
                   <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Tomteopplysninger
@@ -882,7 +881,7 @@ export const PropertyDetail = () => {
                   </div>
                 </div>
               </div>
-              <div className="rounded-[12px] overflow-hidden w-[407px]">
+              <div className="rounded-[12px] overflow-hidden h-[300px] md:h-full w-full md:w-[407px]">
                 {loading ? (
                   <div
                     className="w-full h-full rounded-md custom-shimmer"

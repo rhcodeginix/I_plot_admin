@@ -1,7 +1,7 @@
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../../config/firebaseConfig";
-import { fetchSupplierData } from "../../../lib/utils";
+import { fetchAdminData } from "../../../lib/utils";
 
 export const BrokerCell: React.FC<{ id: string }> = ({ id }) => {
   const [data, setData] = useState<any>(null);
@@ -34,9 +34,9 @@ export const BrokerCell: React.FC<{ id: string }> = ({ id }) => {
       return;
     }
     const getData = async () => {
-      const SupplierData: any = await fetchSupplierData(String(data?.Tildelt));
-      if (SupplierData) {
-        setFinalData(SupplierData);
+      const brokerData: any = await fetchAdminData(String(data?.Tildelt));
+      if (brokerData) {
+        setFinalData(brokerData);
       }
     };
 
@@ -48,13 +48,13 @@ export const BrokerCell: React.FC<{ id: string }> = ({ id }) => {
       {finalData ? (
         <div className="flex items-center gap-3 w-max">
           <div className="w-8 h-8 rounded-full border border-gray1 bg-gray3 flex items-center justify-center">
-            {finalData?.Kontaktperson[0]}
+            {finalData?.f_name[0]}
           </div>
           <div>
             <p className="font-medium text-black text-sm mb-[2px]">
-              {finalData?.Kontaktperson}
+              {finalData?.f_name} {finalData?.l_name}
             </p>
-            <p className="text-xs text-gray">{finalData?.KontaktpersonEPost}</p>
+            <p className="text-xs text-gray">{finalData?.email}</p>
           </div>
         </div>
       ) : (

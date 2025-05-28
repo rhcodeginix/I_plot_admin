@@ -4,6 +4,7 @@ import { TODOTable } from "./todoTable";
 
 export const MyLeads = () => {
   const [activeTab, setActiveTab] = useState<"Lead" | "TODO">("Lead");
+  const email: string | null = localStorage.getItem("Iplot_admin");
 
   return (
     <>
@@ -12,19 +13,21 @@ export const MyLeads = () => {
           Leads for Fjellheimhytta
         </h1>
         <div className="flex gap-1.5">
-          {["Lead", "TODO"].filter(Boolean).map((tab: any) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-2 md:px-4 py-2 text-sm font-medium ${
-                activeTab === tab
-                  ? "border-b-2 border-purple text-purple"
-                  : "text-gray-500"
-              }`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
+          {["Lead", email && email !== "andre.finger@gmail.com" && "TODO"]
+            .filter(Boolean)
+            .map((tab: any) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-2 md:px-4 py-2 text-sm font-medium ${
+                  activeTab === tab
+                    ? "border-b-2 border-purple text-purple"
+                    : "text-gray-500"
+                }`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
         </div>
       </div>
       {activeTab === "Lead" && <MyLeadsTable />}

@@ -24,7 +24,15 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import Ic_search from "../../../assets/images/Ic_search.svg";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  collectionGroup,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -213,65 +221,172 @@ export const TODOTable = () => {
   //   }
   // };
 
+  // const fetchLeadsData = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const leadsSnapshot = await getDocs(
+  //       query(
+  //         collection(db, "leads_from_supplier"),
+  //         orderBy("updatedAt", "desc")
+  //       )
+  //     );
+
+  //     const filterLeadsPromises = leadsSnapshot.docs.map(async (leadDoc) => {
+  //       const leadId = leadDoc.id;
+  //       const leadData = leadDoc.data();
+
+  //       const houseRef = collection(
+  //         db,
+  //         "leads_from_supplier",
+  //         leadId,
+  //         "preferred_house_model"
+  //       );
+  //       const houseSnapshot = await getDocs(houseRef);
+
+  //       const house: any = houseSnapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+
+  //       const isAssignedToUser = house.some((hou: any) => {
+  //         return String(hou?.Tildelt) === String(LoginUserId);
+  //       });
+
+  //       if (isAssignedToUser) {
+  //         return { leadId, leadData };
+  //       } else {
+  //         return null;
+  //       }
+  //     });
+
+  //     const resolvedFilteredLeads: any = await Promise.all(filterLeadsPromises);
+
+  //     const filteredLeadsOnly: any = resolvedFilteredLeads.filter(Boolean);
+
+  //     const leadsWithFollowupsPromises = filteredLeadsOnly.map(
+  //       async ({ leadId, leadData }: any) => {
+  //         const followupsRef = collection(
+  //           db,
+  //           "leads_from_supplier",
+  //           leadId,
+  //           "followups"
+  //         );
+  //         const followupsSnapshot = await getDocs(followupsRef);
+
+  //         const followups = followupsSnapshot.docs.map((doc) => ({
+  //           id: doc.id,
+  //           ...doc.data(),
+  //         }));
+
+  //         if (followups.length > 1) {
+  //           const sortedFollowups = [...followups].sort((a: any, b: any) => {
+  //             const getTimestamp = (item: any): number => {
+  //               if (typeof item.updatedAt === "string") {
+  //                 const [datePart, timePart] = item.updatedAt
+  //                   .split("|")
+  //                   .map((s: string) => s.trim());
+  //                 const [day, monthName, year] = datePart.split(" ");
+  //                 const engMonth =
+  //                   monthMap[monthName.toLowerCase()] || monthName;
+  //                 const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+  //                 const parsed = new Date(dateStr).getTime();
+  //                 return isNaN(parsed) ? 0 : parsed;
+  //               } else if (item.updatedAt?.toMillis) {
+  //                 return item.updatedAt.toMillis();
+  //               } else {
+  //                 return item.date?.seconds ? item.date.seconds * 1000 : 0;
+  //               }
+  //             };
+
+  //             return getTimestamp(b) - getTimestamp(a);
+  //           });
+
+  //           const lastFollowup = sortedFollowups[0];
+
+  //           return {
+  //             id: leadId,
+  //             ...leadData,
+  //             followups: lastFollowup,
+  //           };
+  //         } else if (followups.length === 1) {
+  //           return {
+  //             id: leadId,
+  //             ...leadData,
+  //             followups: followups[0],
+  //           };
+  //         } else {
+  //           return {
+  //             id: leadId,
+  //             ...leadData,
+  //             followups: [],
+  //           };
+  //         }
+  //       }
+  //     );
+
+  //     const resolvedLeads = await Promise.all(leadsWithFollowupsPromises);
+  //     const leadsWithFollowups: any = resolvedLeads.filter(Boolean);
+
+  //     const getTimestamp = (item: any): number => {
+  //       const updatedAt = item.followups?.updatedAt;
+
+  //       if (typeof updatedAt === "string") {
+  //         const [datePart, timePart] = updatedAt
+  //           .split("|")
+  //           .map((s: string) => s.trim());
+  //         const [day, monthName, year] = datePart.split(" ");
+  //         const engMonth = monthMap[monthName.toLowerCase()] || monthName;
+  //         const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+  //         const parsed = new Date(dateStr).getTime();
+  //         return isNaN(parsed) ? 0 : parsed;
+  //       } else if (updatedAt?.toMillis) {
+  //         return updatedAt.toMillis();
+  //       } else {
+  //         return item.followups?.date?.seconds
+  //           ? item.followups.date.seconds * 1000
+  //           : 0;
+  //       }
+  //     };
+
+  //     leadsWithFollowups.sort(
+  //       (a: any, b: any) => getTimestamp(b) - getTimestamp(a)
+  //     );
+
+  //     setLeads(leadsWithFollowups);
+  //   } catch (error) {
+  //     console.error("Error fetching leads with followups:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const fetchLeadsData = async () => {
     setIsLoading(true);
     try {
-      const leadsSnapshot = await getDocs(
+      const assignedModelsSnapshot = await getDocs(
         query(
-          collection(db, "leads_from_supplier"),
-          orderBy("updatedAt", "desc")
+          collectionGroup(db, "preferred_house_model"),
+          where("Tildelt", "==", String(LoginUserId))
         )
       );
 
-      const filterLeadsPromises = leadsSnapshot.docs.map(async (leadDoc) => {
-        const leadId = leadDoc.id;
-        const leadData = leadDoc.data();
+      const leadIds = Array.from(
+        new Set(
+          assignedModelsSnapshot.docs.map((doc) => doc.ref.parent.parent?.id)
+        )
+      );
 
-        const houseRef = collection(
-          db,
-          "leads_from_supplier",
-          leadId,
-          "preferred_house_model"
-        );
-        const houseSnapshot = await getDocs(houseRef);
+      const leadDocs: any = await Promise.all(
+        leadIds.map((leadId) =>
+          getDocs(
+            collection(db, "leads_from_supplier", String(leadId), "followups")
+          ).then((followupsSnapshot) => {
+            const followups = followupsSnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
 
-        const house: any = houseSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        const isAssignedToUser = house.some((hou: any) => {
-          return String(hou?.Tildelt) === String(LoginUserId);
-        });
-
-        if (isAssignedToUser) {
-          return { leadId, leadData };
-        } else {
-          return null;
-        }
-      });
-
-      const resolvedFilteredLeads: any = await Promise.all(filterLeadsPromises);
-
-      const filteredLeadsOnly: any = resolvedFilteredLeads.filter(Boolean);
-
-      const leadsWithFollowupsPromises = filteredLeadsOnly.map(
-        async ({ leadId, leadData }: any) => {
-          const followupsRef = collection(
-            db,
-            "leads_from_supplier",
-            leadId,
-            "followups"
-          );
-          const followupsSnapshot = await getDocs(followupsRef);
-
-          const followups = followupsSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-
-          if (followups.length > 1) {
-            const sortedFollowups = [...followups].sort((a: any, b: any) => {
+            followups.sort((a, b) => {
               const getTimestamp = (item: any): number => {
                 if (typeof item.updatedAt === "string") {
                   const [datePart, timePart] = item.updatedAt
@@ -281,80 +396,52 @@ export const TODOTable = () => {
                   const engMonth =
                     monthMap[monthName.toLowerCase()] || monthName;
                   const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
-                  const parsed = new Date(dateStr).getTime();
-                  return isNaN(parsed) ? 0 : parsed;
+                  return new Date(dateStr).getTime();
                 } else if (item.updatedAt?.toMillis) {
                   return item.updatedAt.toMillis();
                 } else {
                   return item.date?.seconds ? item.date.seconds * 1000 : 0;
                 }
               };
-
               return getTimestamp(b) - getTimestamp(a);
             });
 
-            const lastFollowup = sortedFollowups[0];
+            return getDoc(doc(db, "leads_from_supplier", String(leadId))).then(
+              (leadDoc) => ({
+                id: String(leadId),
+                ...leadDoc.data(),
+                followups: followups[0] || [],
+              })
+            );
+          })
+        )
+      );
 
-            return {
-              id: leadId,
-              ...leadData,
-              followups: lastFollowup,
-            };
-          } else if (followups.length === 1) {
-            // const f: any = followups[0];
-            // if (f.Hurtigvalg !== "initial" && f.type !== "initial") {
-            return {
-              id: leadId,
-              ...leadData,
-              followups: followups[0],
-            };
-            // }
-            // else {
-            //   return null;
-            // }
+      leadDocs.sort((a: any, b: any) => {
+        const getTimestamp = (item: any): number => {
+          const updatedAt = item.followups?.updatedAt;
+          if (typeof updatedAt === "string") {
+            const [datePart, timePart] = updatedAt
+              .split("|")
+              .map((s: string) => s.trim());
+            const [day, monthName, year] = datePart.split(" ");
+            const engMonth = monthMap[monthName.toLowerCase()] || monthName;
+            const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+            return new Date(dateStr).getTime();
+          } else if (updatedAt?.toMillis) {
+            return updatedAt.toMillis();
           } else {
-            // return null;
-            return {
-              id: leadId,
-              ...leadData,
-              followups: [],
-            };
+            return item.followups?.date?.seconds
+              ? item.followups.date.seconds * 1000
+              : 0;
           }
-        }
-      );
+        };
+        return getTimestamp(b) - getTimestamp(a);
+      });
 
-      const resolvedLeads = await Promise.all(leadsWithFollowupsPromises);
-      const leadsWithFollowups: any = resolvedLeads.filter(Boolean);
-
-      // Optional final sorting
-      const getTimestamp = (item: any): number => {
-        const updatedAt = item.followups?.updatedAt;
-
-        if (typeof updatedAt === "string") {
-          const [datePart, timePart] = updatedAt
-            .split("|")
-            .map((s: string) => s.trim());
-          const [day, monthName, year] = datePart.split(" ");
-          const engMonth = monthMap[monthName.toLowerCase()] || monthName;
-          const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
-          const parsed = new Date(dateStr).getTime();
-          return isNaN(parsed) ? 0 : parsed;
-        } else if (updatedAt?.toMillis) {
-          return updatedAt.toMillis();
-        } else {
-          return item.followups?.date?.seconds
-            ? item.followups.date.seconds * 1000
-            : 0;
-        }
-      };
-
-      leadsWithFollowups.sort(
-        (a: any, b: any) => getTimestamp(b) - getTimestamp(a)
-      );
-
-      setLeads(leadsWithFollowups);
+      setLeads(leadDocs);
     } catch (error) {
-      console.error("Error fetching leads with followups:", error);
+      console.error("Error fetching fast leads:", error);
     } finally {
       setIsLoading(false);
     }

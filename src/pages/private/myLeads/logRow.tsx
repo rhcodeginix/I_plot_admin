@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Pencil } from "lucide-react";
-import { doc, updateDoc } from "firebase/firestore";
+import { Timestamp, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 
 type LogItemProps = {
@@ -41,6 +41,10 @@ export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
       await updateDoc(logDocRef, {
         notat: editedNote,
         updatedAt: formattedDateTime,
+      });
+
+      await updateDoc(doc(db, "leads_from_supplier", String(leadId)), {
+        updatedAt: Timestamp.now(),
       });
       setIsEditing(false);
       setEditedNote("");

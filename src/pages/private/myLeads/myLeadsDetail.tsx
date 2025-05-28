@@ -22,6 +22,7 @@ import {
 } from "../../../components/ui/form";
 import Button from "../../../components/common/button";
 import {
+  Timestamp,
   collection,
   doc,
   getDoc,
@@ -304,6 +305,9 @@ export const MyLeadsDetail = () => {
         toast.success("Preferred house info updated.", {
           position: "top-right",
         });
+        await updateDoc(doc(db, "leads_from_supplier", String(id)), {
+          updatedAt: Timestamp.now(),
+        });
         navigate("/my-leads");
       } else {
         await setDoc(subDocRef, {
@@ -313,6 +317,9 @@ export const MyLeadsDetail = () => {
         });
         toast.success("Preferred house info created.", {
           position: "top-right",
+        });
+        await updateDoc(doc(db, "leads_from_supplier", String(id)), {
+          updatedAt: Timestamp.now(),
         });
         navigate("/my-leads");
       }

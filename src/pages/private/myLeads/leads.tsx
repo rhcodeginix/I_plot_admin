@@ -228,8 +228,8 @@ export const MyLeadsTable = () => {
         ),
       },
       {
-        accessorKey: "notaterFørsteSamtale",
-        header: "notaterFørsteSamtale",
+        accessorKey: "Siste aktivitet",
+        header: "Siste aktivitet",
         cell: ({ row }) => (
           <p className="text-sm font-semibold text-black w-[500px]">
             {row.original.leadData?.notaterFørsteSamtale}

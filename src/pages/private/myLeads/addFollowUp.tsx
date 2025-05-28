@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import { db } from "../../../config/firebaseConfig";
 import { useLocation } from "react-router-dom";
 import {
+  Timestamp,
   addDoc,
   collection,
   doc,
@@ -135,6 +136,11 @@ export const AddFollowupForm: React.FC<{
           createdAt: formattedDateTime,
           updatedAt: formattedDateTime,
         });
+
+        await updateDoc(doc(db, "leads_from_supplier", String(id)), {
+          updatedAt: Timestamp.now(),
+        });
+
         await fetchLogs();
         await fetchHusmodellData();
         handlePopup();

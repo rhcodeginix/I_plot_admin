@@ -77,7 +77,7 @@ export const Plot = () => {
             row.original?.CadastreDataFromApi?.presentationAddressApi?.response
               ?.item?.formatted;
           return (
-            <p className="font-semibold text-sm text-darkBlack">
+            <p className="font-semibold text-sm text-darkBlack w-max">
               {address?.line1} {address?.line2}
             </p>
           );
@@ -87,7 +87,7 @@ export const Plot = () => {
         accessorKey: "kommunenummer",
         header: "Kommunenummer",
         cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black">
+          <p className="text-sm font-semibold text-black w-max">
             {row.original.lamdaDataFromApi?.searchParameters?.kommunenummer}
           </p>
         ),
@@ -96,7 +96,7 @@ export const Plot = () => {
         accessorKey: "bruksnummer",
         header: "Bruksnummer",
         cell: ({ row }) => (
-          <p className="text-sm text-darkBlack">
+          <p className="text-sm text-darkBlack w-max">
             {row.original.lamdaDataFromApi?.searchParameters?.bruksnummer}
           </p>
         ),
@@ -105,7 +105,7 @@ export const Plot = () => {
         accessorKey: "gardsnummer",
         header: "Gardsnummer",
         cell: ({ row }) => (
-          <p className="text-sm text-darkBlack">
+          <p className="text-sm text-darkBlack w-max">
             {row.original.lamdaDataFromApi?.searchParameters?.gardsnummer}
           </p>
         ),
@@ -115,7 +115,7 @@ export const Plot = () => {
         header: "Plot size",
         cell: ({ row }) => (
           <div>
-            <p className="text-black text-sm mb-[2px]">
+            <p className="text-black text-sm mb-[2px] w-max">
               {
                 row.original.additionalData?.answer?.bya_calculations?.input
                   ?.plot_size
@@ -129,7 +129,7 @@ export const Plot = () => {
         header: "Antall eiendomsvisninger",
         cell: ({ row }) => (
           <div>
-            <p className="text-black text-sm mb-[2px]">
+            <p className="text-black text-sm mb-[2px] w-max">
               {row.original.view_count || 0}
             </p>
           </div>
@@ -139,14 +139,10 @@ export const Plot = () => {
         id: "action",
         header: "Action",
         cell: ({ row }) => (
-          <>
-            <div className="flex items-center justify-center gap-3">
-              <Eye
-                className="h-5 w-5 text-primary cursor-pointer"
-                onClick={() => navigate(`/se-plot/${row.original.id}`)}
-              />
-            </div>
-          </>
+          <Eye
+            className="h-5 w-5 text-primary cursor-pointer"
+            onClick={() => navigate(`/se-plot/${row.original.id}`)}
+          />
         ),
       },
     ],
@@ -185,10 +181,12 @@ export const Plot = () => {
   });
   return (
     <>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
-        <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">Alle tomter</h1>
+      <div className="p-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
+        <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
+          Alle tomter
+        </h1>
         <div>
-          <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+          <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 md:px-4 gap-2">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
               <img src={Ic_search} alt="search" />
               <input
@@ -199,11 +197,9 @@ export const Plot = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex gap-3 items-center">
-              <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
-                <img src={Ic_filter} alt="" />
-                <span className="text-black font-medium text-sm">Filter</span>
-              </div>
+            <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
+              <img src={Ic_filter} alt="" />
+              <span className="text-black font-medium text-sm">Filter</span>
             </div>
           </div>
           <div className="rounded-lg border border-gray2 shadow-shadow2 overflow-hidden">

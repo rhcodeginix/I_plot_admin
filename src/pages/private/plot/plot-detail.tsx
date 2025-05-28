@@ -185,7 +185,7 @@ export const PlotDetail = () => {
 
   return (
     <>
-      <div className="bg-lightPurple py-[20px] relative px-6">
+      <div className="bg-lightPurple py-4 md:py-5 relative px-4 md:px-6">
         <img
           src={Img_line_bg}
           alt="images"
@@ -193,7 +193,7 @@ export const PlotDetail = () => {
           style={{ zIndex: 1 }}
         />
         <div
-          className="flex items-center justify-between relative"
+          className="flex flex-col sm:flex-row sm:items-center justify-between relative gap-2"
           style={{ zIndex: 9 }}
         >
           <div>
@@ -203,11 +203,9 @@ export const PlotDetail = () => {
                 style={{ borderRadius: "8px" }}
               ></div>
             ) : (
-              <h2 className="text-black text-[32px] font-semibold mb-2">
-                {
-                  CadastreDataFromApi?.presentationAddressApi?.response?.item
-                    ?.formatted?.line1
-                }
+              <h2 className="text-black text-2xl md:text-[28px] desktop:text-[32px] font-semibold mb-2">
+                {CadastreDataFromApi?.presentationAddressApi?.response?.item
+                  ?.formatted?.line1 || data?.getAddress?.adressetekst}
               </h2>
             )}
             {loading ? (
@@ -216,15 +214,14 @@ export const PlotDetail = () => {
                 style={{ borderRadius: "8px" }}
               ></div>
             ) : (
-              <p className="text-gray text-xl">
-                {
-                  CadastreDataFromApi?.presentationAddressApi?.response?.item
-                    ?.formatted?.line2
-                }
+              <p className="text-gray text-base md:text-lg desktop:text-xl">
+                {CadastreDataFromApi?.presentationAddressApi?.response?.item
+                  ?.formatted?.line2 ||
+                  `${data?.getAddress?.kommunenummer} ${data?.getAddress?.kommunenavn}`}
               </p>
             )}
           </div>
-          <div className="flex items-center gap-[24px]">
+          <div className="flex items-center gap-3 md:gap-6">
             <div className="flex items-center gap-4">
               {loading ? (
                 <div
@@ -232,7 +229,7 @@ export const PlotDetail = () => {
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <div className="text-gray text-base">
+                <div className="text-gray text-sm md:text-base">
                   Gnr:{" "}
                   <span className="text-black font-semibold">
                     {lamdaDataFromApi?.searchParameters?.gardsnummer}
@@ -245,7 +242,7 @@ export const PlotDetail = () => {
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <div className="text-gray text-base">
+                <div className="text-gray text-sm md:text-base">
                   Bnr:{" "}
                   <span className="text-black font-semibold">
                     {lamdaDataFromApi?.searchParameters?.bruksnummer}
@@ -256,38 +253,40 @@ export const PlotDetail = () => {
           </div>
         </div>
       </div>
-      <div className="bg-[#125D56] py-5 relative px-6">
+      <div className="bg-[#125D56] py-5 relative px-4 md:px-6">
         {loading ? (
           <div
-            className="w-[300px] h-[30px] rounded-md custom-shimmer mb-2"
+            className="w-full h-[30px] rounded-md custom-shimmer mb-2"
             style={{ borderRadius: "8px" }}
           ></div>
         ) : (
-          <div className="flex gap-[70px] justify-between">
-            <div className="w-1/4 flex items-start gap-3">
+          <div className="flex flex-col sm:flex-row flex-wrap md:flex-nowrap gap-4 lg:gap-8 desktop:gap-[70px] justify-between">
+            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
               <img src={Ic_check_green_icon} alt="check" />
               <div className="flex flex-col gap-1">
-                <p className="text-white text-sm">Eiendommen er</p>
-                <p className="text-white text-base font-semibold">
+                <p className="text-white text-xs md:text-sm">Eiendommen er</p>
+                <p className="text-white text-sm md:text-base font-semibold">
                   ferdig regulert til boligformål
                 </p>
               </div>
             </div>
-            <div className="w-1/4 flex items-start gap-3">
+            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
               <img src={Ic_check_green_icon} alt="check" />
               <div className="flex flex-col gap-1">
-                <p className="text-white text-sm">Eiendommen har en</p>
-                <p className="text-white text-base font-semibold">
+                <p className="text-white text-xs md:text-sm">
+                  Eiendommen har en
+                </p>
+                <p className="text-white text-sm md:text-base font-semibold">
                   Utnyttelsesgrad på{" "}
                   {askData?.bya_calculations?.input?.bya_percentage}%
                 </p>
               </div>
             </div>
-            <div className="w-1/4 flex items-start gap-3">
+            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
               <img src={Ic_check_green_icon} alt="check" />
               <div className="flex flex-col gap-1">
-                <p className="text-white text-sm">Ekisterende BYA</p>
-                <p className="text-white text-base font-semibold">
+                <p className="text-white text-xs md:text-sm">Ekisterende BYA</p>
+                <p className="text-white text-sm md:text-base font-semibold">
                   Utnyttelsesgrad på{" "}
                   {(() => {
                     const data =
@@ -320,7 +319,7 @@ export const PlotDetail = () => {
                     }
                   })()}
                 </p>
-                <p className="text-white text-sm">
+                <p className="text-white text-xs md:text-sm">
                   Tilgjengelig BYA{" "}
                   {(() => {
                     const data =
@@ -355,16 +354,18 @@ export const PlotDetail = () => {
                 </p>
               </div>
             </div>
-            <div className="w-1/4 flex items-start gap-3">
+            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
               <img src={Ic_check_green_icon} alt="check" />
               <div className="flex flex-col gap-1">
-                <p className="text-white text-sm">Boligen kan ha en</p>
-                <p className="text-white text-base font-semibold">
+                <p className="text-white text-xs md:text-sm">
+                  Boligen kan ha en
+                </p>
+                <p className="text-white text-sm md:text-base font-semibold">
                   Grunnflate på{" "}
                   {askData?.bya_calculations?.results?.available_building_area}{" "}
                   m<sup>2</sup>
                 </p>
-                <p className="text-white text-sm">
+                <p className="text-white text-xs md:text-sm">
                   Tilgjengelig{" "}
                   {(() => {
                     const data =
@@ -400,7 +401,7 @@ export const PlotDetail = () => {
           </div>
         )}
       </div>
-      <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
+      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
         <div>
           <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold mb-3">
             Seerdetaljer
@@ -408,25 +409,31 @@ export const PlotDetail = () => {
           {viewerData?.length > 0 ? (
             <table
               className="border border-gray1 rounded-lg w-full"
-              cellPadding="10"
+              cellPadding="8"
             >
               <thead className="border border-gray1">
                 <tr>
-                  <th className="border border-gray1">Navn</th>
-                  <th className="border border-gray1">Siste visning</th>
-                  <th className="border border-gray1">Visningstall</th>
+                  <th className="border border-gray1 text-sm md:text-base">
+                    Navn
+                  </th>
+                  <th className="border border-gray1 text-sm md:text-base">
+                    Siste visning
+                  </th>
+                  <th className="border border-gray1 text-sm md:text-base">
+                    Visningstall
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {viewerData.map((viewer: any) => (
                   <tr key={viewer.id}>
-                    <td className="text-center text-gray border border-gray1">
+                    <td className="text-center text-gray border border-gray1 text-sm md:text-base">
                       {viewer.name}
                     </td>
-                    <td className="text-center text-gray border border-gray1">
+                    <td className="text-center text-gray border border-gray1 text-sm md:text-base">
                       {new Date(viewer.last_updated_date).toLocaleString()}
                     </td>
-                    <td className="text-center text-gray border border-gray1">
+                    <td className="text-center text-gray border border-gray1 text-sm md:text-base">
                       {viewer.view_count}
                     </td>
                   </tr>
@@ -438,7 +445,7 @@ export const PlotDetail = () => {
           )}
         </div>
         <div
-          className="p-6 rounded-lg"
+          className="p-4 md:p-6 rounded-lg"
           style={{
             boxShadow: "0px 2px 4px -2px #1018280F, 0px 4px 8px -2px #1018281A",
           }}
@@ -457,16 +464,18 @@ export const PlotDetail = () => {
             )}
           </div>
           <div className={`mt-6 ${isOpen ? "block" : "hidden"}`}>
-            <div className="flex gap-6 justify-between">
-              <div className="grid grid-cols-3 gap-6">
-                <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
+            <div className="flex flex-col desktop:flex-row gap-4 md:gap-6 desktop:gap-4 big:gap-6 justify-between">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 desktop:gap-4 big:gap-6">
+                <div className="bg-gray3 rounded-[8px] p-3 md:p-5 flex flex-col gap-3 md:gap-4">
                   <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Tomteopplysninger
                   </h2>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Areal beregnet</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Areal beregnet
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
                           ?.areal_beregnet ? (
                           <>
@@ -482,8 +491,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Etableringsårs dato</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Etableringsårs dato
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
                           ?.etableringsdato
                           ? formatDateToDDMMYYYY(
@@ -494,8 +505,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Sist oppdatert</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Sist oppdatert
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
                           ?.sist_oppdatert
                           ? formatDateToDDMMYYYY(
@@ -507,8 +520,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Tomtens totale BYA</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Tomtens totale BYA
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {askData?.bya_calculations?.results
                           ?.total_allowed_bya ? (
                           <>
@@ -524,8 +539,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Er registrert land</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Er registrert land
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .isRegisteredLand === "Ja" ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -537,8 +554,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Festenummer</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Festenummer
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
                           ?.festenummer
                           ? lamdaDataFromApi?.eiendomsInformasjon
@@ -548,14 +567,14 @@ export const PlotDetail = () => {
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
+                <div className="bg-gray3 rounded-[8px] p-3 md:p-5 flex flex-col gap-3 md:gap-4">
                   <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Kommunale data
                   </h2>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Kommune</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">Kommune</p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {
                           CadastreDataFromApi?.presentationAddressApi?.response
                             ?.item?.municipality?.municipalityName
@@ -563,8 +582,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Kommunenummer</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Kommunenummer
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.kommune_info
                           ?.kommunenr
                           ? lamdaDataFromApi?.eiendomsInformasjon?.kommune_info
@@ -573,8 +594,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Gårdsnummer</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Gårdsnummer
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.kommune_info
                           ?.gaardsnummer
                           ? lamdaDataFromApi?.eiendomsInformasjon?.kommune_info
@@ -583,8 +606,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Bruksnummer</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Bruksnummer
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.kommune_info
                           ?.bruksnummer
                           ? lamdaDataFromApi?.eiendomsInformasjon?.kommune_info
@@ -593,8 +618,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Seksjonsnummer</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Seksjonsnummer
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.kommune_info
                           ?.seksjonsnr
                           ? lamdaDataFromApi?.eiendomsInformasjon?.kommune_info
@@ -603,8 +630,8 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Fylke</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">Fylke</p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .municipality?.regionName
                           ? CadastreDataFromApi?.cadastreApi?.response?.item
@@ -614,14 +641,14 @@ export const PlotDetail = () => {
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
+                <div className="bg-gray3 rounded-[8px] p-3 md:p-5 flex flex-col gap-3 md:gap-4">
                   <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Eiendomsstatus
                   </h2>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Kan selges</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">Kan selges</p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .canBeSold === true ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -633,8 +660,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Kan belånes</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Kan belånes
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .canBeMortgaged === true ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -646,8 +675,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Har bygning</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Har bygning
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .hasBuilding === true ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -659,8 +690,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Har fritidsbolig</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Har fritidsbolig
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .hasHolidayHome === true ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -672,8 +705,8 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Har bolig</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">Har bolig</p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .hasHousing === true ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -686,16 +719,16 @@ export const PlotDetail = () => {
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
+                <div className="bg-gray3 rounded-[8px] p-3 md:p-5 flex flex-col gap-3 md:gap-4">
                   <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Parkeringsinformasjon
                   </h2>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">
+                      <p className="text-xs md:text-sm text-gray">
                         Parkering reservert plass
                       </p>
-                      <h5 className="text-base text-black font-medium">
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {askData?.bya_calculations?.results?.parking
                           ?.required_spaces ? (
                           <>
@@ -711,10 +744,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">
+                      <p className="text-xs md:text-sm text-gray">
                         Parkering område per plass
                       </p>
-                      <h5 className="text-base text-black font-medium">
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {askData?.bya_calculations?.results?.parking
                           ?.area_per_space ? (
                           <>
@@ -730,10 +763,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">
+                      <p className="text-xs md:text-sm text-gray">
                         Totalt parkeringsområde
                       </p>
-                      <h5 className="text-base text-black font-medium">
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {askData?.bya_calculations?.results?.parking
                           ?.total_parking_area ? (
                           <>
@@ -749,8 +782,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Parkering er usikker</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Parkering er usikker
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {askData?.bya_calculations?.results?.parking
                           ?.is_uncertain === true ? (
                           <img src={Ic_check} alt="check" />
@@ -761,14 +796,16 @@ export const PlotDetail = () => {
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
+                <div className="bg-gray3 rounded-[8px] p-3 md:p-5 flex flex-col gap-3 md:gap-4">
                   <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Ytterligere eiendomsforhold
                   </h2>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Har forurensning</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Har forurensning
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .hasSoilContamination === "Ja" ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -780,10 +817,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">
+                      <p className="text-xs md:text-sm text-gray">
                         Har aktive festegrunner
                       </p>
-                      <h5 className="text-base text-black font-medium">
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .hasActiveLeasedLand === "Ja" ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -795,10 +832,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">
+                      <p className="text-xs md:text-sm text-gray">
                         Inngår i samlet eiendom
                       </p>
-                      <h5 className="text-base text-black font-medium">
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .includedInTotalRealEstate === "Ja" ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -810,10 +847,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">
+                      <p className="text-xs md:text-sm text-gray">
                         Kulturminner registrert
                       </p>
-                      <h5 className="text-base text-black font-medium">
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.status
                           ?.kulturminner_registrert === "Ja" ||
                         lamdaDataFromApi?.eiendomsInformasjon?.status
@@ -825,8 +862,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Grunnforurensning</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Grunnforurensning
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.status
                           ?.grunnforurensning === "Ja" ||
                         lamdaDataFromApi?.eiendomsInformasjon?.status
@@ -839,14 +878,16 @@ export const PlotDetail = () => {
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray3 rounded-[8px] p-5 flex flex-col gap-4">
+                <div className="bg-gray3 rounded-[8px] p-3 md:p-5 flex flex-col gap-3 md:gap-4">
                   <h2 className="text-black text-sm md:text-base desktop:text-lg font-semibold flex items-center gap-2">
                     Spesielle registreringer
                   </h2>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Sammenslåtte tomter</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Sammenslåtte tomter
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {CadastreDataFromApi?.cadastreApi?.response?.item
                           .numberOfPlots === "Ja" ||
                         CadastreDataFromApi?.cadastreApi?.response?.item
@@ -858,8 +899,8 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Tinglyst</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">Tinglyst</p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
                           ?.tinglyst === "Ja" ||
                         lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
@@ -871,16 +912,16 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Ugyldig</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">Ugyldig</p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         <img src={Ic_check} alt="check" />
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">
+                      <p className="text-xs md:text-sm text-gray">
                         Oppmåling ikke fullført
                       </p>
-                      <h5 className="text-base text-black font-medium">
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.status
                           ?.oppmaling_ikke_fullfort === "Ja" ||
                         lamdaDataFromApi?.eiendomsInformasjon?.status
@@ -892,10 +933,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">
+                      <p className="text-xs md:text-sm text-gray">
                         Mangler grenseoppmerking
                       </p>
-                      <h5 className="text-base text-black font-medium">
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.status
                           ?.mangler_grensepunktmerking === "Ja" ||
                         lamdaDataFromApi?.eiendomsInformasjon?.status
@@ -907,8 +948,10 @@ export const PlotDetail = () => {
                       </h5>
                     </div>
                     <div className="flex items-center justify-between gap-1">
-                      <p className="text-sm text-gray">Under sammenslåing</p>
-                      <h5 className="text-base text-black font-medium">
+                      <p className="text-xs md:text-sm text-gray">
+                        Under sammenslåing
+                      </p>
+                      <h5 className="text-sm md:text-base text-black font-medium">
                         {lamdaDataFromApi?.eiendomsInformasjon?.status
                           ?.under_sammenslaing === "Ja" ||
                         (lamdaDataFromApi?.eiendomsInformasjon?.status
@@ -924,7 +967,7 @@ export const PlotDetail = () => {
                   </div>
                 </div>
               </div>
-              <div className="rounded-[12px] overflow-hidden w-[407px]">
+              <div className="rounded-[12px] overflow-hidden h-[300px] desktop:h-auto w-full desktop:w-[407px]">
                 {loading ? (
                   <div
                     className="w-full h-full rounded-md custom-shimmer"
@@ -945,13 +988,13 @@ export const PlotDetail = () => {
             </div>
           </div>
         </div>
-        <div className="w-full mt-[44px]">
+        <div className="w-full mt-8 md:mt-[44px]">
           <div className="flex border-b border-[#DDDDDD]">
             {tabs.map((tab: any) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-black border-b-[3px] text-sm md:text-base desktop:text-lg transition-colors duration-300 ${
+                className={`px-3 md:px-4 py-2 text-black border-b-[3px] text-sm md:text-base desktop:text-lg transition-colors duration-300 ${
                   activeTab === tab.id
                     ? "border-[#6941C6] font-semibold"
                     : "border-transparent"
@@ -961,32 +1004,32 @@ export const PlotDetail = () => {
               </button>
             ))}
           </div>
-          <div className="pt-8">
+          <div className="pt-5 md:pt-8">
             {activeTab === "Regulering" && (
               <>
                 <div className="relative">
-                  <div className="flex gap-[60px]">
+                  <div className="flex flex-col md:flex-row gap-6 md:gap-[44px] desktop:gap-[60px]">
                     {loading ? (
                       <div
                         className="w-1/2 h-[300px] rounded-md custom-shimmer"
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <div className="relative w-1/2">
+                      <div className="relative w-full md:w-1/2">
                         <div>
-                          <div className="flex justify-between items-center mb-6">
+                          <div className="flex justify-between items-center mb-4 md:mb-6">
                             <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
                               Reguleringsplan
                             </h2>
                             <img src={Ic_generelt} alt="images" />
                           </div>
-                          <div className="flex flex-col gap-3">
+                          <div className="flex flex-col gap-2 md:gap-3">
                             <>
                               {askData &&
                                 askData?.conclusion?.map(
                                   (a: any, index: number) => (
                                     <div
-                                      className="flex items-start gap-3 text-gray text-base"
+                                      className="flex items-start gap-2 md:gap-3 text-gray text-sm md:text-base"
                                       key={index}
                                     >
                                       <img src={Ic_check_true} alt="images" />
@@ -997,8 +1040,8 @@ export const PlotDetail = () => {
                             </>
                           </div>
                         </div>
-                        <div className="w-full flex flex-col gap-8 items-center mt-[55px]">
-                          <div className="rounded-[12px] overflow-hidden w-full relative border border-[#7D89B0] h-[590px]">
+                        <div className="w-full flex flex-col gap-4 md:gap-8 items-center mt-7 md:mt-[55px]">
+                          <div className="rounded-[12px] overflow-hidden w-full relative border border-[#7D89B0] h-[450px] md:h-[590px]">
                             {imgLoading && (
                               <div className="absolute inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10">
                                 <div className="spinner-border animate-spin border-t-4 border-b-4 border-blue-500 w-12 h-12 border-solid rounded-full"></div>
@@ -1101,7 +1144,7 @@ export const PlotDetail = () => {
                           </div>
                           <div className="relative w-full flex justify-center">
                             <div
-                              className="gap-8 flex overflow-x-auto overFlowScrollHidden"
+                              className="gap-4 md:gap-8 flex overflow-x-auto overFlowScrollHidden"
                               ref={scrollContainerRef}
                             >
                               {images.map((image, index) => (
@@ -1223,8 +1266,8 @@ export const PlotDetail = () => {
                         style={{ borderRadius: "8px" }}
                       ></div>
                     ) : (
-                      <div className="relative w-1/2">
-                        <div className="flex justify-between items-center mb-6">
+                      <div className="relative w-full md:w-1/2">
+                        <div className="flex justify-between items-center mb-4 md:mb-6">
                           <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
                             Kommuneplan for{" "}
                             {
@@ -1234,12 +1277,12 @@ export const PlotDetail = () => {
                           </h2>
                           <img src={Ic_generelt} alt="images" />
                         </div>
-                        <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-2 md:gap-3">
                           {askData &&
                             askData?.applicable_rules?.map(
                               (a: any, index: number) => (
                                 <div
-                                  className="flex items-start gap-3 text-gray text-base"
+                                  className="flex items-start gap-2 md:gap-3 text-gray text-sm md:text-base"
                                   key={index}
                                 >
                                   <img src={Ic_check_true} alt="images" />

@@ -118,7 +118,7 @@ export const HusleadsTable = () => {
         accessorKey: "kunde",
         header: "Kunde",
         cell: ({ row }) => (
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3 w-max">
             <div className="w-8 h-8 rounded-full border border-gray1 bg-gray3 flex items-center justify-center">
               {row.original.user.name[0]}
             </div>
@@ -135,7 +135,7 @@ export const HusleadsTable = () => {
         accessorKey: "husmodell",
         header: "Husmodell",
         cell: ({ row }) => (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-max">
             <img
               src={row.original.finalData.husmodell.Husdetaljer.photo}
               alt="Husmodell"
@@ -164,11 +164,11 @@ export const HusleadsTable = () => {
           }, [row.original.finalData.husmodell.Husdetaljer.Leverandører]);
 
           return (
-            <div>
+            <div className="w-[140px]">
               <img
                 src={leverandorData?.photo}
                 alt="leverandor"
-                className="h-5"
+                className="w-full"
               />
             </div>
           );
@@ -178,7 +178,7 @@ export const HusleadsTable = () => {
         accessorKey: "adresse",
         header: "Adresse",
         cell: ({ row }) => (
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3 w-max">
             <div className="w-8 h-8 rounded-full overflow-hidden">
               {row.original.finalData.plot.lamdaDataFromApi?.coordinates
                 ?.convertedCoordinates && (
@@ -211,7 +211,7 @@ export const HusleadsTable = () => {
         accessorKey: "leadSent",
         header: "Lead sendt",
         cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black">
+          <p className="text-sm font-semibold text-black w-max">
             {convertTimestamp(
               row.original.updatedAt?.seconds,
               row.original.updatedAt?.nanoseconds
@@ -223,7 +223,7 @@ export const HusleadsTable = () => {
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) => (
-          <span className="px-3 py-1 rounded-full bg-[#F1F2FF] text-[#02107A] text-xs font-semibold whitespace-nowrap">
+          <span className="px-3 py-1 rounded-full bg-[#F1F2FF] text-[#02107A] text-xs font-semibold whitespace-nowrap w-max">
             Lead sendt
           </span>
         ),
@@ -268,7 +268,7 @@ export const HusleadsTable = () => {
 
   return (
     <>
-      <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+      <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-2 gap-2 md:px-4">
         <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
           <img src={Ic_search} alt="search" />
           <input

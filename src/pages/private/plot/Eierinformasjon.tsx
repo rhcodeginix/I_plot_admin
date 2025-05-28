@@ -13,9 +13,9 @@ const Eierinformasjon: React.FC<{ data: any }> = ({ data }) => {
   }));
 
   return (
-    <div className="flex gap-6">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
       <div
-        className="w-1/3 p-5 rounded-lg h-max"
+        className="w-full lg:w-1/3 p-3 lg:p-5 rounded-lg h-max"
         style={{
           boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
         }}
@@ -25,13 +25,13 @@ const Eierinformasjon: React.FC<{ data: any }> = ({ data }) => {
         </h5>
         <EierinformasjonChart chartData={EierinformasjonData} />
       </div>
-      <div className="w-2/3">
-        <div className="grid grid-cols-2 gap-6">
+      <div className="w-full lg:w-2/3">
+        <div className="grid grid-cols-2 gap-4 lg:gap-6">
           {data &&
             data?.map((item: any, index: number) => {
               return (
                 <div
-                  className="p-5 rounded-lg flex flex-col gap-4"
+                  className="p-3 md:p-5 rounded-lg flex flex-col gap-2 lg:gap-4"
                   style={{
                     boxShadow:
                       "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
@@ -42,14 +42,16 @@ const Eierinformasjon: React.FC<{ data: any }> = ({ data }) => {
                     <h5 className="text-black text-sm md:text-base desktop:text-lg font-semibold mb-2">
                       ID: {item?.eierId}
                     </h5>
-                    <h6 className="text-black text-sm font-medium">
+                    <h6 className="text-black text-xs md:text-sm font-medium">
                       FØDSELSNUMMER (Code: {item?.personalNumberType?.code})
                     </h6>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <p className="text-gray text-xs mb-1">Eierandel</p>
-                      <h6 className="text-black text-sm font-medium">
+                      <p className="text-gray text-[10px] md:text-xs mb-1">
+                        Eierandel
+                      </p>
+                      <h6 className="text-black text-xs md:text-sm font-medium">
                         {calculateOwnership(item?.andel)}
                       </h6>
                     </div>

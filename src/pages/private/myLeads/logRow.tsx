@@ -55,17 +55,17 @@ export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
   };
 
   return (
-    <td className="px-4 py-6 text-sm text-black font-medium flex items-center gap-2 justify-between w-full">
+    <td className="px-3 md:px-4 py-3 md:py-6 text-xs md:text-sm text-black font-medium flex items-center gap-2 justify-between w-[600px] md:w-full">
       {isEditing ? (
         <>
           <input
             value={editedNote}
             onChange={(e) => setEditedNote(e.target.value)}
-            className="border border-gray2 rounded-lg focus-within:outline-none px-3 py-2 text-sm"
+            className="border border-gray2 rounded-lg focus-within:outline-none px-3 py-2 text-xs md:text-sm"
           />
           <button
             onClick={handleSave}
-            className="bg-purple text-white px-6 py-2 rounded"
+            className="bg-purple text-white px-3 md:px-6 py-2 rounded"
           >
             Save
           </button>

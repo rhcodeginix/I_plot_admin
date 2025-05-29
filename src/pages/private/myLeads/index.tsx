@@ -3,7 +3,9 @@ import { MyLeadsTable } from "./leads";
 import { TODOTable } from "./todoTable";
 
 export const MyLeads = () => {
-  const [activeTab, setActiveTab] = useState<"Lead" | "TODO">("Lead");
+  const [activeTab, setActiveTab] = useState<"Mine leads" | "Mine oppgaver">(
+    "Mine leads"
+  );
   const email: string | null = localStorage.getItem("Iplot_admin");
 
   return (
@@ -13,7 +15,10 @@ export const MyLeads = () => {
           Leads for Fjellheimhytta
         </h1>
         <div className="flex gap-1.5">
-          {["Lead", email && email !== "andre.finger@gmail.com" && "TODO"]
+          {[
+            "Mine leads",
+            email && email !== "andre.finger@gmail.com" && "Mine oppgaver",
+          ]
             .filter(Boolean)
             .map((tab: any) => (
               <button
@@ -30,8 +35,8 @@ export const MyLeads = () => {
             ))}
         </div>
       </div>
-      {activeTab === "Lead" && <MyLeadsTable />}
-      {activeTab === "TODO" && <TODOTable />}
+      {activeTab === "Mine leads" && <MyLeadsTable />}
+      {activeTab === "Mine oppgaver" && <TODOTable />}
     </>
   );
 };

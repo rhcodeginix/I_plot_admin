@@ -30,12 +30,12 @@ export const HouseModelCell: React.FC<{ id: string }> = ({ id }) => {
 
   const [finalData, setFinalData] = useState<any>(null);
   useEffect(() => {
-    if (!data?.Husmodell[0]) {
+    if (!data?.Husmodell?.[0]) {
       return;
     }
     const getData = async () => {
       const HouseData: any = await fetchHusmodellData(
-        String(data?.Husmodell[0])
+        String(data?.Husmodell?.[0])
       );
       if (HouseData && HouseData.Husdetaljer) {
         setFinalData(HouseData);

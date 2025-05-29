@@ -33,6 +33,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select";
+import {
+  InspectionPanel,
+  Mail,
+  Phone,
+  Video,
+  Infinity,
+  Shirt,
+} from "lucide-react";
 
 const formSchema = z.object({
   date: z.coerce.date({
@@ -189,7 +197,7 @@ export const AddFollowupForm: React.FC<{
                           fieldState.error ? "text-red" : "text-black"
                         } mb-[6px] text-sm font-medium`}
                       >
-                        Tittel
+                        Legg til ny aktivitet
                       </p>
                       <FormControl>
                         <div className="relative">
@@ -226,21 +234,45 @@ export const AddFollowupForm: React.FC<{
                                   : "border-gray1"
                               } `}
                               >
-                                <SelectValue placeholder="Select Leverandører" />
+                                <SelectValue placeholder="Velg ny aktivitet" />
                               </SelectTrigger>
                               <SelectContent className="bg-white">
                                 <SelectGroup>
                                   <SelectItem value="Telefon">
-                                    Telefon
+                                    <div className="flex items-center gap-2">
+                                      <Phone className="w-5 h-5" /> Telefon
+                                    </div>
                                   </SelectItem>
-                                  <SelectItem value="Møte">Møte</SelectItem>
+                                  <SelectItem value="Møte">
+                                    <div className="flex items-center gap-2">
+                                      <Shirt className="w-5 h-5" />
+                                      Møte
+                                    </div>
+                                  </SelectItem>
                                   <SelectItem value="Videomøte">
-                                    Videomøte
+                                    <div className="flex items-center gap-2">
+                                      <Video className="w-5 h-5" />
+                                      Videomøte
+                                    </div>
                                   </SelectItem>
                                   <SelectItem value="Befaring">
-                                    Befaring
+                                    <div className="flex items-center gap-2">
+                                      <InspectionPanel className="w-5 h-5" />
+                                      Befaring
+                                    </div>
                                   </SelectItem>
-                                  <SelectItem value="Annet">Annet</SelectItem>
+                                  <SelectItem value="E-post">
+                                    <div className="flex items-center gap-2">
+                                      <Mail className="w-5 h-5" />
+                                      E-post
+                                    </div>
+                                  </SelectItem>
+                                  <SelectItem value="Annet">
+                                    <div className="flex items-center gap-2">
+                                      <Infinity className="w-5 h-5" />
+                                      Annet
+                                    </div>
+                                  </SelectItem>
                                 </SelectGroup>
                               </SelectContent>
                             </Select>
@@ -277,6 +309,7 @@ export const AddFollowupForm: React.FC<{
                             className="border border-gray1 rounded-lg px-[14px] py-[10px] w-full"
                             placeholderText="Velg tidspunkt/frist"
                             dateFormat="dd.MM.yyyy | HH:mm"
+                            minDate={new Date()}
                           />
                         </div>
                       </FormControl>

@@ -1,5 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ChevronRight } from "lucide-react";
+import {
+  ChevronRight,
+  InspectionPanel,
+  Mail,
+  Phone,
+  Shirt,
+  Video,
+  Infinity,
+  Presentation,
+  Recycle,
+  Signature,
+  PhoneForwarded,
+  CircleArrowRight,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import Ic_close from "../../../assets/images/Ic_close.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -47,6 +60,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select";
+import { AddLogging } from "./addLogging";
 
 const formSchema = z.object({
   Husmodell: z
@@ -339,8 +353,9 @@ export const MyLeadsDetail = () => {
         leadData?.createdAt?.nanoseconds
       ),
     },
+    { title: "I dialog", date: "-" },
     { title: "Førstegangsmøte", date: "-" },
-    { title: "I process", date: "-" },
+    { title: "I prosess", date: "-" },
     { title: "Signert", date: "-" },
   ];
 
@@ -362,6 +377,7 @@ export const MyLeadsDetail = () => {
   };
 
   const options = [
+    { label: "I dialog", color: "#581845", textColor: "text-[#581845]" },
     { label: "Førstegangsmøte", color: "#996CFF", textColor: "text-primary" },
     { label: "Start prosess", color: "#E46A00", textColor: "text-[#994700]" },
     { label: "Signert", color: "#0022E4", textColor: "text-[#001795]" },
@@ -383,11 +399,14 @@ export const MyLeadsDetail = () => {
 
       const fetchedLogs: any = logsSnapshot.docs.map((doc) => {
         const data = doc.data();
+        if (data?.type === "initial" || data?.Hurtigvalg === "initial") {
+          setActiveStep(1);
+        }
 
         let timestamp: number | undefined = undefined;
 
-        if (typeof data.updatedAt === "string") {
-          const [datePart, timePart] = data.updatedAt
+        if (typeof data.createdAt === "string") {
+          const [datePart, timePart] = data.createdAt
             .split("|")
             .map((s) => s.trim());
           const [day, monthName, year] = datePart.split(" ");
@@ -395,8 +414,8 @@ export const MyLeadsDetail = () => {
 
           const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
           timestamp = new Date(dateStr).getTime();
-        } else if (data.updatedAt?.toMillis) {
-          timestamp = data.updatedAt.toMillis();
+        } else if (data.createdAt?.toMillis) {
+          timestamp = data.createdAt.toMillis();
         } else {
           timestamp = 0;
         }
@@ -441,6 +460,14 @@ export const MyLeadsDetail = () => {
       setIsPopupOpen(false);
     } else {
       setIsPopupOpen(true);
+    }
+  };
+  const [isLoggingPopupOpen, setIsLoggingPopupOpen] = useState(false);
+  const handleLoggingPopup = () => {
+    if (isLoggingPopupOpen) {
+      setIsLoggingPopupOpen(false);
+    } else {
+      setIsLoggingPopupOpen(true);
     }
   };
   const [finalData, setFinalData] = useState<any>(null);
@@ -556,13 +583,22 @@ export const MyLeadsDetail = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
           <Button
             text="Legg til ny oppfølgning"
             className="border border-green2 bg-green2 text-white text-sm md:text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative px-4 md:px-[30px] py-[10px] flex items-center gap-2"
             type="button"
             onClick={() => {
               handlePopup();
+              setSelectHistoryValue("");
+            }}
+          />
+          <Button
+            text="Ny loggføring"
+            className="border border-lightPurple bg-lightPurple text-primary text-sm md:text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative px-4 md:px-[30px] py-[10px] flex items-center gap-2"
+            type="button"
+            onClick={() => {
+              handleLoggingPopup();
               setSelectHistoryValue("");
             }}
           />
@@ -745,16 +781,16 @@ export const MyLeadsDetail = () => {
             </div>
           </form>
         </Form>
-        <div className="shadow-shadow3 border border-gray2 rounded-lg p-4 md:p-6">
+        <div className="shadow-shadow3 border border-gray2 rounded-lg p-3 md:p-6">
           <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-3 md:mb-5">
-            Historikk
+            Fremdrift
           </h4>
           <div className="w-full mb-3 md:mb-5">
             <div className="relative flex justify-between items-center">
-              <div className="absolute top-5 left-[72px] right-[72px] h-0.5 bg-gray2 z-0"></div>
+              <div className="absolute top-3.5 md:top-5 left-[56px] md:left-[72px] right-[56px] md:right-[72px] h-0.5 bg-gray2 z-0"></div>
 
               <div
-                className="absolute top-5 left-[72px] h-0.5 bg-purple z-10 transition-all duration-300 ease-in-out"
+                className="absolute top-3.5 md:top-5 left-[56px] md:left-[72px] h-0.5 bg-purple z-10 transition-all duration-300 ease-in-out"
                 style={{
                   width: `calc((100% - 144px) * ${
                     activeStep / (steps.length - 1)
@@ -776,14 +812,14 @@ export const MyLeadsDetail = () => {
                     ></div>
                   </div>
                   <div
-                    className={`mt-2 md:mt-3 font-medium whitespace-nowrap text-xs md:text-sm desktop:text-base text-center ${getTextStyle(
+                    className={`mt-2 md:mt-3 font-medium whitespace-nowrap text-[10px] sm:text-xs md:text-sm desktop:text-base text-center ${getTextStyle(
                       index
                     )}`}
                   >
                     {step.title}
                   </div>
                   <div
-                    className={`text-xs md:text-sm desktop:text-base whitespace-nowrap text-center ${getTextStyle(
+                    className={`text-[10px] sm:text-xs md:text-sm desktop:text-base whitespace-nowrap text-center ${getTextStyle(
                       index
                     )}`}
                   >
@@ -793,26 +829,31 @@ export const MyLeadsDetail = () => {
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-3 md:gap-5">
-            Hurtigvalg:
+          <div className="flex sm:items-center gap-3 md:gap-5">
+            <span className="text-xs md:text-sm desktop::text-base">
+              Hurtigvalg:
+            </span>
             <div className="flex items-center gap-2 flex-wrap">
               {options.map(({ label, color, textColor }) => (
                 <div
                   key={label}
                   onClick={() => {
-                    if (label === "Førstegangsmøte") {
+                    if (label === "I dialog") {
                       setActiveStep(1);
                     }
-                    if (label === "Start prosess") {
+                    if (label === "Førstegangsmøte") {
                       setActiveStep(2);
                     }
-                    if (label === "Signert") {
+                    if (label === "Start prosess") {
                       setActiveStep(3);
+                    }
+                    if (label === "Signert") {
+                      setActiveStep(4);
                     }
                     setSelectHistoryValue(label);
                     handlePopup();
                   }}
-                  className={`cursor-pointer border-2 rounded-lg py-2 px-4 shadow-shadow1 flex items-center gap-2 transition-all duration-200 border-primary
+                  className={`cursor-pointer border-2 rounded-lg py-2 px-2.5 sm:px-4 shadow-shadow1 flex items-center gap-2 transition-all duration-200 border-primary
                           ${
                             SelectHistoryValue === label ? "bg-[#EBDEFF]" : ""
                           }`}
@@ -821,7 +862,9 @@ export const MyLeadsDetail = () => {
                     className="w-1.5 h-1.5 rounded-full"
                     style={{ backgroundColor: color }}
                   ></div>
-                  <span className={`text-xs font-medium ${textColor}`}>
+                  <span
+                    className={`text-[10px] sm:text-xs font-medium ${textColor}`}
+                  >
                     {label}
                   </span>
                 </div>
@@ -831,55 +874,94 @@ export const MyLeadsDetail = () => {
         </div>
 
         <div>
-          <h3 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-5">
+          <h3 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-3 md:mb-5">
             Logg
           </h3>
-          <table className="min-w-full rounded-md overflow-hidden">
-            <thead className="bg-[#F9FAFB]">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray">
-                  Date
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray">
-                  Title
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray">
-                  Note
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {logs && logs.length > 0 ? (
-                logs.map((log: any, index) => {
-                  return (
-                    <tr className="border-b border-gray2" key={index}>
-                      <td className="px-4 py-6 text-sm text-black font-medium">
-                        {log?.updatedAt ||
-                          log?.createdAt ||
-                          formatTimestamp(log?.date)}
-                      </td>
-                      <td className="px-4 py-6 text-sm text-black font-medium">
-                        {log?.Hurtigvalg || log?.type}
-                      </td>
-                      <LogRow
-                        log={log}
-                        leadId={String(id)}
-                        fetchLogs={fetchLogs}
-                      />
-                    </tr>
-                  );
-                })
-              ) : (
+          <div className="overflow-x-auto w-full">
+            <table className="min-w-full rounded-md overflow-hidden">
+              <thead className="bg-[#F9FAFB]">
                 <tr>
-                  <td colSpan={3}>
-                    <div className="text-center py-2 text-sm text-black">
-                      No Logs Found
-                    </div>
-                  </td>
+                  <th className="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray">
+                    Date
+                  </th>
+                  <th className="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray">
+                    Title
+                  </th>
+                  <th className="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray">
+                    Note
+                  </th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {logs && logs.length > 0 ? (
+                  logs.map((log: any, index) => {
+                    const logType = log?.Hurtigvalg || log?.type;
+
+                    const getIconForType = (type: string) => {
+                      switch (type) {
+                        case "Telefon":
+                          return <Phone className="w-5 h-5" />;
+                        case "Telesamtale":
+                          return <Phone className="w-5 h-5" />;
+                        case "Møte":
+                          return <Shirt className="w-5 h-5" />;
+                        case "initial":
+                          return <CircleArrowRight className="w-5 h-5" />;
+                        case "Ring tilbake":
+                          return <PhoneForwarded className="w-5 h-5" />;
+                        case "Videomøte":
+                          return <Video className="w-5 h-5" />;
+                        case "Befaring":
+                          return <InspectionPanel className="w-5 h-5" />;
+                        case "E-post":
+                          return <Mail className="w-5 h-5" />;
+                        case "Annet":
+                          return <Infinity className="w-5 h-5" />;
+                        case "Førstegangsmøte":
+                          return <Presentation className="w-5 h-5" />;
+                        case "Start prosess":
+                          return <Recycle className="w-5 h-5" />;
+                        case "Signert":
+                          return <Signature className="w-5 h-5" />;
+                        default:
+                          return null;
+                      }
+                    };
+                    return (
+                      <tr className="border-b border-gray2" key={index}>
+                        <td className="px-3 md:px-4 py-3 md:py-6 text-xs md:text-sm text-black font-medium w-max whitespace-nowrap">
+                          {/* {log?.updatedAt ||
+                            log?.createdAt ||
+                            formatTimestamp(log?.date)} */}
+                          {log?.createdAt || formatTimestamp(log?.date)}
+                        </td>
+                        <td className="px-3 md:px-4 py-3 md:py-6 text-xs md:text-sm text-black font-medium w-max whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            {getIconForType(logType)}
+                            {logType}
+                            {/* {log?.Hurtigvalg || log?.type} */}
+                          </div>
+                        </td>
+                        <LogRow
+                          log={log}
+                          leadId={String(id)}
+                          fetchLogs={fetchLogs}
+                        />
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={3}>
+                      <div className="text-center py-2 text-xs md:text-sm text-black">
+                        No Logs Found
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       {isPopupOpen && (
@@ -899,6 +981,33 @@ export const MyLeadsDetail = () => {
               <img src={Ic_close} alt="close" />
             </button>
             <AddFollowupForm
+              fetchLogs={fetchLogs}
+              fetchHusmodellData={fetchHusmodellData}
+              handlePopup={handlePopup}
+              SelectHistoryValue={SelectHistoryValue}
+              setSelectHistoryValue={setSelectHistoryValue}
+              setDropdownOpen={setIsDropdownOpen}
+            />
+          </div>
+        </Modal>
+      )}
+      {isLoggingPopupOpen && (
+        <Modal
+          isOpen={true}
+          onClose={() => {
+            if (!isDropdownOpen) {
+              setIsLoggingPopupOpen(false);
+            }
+          }}
+        >
+          <div className="bg-white p-6 rounded-lg w-full sm:w-[500px] relative">
+            <button
+              className="absolute top-3 right-3"
+              onClick={() => setIsLoggingPopupOpen(false)}
+            >
+              <img src={Ic_close} alt="close" />
+            </button>
+            <AddLogging
               fetchLogs={fetchLogs}
               fetchHusmodellData={fetchHusmodellData}
               handlePopup={handlePopup}

@@ -36,6 +36,7 @@ import {
 import { HouseModelCell } from "./houseRow";
 import { StatusCell } from "./statusRow";
 import { BrokerCell } from "./brokerRow";
+import { monthMap } from "./myLeadsDetail";
 
 const calculateDateRange = (range: string) => {
   const currentDate = new Date();
@@ -80,6 +81,7 @@ export const MyLeadsTable = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<string | null>(
     null
   );
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
   const email = localStorage.getItem("Iplot_admin");
 
@@ -106,37 +108,181 @@ export const MyLeadsTable = () => {
     }
   };
 
-  const filteredData = useMemo(() => {
-    return leads.filter((model: any) => {
+  // const filteredData = useMemo(() => {
+  //   return leads.filter((model: any) => {
+  //     const search = searchTerm.toLowerCase();
+  //     const leadSource = model?.leadSource?.toLowerCase();
+  //     const leadKilde = model?.leadData?.kilde?.toLowerCase();
+  //     const leadName = model?.leadData?.name?.toLowerCase();
+
+  //     let matchesSearch =
+  //       leadSource?.includes(search) ||
+  //       leadKilde?.includes(search) ||
+  //       leadName?.includes(search);
+
+  //     if (!matchesSearch) return false;
+  //     const modelDate: any = convertToFullDateString(model.createdAt);
+
+  //     if (selectedDate1 !== null) {
+  //       const matchDate = modelDate === formatDateOnly(selectedDate1);
+  //       matchesSearch = matchesSearch && matchDate;
+  //     }
+  //     if (selectedDateRange !== null) {
+  //       const { startDate, endDate }: any =
+  //         calculateDateRange(selectedDateRange);
+
+  //       const isWithinDateRange =
+  //         modelDate >= startDate && modelDate <= endDate;
+
+  //       matchesSearch = matchesSearch && isWithinDateRange;
+  //     }
+
+  //     return matchesSearch;
+  //   });
+  // }, [leads, searchTerm, selectedDate1, selectedDateRange]);
+
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [allLogMap, setAllLogMap] = useState<Record<string, any[]>>({});
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchLogs = async () => {
+      const logMap: Record<string, any[]> = {};
+
+      await Promise.all(
+        leads.map(async (model: any) => {
+          const logsCollectionRef = collection(
+            db,
+            "leads_from_supplier",
+            String(model.id),
+            "followups"
+          );
+
+          try {
+            const logsSnapshot = await getDocs(logsCollectionRef);
+            const fetchedLogs = logsSnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+
+            const getTimestamp = (item: any): number => {
+              const updatedAt = item?.updatedAt;
+              if (typeof updatedAt === "string") {
+                const [datePart, timePart] = updatedAt
+                  .split("|")
+                  .map((s: string) => s.trim());
+                const [day, monthName, year] = datePart.split(" ");
+                const engMonth = monthMap[monthName.toLowerCase()] || monthName;
+                const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+                const parsed = new Date(dateStr).getTime();
+                return isNaN(parsed) ? 0 : parsed;
+              } else if (updatedAt?.toMillis) {
+                return updatedAt.toMillis();
+              } else {
+                return item?.date?.seconds ? item.date.seconds * 1000 : 0;
+              }
+            };
+
+            fetchedLogs.sort((a, b) => getTimestamp(b) - getTimestamp(a));
+            logMap[model.id] = fetchedLogs;
+          } catch (error) {
+            console.error("Failed to fetch logs:", error);
+          }
+        })
+      );
+
+      setAllLogMap(logMap);
+      setIsLoading(false);
+    };
+
+    if (leads.length > 0) {
+      fetchLogs();
+    }
+  }, [leads]);
+  useEffect(() => {
+    const filterLeads = async () => {
       const search = searchTerm.toLowerCase();
-      const leadSource = model?.leadSource?.toLowerCase();
-      const leadKilde = model?.leadData?.kilde?.toLowerCase();
-      const leadName = model?.leadData?.name?.toLowerCase();
+      setIsLoading(true);
 
-      let matchesSearch =
-        leadSource?.includes(search) ||
-        leadKilde?.includes(search) ||
-        leadName?.includes(search);
+      const results = await Promise.all(
+        leads.map(async (model: any) => {
+          const leadSource = model?.leadSource?.toLowerCase();
+          const leadKilde = model?.leadData?.kilde?.toLowerCase();
+          const leadName = model?.leadData?.name?.toLowerCase();
 
-      if (!matchesSearch) return false;
-      const modelDate: any = convertToFullDateString(model.createdAt);
+          let matchesSearch =
+            leadSource?.includes(search) ||
+            leadKilde?.includes(search) ||
+            leadName?.includes(search);
 
-      if (selectedDate1 !== null) {
-        const matchDate = modelDate === formatDateOnly(selectedDate1);
-        matchesSearch = matchesSearch && matchDate;
-      }
-      if (selectedDateRange !== null) {
-        const { startDate, endDate }: any =
-          calculateDateRange(selectedDateRange);
+          if (!matchesSearch) return null;
 
-        const isWithinDateRange =
-          modelDate >= startDate && modelDate <= endDate;
+          const modelDate: any = convertToFullDateString(model.createdAt);
 
-        matchesSearch = matchesSearch && isWithinDateRange;
-      }
-      return matchesSearch;
-    });
-  }, [leads, searchTerm, selectedDate1, selectedDateRange]);
+          if (selectedDate1 !== null) {
+            const matchDate = modelDate === formatDateOnly(selectedDate1);
+            if (!matchDate) return null;
+          }
+
+          if (selectedDateRange !== null) {
+            const { startDate, endDate }: any =
+              calculateDateRange(selectedDateRange);
+            const isWithinDateRange =
+              modelDate >= startDate && modelDate <= endDate;
+            if (!isWithinDateRange) return null;
+          }
+
+          if (selectedFilter === "Up for grabs") {
+            const logs = allLogMap?.[model.id] || [];
+            const firstLog = logs && logs?.[0];
+            if (
+              firstLog?.type === "initial" ||
+              firstLog?.Hurtigvalg === "initial"
+            ) {
+              return model;
+            } else {
+              return null;
+            }
+          }
+        
+          if (selectedFilter === "Fremtidige oppgaver") {
+            const logs = Array.isArray(allLogMap?.[model.id])
+              ? allLogMap[model.id]
+              : [];
+            const firstLog = logs?.[0];
+
+            const futureTimestamp = firstLog?.date?.seconds
+              ? new Date(firstLog.date.seconds * 1000)
+              : null;
+
+            const now = new Date();
+
+            if (futureTimestamp && futureTimestamp > now) {
+              return model; 
+            } else {
+              return null; 
+            }
+          }
+
+          return model;
+        })
+      );
+
+      const cleaned = results.filter(Boolean);
+      setFilteredData(cleaned);
+      setIsLoading(false);
+    };
+
+    if (Object.keys(allLogMap).length > 0) {
+      filterLeads();
+    }
+  }, [
+    leads,
+    searchTerm,
+    selectedDate1,
+    selectedDateRange,
+    selectedFilter,
+    allLogMap,
+  ]);
 
   useEffect(() => {
     fetchLeadsData();
@@ -336,15 +482,51 @@ export const MyLeadsTable = () => {
           </div>
         </div>
         <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 gap-2 md:px-4">
-          <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
-            <img src={Ic_search} alt="search" />
-            <input
-              type="text"
-              placeholder="Søk i leads"
-              className="focus-within:outline-none"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div className="flex gap-3 items-center">
+            <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
+              <img src={Ic_search} alt="search" />
+              <input
+                type="text"
+                placeholder="Søk i leads"
+                className="focus-within:outline-none"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
+              <div
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
+                  selectedFilter === "Up for grabs" && "bg-white"
+                }`}
+                onClick={() => setSelectedFilter("Up for grabs")}
+              >
+                Up for grabs
+              </div>
+              {/* <div
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm border border-t-0 border-b-0 border-gray1 cursor-pointer ${
+                  selectedFilter === "Til oppfølgning" && "bg-white"
+                }`}
+                onClick={() => setSelectedFilter("Til oppfølgning")}
+              >
+                Til oppfølgning
+              </div> */}
+              <div
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer border-l border-gray1 ${
+                  selectedFilter === "Fremtidige oppgaver" && "bg-white"
+                }`}
+                onClick={() => setSelectedFilter("Fremtidige oppgaver")}
+              >
+                Fremtidige oppgaver
+              </div>
+              {/* <div
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
+                  selectedFilter === "Avsluttede leads" && "bg-white"
+                }`}
+                onClick={() => setSelectedFilter("Avsluttede leads")}
+              >
+                Avsluttede leads
+              </div> */}
+            </div>
           </div>
           <div className="flex gap-3 items-center">
             <div

@@ -9,6 +9,7 @@ interface DateTimePickerComponentProps {
   dateFormat?: string;
   placeholderText?: string;
   className?: string;
+  minDate?: Date;
 }
 
 const DateTimePickerComponent: React.FC<DateTimePickerComponentProps> = ({
@@ -17,6 +18,7 @@ const DateTimePickerComponent: React.FC<DateTimePickerComponentProps> = ({
   dateFormat = "dd.MM.yyyy | HH:mm",
   placeholderText = "Select date and time",
   className,
+  minDate,
 }) => {
   const CustomInput = ({
     value,
@@ -74,6 +76,7 @@ const DateTimePickerComponent: React.FC<DateTimePickerComponentProps> = ({
           showYearDropdown
           dropdownMode="select"
           className="w-full flex"
+          minDate={minDate}
         />
       </div>
     </>

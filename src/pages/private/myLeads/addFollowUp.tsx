@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -53,12 +53,14 @@ export const AddFollowupForm: React.FC<{
   handlePopup: any;
   SelectHistoryValue: any;
   setSelectHistoryValue: any;
+  setDropdownOpen: any;
 }> = ({
   fetchLogs,
   fetchHusmodellData,
   handlePopup,
   SelectHistoryValue,
   setSelectHistoryValue,
+  setDropdownOpen,
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -165,6 +167,7 @@ export const AddFollowupForm: React.FC<{
       form.setValue("Hurtigvalg", SelectHistoryValue);
     }
   }, [SelectHistoryValue, form]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <>
@@ -209,6 +212,11 @@ export const AddFollowupForm: React.FC<{
                                 field.onChange(value);
                               }}
                               value={field.value}
+                              onOpenChange={(open) => {
+                                setIsDropdownOpen(open);
+                                setDropdownOpen(open);
+                              }}
+                              open={isDropdownOpen}
                             >
                               <SelectTrigger
                                 className={`bg-white rounded-[8px] border text-black

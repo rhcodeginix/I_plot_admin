@@ -474,21 +474,25 @@ export const MyLeadsDetail = () => {
 
     fetchPreferredHouse();
   }, [id]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <>
-      <div className="bg-lightPurple py-4 px-6">
-        <div className="mb-4 flex items-center gap-3">
-          <Link to="/my-leads" className="text-gray text-sm font-medium">
+      <div className="bg-lightPurple py-4 px-4 md:px-6">
+        <div className="flex items-center gap-1.5 md:gap-3">
+          <Link
+            to="/my-leads"
+            className="text-gray text-xs md:text-sm font-medium"
+          >
             Leads
           </Link>
           <ChevronRight className="w-4 h-4 text-gray2" />
-          <span className="text-primary text-sm font-medium">
+          <span className="text-primary text-xs md:text-sm font-medium">
             Leadsdetaljer
           </span>
         </div>
         {finalData && (
-          <div className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-medium">
+          <div className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-medium mt-2 md:mt-4">
             Lead for{" "}
             <span className="font-bold">
               {finalData?.Husdetaljer?.husmodell_name}
@@ -496,11 +500,11 @@ export const MyLeadsDetail = () => {
           </div>
         )}
       </div>
-      <div className="p-6 flex flex-col gap-6">
-        <div className="flex gap-6 items-center justify-between">
-          <div className="flex items-center gap-6">
+      <div className="p-4 md:p-6 flex flex-col gap-4 md:gap-6">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:items-center justify-between">
+          <div className="flex items-center gap-4 md:gap-6">
             <div
-              className="w-[160px] h-[160px] rounded-full flex items-center justify-center border-[4px] border-[#fff] bg-lightPurple text-primary text-[48px] font-medium"
+              className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] desktop:w-[160px] desktop:h-[160px] rounded-full flex items-center justify-center border-[4px] border-[#fff] bg-lightPurple text-primary text-[2rem] md:text-[40px] desktop:text-[48px] font-medium"
               style={{
                 boxShadow:
                   "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
@@ -512,11 +516,11 @@ export const MyLeadsDetail = () => {
                 .join("")}
             </div>
             <div className="flex flex-col gap-2">
-              <h4 className="text-darkBlack text-[28px] font-medium">
+              <h4 className="text-darkBlack text-xl md:text-2xl desktop:text-[28px] font-medium">
                 {leadData?.leadData?.name}
               </h4>
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-4">
+              <div className="flex items-center gap-2 md:gap-4 flex-wrap">
+                <span className="flex items-center gap-2 md:gap-4">
                   {leadData?.leadData?.email && (
                     <>
                       <span className="text-gray text-sm md:text-base desktop:text-lg">
@@ -532,10 +536,10 @@ export const MyLeadsDetail = () => {
               </div>
             </div>
           </div>
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-4 items-end">
-              <div className="flex items-center gap-5">
-                <p className="text-sm text-gray">
+          <div className="flex gap-2 md:gap-4">
+            <div className="flex flex-col gap-2 md:gap-4 md:items-end">
+              <div className="flex items-center gap-3 md:gap-5">
+                <p className="text-xs sm:text-sm text-gray">
                   {formatTimestamp(leadData?.createdAt)}
                 </p>
                 {/* <div className="bg-lightGreen rounded-[16px] py-1.5 px-4 flex items-center gap-1.5 h-[30px]">
@@ -544,8 +548,8 @@ export const MyLeadsDetail = () => {
                 </div> */}
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-gray text-sm">Kilde:</span>
-                <div className="bg-lightPurple py-1 px-3 h-[28px] rounded-[40px] flex items-center justify-between clear-start text-black text-sm font-medium">
+                <span className="text-gray text-xs sm:text-sm">Kilde:</span>
+                <div className="bg-lightPurple py-1 px-3 h-[28px] rounded-[40px] flex items-center justify-between clear-start text-black text-xs sm:text-sm font-medium">
                   {supplierData?.company_name}
                 </div>
               </div>
@@ -555,7 +559,7 @@ export const MyLeadsDetail = () => {
         <div className="flex justify-end">
           <Button
             text="Legg til ny oppfølgning"
-            className="border border-green2 bg-green2 text-white text-base rounded-[8px] h-[48px] font-medium relative px-[30px] py-[10px] flex items-center gap-2"
+            className="border border-green2 bg-green2 text-white text-sm md:text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative px-4 md:px-[30px] py-[10px] flex items-center gap-2"
             type="button"
             onClick={() => {
               handlePopup();
@@ -565,11 +569,11 @@ export const MyLeadsDetail = () => {
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-            <div className="shadow-shadow3 border border-gray2 rounded-lg p-6">
-              <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-5">
+            <div className="shadow-shadow3 border border-gray2 rounded-lg p-4 md:p-6">
+              <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-3 md:mb-5">
                 Leadsinformasjon
               </h4>
-              <div className="grid grid-cols-2 gap-x-5 gap-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 md:gap-x-5 gap-y-4 md:gap-y-8">
                 <div>
                   <FormField
                     control={form.control}
@@ -725,27 +729,27 @@ export const MyLeadsDetail = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-end w-full gap-5 items-center mt-8">
+              <div className="flex justify-end w-full gap-3 md:gap-5 items-center mt-4 md:mt-8">
                 <div onClick={() => form.reset()}>
                   <Button
                     text="Tilbake"
-                    className="border border-lightPurple bg-lightPurple text-primary text-base rounded-[8px] h-[48px] font-medium relative py-[10px] flex items-center gap-2 px-[50px]"
+                    className="border border-lightPurple bg-lightPurple text-primary text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative py-[10px] flex items-center gap-2 px-6 md:px-[50px]"
                   />
                 </div>
                 <Button
                   text="Lagre"
-                  className="border border-green2 bg-green2 text-white text-base rounded-[8px] h-[48px] font-medium relative px-[50px] py-[10px] flex items-center gap-2"
+                  className="border border-green2 bg-green2 text-white text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative px-px-6 md:[50px] py-[10px] flex items-center gap-2"
                   type="submit"
                 />
               </div>
             </div>
           </form>
         </Form>
-        <div className="shadow-shadow3 border border-gray2 rounded-lg p-6">
-          <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-5">
+        <div className="shadow-shadow3 border border-gray2 rounded-lg p-4 md:p-6">
+          <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-3 md:mb-5">
             Historikk
           </h4>
-          <div className="w-full mb-5">
+          <div className="w-full mb-3 md:mb-5">
             <div className="relative flex justify-between items-center">
               <div className="absolute top-5 left-[72px] right-[72px] h-0.5 bg-gray2 z-0"></div>
 
@@ -763,7 +767,7 @@ export const MyLeadsDetail = () => {
                   className="flex flex-col z-20 items-center w-[145px]"
                 >
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center border-4 shadow-md ${getStepStyle(
+                    className={`w-8 md:w-10 h-8 md:h-10 rounded-full flex items-center justify-center border-4 shadow-md ${getStepStyle(
                       index
                     )}`}
                   >
@@ -772,14 +776,16 @@ export const MyLeadsDetail = () => {
                     ></div>
                   </div>
                   <div
-                    className={`mt-3 font-medium text-base text-center ${getTextStyle(
+                    className={`mt-2 md:mt-3 font-medium whitespace-nowrap text-xs md:text-sm desktop:text-base text-center ${getTextStyle(
                       index
                     )}`}
                   >
                     {step.title}
                   </div>
                   <div
-                    className={`text-base text-center ${getTextStyle(index)}`}
+                    className={`text-xs md:text-sm desktop:text-base whitespace-nowrap text-center ${getTextStyle(
+                      index
+                    )}`}
                   >
                     {step.date}
                   </div>
@@ -787,7 +793,7 @@ export const MyLeadsDetail = () => {
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3 md:gap-5">
             Hurtigvalg:
             <div className="flex items-center gap-2 flex-wrap">
               {options.map(({ label, color, textColor }) => (
@@ -877,7 +883,14 @@ export const MyLeadsDetail = () => {
         </div>
       </div>
       {isPopupOpen && (
-        <Modal isOpen={true} onClose={handlePopup}>
+        <Modal
+          isOpen={true}
+          onClose={() => {
+            if (!isDropdownOpen) {
+              setIsPopupOpen(false);
+            }
+          }}
+        >
           <div className="bg-white p-6 rounded-lg w-full sm:w-[500px] relative">
             <button
               className="absolute top-3 right-3"
@@ -891,6 +904,7 @@ export const MyLeadsDetail = () => {
               handlePopup={handlePopup}
               SelectHistoryValue={SelectHistoryValue}
               setSelectHistoryValue={setSelectHistoryValue}
+              setDropdownOpen={setIsDropdownOpen}
             />
           </div>
         </Modal>

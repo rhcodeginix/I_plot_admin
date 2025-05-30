@@ -1010,7 +1010,7 @@ export const MyLeadsDetail = () => {
             <AddLogging
               fetchLogs={fetchLogs}
               fetchHusmodellData={fetchHusmodellData}
-              handlePopup={handlePopup}
+              handlePopup={handleLoggingPopup}
               SelectHistoryValue={SelectHistoryValue}
               setSelectHistoryValue={setSelectHistoryValue}
               setDropdownOpen={setIsDropdownOpen}

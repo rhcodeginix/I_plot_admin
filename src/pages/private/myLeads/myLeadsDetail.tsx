@@ -594,14 +594,16 @@ export const MyLeadsDetail = () => {
               </h4>
               <div className="flex items-center gap-2 md:gap-4 flex-wrap">
                 <span className="flex items-center gap-2 md:gap-4">
-                  {leadData?.leadData?.email && (
-                    <>
-                      <span className="text-gray text-sm md:text-base desktop:text-lg">
-                        {leadData?.leadData?.email}
-                      </span>
-                      <div className="border-l border-gray2 h-[14px]"></div>
-                    </>
-                  )}
+                  {leadData?.leadData?.email ||
+                    (leadData?.leadData?.epost && (
+                      <>
+                        <span className="text-gray text-sm md:text-base desktop:text-lg">
+                          {leadData?.leadData?.email ||
+                            leadData?.leadData?.epost}
+                        </span>
+                        <div className="border-l border-gray2 h-[14px]"></div>
+                      </>
+                    ))}
                 </span>
                 <span className="text-gray text-sm md:text-base desktop:text-lg">
                   {formatNorwegianPhone(leadData?.leadData?.telefon)}

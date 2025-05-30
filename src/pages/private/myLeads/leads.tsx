@@ -356,7 +356,9 @@ export const MyLeadsTable = () => {
               >
                 {row.original.leadData.name}
               </Link>
-              <p className="text-xs text-gray">{row.original.leadData.email}</p>
+              <p className="text-xs text-gray">
+                {row.original.leadData.email || row.original.leadData?.epost}
+              </p>
             </div>
           </div>
         ),

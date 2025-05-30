@@ -100,7 +100,7 @@ export const AddLogging: React.FC<{
             ...finalData,
             updatedAt: formatter.format(new Date()),
           });
-          toast.success("Follow up updated.", {
+          toast.success("Loggen er oppdatert", {
             position: "top-right",
           });
         } else {
@@ -109,7 +109,7 @@ export const AddLogging: React.FC<{
             createdAt: formatter.format(new Date()),
             updatedAt: formatter.format(new Date()),
           });
-          toast.success("Follow up created.", {
+          toast.success("Loggen er oppdatert", {
             position: "top-right",
           });
         }

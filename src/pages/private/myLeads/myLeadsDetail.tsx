@@ -12,15 +12,18 @@ import {
   Signature,
   PhoneForwarded,
   CircleArrowRight,
+  Pencil,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Ic_close from "../../../assets/images/Ic_close.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
+  convertFullStringTo24Hour,
   convertTimestamp,
   fetchAdminDataByEmail,
   fetchLeadData,
   fetchSupplierData,
+  formatNorwegianPhone,
   formatTimestamp,
 } from "../../../lib/utils";
 import { z } from "zod";
@@ -61,6 +64,7 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { AddLogging } from "./addLogging";
+import { EditProfile } from "./editProfile";
 
 const formSchema = z.object({
   Husmodell: z
@@ -108,19 +112,26 @@ export const MyLeadsDetail = () => {
     getData();
   }, [permission]);
 
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
-    const getData = async () => {
+  const getLeadData = useCallback(async () => {
+    if (!id) return;
+
+    try {
       const data = await fetchLeadData(id);
       if (data) {
         setLeadData(data);
       }
-    };
-
-    getData();
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
   }, [id]);
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+
+    getLeadData();
+  }, [getLeadData]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -355,7 +366,7 @@ export const MyLeadsDetail = () => {
     },
     { title: "I dialog", date: "-" },
     { title: "Førstegangsmøte", date: "-" },
-    { title: "I prosess", date: "-" },
+    { title: "Tilbud sendt", date: "-" },
     { title: "Signert", date: "-" },
   ];
 
@@ -384,6 +395,23 @@ export const MyLeadsDetail = () => {
   ];
 
   const [logs, setLogs] = useState([]);
+  const [logFilter, setLogFilter] = useState("All");
+  const logFilterData = [
+    { name: "All" },
+    { name: "Telefon" },
+    { name: "Telesamtale" },
+    { name: "Møte" },
+    { name: "initial" },
+    { name: "Ring tilbake" },
+    { name: "Videomøte" },
+    { name: "Befaring" },
+    { name: "E-post" },
+    { name: "Annet" },
+    { name: "Førstegangsmøte" },
+    { name: "Start prosess" },
+    { name: "Signert" },
+  ];
+
   const fetchLogs = async () => {
     if (!id) return;
 
@@ -435,6 +463,15 @@ export const MyLeadsDetail = () => {
     }
   };
 
+  const logFilterValue = logFilter === "All" ? "" : logFilter;
+
+  const filteredLogs = !logFilterValue
+    ? logs
+    : logs.filter((log: any) => {
+        const logType = log?.Hurtigvalg || log?.type;
+        return logType === logFilterValue;
+      });
+
   useEffect(() => {
     fetchLogs();
   }, [id]);
@@ -470,6 +507,15 @@ export const MyLeadsDetail = () => {
       setIsLoggingPopupOpen(true);
     }
   };
+
+  const [editProfile, setEditProfile] = useState(false);
+  const handleEditProfilePopup = () => {
+    if (editProfile) {
+      setEditProfile(false);
+    } else {
+      setEditProfile(true);
+    }
+  };
   const [finalData, setFinalData] = useState<any>(null);
 
   useEffect(() => {
@@ -488,9 +534,9 @@ export const MyLeadsDetail = () => {
 
       if (subDocSnap.exists()) {
         const data: any = subDocSnap.data();
-        if (data?.Husmodell[0]) {
+        if (data?.Husmodell?.[0]) {
           const HouseData: any = await singleHouseModelData(
-            String(data?.Husmodell[0])
+            String(data?.Husmodell?.[0])
           );
           if (HouseData && HouseData.Husdetaljer) {
             setFinalData(HouseData);
@@ -558,10 +604,14 @@ export const MyLeadsDetail = () => {
                   )}
                 </span>
                 <span className="text-gray text-sm md:text-base desktop:text-lg">
-                  {leadData?.leadData?.telefon}
+                  {formatNorwegianPhone(leadData?.leadData?.telefon)}
                 </span>
               </div>
             </div>
+            <Pencil
+              className="text-primary cursor-pointer"
+              onClick={handleEditProfilePopup}
+            />
           </div>
           <div className="flex gap-2 md:gap-4">
             <div className="flex flex-col gap-2 md:gap-4 md:items-end">
@@ -874,9 +924,34 @@ export const MyLeadsDetail = () => {
         </div>
 
         <div>
-          <h3 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-3 md:mb-5">
-            Logg
-          </h3>
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-3 md:mb-5">
+              Logg
+            </h3>
+            <div className="w-[300px]">
+              <Select
+                onValueChange={(value) => {
+                  setLogFilter(value);
+                }}
+                value={logFilter}
+              >
+                <SelectTrigger
+                  className={`bg-white rounded-[8px] border text-black border-gray1`}
+                >
+                  <SelectValue placeholder="Enter Type partner" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectGroup>
+                    {logFilterData.map((log, index) => (
+                      <SelectItem value={log.name} key={index}>
+                        {log.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
           <div className="overflow-x-auto w-full">
             <table className="min-w-full rounded-md overflow-hidden">
               <thead className="bg-[#F9FAFB]">
@@ -893,8 +968,8 @@ export const MyLeadsDetail = () => {
                 </tr>
               </thead>
               <tbody>
-                {logs && logs.length > 0 ? (
-                  logs.map((log: any, index) => {
+                {filteredLogs && filteredLogs.length > 0 ? (
+                  filteredLogs.map((log: any, index) => {
                     const logType = log?.Hurtigvalg || log?.type;
 
                     const getIconForType = (type: string) => {
@@ -930,16 +1005,14 @@ export const MyLeadsDetail = () => {
                     return (
                       <tr className="border-b border-gray2" key={index}>
                         <td className="px-3 md:px-4 py-3 md:py-6 text-xs md:text-sm text-black font-medium w-max whitespace-nowrap">
-                          {/* {log?.updatedAt ||
-                            log?.createdAt ||
-                            formatTimestamp(log?.date)} */}
-                          {log?.createdAt || formatTimestamp(log?.date)}
+                          {(log?.createdAt &&
+                            convertFullStringTo24Hour(log?.createdAt)) ||
+                            formatTimestamp(log?.date)}
                         </td>
                         <td className="px-3 md:px-4 py-3 md:py-6 text-xs md:text-sm text-black font-medium w-max whitespace-nowrap">
                           <div className="flex items-center gap-2">
                             {getIconForType(logType)}
                             {logType}
-                            {/* {log?.Hurtigvalg || log?.type} */}
                           </div>
                         </td>
                         <LogRow
@@ -973,7 +1046,7 @@ export const MyLeadsDetail = () => {
             }
           }}
         >
-          <div className="bg-white p-6 rounded-lg w-full sm:w-[500px] relative">
+          <div className="bg-white p-4 md:p-6 rounded-lg w-[100vw] sm:w-[500px] relative">
             <button
               className="absolute top-3 right-3"
               onClick={() => setIsPopupOpen(false)}
@@ -1000,7 +1073,7 @@ export const MyLeadsDetail = () => {
             }
           }}
         >
-          <div className="bg-white p-6 rounded-lg w-full sm:w-[500px] relative">
+          <div className="bg-white p-4 md:p-6 rounded-lg w-[100vw] sm:w-[500px] relative">
             <button
               className="absolute top-3 right-3"
               onClick={() => setIsLoggingPopupOpen(false)}
@@ -1014,6 +1087,23 @@ export const MyLeadsDetail = () => {
               SelectHistoryValue={SelectHistoryValue}
               setSelectHistoryValue={setSelectHistoryValue}
               setDropdownOpen={setIsDropdownOpen}
+            />
+          </div>
+        </Modal>
+      )}
+      {editProfile && (
+        <Modal isOpen={true} onClose={handleEditProfilePopup}>
+          <div className="bg-white p-4 md:p-6 rounded-lg w-[100vw] sm:w-[500px] relative">
+            <button
+              className="absolute top-3 right-3"
+              onClick={() => setEditProfile(false)}
+            >
+              <img src={Ic_close} alt="close" />
+            </button>
+            <EditProfile
+              handlePopup={handleEditProfilePopup}
+              getLeadData={getLeadData}
+              leadData={leadData}
             />
           </div>
         </Modal>

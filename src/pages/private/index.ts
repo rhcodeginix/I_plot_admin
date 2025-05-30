@@ -25,3 +25,4 @@ export { AllLeads } from "./leads";
 export { LeadsDetails } from "./leadDetail";
 export { AddBankUserForm } from "./addUsers/addBankUserForm";
 export { AddAgentUserForm } from "./addUsers/addAgentUserForm";
+export { AddLeadForm } from "./myLeads/addLead";

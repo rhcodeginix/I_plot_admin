@@ -189,6 +189,7 @@ export const Navbar: React.FC = () => {
                 to={"/my-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                   currentPath === "/my-leads" ||
+                  currentPath === "/add-lead" ||
                   currentPath.startsWith("/my-leads-details/")
                     ? "bg-lightPurple text-primary"
                     : "text-black"
@@ -376,19 +377,19 @@ export const Navbar: React.FC = () => {
                 Brukeradministrasjon
               </Link>
             )}
-            {email &&
-              Supplier &&
-              Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95" &&
+            {(loginUser === "andre.finger@gmail.com" ||
+              (loginUser !== "andre.finger@gmail.com" &&
+                Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95")) &&
               (!Role || (Role && Role !== "Bankansvarlig")) && (
                 <Link
                   to={"/my-leads"}
-                  className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                     currentPath === "/my-leads" ||
+                    currentPath === "/add-lead" ||
                     currentPath.startsWith("/my-leads-details/")
                       ? "bg-lightPurple text-primary"
                       : "text-black"
                   }`}
-                  onClick={toggleDrawer}
                 >
                   Mine leads
                 </Link>

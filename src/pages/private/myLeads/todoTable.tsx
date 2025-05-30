@@ -2,11 +2,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
 import Ic_filter from "../../../assets/images/Ic_filter.svg";
-import Ic_map from "../../../assets/images/Ic_map.svg";
 import Ic_download from "../../../assets/images/Ic_download.svg";
 import * as XLSX from "xlsx";
 import DatePickerComponent from "../../../components/ui/datepicker";
-import { Ellipsis, Loader2 } from "lucide-react";
+import { Ellipsis, Loader2, X } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -92,6 +91,7 @@ export const TODOTable = () => {
 
   const email = localStorage.getItem("Iplot_admin");
   const [LoginUserId, setLoginUserId] = useState<any>(null);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -106,258 +106,6 @@ export const TODOTable = () => {
 
     getData();
   }, []);
-
-  // const fetchLeadsData = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const leadsSnapshot = await getDocs(
-  //       query(
-  //         collection(db, "leads_from_supplier"),
-  //         orderBy("updatedAt", "desc")
-  //       )
-  //     );
-
-  //     const leadsWithFollowupsPromises = leadsSnapshot.docs.map(
-  //       async (leadDoc) => {
-  //         const leadId = leadDoc.id;
-  //         const leadData = leadDoc.data();
-
-  //         const followupsRef = collection(
-  //           db,
-  //           "leads_from_supplier",
-  //           leadId,
-  //           "followups"
-  //         );
-  //         const followupsSnapshot = await getDocs(followupsRef);
-
-  //         const followups = followupsSnapshot.docs.map((doc) => ({
-  //           id: doc.id,
-  //           ...doc.data(),
-  //         }));
-
-  //         if (followups.length > 1) {
-  //           const sortedFollowups = [...followups].sort((a: any, b: any) => {
-  //             const getTimestamp = (item: any): number => {
-  //               if (typeof item.updatedAt === "string") {
-  //                 const [datePart, timePart] = item.updatedAt
-  //                   .split("|")
-  //                   .map((s: string) => s.trim());
-  //                 const [day, monthName, year] = datePart.split(" ");
-  //                 const engMonth =
-  //                   monthMap[monthName.toLowerCase()] || monthName;
-
-  //                 const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
-  //                 const parsed = new Date(dateStr).getTime();
-  //                 return isNaN(parsed) ? 0 : parsed;
-  //               } else if (item.updatedAt?.toMillis) {
-  //                 return item.updatedAt.toMillis();
-  //               } else {
-  //                 return item.date?.seconds ? item.date.seconds * 1000 : 0;
-  //               }
-  //             };
-
-  //             return getTimestamp(b) - getTimestamp(a);
-  //           });
-
-  //           const lastFollowup = sortedFollowups[0];
-
-  //           return {
-  //             id: leadId,
-  //             ...leadData,
-  //             followups: lastFollowup,
-  //           };
-  //         } else if (followups.length === 1) {
-  //           const f: any = followups[0];
-  //           if (f.Hurtigvalg !== "initial" && f.type !== "initial") {
-  //             return {
-  //               id: leadId,
-  //               ...leadData,
-  //               followups: followups[0],
-  //             };
-  //           } else {
-  //             return null;
-  //           }
-  //         } else {
-  //           return null;
-  //         }
-  //       }
-  //     );
-
-  //     const resolvedLeads = await Promise.all(leadsWithFollowupsPromises);
-  //     const leadsWithFollowups: any = resolvedLeads.filter(Boolean);
-
-  //     const getTimestamp = (item: any): number => {
-  //       const updatedAt = item.followups?.updatedAt;
-
-  //       if (typeof updatedAt === "string") {
-  //         const [datePart, timePart] = updatedAt
-  //           .split("|")
-  //           .map((s: string) => s.trim());
-  //         const [day, monthName, year] = datePart.split(" ");
-  //         const engMonth = monthMap[monthName.toLowerCase()] || monthName;
-
-  //         const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
-  //         const parsed = new Date(dateStr).getTime();
-  //         return isNaN(parsed) ? 0 : parsed;
-  //       } else if (updatedAt?.toMillis) {
-  //         return updatedAt.toMillis();
-  //       } else {
-  //         return item.followups?.date?.seconds
-  //           ? item.followups.date.seconds * 1000
-  //           : 0;
-  //       }
-  //     };
-
-  //     leadsWithFollowups.sort(
-  //       (a: any, b: any) => getTimestamp(b) - getTimestamp(a)
-  //     );
-
-  //     setLeads(leadsWithFollowups);
-  //   } catch (error) {
-  //     console.error("Error fetching leads with followups:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // const fetchLeadsData = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const leadsSnapshot = await getDocs(
-  //       query(
-  //         collection(db, "leads_from_supplier"),
-  //         orderBy("updatedAt", "desc")
-  //       )
-  //     );
-
-  //     const filterLeadsPromises = leadsSnapshot.docs.map(async (leadDoc) => {
-  //       const leadId = leadDoc.id;
-  //       const leadData = leadDoc.data();
-
-  //       const houseRef = collection(
-  //         db,
-  //         "leads_from_supplier",
-  //         leadId,
-  //         "preferred_house_model"
-  //       );
-  //       const houseSnapshot = await getDocs(houseRef);
-
-  //       const house: any = houseSnapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       }));
-
-  //       const isAssignedToUser = house.some((hou: any) => {
-  //         return String(hou?.Tildelt) === String(LoginUserId);
-  //       });
-
-  //       if (isAssignedToUser) {
-  //         return { leadId, leadData };
-  //       } else {
-  //         return null;
-  //       }
-  //     });
-
-  //     const resolvedFilteredLeads: any = await Promise.all(filterLeadsPromises);
-
-  //     const filteredLeadsOnly: any = resolvedFilteredLeads.filter(Boolean);
-
-  //     const leadsWithFollowupsPromises = filteredLeadsOnly.map(
-  //       async ({ leadId, leadData }: any) => {
-  //         const followupsRef = collection(
-  //           db,
-  //           "leads_from_supplier",
-  //           leadId,
-  //           "followups"
-  //         );
-  //         const followupsSnapshot = await getDocs(followupsRef);
-
-  //         const followups = followupsSnapshot.docs.map((doc) => ({
-  //           id: doc.id,
-  //           ...doc.data(),
-  //         }));
-
-  //         if (followups.length > 1) {
-  //           const sortedFollowups = [...followups].sort((a: any, b: any) => {
-  //             const getTimestamp = (item: any): number => {
-  //               if (typeof item.updatedAt === "string") {
-  //                 const [datePart, timePart] = item.updatedAt
-  //                   .split("|")
-  //                   .map((s: string) => s.trim());
-  //                 const [day, monthName, year] = datePart.split(" ");
-  //                 const engMonth =
-  //                   monthMap[monthName.toLowerCase()] || monthName;
-  //                 const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
-  //                 const parsed = new Date(dateStr).getTime();
-  //                 return isNaN(parsed) ? 0 : parsed;
-  //               } else if (item.updatedAt?.toMillis) {
-  //                 return item.updatedAt.toMillis();
-  //               } else {
-  //                 return item.date?.seconds ? item.date.seconds * 1000 : 0;
-  //               }
-  //             };
-
-  //             return getTimestamp(b) - getTimestamp(a);
-  //           });
-
-  //           const lastFollowup = sortedFollowups[0];
-
-  //           return {
-  //             id: leadId,
-  //             ...leadData,
-  //             followups: lastFollowup,
-  //           };
-  //         } else if (followups.length === 1) {
-  //           return {
-  //             id: leadId,
-  //             ...leadData,
-  //             followups: followups[0],
-  //           };
-  //         } else {
-  //           return {
-  //             id: leadId,
-  //             ...leadData,
-  //             followups: [],
-  //           };
-  //         }
-  //       }
-  //     );
-
-  //     const resolvedLeads = await Promise.all(leadsWithFollowupsPromises);
-  //     const leadsWithFollowups: any = resolvedLeads.filter(Boolean);
-
-  //     const getTimestamp = (item: any): number => {
-  //       const updatedAt = item.followups?.updatedAt;
-
-  //       if (typeof updatedAt === "string") {
-  //         const [datePart, timePart] = updatedAt
-  //           .split("|")
-  //           .map((s: string) => s.trim());
-  //         const [day, monthName, year] = datePart.split(" ");
-  //         const engMonth = monthMap[monthName.toLowerCase()] || monthName;
-  //         const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
-  //         const parsed = new Date(dateStr).getTime();
-  //         return isNaN(parsed) ? 0 : parsed;
-  //       } else if (updatedAt?.toMillis) {
-  //         return updatedAt.toMillis();
-  //       } else {
-  //         return item.followups?.date?.seconds
-  //           ? item.followups.date.seconds * 1000
-  //           : 0;
-  //       }
-  //     };
-
-  //     leadsWithFollowups.sort(
-  //       (a: any, b: any) => getTimestamp(b) - getTimestamp(a)
-  //     );
-
-  //     setLeads(leadsWithFollowups);
-  //   } catch (error) {
-  //     console.error("Error fetching leads with followups:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const fetchLeadsData = async () => {
     setIsLoading(true);
@@ -374,6 +122,11 @@ export const TODOTable = () => {
           assignedModelsSnapshot.docs.map((doc) => doc.ref.parent.parent?.id)
         )
       );
+
+      if (leadIds.length === 0) {
+        setFilteredData([]);
+        return;
+      }
 
       const leadDocs: any = await Promise.all(
         leadIds.map((leadId) =>
@@ -446,37 +199,259 @@ export const TODOTable = () => {
     }
   };
 
-  const filteredData = useMemo(() => {
-    return leads.filter((model: any) => {
+  // const filteredData = useMemo(() => {
+  //   return leads.filter((model: any) => {
+  //     const search = searchTerm.toLowerCase();
+  //     const leadSource = model?.leadSource?.toLowerCase();
+  //     const leadKilde = model?.leadData?.kilde?.toLowerCase();
+  //     const leadName = model?.leadData?.name?.toLowerCase();
+
+  //     let matchesSearch =
+  //       leadSource?.includes(search) ||
+  //       leadKilde?.includes(search) ||
+  //       leadName?.includes(search);
+
+  //     if (!matchesSearch) return false;
+  //     const modelDate: any = convertToFullDateString(model.createdAt);
+
+  //     if (selectedDate1 !== null) {
+  //       const matchDate = modelDate === formatDateOnly(selectedDate1);
+  //       matchesSearch = matchesSearch && matchDate;
+  //     }
+  //     if (selectedDateRange !== null) {
+  //       const { startDate, endDate }: any =
+  //         calculateDateRange(selectedDateRange);
+
+  //       const isWithinDateRange =
+  //         modelDate >= startDate && modelDate <= endDate;
+
+  //       matchesSearch = matchesSearch && isWithinDateRange;
+  //     }
+  //     return matchesSearch;
+  //   });
+  // }, [leads, searchTerm, selectedDate1, selectedDateRange]);
+
+  // const filteredData = useMemo(() => {
+  //   return leads.filter((model: any) => {
+  //     const search = searchTerm.toLowerCase();
+  //     const leadSource = model?.leadSource?.toLowerCase();
+  //     const leadKilde = model?.leadData?.kilde?.toLowerCase();
+  //     const leadName = model?.leadData?.name?.toLowerCase();
+
+  //     let matchesSearch =
+  //       leadSource?.includes(search) ||
+  //       leadKilde?.includes(search) ||
+  //       leadName?.includes(search);
+
+  //     if (!matchesSearch) return false;
+  //     const modelDate: any = convertToFullDateString(model.createdAt);
+
+  //     if (selectedDate1 !== null) {
+  //       const matchDate = modelDate === formatDateOnly(selectedDate1);
+  //       matchesSearch = matchesSearch && matchDate;
+  //     }
+  //     if (selectedDateRange !== null) {
+  //       const { startDate, endDate }: any =
+  //         calculateDateRange(selectedDateRange);
+
+  //       const isWithinDateRange =
+  //         modelDate >= startDate && modelDate <= endDate;
+
+  //       matchesSearch = matchesSearch && isWithinDateRange;
+  //     }
+  //     return matchesSearch;
+  //   });
+  // }, [leads, searchTerm, selectedDate1, selectedDateRange]);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+
+  const [allLogMap, setAllLogMap] = useState<Record<string, any[]>>({});
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchLogs = async () => {
+      const logMap: Record<string, any[]> = {};
+
+      await Promise.all(
+        leads.map(async (model: any) => {
+          const logsCollectionRef = collection(
+            db,
+            "leads_from_supplier",
+            String(model.id),
+            "followups"
+          );
+
+          try {
+            const logsSnapshot = await getDocs(logsCollectionRef);
+            const fetchedLogs = logsSnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+
+            const getTimestamp = (item: any): number => {
+              const updatedAt = item?.updatedAt;
+              if (typeof updatedAt === "string") {
+                const [datePart, timePart] = updatedAt
+                  .split("|")
+                  .map((s: string) => s.trim());
+                const [day, monthName, year] = datePart.split(" ");
+                const engMonth = monthMap[monthName.toLowerCase()] || monthName;
+                const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+                const parsed = new Date(dateStr).getTime();
+                return isNaN(parsed) ? 0 : parsed;
+              } else if (updatedAt?.toMillis) {
+                return updatedAt.toMillis();
+              } else {
+                return item?.date?.seconds ? item.date.seconds * 1000 : 0;
+              }
+            };
+
+            fetchedLogs.sort((a, b) => getTimestamp(b) - getTimestamp(a));
+            logMap[model.id] = fetchedLogs;
+          } catch (error) {
+            console.error("Failed to fetch logs:", error);
+          }
+        })
+      );
+
+      setAllLogMap(logMap);
+      setIsLoading(false);
+    };
+
+    if (leads.length > 0) {
+      fetchLogs();
+    }
+  }, [leads]);
+  useEffect(() => {
+    const filterLeads = async () => {
       const search = searchTerm.toLowerCase();
-      const leadSource = model?.leadSource?.toLowerCase();
-      const leadKilde = model?.leadData?.kilde?.toLowerCase();
-      const leadName = model?.leadData?.name?.toLowerCase();
+      setIsLoading(true);
 
-      let matchesSearch =
-        leadSource?.includes(search) ||
-        leadKilde?.includes(search) ||
-        leadName?.includes(search);
+      const results = await Promise.all(
+        leads.map(async (model: any) => {
+          const leadSource = model?.leadSource?.toLowerCase();
+          const leadKilde = model?.leadData?.kilde?.toLowerCase();
+          const leadName = model?.leadData?.name?.toLowerCase();
 
-      if (!matchesSearch) return false;
-      const modelDate: any = convertToFullDateString(model.createdAt);
+          let matchesSearch =
+            leadSource?.includes(search) ||
+            leadKilde?.includes(search) ||
+            leadName?.includes(search);
 
-      if (selectedDate1 !== null) {
-        const matchDate = modelDate === formatDateOnly(selectedDate1);
-        matchesSearch = matchesSearch && matchDate;
-      }
-      if (selectedDateRange !== null) {
-        const { startDate, endDate }: any =
-          calculateDateRange(selectedDateRange);
+          if (!matchesSearch) return null;
 
-        const isWithinDateRange =
-          modelDate >= startDate && modelDate <= endDate;
+          const modelDate: any = convertToFullDateString(model.createdAt);
 
-        matchesSearch = matchesSearch && isWithinDateRange;
-      }
-      return matchesSearch;
-    });
-  }, [leads, searchTerm, selectedDate1, selectedDateRange]);
+          if (selectedDate1 !== null) {
+            const matchDate = modelDate === formatDateOnly(selectedDate1);
+            if (!matchDate) return null;
+          }
+
+          if (selectedDateRange !== null) {
+            const { startDate, endDate }: any =
+              calculateDateRange(selectedDateRange);
+            const isWithinDateRange =
+              modelDate >= startDate && modelDate <= endDate;
+            if (!isWithinDateRange) return null;
+          }
+
+          if (selectedFilter === "Up for grabs") {
+            const logs = allLogMap?.[model.id] || [];
+            const firstLog = logs && logs?.[0];
+            if (
+              firstLog?.type === "initial" ||
+              firstLog?.Hurtigvalg === "initial"
+            ) {
+              return model;
+            } else {
+              return null;
+            }
+          }
+
+          if (selectedFilter === "Fremtidige oppgaver") {
+            const logs = Array.isArray(allLogMap?.[model.id])
+              ? allLogMap[model.id]
+              : [];
+            const firstLog = logs?.[0];
+
+            const futureTimestamp = firstLog?.date?.seconds
+              ? new Date(firstLog.date.seconds * 1000)
+              : null;
+
+            const now = new Date();
+
+            if (futureTimestamp && futureTimestamp > now) {
+              return model;
+            } else {
+              return null;
+            }
+          }
+
+          if (selectedFilter === "Til oppfølgning") {
+            const logs = Array.isArray(allLogMap?.[model.id])
+              ? allLogMap[model.id]
+              : [];
+            const firstLog = logs?.[0];
+
+            if (
+              firstLog?.type === "initial" ||
+              firstLog?.Hurtigvalg === "initial" ||
+              firstLog?.type === "Signert" ||
+              firstLog?.Hurtigvalg === "Signert"
+            ) {
+              return null;
+            }
+
+            const logDate = firstLog?.date?.seconds
+              ? new Date(firstLog.date.seconds * 1000)
+              : null;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const isTodayOrPast =
+              logDate && logDate.setHours(0, 0, 0, 0) <= today.getTime();
+
+            if (isTodayOrPast) {
+              return model;
+            } else {
+              return null;
+            }
+          }
+          if (selectedFilter === "Avsluttede leads") {
+            const logs = Array.isArray(allLogMap?.[model.id])
+              ? allLogMap[model.id]
+              : [];
+            const firstLog = logs?.[0];
+
+            if (
+              firstLog?.type === "Signert" ||
+              firstLog?.Hurtigvalg === "Signert"
+            ) {
+              return model;
+            } else {
+              return null;
+            }
+          }
+
+          return model;
+        })
+      );
+
+      const cleaned = results.filter(Boolean);
+      setFilteredData(cleaned);
+      setIsLoading(false);
+    };
+
+    if (Object.keys(allLogMap).length > 0) {
+      filterLeads();
+    }
+  }, [
+    leads,
+    searchTerm,
+    selectedDate1,
+    selectedDateRange,
+    selectedFilter,
+    allLogMap,
+  ]);
 
   useEffect(() => {
     if (LoginUserId) {
@@ -526,34 +501,19 @@ export const TODOTable = () => {
         ),
       },
       {
-        accessorKey: "Telefonnummer",
-        header: "Telefonnummer",
-        cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black w-max">
-            {row.original.leadData.telefon}
-          </p>
-        ),
-      },
-      {
         accessorKey: "Broker",
         header: "Broker",
         cell: ({ row }) => <BrokerCell id={row.original.id} />,
       },
       {
         accessorKey: "adresse",
-        header: "Adresse",
+        header: "Anleggsadresse",
         cell: ({ row }) => (
           <>
-            {row.original.address ? (
-              <div className="flex items-center gap-3 w-max">
-                <img src={Ic_map} alt="map" className="w-10 h-10" />
-                <div>
-                  <p className="text-black text-sm mb-[2px] font-medium">
-                    Sokkabekveien 77
-                  </p>
-                  <span className="text-gray text-xs">3478 Nærsnes</span>
-                </div>
-              </div>
+            {row.original.leadData?.adresse ? (
+              <p className="text-black text-sm font-medium w-max">
+                {row.original.leadData?.adresse}
+              </p>
             ) : (
               <p className="text-center">-</p>
             )}
@@ -672,21 +632,63 @@ export const TODOTable = () => {
               selectedDate={selectedDate1}
               onDateChange={setSelectedDate1}
               dateFormat="MM/dd/yyyy"
-              placeholderText="Select dates"
+              placeholderText="Velg dato"
               className="border border-gray1 rounded-[8px] flex gap-2 items-center p-2.5 md:py-[10px] md:px-4 cursor-pointer shadow-shadow1 h-[40px] w-max"
             />
           </div>
         </div>
         <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 gap-2 md:px-4">
-          <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
-            <img src={Ic_search} alt="search" />
-            <input
-              type="text"
-              placeholder="Søk i leads"
-              className="focus-within:outline-none"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div className="flex gap-3 items-center">
+            <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px] relative">
+              <img src={Ic_search} alt="search" />
+              <input
+                type="text"
+                placeholder="Søk i leads"
+                className="focus-within:outline-none"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <X
+                  className="text-primary cursor-pointer h-5 w-5 absolute right-[14px]"
+                  onClick={() => setSearchTerm("")}
+                />
+              )}
+            </div>
+            <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
+              <div
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
+                  selectedFilter === "Up for grabs" && "bg-white"
+                }`}
+                onClick={() => setSelectedFilter("Up for grabs")}
+              >
+                Up for grabs
+              </div>
+              <div
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm border border-t-0 border-b-0 border-gray1 cursor-pointer ${
+                  selectedFilter === "Til oppfølgning" && "bg-white"
+                }`}
+                onClick={() => setSelectedFilter("Til oppfølgning")}
+              >
+                Til oppfølgning
+              </div>
+              <div
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer border-r border-gray1 ${
+                  selectedFilter === "Fremtidige oppgaver" && "bg-white"
+                }`}
+                onClick={() => setSelectedFilter("Fremtidige oppgaver")}
+              >
+                Fremtidige oppgaver
+              </div>
+              <div
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
+                  selectedFilter === "Avsluttede leads" && "bg-white"
+                }`}
+                onClick={() => setSelectedFilter("Avsluttede leads")}
+              >
+                Avsluttede leads
+              </div>
+            </div>
           </div>
           <div className="flex gap-3 items-center">
             <div

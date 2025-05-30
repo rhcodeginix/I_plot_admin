@@ -2,11 +2,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
 import Ic_filter from "../../../assets/images/Ic_filter.svg";
-import Ic_map from "../../../assets/images/Ic_map.svg";
 import Ic_download from "../../../assets/images/Ic_download.svg";
 import * as XLSX from "xlsx";
 import DatePickerComponent from "../../../components/ui/datepicker";
-import { Ellipsis, Loader2 } from "lucide-react";
+import { Ellipsis, Loader2, X } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -243,7 +242,7 @@ export const MyLeadsTable = () => {
               return null;
             }
           }
-        
+
           if (selectedFilter === "Fremtidige oppgaver") {
             const logs = Array.isArray(allLogMap?.[model.id])
               ? allLogMap[model.id]
@@ -257,9 +256,56 @@ export const MyLeadsTable = () => {
             const now = new Date();
 
             if (futureTimestamp && futureTimestamp > now) {
-              return model; 
+              return model;
             } else {
-              return null; 
+              return null;
+            }
+          }
+
+          if (selectedFilter === "Til oppfølgning") {
+            const logs = Array.isArray(allLogMap?.[model.id])
+              ? allLogMap[model.id]
+              : [];
+            const firstLog = logs?.[0];
+
+            if (
+              firstLog?.type === "initial" ||
+              firstLog?.Hurtigvalg === "initial" ||
+              firstLog?.type === "Signert" ||
+              firstLog?.Hurtigvalg === "Signert"
+            ) {
+              return null;
+            }
+
+            const logDate = firstLog?.date?.seconds
+              ? new Date(firstLog.date.seconds * 1000)
+              : null;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const isTodayOrPast =
+              logDate && logDate.setHours(0, 0, 0, 0) <= today.getTime();
+
+            if (isTodayOrPast) {
+              return model;
+            } else {
+              return null;
+            }
+          }
+          if (selectedFilter === "Avsluttede leads") {
+            const logs = Array.isArray(allLogMap?.[model.id])
+              ? allLogMap[model.id]
+              : [];
+            const firstLog = logs?.[0];
+
+            if (
+              firstLog?.type === "Signert" ||
+              firstLog?.Hurtigvalg === "Signert"
+            ) {
+              return model;
+            } else {
+              return null;
             }
           }
 
@@ -330,34 +376,19 @@ export const MyLeadsTable = () => {
         ),
       },
       {
-        accessorKey: "Telefonnummer",
-        header: "Telefonnummer",
-        cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black w-max">
-            {row.original.leadData.telefon}
-          </p>
-        ),
-      },
-      {
         accessorKey: "Broker",
         header: "Broker",
         cell: ({ row }) => <BrokerCell id={row.original.id} />,
       },
       {
         accessorKey: "adresse",
-        header: "Adresse",
+        header: "Anleggsadresse",
         cell: ({ row }) => (
           <>
-            {row.original.address ? (
-              <div className="flex items-center gap-3 w-max">
-                <img src={Ic_map} alt="map" className="w-10 h-10" />
-                <div>
-                  <p className="text-black text-sm mb-[2px] font-medium">
-                    Sokkabekveien 77
-                  </p>
-                  <span className="text-gray text-xs">3478 Nærsnes</span>
-                </div>
-              </div>
+            {row.original.leadData?.adresse ? (
+              <p className="text-black text-sm font-medium w-max">
+                {row.original.leadData?.adresse}
+              </p>
             ) : (
               <p className="text-center">-</p>
             )}
@@ -476,14 +507,14 @@ export const MyLeadsTable = () => {
               selectedDate={selectedDate1}
               onDateChange={setSelectedDate1}
               dateFormat="MM/dd/yyyy"
-              placeholderText="Select dates"
+              placeholderText="Velg dato"
               className="border border-gray1 rounded-[8px] flex gap-2 items-center p-2.5 md:py-[10px] md:px-4 cursor-pointer shadow-shadow1 h-[40px] w-max"
             />
           </div>
         </div>
         <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 gap-2 md:px-4">
           <div className="flex gap-3 items-center">
-            <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
+            <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px] relative">
               <img src={Ic_search} alt="search" />
               <input
                 type="text"
@@ -492,6 +523,12 @@ export const MyLeadsTable = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+              {searchTerm && (
+                <X
+                  className="text-primary cursor-pointer h-5 w-5 absolute right-[14px]"
+                  onClick={() => setSearchTerm("")}
+                />
+              )}
             </div>
             <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
               <div
@@ -502,30 +539,30 @@ export const MyLeadsTable = () => {
               >
                 Up for grabs
               </div>
-              {/* <div
+              <div
                 className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm border border-t-0 border-b-0 border-gray1 cursor-pointer ${
                   selectedFilter === "Til oppfølgning" && "bg-white"
                 }`}
                 onClick={() => setSelectedFilter("Til oppfølgning")}
               >
                 Til oppfølgning
-              </div> */}
+              </div>
               <div
-                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer border-l border-gray1 ${
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer border-r border-gray1 ${
                   selectedFilter === "Fremtidige oppgaver" && "bg-white"
                 }`}
                 onClick={() => setSelectedFilter("Fremtidige oppgaver")}
               >
                 Fremtidige oppgaver
               </div>
-              {/* <div
+              <div
                 className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
                   selectedFilter === "Avsluttede leads" && "bg-white"
                 }`}
                 onClick={() => setSelectedFilter("Avsluttede leads")}
               >
                 Avsluttede leads
-              </div> */}
+              </div>
             </div>
           </div>
           <div className="flex gap-3 items-center">

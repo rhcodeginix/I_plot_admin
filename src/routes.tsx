@@ -3,6 +3,7 @@ import { Layout } from "./layouts";
 import {
   AddAgentUserForm,
   AddBankUserForm,
+  AddLeadForm,
   AddSuppliers,
   AddUsers,
   AllBankLeads,
@@ -81,6 +82,7 @@ export const routes = createBrowserRouter([
       { path: "/edit-bank-user/*", element: <AddBankUserForm /> },
       { path: "/add-agent-user", element: <AddAgentUserForm /> },
       { path: "/edit-agent-user/*", element: <AddAgentUserForm /> },
+      { path: "/add-lead", element: <AddLeadForm /> },
     ],
   },
 ]);

@@ -165,6 +165,7 @@ export const fetchLeadData = async (id: string) => {
     console.error("Error fetching lead data:", error);
   }
 };
+
 export function formatTimestamp(timestamp: any) {
   const date = new Date(timestamp?.seconds * 1000);
 
@@ -172,14 +173,10 @@ export function formatTimestamp(timestamp: any) {
   const month = date.toLocaleString("no-NO", { month: "long" });
   const year = date.getFullYear();
 
-  let hours = date.getHours();
+  const hours = date.getHours().toString().padStart(2, "0"); // 24-hour format
   const minutes = date.getMinutes().toString().padStart(2, "0");
-  const isPM = hours >= 12;
-  hours = hours % 12 || 12;
 
-  const period = isPM ? "pm" : "am";
-
-  return `${day}. ${month} ${year} | ${hours}:${minutes} ${period}`;
+  return `${day}. ${month} ${year} | ${hours}:${minutes}`;
 }
 
 export function convertToFullDateString(timestamp: any) {
@@ -204,4 +201,31 @@ export function formatDateOnly(date: Date) {
 export function formatSpaceSeparatedToNOK(value: string): string {
   const numericValue = Number(value.replace(/\s/g, ""));
   return numericValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " NOK";
+}
+
+export function convertFullStringTo24Hour(datetimeStr: any) {
+  const [datePart, timePart] =
+    datetimeStr && datetimeStr?.split("|").map((part: any) => part.trim());
+
+  const [time, modifier] = timePart.split(" ");
+  let [hours, minutes] = time.split(":").map(Number);
+
+  if (modifier === "PM" && hours !== 12) {
+    hours += 12;
+  } else if (modifier === "AM" && hours === 12) {
+    hours = 0;
+  }
+
+  const hoursStr = hours.toString().padStart(2, "0");
+  const minutesStr = minutes.toString().padStart(2, "0");
+  const time24 = `${hoursStr}:${minutesStr}`;
+
+  return `${datePart} | ${time24}`;
+}
+export function formatNorwegianPhone(phone: string): string {
+  if (!phone) return "";
+
+  let formatted = phone.startsWith("47") ? phone.slice(2) : phone;
+
+  return `+47 ${formatted.replace(/(\d{2})(?=\d)/g, "$1 ").trim()}`;
 }

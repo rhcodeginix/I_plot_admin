@@ -106,7 +106,7 @@ export const AddFollowupForm: React.FC<{
             ...finalData,
             updatedAt: formatter.format(new Date()),
           });
-          toast.success("Follow up updated.", {
+          toast.success("Ny aktivitet lagret.", {
             position: "top-right",
           });
         } else {

@@ -225,7 +225,7 @@ export const Dashboard = () => {
               selectedDate={selectedDate1}
               onDateChange={setSelectedDate1}
               dateFormat="MM/dd/yyyy"
-              placeholderText="Select dates"
+              placeholderText="Velg dato"
               className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] w-full sm:w-max"
             />
             <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 pr-8 cursor-pointer shadow-shadow1 h-[40px]">

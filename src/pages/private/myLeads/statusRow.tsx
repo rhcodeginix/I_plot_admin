@@ -43,7 +43,6 @@ export const StatusCell: React.FC<{ id: string }> = ({ id }) => {
             return item?.date?.seconds ? item.date.seconds * 1000 : 0;
           }
         };
-
         fetchedLogs.sort((a: any, b: any) => getTimestamp(b) - getTimestamp(a));
 
         setData(fetchedLogs);

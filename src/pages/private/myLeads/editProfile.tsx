@@ -107,7 +107,10 @@ export const EditProfile: React.FC<{
   useEffect(() => {
     if (leadData) {
       form.setValue("name", leadData?.leadData?.name);
-      form.setValue("email", leadData?.leadData?.email);
+      form.setValue(
+        "email",
+        leadData?.leadData?.email || leadData?.leadData?.epost
+      );
       form.setValue(
         "telefon",
         leadData?.leadData?.telefon &&

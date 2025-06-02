@@ -635,8 +635,8 @@ export const TODOTable = () => {
             />
           </div>
         </div>
-        <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 gap-2 md:px-4">
-          <div className="flex gap-3 items-center">
+        <div className="mb-2 flex flex-col desktop:flex-row desktop:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 gap-2 md:px-4">
+          <div className="flex flex-col lg:flex-row gap-2 md:gap-3 lg:items-center">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px] relative">
               <img src={Ic_search} alt="search" />
               <input
@@ -653,7 +653,7 @@ export const TODOTable = () => {
                 />
               )}
             </div>
-            <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
+            <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex flex-col sm:flex-row overflow-hidden md:w-max">
               <div
                 className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
                   selectedFilter === "Up for grabs" && "bg-white"
@@ -663,7 +663,7 @@ export const TODOTable = () => {
                 Up for grabs
               </div>
               <div
-                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm border border-t-0 border-b-0 border-gray1 cursor-pointer ${
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-b border-t sm:border-t-0 sm:border-b-0 sm:border-r sm:border-l border-gray1 cursor-pointer ${
                   selectedFilter === "Til oppfølgning" && "bg-white"
                 }`}
                 onClick={() => setSelectedFilter("Til oppfølgning")}
@@ -671,7 +671,7 @@ export const TODOTable = () => {
                 Til oppfølgning
               </div>
               <div
-                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer border-r border-gray1 ${
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer border-b sm:border-b-0 sm:border-r border-gray1 ${
                   selectedFilter === "Fremtidige oppgaver" && "bg-white"
                 }`}
                 onClick={() => setSelectedFilter("Fremtidige oppgaver")}
@@ -688,7 +688,7 @@ export const TODOTable = () => {
               </div>
             </div>
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-2 md:gap-3 items-center">
             <div
               className="border border-gray1 rounded-[8px] flex gap-2 items-center p-2.5 md:py-[10px] md:px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]"
               onClick={downloadExcel}

@@ -839,10 +839,10 @@ export const MyLeadsDetail = () => {
           </h4>
           <div className="w-full mb-3 md:mb-5">
             <div className="relative flex justify-between items-center">
-              <div className="absolute top-3.5 md:top-5 left-[56px] md:left-[72px] right-[56px] md:right-[72px] h-0.5 bg-gray2 z-0"></div>
+              <div className="absolute top-3.5 md:top-5 left-[50px] md:left-[72px] right-[50px] md:right-[72px] h-0.5 bg-gray2 z-0"></div>
 
               <div
-                className="absolute top-3.5 md:top-5 left-[56px] md:left-[72px] h-0.5 bg-purple z-10 transition-all duration-300 ease-in-out"
+                className="absolute top-3.5 md:top-5 left-[50px] md:left-[72px] h-0.5 bg-purple z-10 transition-all duration-300 ease-in-out"
                 style={{
                   width: `calc((100% - 144px) * ${
                     activeStep / (steps.length - 1)

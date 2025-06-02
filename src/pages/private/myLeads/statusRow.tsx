@@ -65,7 +65,7 @@ export const StatusCell: React.FC<{ id: string }> = ({ id }) => {
             : ""
         }
         ${
-          data[0]?.Hurtigvalg === "Start prosess"
+          data[0]?.Hurtigvalg === "Tilbud sendt"
             ? "bg-[#e2e6fd] text-[#001795]"
             : ""
         }
@@ -75,7 +75,7 @@ export const StatusCell: React.FC<{ id: string }> = ({ id }) => {
             : ""
         }
         ${
-          !["Signert", "Førstegangsmøte", "Start prosess"].includes(
+          !["Signert", "Førstegangsmøte", "Tilbud sendt"].includes(
             data[0]?.Hurtigvalg
           )
             ? "bg-[#FFEBD9] text-[#994700]"

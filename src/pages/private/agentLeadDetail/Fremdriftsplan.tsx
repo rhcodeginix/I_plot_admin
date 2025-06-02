@@ -9,8 +9,8 @@ import { isValid, addDays, differenceInCalendarDays } from "date-fns";
 
 function formatPrice(inputStr: any) {
   let noSuffix = inputStr.replace(" NOK", "");
-  let withDots = noSuffix.replace(/\s+/g, ".");
-  return withDots + " NOK";
+  let withDots = noSuffix.replace(/\s+/g, " ");
+  return "kr" + withDots;
 }
 
 export const Fremdriftsplan: React.FC<{

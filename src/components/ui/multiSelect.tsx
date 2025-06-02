@@ -67,13 +67,15 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   };
 
   useEffect(() => {
-    const optionsFromValue = value?.map((val: any) => {
-      const foundOption = options.find((option) => option.value === val);
-      return foundOption ? foundOption : { value: val, label: val };
-    });
+    if (Array.isArray(value)) {
+      const optionsFromValue = value?.map((val: any) => {
+        const foundOption = options.find((option) => option.value === val);
+        return foundOption ? foundOption : { value: val, label: val };
+      });
 
-    if (optionsFromValue?.length > 0) {
-      setSelectedOptions(optionsFromValue);
+      if (optionsFromValue?.length > 0) {
+        setSelectedOptions(optionsFromValue);
+      }
     }
   }, [value, options]);
   const scrollRef = useRef<HTMLParagraphElement>(null);

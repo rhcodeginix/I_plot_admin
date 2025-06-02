@@ -334,8 +334,93 @@ export const MyLeadsTable = () => {
     fetchLeadsData();
   }, []);
 
-  const columns = useMemo<ColumnDef<any>[]>(
-    () => [
+  // const columns = useMemo<ColumnDef<any>[]>(
+  //   () => [
+  //     {
+  //       accessorKey: "Status",
+  //       header: "Status",
+  //       cell: ({ row }) => <StatusCell id={row.original.id} />,
+  //     },
+  //     {
+  //       accessorKey: "kunde",
+  //       header: "Kunde",
+  //       cell: ({ row }) => (
+  //         <div className="flex items-center gap-3 w-max">
+  //           <div className="w-8 h-8 rounded-full border border-gray1 bg-gray3 flex items-center justify-center">
+  //             {row.original.leadData.name[0]}
+  //           </div>
+  //           <div>
+  //             <Link
+  //               to={`/my-leads-details/${row.original.id}`}
+  //               className="font-medium text-purple text-sm mb-[2px]"
+  //             >
+  //               {row.original.leadData.name}
+  //             </Link>
+  //             <p className="text-xs text-gray">
+  //               {row.original.leadData.email || row.original.leadData?.epost}
+  //             </p>
+  //           </div>
+  //         </div>
+  //       ),
+  //     },
+  //     {
+  //       accessorKey: "Husmodell",
+  //       header: "Husmodell",
+  //       cell: ({ row }) => <HouseModelCell id={row.original.id} />,
+  //     },
+  //     {
+  //       accessorKey: "Broker",
+  //       header: "Broker",
+  //       cell: ({ row }) => <BrokerCell id={row.original.id} />,
+  //     },
+  //     {
+  //       accessorKey: "adresse",
+  //       header: "Anleggsadresse",
+  //       cell: ({ row }) => (
+  //         <>
+  //           {row.original.leadData?.adresse ? (
+  //             <p className="text-black text-sm font-medium w-max">
+  //               {row.original.leadData?.adresse}
+  //             </p>
+  //           ) : (
+  //             <p className="text-center">-</p>
+  //           )}
+  //         </>
+  //       ),
+  //     },
+  //     {
+  //       accessorKey: "Oppdatert kl",
+  //       header: "Oppdatert kl",
+  //       cell: ({ row }) => (
+  //         <p className="text-sm font-semibold text-black w-max">
+  //           {formatTimestamp(row.original.updatedAt)}
+  //         </p>
+  //       ),
+  //     },
+  //     {
+  //       accessorKey: "Siste aktivitet",
+  //       header: "Siste aktivitet",
+  //       cell: ({ row }) => (
+  //         <p className="text-sm font-semibold text-black w-[500px]">
+  //           {row.original.leadData?.notaterFørsteSamtale}
+  //         </p>
+  //       ),
+  //     },
+  //     {
+  //       id: "handling",
+  //       header: "Handling",
+  //       cell: () => (
+  //         <button className="h-8 w-8 flex items-center justify-center">
+  //           <Ellipsis className="h-4 w-4 text-gray-500" />
+  //         </button>
+  //       ),
+  //     },
+  //   ],
+  //   [email, navigate, page]
+  // );
+
+  const columns = useMemo<ColumnDef<any>[]>(() => {
+    const baseColumns: ColumnDef<any>[] = [
       {
         accessorKey: "Status",
         header: "Status",
@@ -369,15 +454,6 @@ export const MyLeadsTable = () => {
         cell: ({ row }) => <HouseModelCell id={row.original.id} />,
       },
       {
-        accessorKey: "Opprettet kl",
-        header: "Opprettet kl",
-        cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black w-max">
-            {formatTimestamp(row.original.createdAt)}
-          </p>
-        ),
-      },
-      {
         accessorKey: "Broker",
         header: "Broker",
         cell: ({ row }) => <BrokerCell id={row.original.id} />,
@@ -385,26 +461,14 @@ export const MyLeadsTable = () => {
       {
         accessorKey: "adresse",
         header: "Anleggsadresse",
-        cell: ({ row }) => (
-          <>
-            {row.original.leadData?.adresse ? (
-              <p className="text-black text-sm font-medium w-max">
-                {row.original.leadData?.adresse}
-              </p>
-            ) : (
-              <p className="text-center">-</p>
-            )}
-          </>
-        ),
-      },
-      {
-        accessorKey: "Oppdatert kl",
-        header: "Oppdatert kl",
-        cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black w-max">
-            {formatTimestamp(row.original.updatedAt)}
-          </p>
-        ),
+        cell: ({ row }) =>
+          row.original.leadData?.adresse ? (
+            <p className="text-black text-sm font-medium w-max">
+              {row.original.leadData?.adresse}
+            </p>
+          ) : (
+            <p className="text-center">-</p>
+          ),
       },
       {
         accessorKey: "Siste aktivitet",
@@ -424,9 +488,26 @@ export const MyLeadsTable = () => {
           </button>
         ),
       },
-    ],
-    [email, navigate, page]
-  );
+    ];
+
+    const updatedColumn: ColumnDef<any> = {
+      accessorKey: "Oppdatert kl",
+      header: "Oppdatert kl",
+      cell: ({ row }) => (
+        <p className="text-sm font-semibold text-black w-max">
+          {formatTimestamp(row.original.updatedAt)}
+        </p>
+      ),
+    };
+
+    if (selectedFilter === "Til oppfølgning") {
+      baseColumns.splice(1, 0, updatedColumn);
+    } else {
+      baseColumns.splice(5, 0, updatedColumn);
+    }
+
+    return baseColumns;
+  }, [email, navigate, page, selectedFilter]);
 
   const pageSize = 10;
   const paginatedData = useMemo(() => {

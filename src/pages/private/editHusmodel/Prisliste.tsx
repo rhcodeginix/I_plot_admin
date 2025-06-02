@@ -347,7 +347,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                         />
                       </div>
                       <div className="text-darkBlack text-right font-bold text-lg md:text-xl desktop:text-2xl">
-                        {totalPrisOfByggekostnader} NOK
+                        kr {totalPrisOfByggekostnader}
                       </div>
                     </div>
                   </div>
@@ -633,7 +633,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                         />
                       </div>
                       <div className="text-darkBlack text-right font-bold text-lg md:text-xl desktop:text-2xl">
-                        {totalPrisOfTomtekost} NOK
+                        kr {totalPrisOfTomtekost}
                       </div>
                     </div>
                   </div>

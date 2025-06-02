@@ -139,7 +139,7 @@ export const BankleadsTabs = () => {
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-xl">
-                  {sum ? numberToNorwegian(sum) : 0} NOK
+                  kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>
@@ -179,7 +179,7 @@ export const BankleadsTabs = () => {
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-xl">
-                  {sum ? numberToNorwegian(sum) : 0} NOK
+                  kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>
@@ -226,7 +226,7 @@ export const BankleadsTabs = () => {
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-xl">
-                  {sum ? numberToNorwegian(sum) : 0} NOK
+                  kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>
@@ -280,7 +280,7 @@ export const BankleadsTabs = () => {
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-xl">
-                  {sum ? numberToNorwegian(sum) : 0} NOK
+                  kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>

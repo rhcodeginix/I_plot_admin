@@ -792,9 +792,9 @@ export const ProjectAccounting = forwardRef<
                                     onClick={() => setEditingPriceIndex(index)}
                                   >
                                     {editedPrices[index]
-                                      ? `${editedPrices[index]} NOK`
+                                      ? `kr ${editedPrices[index]}`
                                       : item?.pris
-                                      ? `${item.pris} NOK`
+                                      ? `kr ${item.pris}`
                                       : "inkl. i tilbud"}
                                   </h4>
                                 )}
@@ -882,9 +882,9 @@ export const ProjectAccounting = forwardRef<
                                 onClick={() => setEditingPriceIndex(index)}
                               >
                                 {editedPrices[index]
-                                  ? `${editedPrices[index]} NOK`
+                                  ? `kr ${editedPrices[index]}`
                                   : item?.pris
-                                  ? `${item.pris} NOK`
+                                  ? `kr ${item.pris}`
                                   : "inkl. i tilbud"}
                               </h4>
                             )}
@@ -918,7 +918,7 @@ export const ProjectAccounting = forwardRef<
                         </p>
                       </div>
                       <h4 className="text-black font-bold text-base">
-                        {formattedNumberOfByggekostnader} NOK
+                        kr {formattedNumberOfByggekostnader}
                       </h4>
                     </div>
                     <div className="flex items-center justify-center">
@@ -1022,9 +1022,9 @@ export const ProjectAccounting = forwardRef<
                                 onClick={() => setEditingPriceTomIndex(index)}
                               >
                                 {editedPricesTom[index]
-                                  ? `${editedPricesTom[index]} NOK`
+                                  ? `kr ${editedPricesTom[index]}`
                                   : item?.pris
-                                  ? `${item.pris} NOK`
+                                  ? `kr ${item.pris}`
                                   : "inkl. i tilbud"}
                               </h4>
                             )}
@@ -1074,9 +1074,9 @@ export const ProjectAccounting = forwardRef<
                                 onClick={() => setEditingPriceIndex(index)}
                               >
                                 {editedPricesTom[index]
-                                  ? `${editedPricesTom[index]} NOK`
+                                  ? `kr ${editedPricesTom[index]}`
                                   : item?.pris
-                                  ? `${item.pris} NOK`
+                                  ? `kr ${item.pris}`
                                   : "inkl. i tilbud"}
                               </h4>
                             )}
@@ -1112,7 +1112,7 @@ export const ProjectAccounting = forwardRef<
                         </p>
                       </div>
                       <h4 className="text-black font-bold text-base">
-                        {formattedNumber} NOK
+                        kr {formattedNumber}
                       </h4>
                     </div>
                     <div className="flex items-center justify-center">
@@ -1137,7 +1137,7 @@ export const ProjectAccounting = forwardRef<
             </p>
           )}
           <div className="flex justify-end w-full gap-5 items-center fixed bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-            <div onClick={() => setActiveTab(1)} >
+            <div onClick={() => setActiveTab(1)}>
               <Button
                 text="Tilbake"
                 className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -1158,7 +1158,7 @@ export const ProjectAccounting = forwardRef<
             <div className="bg-white p-6 rounded-lg">
               <p className="mb-4">Er du sikker på at du vil slette?</p>
               <div className="flex justify-center gap-4">
-                <div onClick={handleCancelDelete} >
+                <div onClick={handleCancelDelete}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

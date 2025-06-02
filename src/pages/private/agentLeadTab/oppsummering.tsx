@@ -122,9 +122,9 @@ export const Oppsummering: React.FC<{
               dealer: "BoligPartner",
               office: "BoligPartner",
               projectAddress: bankData?.plotHusmodell?.plot?.address,
-              landCost: `${plotData?.tomtekostnader} NOK`,
-              buildingCost: `${houseData?.byggekostnader} NOK`,
-              totalCost: `${numberToNorwegian(sum)} NOK`,
+              landCost: `kr ${plotData?.tomtekostnader}`,
+              buildingCost: `kr ${houseData?.byggekostnader}`,
+              totalCost: `kr ${numberToNorwegian(sum)}`,
               link: `https://admin.mintomt.no/bank-leads-detail/${id}`,
             },
           }),
@@ -150,7 +150,9 @@ export const Oppsummering: React.FC<{
         }}
       >
         <div className="py-4 px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
-          <span className="text-sm md:text-base desktop:text-lg font-semibold">Oppsummering</span>
+          <span className="text-sm md:text-base desktop:text-lg font-semibold">
+            Oppsummering
+          </span>
         </div>
         <div className="p-5">
           <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
@@ -239,15 +241,12 @@ export const Oppsummering: React.FC<{
                   Totale tomtekostnader:
                 </div>
                 <div className="text-darkBlack">
-                  {/* {formattedNumberOfByggekostnader} NOK */}
-                  {plotData?.tomtekostnader} NOK
+                  kr {plotData?.tomtekostnader}
                 </div>
               </div>
               <div className="flex gap-3 items-center">
                 <div className="w-[300px] text-[#5D6B98]">Kommentar:</div>
-                <div className="text-darkBlack">
-                  {plotData?.Kommentar}
-                </div>
+                <div className="text-darkBlack">{plotData?.Kommentar}</div>
               </div>
             </div>
           </div>
@@ -268,15 +267,12 @@ export const Oppsummering: React.FC<{
                   Totale byggekostnader:
                 </div>
                 <div className="text-darkBlack">
-                  {/* {formattedNumber} NOK */}
-                  {houseData?.byggekostnader} NOK
+                  kr {houseData?.byggekostnader}
                 </div>
               </div>
               <div className="flex gap-3 items-center mb-3">
                 <div className="w-[300px] text-[#5D6B98]">Kommentar:</div>
-                <div className="text-darkBlack">
-                  {houseData?.Kommentar}
-                </div>
+                <div className="text-darkBlack">{houseData?.Kommentar}</div>
               </div>
             </div>
           </div>
@@ -316,7 +312,9 @@ export const Oppsummering: React.FC<{
             </div>
           </div>
           <div className="border-t border-[#DCDFEA] mb-5"></div>
-          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">Forhåndstakst</div>
+          <div className="text-sm md:text-base desktop:text-lg text-black font-medium">
+            Forhåndstakst
+          </div>
           <div className="py-5">
             <div className="flex flex-col gap-2">
               <div className="flex gap-3 items-center">
@@ -338,8 +336,7 @@ export const Oppsummering: React.FC<{
                 Sum tomtekostnader
               </div>
               <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                {/* {formattedNumberOfByggekostnader} NOK */}
-                {plotData?.tomtekostnader} NOK
+                kr {plotData?.tomtekostnader}
                 <p className="text-[#5D6B98] text-base font-normal">
                   (prosjektregnskapet oversendes megler)
                 </p>
@@ -350,8 +347,7 @@ export const Oppsummering: React.FC<{
                 Sum byggkostnader
               </div>
               <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                {/* {formattedNumber} NOK */}
-                {houseData?.byggekostnader} NOK
+                kr {houseData?.byggekostnader}
                 <p className="text-[#5D6B98] text-base font-normal">
                   (prosjektregnskapet oversende banken)
                 </p>
@@ -363,15 +359,14 @@ export const Oppsummering: React.FC<{
                 Totale kostnader
               </div>
               <div className="w-full text-darkBlack font-bold text-xl">
-                {numberToNorwegian(sum)} NOK
-                {/* {formattedGrandTotal} NOK */}
+                kr {numberToNorwegian(sum)}
               </div>
             </div>
           </div>
         </div>
       </div>
       <div className="flex justify-end w-full gap-5 items-center fixed bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-        <div onClick={() => setActiveTab(3)} >
+        <div onClick={() => setActiveTab(3)}>
           <Button
             text="Tilbake"
             className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

@@ -237,7 +237,7 @@ export const BankTable = () => {
 
             return (
               <p className="text-sm font-semibold text-black w-max">
-                {numberToNorwegian(sum)} NOK
+                kr {numberToNorwegian(sum)}
               </p>
             );
           },

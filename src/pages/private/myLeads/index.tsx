@@ -5,8 +5,8 @@ import Button from "../../../components/common/button";
 import { Plus } from "lucide-react";
 
 export const MyLeads = () => {
-  const [activeTab, setActiveTab] = useState<"Mine leads" | "Mine oppgaver">(
-    "Mine leads"
+  const [activeTab, setActiveTab] = useState<"Alle leads" | "Mine leads">(
+    "Alle leads"
   );
   const email: string | null = localStorage.getItem("Iplot_admin");
 
@@ -19,8 +19,8 @@ export const MyLeads = () => {
         <div className="flex gap-2 text-center">
           <div className="flex gap-1.5">
             {[
-              "Mine leads",
-              email && email !== "andre.finger@gmail.com" && "Mine oppgaver",
+              "Alle leads",
+              email && email !== "andre.finger@gmail.com" && "Mine leads",
             ]
               .filter(Boolean)
               .map((tab: any) => (
@@ -45,8 +45,8 @@ export const MyLeads = () => {
           />
         </div>
       </div>
-      {activeTab === "Mine leads" && <MyLeadsTable />}
-      {activeTab === "Mine oppgaver" && <TODOTable />}
+      {activeTab === "Alle leads" && <MyLeadsTable />}
+      {activeTab === "Mine leads" && <TODOTable />}
     </>
   );
 };

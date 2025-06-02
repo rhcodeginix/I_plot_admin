@@ -57,7 +57,7 @@ export const EditHouseModel = () => {
               Sum antatte anleggskostnader inkl. mva.
             </p>
             <h1 className="text-darkBlack font-bold text-lg md:text-xl desktop:text-2xl">
-              {house && house?.pris ? formatCurrency(house?.pris) : "0 NOK"}
+              {house && house?.pris ? formatCurrency(house?.pris) : "kr 0"}
             </h1>
           </div>
         </div>

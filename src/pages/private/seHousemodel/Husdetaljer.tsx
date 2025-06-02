@@ -54,6 +54,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
       setIsOpen(true);
     }
   };
+
   return (
     <>
       <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:h-[333px] mb-6 md:mb-9 desktop:mb-[74px]">
@@ -409,7 +410,9 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                       ></div>
                     ) : (
                       <td className="text-left pb-3 md:pb-4 text-darkBlack text-sm font-semibold whitespace-nowrap">
-                        {husmodellData?.Tomtetype}
+                        {Array.isArray(husmodellData?.Tomtetype)
+                          ? husmodellData.Tomtetype.join(", ")
+                          : husmodellData?.Tomtetype}
                       </td>
                     )}
                   </tr>

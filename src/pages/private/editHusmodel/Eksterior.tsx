@@ -920,7 +920,7 @@ export const Eksterior: React.FC<{
               </span>
               <div>
                 <h3 className="mb-[2px] text-darkBlack font-semibold text-lg md:text-xl desktop:text-2xl">
-                  {totalPris} NOK
+                  kr {totalPris}
                 </h3>
                 <h6 className="text-purple text-xs md:text-sm font-semibold">
                   Se oppstilling

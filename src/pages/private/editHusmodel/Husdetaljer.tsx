@@ -45,6 +45,7 @@ import {
 } from "../../../lib/utils";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
+import MultiSelect from "../../../components/ui/multiSelect";
 
 const formSchema = z.object({
   Leverandører: z
@@ -140,7 +141,10 @@ const formSchema = z.object({
   TilgjengeligBolig: z
     .string()
     .min(1, { message: "TilgjengeligBolig must må spesifiseres." }),
-  Tomtetype: z.string().min(1, { message: "Tomtetype must må spesifiseres." }),
+  // Tomtetype: z.string().min(1, { message: "Tomtetype must må spesifiseres." }),
+  Tomtetype: z
+    .array(z.string().min(1, { message: "Tomtetype må spesifiseres." }))
+    .min(1, { message: "Minst én tomtetype må velges." }),
   Hustittel: z.string().min(1, {
     message: "Hustittel må bestå av minst 2 tegn.",
   }),
@@ -683,6 +687,17 @@ export const Husdetaljer: React.FC<{
       setShowConfirm(true);
     }
   };
+
+  const tomteTypeOption: any = [
+    {
+      value: "Flat tomt",
+      label: "Flat tomt",
+    },
+    {
+      value: "Skrånet",
+      label: "Skrånet",
+    },
+  ];
 
   return (
     <>
@@ -1642,33 +1657,26 @@ export const Husdetaljer: React.FC<{
                             Tomtetype
                           </p>
                           <FormControl>
-                            <Select
-                              onValueChange={(value) => {
-                                field.onChange(value);
+                            <MultiSelect
+                              options={tomteTypeOption}
+                              onChange={(value) => {
+                                if (Array.isArray(value)) {
+                                  const data = value.map(
+                                    (option: any) => option.value
+                                  );
+                                  field.onChange(data);
+                                } else {
+                                  field.onChange(value);
+                                }
                               }}
-                              value={field.value}
-                            >
-                              <SelectTrigger
-                                className={`bg-white rounded-[8px] border text-black
-                              ${
+                              placeholder="Enter Tomtetype"
+                              className={`${
                                 fieldState?.error
                                   ? "border-red"
                                   : "border-gray1"
                               } `}
-                              >
-                                <SelectValue placeholder="Enter Tomtetype" />
-                              </SelectTrigger>
-                              <SelectContent className="bg-white">
-                                <SelectGroup>
-                                  <SelectItem value="Flat tomt">
-                                    Flat tomt
-                                  </SelectItem>
-                                  <SelectItem value="Skrånet">
-                                    Skrånet
-                                  </SelectItem>
-                                </SelectGroup>
-                              </SelectContent>
-                            </Select>
+                              value={field.value}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

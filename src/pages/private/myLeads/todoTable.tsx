@@ -459,8 +459,8 @@ export const TODOTable = () => {
     }
   }, [LoginUserId]);
 
-  const columns = useMemo<ColumnDef<any>[]>(
-    () => [
+  const columns = useMemo<ColumnDef<any>[]>(() => {
+    const baseColumns: ColumnDef<any>[] = [
       {
         accessorKey: "Status",
         header: "Status",
@@ -494,15 +494,6 @@ export const TODOTable = () => {
         cell: ({ row }) => <HouseModelCell id={row.original.id} />,
       },
       {
-        accessorKey: "Opprettet kl",
-        header: "Opprettet kl",
-        cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black w-max">
-            {formatTimestamp(row.original.createdAt)}
-          </p>
-        ),
-      },
-      {
         accessorKey: "Broker",
         header: "Broker",
         cell: ({ row }) => <BrokerCell id={row.original.id} />,
@@ -510,26 +501,14 @@ export const TODOTable = () => {
       {
         accessorKey: "adresse",
         header: "Anleggsadresse",
-        cell: ({ row }) => (
-          <>
-            {row.original.leadData?.adresse ? (
-              <p className="text-black text-sm font-medium w-max">
-                {row.original.leadData?.adresse}
-              </p>
-            ) : (
-              <p className="text-center">-</p>
-            )}
-          </>
-        ),
-      },
-      {
-        accessorKey: "Oppdatert kl",
-        header: "Oppdatert kl",
-        cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black w-max">
-            {formatTimestamp(row.original.updatedAt)}
-          </p>
-        ),
+        cell: ({ row }) =>
+          row.original.leadData?.adresse ? (
+            <p className="text-black text-sm font-medium w-max">
+              {row.original.leadData?.adresse}
+            </p>
+          ) : (
+            <p className="text-center">-</p>
+          ),
       },
       {
         accessorKey: "Siste aktivitet",
@@ -549,9 +528,26 @@ export const TODOTable = () => {
           </button>
         ),
       },
-    ],
-    [email, navigate, page]
-  );
+    ];
+
+    const updatedColumn: ColumnDef<any> = {
+      accessorKey: "Oppdatert kl",
+      header: "Oppdatert kl",
+      cell: ({ row }) => (
+        <p className="text-sm font-semibold text-black w-max">
+          {formatTimestamp(row.original.updatedAt)}
+        </p>
+      ),
+    };
+
+    if (selectedFilter === "Til oppfølgning") {
+      baseColumns.splice(1, 0, updatedColumn);
+    } else {
+      baseColumns.splice(5, 0, updatedColumn);
+    }
+
+    return baseColumns;
+  }, [email, navigate, page, selectedFilter]);
 
   const pageSize = 10;
   const paginatedData = useMemo(() => {

@@ -15,8 +15,8 @@ import { toast } from "react-hot-toast";
 
 function formatPrice(inputStr: any) {
   let noSuffix = inputStr && inputStr.replace(" NOK", "");
-  let withDots = noSuffix && noSuffix.replace(/\s+/g, ".");
-  return withDots + " NOK";
+  let withDots = noSuffix && noSuffix.replace(/\s+/g, " ");
+  return "kr " + withDots;
 }
 
 export const Fremdriftsplan: React.FC<{

@@ -390,7 +390,7 @@ export const MyLeadsDetail = () => {
   const options = [
     { label: "I dialog", color: "#581845", textColor: "text-[#581845]" },
     { label: "Førstegangsmøte", color: "#996CFF", textColor: "text-primary" },
-    { label: "Start prosess", color: "#E46A00", textColor: "text-[#994700]" },
+    { label: "Tilbud sendt", color: "#E46A00", textColor: "text-[#994700]" },
     { label: "Signert", color: "#0022E4", textColor: "text-[#001795]" },
   ];
 
@@ -408,7 +408,7 @@ export const MyLeadsDetail = () => {
     { name: "E-post" },
     { name: "Annet" },
     { name: "Førstegangsmøte" },
-    { name: "Start prosess" },
+    { name: "Tilbud sendt" },
     { name: "Signert" },
   ];
 
@@ -896,7 +896,7 @@ export const MyLeadsDetail = () => {
                     if (label === "Førstegangsmøte") {
                       setActiveStep(2);
                     }
-                    if (label === "Start prosess") {
+                    if (label === "Tilbud sendt") {
                       setActiveStep(3);
                     }
                     if (label === "Signert") {
@@ -996,7 +996,7 @@ export const MyLeadsDetail = () => {
                           return <Infinity className="w-5 h-5" />;
                         case "Førstegangsmøte":
                           return <Presentation className="w-5 h-5" />;
-                        case "Start prosess":
+                        case "Tilbud sendt":
                           return <Recycle className="w-5 h-5" />;
                         case "Signert":
                           return <Signature className="w-5 h-5" />;

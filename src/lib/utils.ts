@@ -92,9 +92,21 @@ export function formatDateTime(inputDateTime: string) {
   return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
 }
 
-export function formatCurrency(nokValue: any) {
-  let number = nokValue.replace(/\s/g, "");
-  return new Intl.NumberFormat("de-DE").format(Number(number)) + " NOK";
+export function formatCurrency(value: number | string) {
+  const number =
+    typeof value === "string"
+      ? Number(value.replace(/\s/g, "").replace(/kr/i, ""))
+      : value;
+
+  if (isNaN(Number(number))) return value;
+
+  const formatted = new Intl.NumberFormat("no-NO", {
+    style: "decimal",
+    useGrouping: true,
+    minimumFractionDigits: 0,
+  }).format(number);
+
+  return `kr ${formatted}`;
 }
 
 export const phoneNumberValidations: Record<string, (num: string) => boolean> =
@@ -198,9 +210,25 @@ export function formatDateOnly(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-export function formatSpaceSeparatedToNOK(value: string): string {
-  const numericValue = Number(value.replace(/\s/g, ""));
-  return numericValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " NOK";
+// export function formatSpaceSeparatedToNOK(value: string): string {
+//   const numericValue = Number(value.replace(/\s/g, ""));
+//   return numericValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " NOK";
+// }
+export function formatSpaceSeparatedToNOK(value: number | string) {
+  const number =
+    typeof value === "string"
+      ? Number(value.replace(/\s/g, "").replace(/kr/i, ""))
+      : value;
+
+  if (isNaN(Number(number))) return value;
+
+  const formatted = new Intl.NumberFormat("no-NO", {
+    style: "decimal",
+    useGrouping: true,
+    minimumFractionDigits: 0,
+  }).format(number);
+
+  return `kr ${formatted}`;
 }
 
 export function convertFullStringTo24Hour(datetimeStr: any) {

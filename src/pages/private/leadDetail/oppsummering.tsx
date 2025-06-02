@@ -144,7 +144,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                   Totale tomtekostnader:
                 </div>
                 <div className="text-darkBlack">
-                  {plotData?.tomtekostnader} NOK
+                  kr {plotData?.tomtekostnader}
                 </div>
               </div>
               <div className="flex gap-3 items-center">
@@ -170,7 +170,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                   Totale byggekostnader:
                 </div>
                 <div className="text-darkBlack">
-                  {houseData?.byggekostnader} NOK
+                  kr {houseData?.byggekostnader}
                 </div>
               </div>
               <div className="flex gap-3 items-center mb-3">
@@ -239,7 +239,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 Sum tomtekostnader
               </div>
               <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                {plotData?.tomtekostnader} NOK
+                kr {plotData?.tomtekostnader}
                 <p className="text-[#5D6B98] text-base font-normal">
                   (prosjektregnskapet oversendes megler)
                 </p>
@@ -250,7 +250,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 Sum byggkostnader
               </div>
               <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                {houseData?.byggekostnader} NOK
+                kr {houseData?.byggekostnader}
                 <p className="text-[#5D6B98] text-base font-normal">
                   (prosjektregnskapet oversende banken)
                 </p>
@@ -262,7 +262,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 Totale kostnader
               </div>
               <div className="w-full text-darkBlack font-bold text-xl">
-                {numberToNorwegian(sum)} NOK
+                kr {numberToNorwegian(sum)}
               </div>
             </div>
           </div>

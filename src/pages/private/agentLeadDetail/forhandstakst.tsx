@@ -494,7 +494,7 @@ export const Forhandstakst: React.FC<{
                           Totale tomtekostnader:
                         </div>
                         <div className="w-full text-[#000000] font-semibold">
-                          {plotData?.tomtekostnader} NOK
+                          kr {plotData?.tomtekostnader}
                         </div>
                       </div>
                       <div className="flex gap-3 items-center">
@@ -526,7 +526,7 @@ export const Forhandstakst: React.FC<{
                           Totale byggekostnader:
                         </div>
                         <div className="w-full text-[#000000] font-semibold">
-                          {houseData?.byggekostnader} NOK
+                          kr {houseData?.byggekostnader}
                         </div>
                       </div>
                       <div className="flex gap-3 items-center mb-3">
@@ -543,7 +543,7 @@ export const Forhandstakst: React.FC<{
                             Sum tomtekostnader
                           </div>
                           <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                            {plotData?.tomtekostnader} NOK
+                            kr {plotData?.tomtekostnader}
                             <p className="text-[#5D6B98] text-base font-normal">
                               (prosjektregnskapet oversendes megler)
                             </p>
@@ -554,7 +554,7 @@ export const Forhandstakst: React.FC<{
                             Sum byggkostnader
                           </div>
                           <div className="w-full text-darkBlack font-medium flex gap-4 items-center">
-                            {houseData?.byggekostnader} NOK
+                            kr {houseData?.byggekostnader}
                             <p className="text-[#5D6B98] text-base font-normal">
                               (prosjektregnskapet oversende banken)
                             </p>
@@ -566,7 +566,7 @@ export const Forhandstakst: React.FC<{
                             Totale kostnader
                           </div>
                           <div className="w-full text-darkBlack font-bold text-xl">
-                            {numberToNorwegian(sum)} NOK
+                            kr {numberToNorwegian(sum)}
                           </div>
                         </div>
                       </div>

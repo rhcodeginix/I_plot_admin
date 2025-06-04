@@ -18,12 +18,24 @@ import { Forhandstakst } from "./forhandstakst";
 export const BankleadsTabs = () => {
   const [activeTab, setActiveTab] = useState<any>(0);
   const tabData = [
-    { label: "Kunden", icon: <User /> },
-    { label: "Tomt og husmodell", icon: <Banknote /> },
-    { label: "Prosjektregnskap", icon: <ScrollText /> },
-    { label: "Forhåndstakst", icon: <FileText /> },
-    { label: "Oppsummering", icon: <FileText /> },
-    // { label: "Fremdriftsplan", icon: <ChartPie /> },
+    { label: "Kunden", icon: <User className="w-4 h-4 md:w-6 md:h-6" /> },
+    {
+      label: "Tomt og husmodell",
+      icon: <Banknote className="w-4 h-4 md:w-6 md:h-6" />,
+    },
+    {
+      label: "Prosjektregnskap",
+      icon: <ScrollText className="w-4 h-4 md:w-6 md:h-6" />,
+    },
+    {
+      label: "Forhåndstakst",
+      icon: <FileText className="w-4 h-4 md:w-6 md:h-6" />,
+    },
+    {
+      label: "Oppsummering",
+      icon: <FileText className="w-4 h-4 md:w-6 md:h-6" />,
+    },
+    // { label: "Fremdriftsplan", icon: <ChartPie className="w-4 h-4 md:w-6 md:h-6" /> },
   ];
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
@@ -100,7 +112,7 @@ export const BankleadsTabs = () => {
     <>
       <div>
         {activeTab === 0 && (
-          <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
             <div>
               <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                 Registrer lead til bank
@@ -114,7 +126,7 @@ export const BankleadsTabs = () => {
           </div>
         )}
         {activeTab === 1 && (
-          <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
             <div className="flex items-center gap-1">
               <span
                 className="text-[#7839EE] text-sm font-medium cursor-pointer"
@@ -147,7 +159,7 @@ export const BankleadsTabs = () => {
           </div>
         )}
         {activeTab === 2 && (
-          <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
             <div className="flex items-center gap-1">
               <span
                 className="text-[#7839EE] text-sm font-medium cursor-pointer"
@@ -187,7 +199,7 @@ export const BankleadsTabs = () => {
           </div>
         )}
         {activeTab === 3 && (
-          <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
             <div className="flex items-center gap-1">
               <span
                 className="text-[#7839EE] text-sm font-medium cursor-pointer"
@@ -234,7 +246,7 @@ export const BankleadsTabs = () => {
           </div>
         )}
         {activeTab === 4 && (
-          <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
             <div className="flex items-center gap-1">
               <span
                 className="text-[#7839EE] text-sm font-medium cursor-pointer"
@@ -288,9 +300,9 @@ export const BankleadsTabs = () => {
           </div>
         )}
         <div className="relative">
-          <div className="flex items-center justify-between gap-2 mb-6 px-10 mt-4">
+          <div className="flex items-center justify-between gap-2 mb-6 px-4 py-1 md:px-8 lg:px-10 mt-4 overflow-x-auto">
             <div
-              className="flex gap-4 rounded-lg bg-white p-[6px]"
+              className="flex gap-2 md:gap-3 lg:gap-4 rounded-lg bg-white p-1 md:p-1.2"
               style={{
                 boxShadow:
                   "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
@@ -299,9 +311,9 @@ export const BankleadsTabs = () => {
               {tabData.map((tab, index) => (
                 <button
                   key={index}
-                  className={`${
+                  className={`text-sm md:text-base whitespace-nowrap ${
                     id ? "cursor-pointer" : "cursor-auto"
-                  } flex items-center gap-2 text-darkBlack py-2 px-3 rounded-lg ${
+                  } flex items-center gap-2 text-darkBlack py-2 px-2 md:px-3 rounded-lg ${
                     activeTab === index
                       ? "font-semibold bg-[#7839EE] text-white"
                       : "text-[#4D4D4D]"

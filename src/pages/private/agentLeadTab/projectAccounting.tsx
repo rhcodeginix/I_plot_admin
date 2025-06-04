@@ -473,7 +473,7 @@ export const ProjectAccounting = forwardRef<
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <div className="px-6">
+          <div className="px-4 md:px-6">
             <div className="pb-5 text-[#111322] text-xl font-semibold">
               Økonomisk plan
             </div>

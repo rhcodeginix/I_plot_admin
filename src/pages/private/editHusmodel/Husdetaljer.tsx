@@ -694,8 +694,8 @@ export const Husdetaljer: React.FC<{
       label: "Flat tomt",
     },
     {
-      value: "Skrånet",
-      label: "Skrånet",
+      value: "Skrånet tomt",
+      label: "Skrånet tomt",
     },
   ];
 

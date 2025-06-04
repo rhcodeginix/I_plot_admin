@@ -233,7 +233,7 @@ export const PlotHusmodell = forwardRef<
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div
-            className="mx-10 rounded-lg"
+            className="mx-4 md:mx-8 lg:mx-10 rounded-lg"
             style={{
               boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
             }}
@@ -832,7 +832,7 @@ export const PlotHusmodell = forwardRef<
           </div>
 
           <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-            <div onClick={() => setActiveTab(0)} >
+            <div onClick={() => setActiveTab(0)}>
               <Button
                 text="Tilbake"
                 className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

@@ -293,27 +293,27 @@ export const Kunden = forwardRef<
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div
-            className="mx-10 rounded-lg"
+            className="mx-4 md:mx-8 lg:mx-10 rounded-lg"
             style={{
               boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
             }}
           >
-            <div className="py-4 px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
+            <div className="py-2.5 md:py-4 px-3 md:px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
               <UserRoundCheck />
               <span className="text-sm md:text-base desktop:text-lg font-semibold">
                 Registrering av kunde
               </span>
             </div>
-            <div className="bg-[#F6F4F2] py-3 px-5 text-sm font-semibold">
+            <div className="bg-[#F6F4F2] py-2 md:py-3 px-3 md:px-5 text-sm font-semibold">
               Informasjon om oppdragsgiver
             </div>
-            <div className="p-6 mb-6 z-40 relative">
-              <div className="flex flex-col gap-8">
+            <div className="p-3 md:p-6 mb-6 z-40 relative">
+              <div className="flex flex-col gap-4 md:gap-8">
                 {fields.map((product, index) => {
                   return (
                     <div key={product.id}>
-                      <div className="flex flex-col gap-6">
-                        <div className="flex items-center gap-3 justify-between">
+                      <div className="flex flex-col gap-3 md:gap-6">
+                        <div className="flex items-center gap-2 justify-between">
                           {index === 0 ? (
                             <div>
                               <h3 className="text-base font-semibold mb-1.5">
@@ -359,7 +359,7 @@ export const Kunden = forwardRef<
                                   Mobilnummer
                                 </p>
                                 <FormControl>
-                                  <div className="relative flex gap-1.5 items-center">
+                                  <div className="relative flex flex-col sm:flex-row gap-1.5 sm:items-center">
                                     <InputMobile
                                       placeholder="Skriv inn Telefon"
                                       {...field}

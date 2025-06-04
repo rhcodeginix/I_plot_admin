@@ -261,6 +261,38 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
       }, 0)
     : 0;
 
+  function parsePrice(price: any) {
+    if (!price || price === "-" || price.trim() === "") return null;
+    const digits = price.replace(/\D/g, "");
+    return digits ? Number(digits) : null;
+  }
+
+  const sortedIndexes = React.useMemo(() => {
+    return fields
+      .map((product, index) => ({ index, price: parsePrice(product.pris) }))
+      .sort((a, b) => {
+        if (a.price === null && b.price === null) return 0;
+        if (a.price === null) return 1;
+        if (b.price === null) return -1;
+        return b.price - a.price;
+      })
+      .map(({ index }) => index);
+  }, [fields]);
+
+  const sortedIndexesTomtekostFields = React.useMemo(() => {
+    return TomtekostFields.map((product, index) => ({
+      index,
+      price: parsePrice(product.pris),
+    }))
+      .sort((a, b) => {
+        if (a.price === null && b.price === null) return 0;
+        if (a.price === null) return 1;
+        if (b.price === null) return -1;
+        return b.price - a.price;
+      })
+      .map(({ index }) => index);
+  }, [TomtekostFields]);
+
   return (
     <>
       <Form {...form}>
@@ -353,7 +385,9 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                   </div>
                   <div className="border-t border-gray2"></div>
                   <div className="flex flex-col gap-5 desktop:gap-8">
-                    {fields.map((product, index) => {
+                    {sortedIndexes.map((sortedIndex) => {
+                      const product = fields[sortedIndex];
+                      if (!product.byggkostnaderID) return null;
                       return (
                         <div key={product.id}>
                           {product.byggkostnaderID ? (
@@ -362,7 +396,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                 <div className="w-full">
                                   <FormField
                                     control={form.control}
-                                    name={`Byggekostnader.${index}.Headline`}
+                                    name={`Byggekostnader.${sortedIndex}.Headline`}
                                     render={({ field, fieldState }) => (
                                       <FormItem>
                                         <p
@@ -402,7 +436,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                   }`}
                                   onClick={() => {
                                     if (fields.length > 1) {
-                                      removeProduct(index);
+                                      removeProduct(sortedIndex);
                                     }
                                   }}
                                 >
@@ -414,7 +448,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                 <div>
                                   <FormField
                                     control={form.control}
-                                    name={`Byggekostnader.${index}.MerInformasjon`}
+                                    name={`Byggekostnader.${sortedIndex}.MerInformasjon`}
                                     render={({ field, fieldState }) => (
                                       <FormItem>
                                         <p
@@ -449,7 +483,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                 <div>
                                   <FormField
                                     control={form.control}
-                                    name={`Byggekostnader.${index}.pris`}
+                                    name={`Byggekostnader.${sortedIndex}.pris`}
                                     render={({ field, fieldState }) => (
                                       <FormItem>
                                         <div className="flex items-center justify-between gap-2 mb-[6px]">
@@ -471,25 +505,25 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                                 className="toggle-input"
                                                 checked={
                                                   form.watch(
-                                                    `Byggekostnader.${index}.IncludingOffer`
+                                                    `Byggekostnader.${sortedIndex}.IncludingOffer`
                                                   ) || false
                                                 }
-                                                name={`Byggekostnader.${index}.IncludingOffer`}
+                                                name={`Byggekostnader.${sortedIndex}.IncludingOffer`}
                                                 onChange={(e: any) => {
                                                   const checkedValue =
                                                     e.target.checked;
                                                   form.setValue(
-                                                    `Byggekostnader.${index}.IncludingOffer`,
+                                                    `Byggekostnader.${sortedIndex}.IncludingOffer`,
                                                     checkedValue
                                                   );
                                                   if (checkedValue) {
                                                     form.setValue(
-                                                      `Byggekostnader.${index}.pris`,
+                                                      `Byggekostnader.${sortedIndex}.pris`,
                                                       null
                                                     );
                                                   } else {
                                                     form.setValue(
-                                                      `Byggekostnader.${index}.pris`,
+                                                      `Byggekostnader.${sortedIndex}.pris`,
                                                       ""
                                                     );
                                                   }
@@ -515,7 +549,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                         } `}
                                               inputMode="numeric"
                                               disabled={form.watch(
-                                                `Byggekostnader.${index}.IncludingOffer`
+                                                `Byggekostnader.${sortedIndex}.IncludingOffer`
                                               )}
                                               type="text"
                                               onChange={({
@@ -523,7 +557,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                               }: any) =>
                                                 field.onChange({
                                                   target: {
-                                                    name: `Byggekostnader.${index}.pris`,
+                                                    name: `Byggekostnader.${sortedIndex}.pris`,
                                                     value: value.replace(
                                                       /\D/g,
                                                       ""
@@ -556,7 +590,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                   />
                                 </div>
                               </div>
-                              {index === fields.length - 1 && (
+                              {sortedIndex === fields.length - 1 && (
                                 <div className={`border-t border-gray2`}></div>
                               )}
                             </div>
@@ -639,7 +673,10 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                   </div>
                   <div className="border-t border-gray2"></div>
                   <div className="flex flex-col gap-5 desktop:gap-8">
-                    {TomtekostFields.map((product, index) => {
+                    {/* {TomtekostFields.map((product, index) => { */}
+                    {sortedIndexesTomtekostFields.map((sortedIndex) => {
+                      const product = TomtekostFields[sortedIndex];
+                      if (!product.TomtekostID) return null;
                       return (
                         <div key={product.id}>
                           {product.TomtekostID ? (
@@ -648,7 +685,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                 <div className="w-full">
                                   <FormField
                                     control={form.control}
-                                    name={`Tomtekost.${index}.Headline`}
+                                    name={`Tomtekost.${sortedIndex}.Headline`}
                                     render={({ field, fieldState }) => (
                                       <FormItem>
                                         <p
@@ -688,7 +725,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                   }`}
                                   onClick={() => {
                                     if (TomtekostFields.length > 1) {
-                                      removeTomtekostProduct(index);
+                                      removeTomtekostProduct(sortedIndex);
                                     }
                                   }}
                                 >
@@ -700,7 +737,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                 <div>
                                   <FormField
                                     control={form.control}
-                                    name={`Tomtekost.${index}.MerInformasjon`}
+                                    name={`Tomtekost.${sortedIndex}.MerInformasjon`}
                                     render={({ field, fieldState }) => (
                                       <FormItem>
                                         <p
@@ -735,7 +772,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                 <div>
                                   <FormField
                                     control={form.control}
-                                    name={`Tomtekost.${index}.pris`}
+                                    name={`Tomtekost.${sortedIndex}.pris`}
                                     render={({ field, fieldState }) => (
                                       <FormItem>
                                         <div className="flex items-center justify-between gap-2 mb-[6px]">
@@ -757,25 +794,25 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                                 className="toggle-input"
                                                 checked={
                                                   form.watch(
-                                                    `Tomtekost.${index}.IncludingOffer`
+                                                    `Tomtekost.${sortedIndex}.IncludingOffer`
                                                   ) || false
                                                 }
-                                                name={`Tomtekost.${index}.IncludingOffer`}
+                                                name={`Tomtekost.${sortedIndex}.IncludingOffer`}
                                                 onChange={(e: any) => {
                                                   const checkedValue =
                                                     e.target.checked;
                                                   form.setValue(
-                                                    `Tomtekost.${index}.IncludingOffer`,
+                                                    `Tomtekost.${sortedIndex}.IncludingOffer`,
                                                     checkedValue
                                                   );
                                                   if (checkedValue) {
                                                     form.setValue(
-                                                      `Tomtekost.${index}.pris`,
+                                                      `Tomtekost.${sortedIndex}.pris`,
                                                       null
                                                     );
                                                   } else {
                                                     form.setValue(
-                                                      `Tomtekost.${index}.pris`,
+                                                      `Tomtekost.${sortedIndex}.pris`,
                                                       ""
                                                     );
                                                   }
@@ -801,7 +838,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                         } `}
                                               inputMode="numeric"
                                               disabled={form.watch(
-                                                `Tomtekost.${index}.IncludingOffer`
+                                                `Tomtekost.${sortedIndex}.IncludingOffer`
                                               )}
                                               type="text"
                                               onChange={({
@@ -809,7 +846,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                               }: any) =>
                                                 field.onChange({
                                                   target: {
-                                                    name: `Tomtekost.${index}.pris`,
+                                                    name: `Tomtekost.${sortedIndex}.pris`,
                                                     value: value.replace(
                                                       /\D/g,
                                                       ""
@@ -842,7 +879,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                   />
                                 </div>
                               </div>
-                              {index === TomtekostFields.length - 1 && (
+                              {sortedIndex === TomtekostFields.length - 1 && (
                                 <div className={`border-t border-gray2`}></div>
                               )}
                             </div>

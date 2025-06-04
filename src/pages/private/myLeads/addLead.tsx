@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import Button from "../../../components/common/button";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import toast from "react-hot-toast";
 import { db } from "../../../config/firebaseConfig";
@@ -23,15 +24,15 @@ import { InputMobile } from "../../../components/ui/inputMobile";
 import { useEffect, useState } from "react";
 
 const formSchema = z.object({
-  lead_id: z.string().min(1, {
-    message: "Lead id må bestå av minst 2 tegn.",
-  }),
-  leadSource: z.string().min(1, {
-    message: "LeadSource må bestå av minst 2 tegn.",
-  }),
-  status: z.string().min(1, {
-    message: "Status må bestå av minst 2 tegn.",
-  }),
+  // lead_id: z.string().min(1, {
+  //   message: "Lead id må bestå av minst 2 tegn.",
+  // }),
+  // leadSource: z.string().min(1, {
+  //   message: "LeadSource må bestå av minst 2 tegn.",
+  // }),
+  // status: z.string().min(1, {
+  //   message: "Status må bestå av minst 2 tegn.",
+  // }),
   leadData: z.object({
     name: z.string().min(1, {
       message: "Navn må bestå av minst 2 tegn.",
@@ -40,19 +41,19 @@ const formSchema = z.object({
       .string()
       .email({ message: "Vennligst skriv inn en gyldig e-postadresse." })
       .min(1, { message: "E-posten må være på minst 2 tegn." }),
-    kildeNy: z.string().min(1, {
-      message: "KildeNy må bestå av minst 2 tegn.",
-    }),
-    notaterFørsteSamtale: z.string().min(1, {
-      message: "NotaterFørsteSamtale må bestå av minst 2 tegn.",
-    }),
-    datoRegistrert: z.string().min(1, "DatoRegistrert den er påkrevd"),
-    people: z.string().min(1, {
-      message: "People må bestå av minst 2 tegn.",
-    }),
-    statusKunde: z.string().min(1, {
-      message: "StatusKunde må bestå av minst 2 tegn.",
-    }),
+    // kildeNy: z.string().min(1, {
+    //   message: "KildeNy må bestå av minst 2 tegn.",
+    // }),
+    // notaterFørsteSamtale: z.string().min(1, {
+    //   message: "NotaterFørsteSamtale må bestå av minst 2 tegn.",
+    // }),
+    // datoRegistrert: z.string().min(1, "DatoRegistrert den er påkrevd"),
+    // people: z.string().min(1, {
+    //   message: "People må bestå av minst 2 tegn.",
+    // }),
+    // statusKunde: z.string().min(1, {
+    //   message: "StatusKunde må bestå av minst 2 tegn.",
+    // }),
     telefon: z.string().refine(
       (value) => {
         const parsedNumber = parsePhoneNumber(value);
@@ -111,7 +112,8 @@ export const AddLeadForm = () => {
           .toLocaleString("sv-SE", { timeZone: "UTC" })
           .replace(",", "");
       };
-      const uniqueId = id ? id : data.lead_id;
+      // const uniqueId = id ? id : data.lead_id;
+      const uniqueId = id ? id : uuidv4();
       const husmodellDocRef = doc(db, "leads_from_supplier", uniqueId);
 
       if (id) {
@@ -156,7 +158,7 @@ export const AddLeadForm = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
             <div className="">
               <div className="grid grid-cols-2 gap-4 md:gap-6">
-                <div>
+                {/* <div>
                   <FormField
                     control={form.control}
                     name="lead_id"
@@ -254,7 +256,7 @@ export const AddLeadForm = () => {
                       </FormItem>
                     )}
                   />
-                </div>
+                </div> */}
                 <h3 className="col-span-2 text-darkBlack font-semibold text-xl">
                   Lead Data
                 </h3>
@@ -324,7 +326,7 @@ export const AddLeadForm = () => {
                     )}
                   />
                 </div>
-                <div>
+                {/* <div>
                   <FormField
                     control={form.control}
                     name="leadData.kildeNy"
@@ -488,7 +490,7 @@ export const AddLeadForm = () => {
                       </FormItem>
                     )}
                   />
-                </div>
+                </div> */}
                 <div>
                   <FormField
                     control={form.control}

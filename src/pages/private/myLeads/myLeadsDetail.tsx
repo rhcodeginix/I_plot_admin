@@ -818,12 +818,12 @@ export const MyLeadsDetail = () => {
                 </div>
               </div>
               <div className="flex justify-end w-full gap-3 md:gap-5 items-center mt-4 md:mt-8">
-                <div onClick={() => form.reset()}>
+                {/* <div onClick={() => form.reset()}>
                   <Button
-                    text="Tilbake"
+                    text="kansellere"
                     className="border border-lightPurple bg-lightPurple text-primary text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative py-[10px] flex items-center gap-2 px-6 md:px-[50px]"
                   />
-                </div>
+                </div> */}
                 <Button
                   text="Lagre"
                   className="border border-green2 bg-green2 text-white text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative px-px-6 md:[50px] py-[10px] flex items-center gap-2"

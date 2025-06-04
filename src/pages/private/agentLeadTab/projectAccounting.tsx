@@ -474,18 +474,18 @@ export const ProjectAccounting = forwardRef<
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div className="px-4 md:px-6">
-            <div className="pb-5 text-[#111322] text-xl font-semibold">
+            <div className="pb-3 md:pb-5 text-[#111322] text-base md:text-lg desktop:text-xl font-semibold">
               Økonomisk plan
             </div>
             <div>
-              <div className="mb-[40px]">
+              <div className="mb-7 md:mb-[40px]">
                 <FormField
                   control={form.control}
                   name={`Økonomisk`}
                   render={({ field, fieldState }) => (
                     <FormItem>
                       <FormControl>
-                        <div className="flex items-center gap-5">
+                        <div className="flex flex-wrap items-center gap-3 md:gap-5">
                           <div
                             className="relative flex items-center gap-2 cursor-pointer"
                             onClick={() =>
@@ -510,7 +510,7 @@ export const ProjectAccounting = forwardRef<
                               }
                             />
                             <p
-                              className={`${
+                              className={`text-sm md:text-base ${
                                 field.value === "Last opp en økonomisk plan"
                                   ? "text-darkBlack"
                                   : "text-[#5D6B98]"
@@ -545,7 +545,7 @@ export const ProjectAccounting = forwardRef<
                               }
                             />
                             <p
-                              className={`${
+                              className={`text-sm md:text-base ${
                                 field.value === "Opprett en økonomisk plan"
                                   ? "text-darkBlack"
                                   : "text-[#5D6B98]"
@@ -580,7 +580,7 @@ export const ProjectAccounting = forwardRef<
                               }
                             />
                             <p
-                              className={`${
+                              className={`text-sm md:text-base ${
                                 field.value === "Ettersend en økonomisk plan"
                                   ? "text-darkBlack"
                                   : "text-[#5D6B98]"
@@ -688,157 +688,180 @@ export const ProjectAccounting = forwardRef<
           </div>
           {okonomi === "Opprett en økonomisk plan" && (
             <>
-              <h4 className="px-6 pb-5 text-darkBlack font-semibold text-sm md:text-base desktop:text-lg">
+              <h4 className="px-4 md:px-6 pb-5 text-darkBlack font-semibold text-sm md:text-base desktop:text-lg">
                 Har du ikke laget en økonomisk plan? Fyll ut den økonomiske
                 planen her:
               </h4>
-              <div className="flex gap-6 px-6 mb-28">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-6 px-4 md:px-6 mb-28">
                 <div
-                  className="w-1/2 p-4 border border-gray2 rounded-lg h-max"
+                  className="w-full md:w-1/2 p-2 md:p-4 border border-gray2 rounded-lg h-max"
                   style={{
                     boxShadow:
                       "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
                   }}
                 >
-                  <div className="text-center p-4 text-[#101828] font-medium text-sm md:text-base desktop:text-lg bg-[#F9F9FB] mb-5 relative">
+                  <div className="text-center p-2 md:p-4 text-[#101828] font-medium text-sm md:text-base desktop:text-lg bg-[#F9F9FB] mb-3 md:mb-5 relative">
                     Byggekostnader
-                    <Pencil className="text-primary absolute top-5 right-4" />
+                    <Pencil className="text-primary absolute top-2 h-5 w-5 md:w-6 md:h-6 md:top-5 right-4" />
                   </div>
-                  <div className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-3 md:gap-5">
                     {(apiData
                       ? apiData?.Byggekostnader.length > 0
                       : ByggekostnaderHusmodell?.Byggekostnader?.length >
                         0) && (
-                      <div className="flex flex-col gap-5">
+                      <div className="flex flex-col gap-3 md:gap-5">
                         {(apiData
                           ? apiData?.Byggekostnader
                           : ByggekostnaderHusmodell?.Byggekostnader
-                        )?.map((item: any, index: number) => {
-                          const isEditing = editingPriceIndex === index;
-                          const isHeadlineEditing =
-                            editingHeadlineIndex === index;
+                        )
+                          ?.sort((a: any, b: any) => {
+                            const aPris =
+                              parseInt(String(a?.pris)?.replace(/\D/g, "")) ||
+                              0;
+                            const bPris =
+                              parseInt(String(b?.pris)?.replace(/\D/g, "")) ||
+                              0;
 
-                          return (
-                            <div
-                              className="flex items-center gap-2 justify-between"
-                              key={index}
-                            >
-                              <div className="flex items-center gap-2">
-                                {isHeadlineEditing ? (
-                                  <input
-                                    type="text"
-                                    value={
-                                      editedHeadlines[index] ??
-                                      item.Headline ??
-                                      ""
-                                    }
-                                    onChange={(e) => {
-                                      setEditedHeadlines({
-                                        ...editedHeadlines,
-                                        [index]: e.target.value,
-                                      });
-                                    }}
-                                    onBlur={() => setEditingHeadlineIndex(null)}
-                                    className="focus-within:outline-none placeholder:text-gray text-sm rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[400px]"
-                                  />
-                                ) : (
-                                  <p
-                                    className="text-gray text-sm font-medium cursor-pointer"
-                                    onClick={() =>
-                                      setEditingHeadlineIndex(index)
-                                    }
-                                  >
-                                    {editedHeadlines[index]
-                                      ? editedHeadlines[index]
-                                      : item?.Headline}
-                                  </p>
-                                )}
-                              </div>
+                            const aHasPris = !!a?.pris;
+                            const bHasPris = !!b?.pris;
 
-                              <div className="flex items-center gap-3">
-                                {isEditing ? (
-                                  <input
-                                    inputMode="numeric"
-                                    type="text"
-                                    value={
-                                      editedPrices[index] ?? item.pris ?? ""
-                                    }
-                                    onChange={(e) => {
-                                      setEditedPrices({
-                                        ...editedPrices,
-                                        [index]: e.target.value.replace(
-                                          /\D/g,
-                                          ""
-                                        )
-                                          ? new Intl.NumberFormat(
-                                              "no-NO"
-                                            ).format(
-                                              Number(
-                                                e.target.value.replace(
-                                                  /\D/g,
-                                                  ""
+                            if (aHasPris && !bHasPris) return -1;
+                            if (!aHasPris && bHasPris) return 1;
+
+                            return bPris - aPris;
+                          })
+                          ?.map((item: any, index: number) => {
+                            const isEditing = editingPriceIndex === index;
+                            const isHeadlineEditing =
+                              editingHeadlineIndex === index;
+
+                            return (
+                              <div
+                                className="flex items-center gap-1 md:gap-2 justify-between"
+                                key={index}
+                              >
+                                <div className="flex items-center gap-1 md:gap-2">
+                                  {isHeadlineEditing ? (
+                                    <input
+                                      type="text"
+                                      value={
+                                        editedHeadlines[index] ??
+                                        item.Headline ??
+                                        ""
+                                      }
+                                      onChange={(e) => {
+                                        setEditedHeadlines({
+                                          ...editedHeadlines,
+                                          [index]: e.target.value,
+                                        });
+                                      }}
+                                      onBlur={() =>
+                                        setEditingHeadlineIndex(null)
+                                      }
+                                      className="focus-within:outline-none placeholder:text-gray text-sm rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[400px]"
+                                    />
+                                  ) : (
+                                    <p
+                                      className="text-gray text-xs md:text-sm font-medium cursor-pointer"
+                                      onClick={() =>
+                                        setEditingHeadlineIndex(index)
+                                      }
+                                    >
+                                      {editedHeadlines[index]
+                                        ? editedHeadlines[index]
+                                        : item?.Headline}
+                                    </p>
+                                  )}
+                                </div>
+
+                                <div className="flex items-center gap-2 md:gap-3">
+                                  {isEditing ? (
+                                    <input
+                                      inputMode="numeric"
+                                      type="text"
+                                      value={
+                                        editedPrices[index] ?? item.pris ?? ""
+                                      }
+                                      onChange={(e) => {
+                                        setEditedPrices({
+                                          ...editedPrices,
+                                          [index]: e.target.value.replace(
+                                            /\D/g,
+                                            ""
+                                          )
+                                            ? new Intl.NumberFormat(
+                                                "no-NO"
+                                              ).format(
+                                                Number(
+                                                  e.target.value.replace(
+                                                    /\D/g,
+                                                    ""
+                                                  )
                                                 )
                                               )
-                                            )
-                                          : "",
-                                      });
+                                            : "",
+                                        });
+                                      }}
+                                      onBlur={() => setEditingPriceIndex(null)}
+                                      className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
+                                    />
+                                  ) : (
+                                    <h4
+                                      className="text-black font-medium text-sm md:text-base cursor-pointer whitespace-nowrap"
+                                      onClick={() =>
+                                        setEditingPriceIndex(index)
+                                      }
+                                    >
+                                      {editedPrices[index]
+                                        ? `kr ${editedPrices[index]}`
+                                        : item?.pris
+                                        ? `kr ${item.pris}`
+                                        : "inkl. i tilbud"}
+                                    </h4>
+                                  )}
+                                  <Trash2
+                                    className="text-red w-4 md:w-5 h-4 md:h-5 cursor-pointer"
+                                    onClick={() => {
+                                      const indexToDelete = index;
+                                      if (apiData) {
+                                        const updatedList =
+                                          apiData.Byggekostnader.filter(
+                                            (_: any, index: number) =>
+                                              index !== indexToDelete
+                                          );
+                                        setApiData({
+                                          ...apiData,
+                                          Byggekostnader: updatedList,
+                                        });
+                                      } else {
+                                        const updatedList =
+                                          ByggekostnaderHusmodell?.Byggekostnader?.filter(
+                                            (_: any, index: number) =>
+                                              index !== indexToDelete
+                                          ) || [];
+
+                                        setByggekostnaderHusmodell({
+                                          ...ByggekostnaderHusmodell,
+                                          Byggekostnader: updatedList,
+                                        });
+                                      }
+
+                                      const newEditedPrices = {
+                                        ...editedPrices,
+                                      };
+                                      const newEditedHeadlines = {
+                                        ...editedHeadlines,
+                                      };
+                                      delete newEditedPrices[indexToDelete];
+                                      delete newEditedHeadlines[indexToDelete];
+                                      setEditedPrices(newEditedPrices);
+                                      setEditedHeadlines(newEditedHeadlines);
                                     }}
-                                    onBlur={() => setEditingPriceIndex(null)}
-                                    className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
                                   />
-                                ) : (
-                                  <h4
-                                    className="text-black font-medium text-base cursor-pointer"
-                                    onClick={() => setEditingPriceIndex(index)}
-                                  >
-                                    {editedPrices[index]
-                                      ? `kr ${editedPrices[index]}`
-                                      : item?.pris
-                                      ? `kr ${item.pris}`
-                                      : "inkl. i tilbud"}
-                                  </h4>
-                                )}
-                                <Trash2
-                                  className="text-red w-5 h-5 cursor-pointer"
-                                  onClick={() => {
-                                    const indexToDelete = index;
-                                    if (apiData) {
-                                      const updatedList =
-                                        apiData.Byggekostnader.filter(
-                                          (_: any, index: number) =>
-                                            index !== indexToDelete
-                                        );
-                                      setApiData({
-                                        ...apiData,
-                                        Byggekostnader: updatedList,
-                                      });
-                                    } else {
-                                      const updatedList =
-                                        ByggekostnaderHusmodell?.Byggekostnader?.filter(
-                                          (_: any, index: number) =>
-                                            index !== indexToDelete
-                                        ) || [];
-
-                                      setByggekostnaderHusmodell({
-                                        ...ByggekostnaderHusmodell,
-                                        Byggekostnader: updatedList,
-                                      });
-                                    }
-
-                                    const newEditedPrices = { ...editedPrices };
-                                    const newEditedHeadlines = {
-                                      ...editedHeadlines,
-                                    };
-                                    delete newEditedPrices[indexToDelete];
-                                    delete newEditedHeadlines[indexToDelete];
-                                    setEditedPrices(newEditedPrices);
-                                    setEditedHeadlines(newEditedHeadlines);
-                                  }}
-                                />
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
                       </div>
                     )}
                     {newByggekostList?.map((item: any, index: number) => {
@@ -846,16 +869,16 @@ export const ProjectAccounting = forwardRef<
 
                       return (
                         <div
-                          className="flex items-center gap-2 justify-between"
+                          className="flex items-center gap-1 md:gap-2 justify-between"
                           key={index}
                         >
-                          <div className="flex items-center gap-2">
-                            <p className="text-gray text-sm font-medium">
+                          <div className="flex items-center gap-1 md:gap-2">
+                            <p className="text-gray text-xs md:text-sm font-medium">
                               {item?.Headline}
                             </p>
                           </div>
 
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2 md:gap-3">
                             {isEditing ? (
                               <input
                                 inputMode="numeric"
@@ -878,7 +901,7 @@ export const ProjectAccounting = forwardRef<
                               />
                             ) : (
                               <h4
-                                className="text-black font-medium text-base cursor-pointer"
+                                className="text-black font-medium text-sm md:text-base cursor-pointer whitespace-nowrap"
                                 onClick={() => setEditingPriceIndex(index)}
                               >
                                 {editedPrices[index]
@@ -889,7 +912,7 @@ export const ProjectAccounting = forwardRef<
                               </h4>
                             )}
                             <Trash2
-                              className="text-red w-5 h-5 cursor-pointer"
+                              className="text-red w-4 md:w-5 h-4 md:h-5 cursor-pointer"
                               onClick={() => {
                                 const updatedList = newByggekostList.filter(
                                   (_: any, idx: number) => idx !== index
@@ -917,17 +940,17 @@ export const ProjectAccounting = forwardRef<
                           Sum byggkostnader
                         </p>
                       </div>
-                      <h4 className="text-black font-bold text-base">
+                      <h4 className="text-black font-bold text-sm md:text-base">
                         kr {formattedNumberOfByggekostnader}
                       </h4>
                     </div>
                     <div className="flex items-center justify-center">
                       <div
-                        className="bg-[#7839EE] rounded-[40px] py-[14px] px-5 flex items-center gap-2 cursor-pointer"
+                        className="bg-[#7839EE] rounded-[40px] py-2 md:py-3.5 px-3 md:px-5 flex items-center gap-2 cursor-pointer"
                         onClick={() => openModal("byggekost")}
                       >
-                        <Plus className="text-white w-5 h-5" />
-                        <span className="text-white font-medium">
+                        <Plus className="text-white w-4 md:w-5 h-4 md:h-5" />
+                        <span className="text-white font-medium text-sm md:text-base">
                           Legg til ny byggekostnad
                         </span>
                       </div>
@@ -935,117 +958,132 @@ export const ProjectAccounting = forwardRef<
                   </div>
                 </div>
                 <div
-                  className="w-1/2 p-4 border border-gray2 rounded-lg h-max"
+                  className="w-full md:w-1/2 p-2 md:p-4 border border-gray2 rounded-lg h-max"
                   style={{
                     boxShadow:
                       "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
                   }}
                 >
-                  <div className="text-center p-4 text-[#101828] font-medium text-sm md:text-base desktop:text-lg bg-[#F9F9FB] mb-5 relative">
+                  <div className="text-center  p-2 md:p-4 text-[#101828] font-medium text-sm md:text-base desktop:text-lg bg-[#F9F9FB] mb-3 md:mb-5 relative">
                     Tomkostnader
-                    <Pencil className="text-primary absolute top-5 right-4" />
+                    <Pencil className="text-primary absolute top-2 h-5 w-5 md:w-6 md:h-6 md:top-5 right-4" />
                   </div>
-                  <div className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-3 md:gap-5">
                     {(apiData
                       ? apiData?.Tomtekost.length > 0
                       : TomtekostHusmodell?.Tomtekost.length > 0) &&
                       (apiData
                         ? apiData?.Tomtekost
                         : TomtekostHusmodell?.Tomtekost
-                      )?.map((item: any, index: number) => {
-                        const isEditing = editingPriceTomIndex === index;
-                        const isHeadlineEditing =
-                          editingHeadlineTomIndex === index;
-                        return (
-                          <div
-                            className="flex items-center gap-2 justify-between"
-                            key={index}
-                          >
-                            <div className="flex items-center gap-2">
-                              {isHeadlineEditing ? (
+                      )
+                        ?.sort((a: any, b: any) => {
+                          const aPris =
+                            parseInt(String(a?.pris)?.replace(/\D/g, "")) || 0;
+                          const bPris =
+                            parseInt(String(b?.pris)?.replace(/\D/g, "")) || 0;
+
+                          const aHasPris = !!a?.pris;
+                          const bHasPris = !!b?.pris;
+
+                          if (aHasPris && !bHasPris) return -1;
+                          if (!aHasPris && bHasPris) return 1;
+
+                          return bPris - aPris;
+                        })
+                        .map((item: any, index: number) => {
+                          const isEditing = editingPriceTomIndex === index;
+                          const isHeadlineEditing =
+                            editingHeadlineTomIndex === index;
+                          return (
+                            <div
+                              className="flex items-center gap-1 md:gap-2 justify-between"
+                              key={index}
+                            >
+                              <div className="flex items-center gap-1 md:gap-2">
+                                {isHeadlineEditing ? (
+                                  <input
+                                    type="text"
+                                    value={
+                                      editedHeadlinesTom[index] ??
+                                      item.Headline ??
+                                      ""
+                                    }
+                                    onChange={(e) => {
+                                      setEditedHeadlinesTom({
+                                        ...editedHeadlinesTom,
+                                        [index]: e.target.value,
+                                      });
+                                    }}
+                                    onBlur={() =>
+                                      setEditingHeadlineTomIndex(null)
+                                    }
+                                    className="focus-within:outline-none placeholder:text-gray text-sm rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[400px]"
+                                  />
+                                ) : (
+                                  <p
+                                    className="text-gray text-xs md:text-sm font-medium cursor-pointer"
+                                    onClick={() =>
+                                      setEditingHeadlineTomIndex(index)
+                                    }
+                                  >
+                                    {editedHeadlinesTom[index]
+                                      ? editedHeadlinesTom[index]
+                                      : item?.Headline}
+                                  </p>
+                                )}
+                              </div>
+                              {isEditing ? (
                                 <input
+                                  inputMode="numeric"
                                   type="text"
                                   value={
-                                    editedHeadlinesTom[index] ??
-                                    item.Headline ??
-                                    ""
+                                    editedPricesTom[index] ?? item.pris ?? ""
                                   }
                                   onChange={(e) => {
-                                    setEditedHeadlinesTom({
-                                      ...editedHeadlinesTom,
-                                      [index]: e.target.value,
+                                    setEditedPricesTom({
+                                      ...editedPricesTom,
+                                      [index]: e.target.value.replace(/\D/g, "")
+                                        ? new Intl.NumberFormat("no-NO").format(
+                                            Number(
+                                              e.target.value.replace(/\D/g, "")
+                                            )
+                                          )
+                                        : "",
                                     });
                                   }}
-                                  onBlur={() =>
-                                    setEditingHeadlineTomIndex(null)
-                                  }
-                                  className="focus-within:outline-none placeholder:text-gray text-sm rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[400px]"
+                                  onBlur={() => setEditingPriceTomIndex(null)}
+                                  className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
                                 />
                               ) : (
-                                <p
-                                  className="text-gray text-sm font-medium cursor-pointer"
-                                  onClick={() =>
-                                    setEditingHeadlineTomIndex(index)
-                                  }
+                                <h4
+                                  className="text-black font-medium text-sm md:text-base cursor-pointer whitespace-nowrap"
+                                  onClick={() => setEditingPriceTomIndex(index)}
                                 >
-                                  {editedHeadlinesTom[index]
-                                    ? editedHeadlinesTom[index]
-                                    : item?.Headline}
-                                </p>
+                                  {editedPricesTom[index]
+                                    ? `kr ${editedPricesTom[index]}`
+                                    : item?.pris
+                                    ? `kr ${item.pris}`
+                                    : "inkl. i tilbud"}
+                                </h4>
                               )}
                             </div>
-                            {isEditing ? (
-                              <input
-                                inputMode="numeric"
-                                type="text"
-                                value={
-                                  editedPricesTom[index] ?? item.pris ?? ""
-                                }
-                                onChange={(e) => {
-                                  setEditedPricesTom({
-                                    ...editedPricesTom,
-                                    [index]: e.target.value.replace(/\D/g, "")
-                                      ? new Intl.NumberFormat("no-NO").format(
-                                          Number(
-                                            e.target.value.replace(/\D/g, "")
-                                          )
-                                        )
-                                      : "",
-                                  });
-                                }}
-                                onBlur={() => setEditingPriceTomIndex(null)}
-                                className="focus-within:outline-none placeholder:text-gray rounded-[8px] shadow-shadow1 border border-gray1 py-[6px] px-[10px] w-[140px]"
-                              />
-                            ) : (
-                              <h4
-                                className="text-black font-medium text-base cursor-pointer"
-                                onClick={() => setEditingPriceTomIndex(index)}
-                              >
-                                {editedPricesTom[index]
-                                  ? `kr ${editedPricesTom[index]}`
-                                  : item?.pris
-                                  ? `kr ${item.pris}`
-                                  : "inkl. i tilbud"}
-                              </h4>
-                            )}
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
 
                     {newTomtekostList?.map((item: any, index: number) => {
                       const isEditing = editingPriceIndex === index;
 
                       return (
                         <div
-                          className="flex items-center gap-2 justify-between"
+                          className="flex items-center gap-1 md:gap-2 justify-between"
                           key={index}
                         >
-                          <div className="flex items-center gap-2">
-                            <p className="text-gray text-sm font-medium">
+                          <div className="flex items-center gap-1 md:gap-2">
+                            <p className="text-gray text-xs md:text-sm font-medium">
                               {item?.Headline}
                             </p>
                           </div>
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2 md:gap-3">
                             {isEditing ? (
                               <input
                                 inputMode="numeric"
@@ -1070,7 +1108,7 @@ export const ProjectAccounting = forwardRef<
                               />
                             ) : (
                               <h4
-                                className="text-black font-medium text-base cursor-pointer"
+                                className="text-black font-medium text-sm md:text-base cursor-pointer whitespace-nowrap"
                                 onClick={() => setEditingPriceIndex(index)}
                               >
                                 {editedPricesTom[index]
@@ -1082,7 +1120,7 @@ export const ProjectAccounting = forwardRef<
                             )}
 
                             <Trash2
-                              className="text-red w-5 h-5 cursor-pointer"
+                              className="text-red w-4 md:w-5 h-4 md:h-5 cursor-pointer"
                               onClick={() => {
                                 const updatedList = newTomtekostList.filter(
                                   (_: any, idx: number) => idx !== index
@@ -1105,23 +1143,23 @@ export const ProjectAccounting = forwardRef<
                     })}
 
                     <div className="border-t border-gray2"></div>
-                    <div className="flex items-center gap-2 justify-between">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 md:gap-2 justify-between">
+                      <div className="flex items-center gap-1 md:gap-2">
                         <p className="text-gray text-sm md:text-base desktop:text-lg font-bold">
                           Sum tomtekostnader
                         </p>
                       </div>
-                      <h4 className="text-black font-bold text-base">
+                      <h4 className="text-black font-bold text-sm md:text-base">
                         kr {formattedNumber}
                       </h4>
                     </div>
                     <div className="flex items-center justify-center">
                       <div
-                        className="bg-[#7839EE] rounded-[40px] py-[14px] px-5 flex items-center gap-2 cursor-pointer"
+                        className="bg-[#7839EE] rounded-[40px] py-2 md:py-3.5 px-3 md:px-5 flex items-center gap-2 cursor-pointer"
                         onClick={() => openModal("tomtekost")}
                       >
-                        <Plus className="text-white w-5 h-5" />
-                        <span className="text-white font-medium">
+                        <Plus className="text-white w-4 md:w-5 h-4 md:h-5" />
+                        <span className="text-white font-medium text-sm md:text-base">
                           Legg til ny tomtekostnad
                         </span>
                       </div>
@@ -1132,7 +1170,7 @@ export const ProjectAccounting = forwardRef<
             </>
           )}
           {okonomi === "Ettersend en økonomisk plan" && (
-            <p className="text-darkBlack px-6 text-sm md:text-base desktop:text-lg font-medium">
+            <p className="text-darkBlack px-4 md:px-6 text-sm md:text-base desktop:text-lg font-medium">
               Du vil ettersende økonomisk plan
             </p>
           )}

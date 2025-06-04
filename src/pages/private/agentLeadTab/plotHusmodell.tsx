@@ -238,19 +238,19 @@ export const PlotHusmodell = forwardRef<
               boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
             }}
           >
-            <div className="py-4 px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
+            <div className="py-2.5 md:py-4 px-3 md:px-5 flex items-center gap-3 border-b border-[#E8E8E8]">
               <UserRoundCheck />
               <span className="text-sm md:text-base desktop:text-lg font-semibold">
                 Registrering av prosjekt
               </span>
             </div>
-            <div className="bg-[#F6F4F2] py-3 px-5 text-sm font-semibold">
+            <div className="bg-[#F6F4F2] py-2 md:py-3 px-3 md:px-5 text-sm font-semibold">
               Informasjon om <span className="font-extrabold">tomten:</span>
             </div>
-            <div className="p-6 mb-6 z-40 relative">
-              <div className="flex flex-col gap-6">
-                <div className="flex gap-6">
-                  <div className="w-[35%]">
+            <div className="p-3 md:p-6 mb-6 z-40 relative">
+              <div className="flex flex-col gap-4 md:gap-6">
+                <div className="flex flex-col sm:flex-row flex-wrap desktop:flex-nowrap gap-4 md:gap-6">
+                  <div className="w-full lg:w-[48.5%] desktop:w-[35%]">
                     <FormField
                       control={form.control}
                       name="plot.address"
@@ -362,7 +362,7 @@ export const PlotHusmodell = forwardRef<
                       )}
                     />
                   </div>
-                  <div className="w-[13%]">
+                  <div className="w-full sm:w-[48.3%] md:w-[48%] lg:w-[48.5%] desktop:w-[13%]">
                     <FormField
                       control={form.control}
                       name="plot.Kommunenummer"
@@ -396,7 +396,7 @@ export const PlotHusmodell = forwardRef<
                       )}
                     />
                   </div>
-                  <div className="w-[13%]">
+                  <div className="w-full sm:w-[48.3%] md:w-[48%] lg:w-[48.5%] desktop:w-[13%]">
                     <FormField
                       control={form.control}
                       name="plot.Gårdsnummer"
@@ -430,7 +430,7 @@ export const PlotHusmodell = forwardRef<
                       )}
                     />
                   </div>
-                  <div className="w-[13%]">
+                  <div className="w-full sm:w-[48.3%] md:w-[48%] lg:w-[48.5%] desktop:w-[13%]">
                     <FormField
                       control={form.control}
                       name="plot.Bruksnummer"
@@ -464,7 +464,7 @@ export const PlotHusmodell = forwardRef<
                       )}
                     />
                   </div>
-                  <div className="w-[13%]">
+                  <div className="w-full sm:w-[48.3%] md:w-[48%] lg:w-[48.5%] desktop:w-[13%]">
                     <FormField
                       control={form.control}
                       name="plot.Seksjonsnummer"
@@ -498,7 +498,7 @@ export const PlotHusmodell = forwardRef<
                       )}
                     />
                   </div>
-                  <div className="w-[13%]">
+                  <div className="w-full sm:w-[48.3%] md:w-[48%] lg:w-[48.5%] desktop:w-[13%]">
                     <FormField
                       control={form.control}
                       name="plot.Festenummer"
@@ -535,10 +535,10 @@ export const PlotHusmodell = forwardRef<
                 </div>
                 <div>
                   <div className="flex items-center gap-2 justify-between">
-                    <p className={`font-semibold`}>
+                    <p className={`font-semibold text-sm md:text-base`}>
                       Eier kunden tomten allerede?
                     </p>
-                    <div className="flex gap-4 items-center">
+                    <div className="flex gap-2 md:gap-4 items-center">
                       {[
                         {
                           label: "Ja",
@@ -554,7 +554,7 @@ export const PlotHusmodell = forwardRef<
                           onClick={() => {
                             form.setValue("plot.alreadyHavePlot", item.value);
                           }}
-                          className={`border-2 rounded-lg p-[10px] w-[106px] cursor-pointer ${
+                          className={`border-2 rounded-lg p-[10px] w-[80px] md:w-[106px] cursor-pointer ${
                             selectedPlotType === item.value
                               ? "border-[#002776]"
                               : "border-transparent"
@@ -587,8 +587,8 @@ export const PlotHusmodell = forwardRef<
                       </div>
                     )}
                 </div>
-                <div className="flex gap-6">
-                  <div className="w-[35%]">
+                <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                  <div className="w-full md:w-[50%] desktop:w-[35%]">
                     <FormField
                       control={form.control}
                       name="plot.tomtekostnader"
@@ -638,7 +638,7 @@ export const PlotHusmodell = forwardRef<
                       )}
                     />
                   </div>
-                  <div className="w-[65%]">
+                  <div className="w-full md:w-[50%] desktop:w-[65%]">
                     <FormField
                       control={form.control}
                       name="plot.Kommentar"
@@ -673,12 +673,12 @@ export const PlotHusmodell = forwardRef<
                   </div>
                 </div>
                 <div className="border-t border-[#D1D1D1] w-full"></div>
-                <div className="bg-[#F6F4F2] py-3 px-5 text-sm font-semibold">
+                <div className="bg-[#F6F4F2] py-3 px-3 md:px-5 text-sm font-semibold">
                   Informasjon om{" "}
                   <span className="font-extrabold">husmodellen:</span>
                 </div>
-                <div className="flex gap-6">
-                  <div className="w-[35%]">
+                <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                  <div className="w-full md:w-[50%] desktop:w-[35%]">
                     <FormField
                       control={form.control}
                       name="house.housemodell"
@@ -740,10 +740,10 @@ export const PlotHusmodell = forwardRef<
                       )}
                     />
                   </div>
-                  <div className="w-[65%]"></div>
+                  <div className="w-full md:w-[50%] desktop:w-[65%]"></div>
                 </div>
-                <div className="flex gap-6">
-                  <div className="w-[35%]">
+                <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                  <div className="w-full md:w-[50%] desktop:w-[35%]">
                     <FormField
                       control={form.control}
                       name="house.byggekostnader"
@@ -793,7 +793,7 @@ export const PlotHusmodell = forwardRef<
                       )}
                     />
                   </div>
-                  <div className="w-[65%]">
+                  <div className="w-full md:w-[50%] desktop:w-[65%]">
                     <FormField
                       control={form.control}
                       name="house.Kommentar"

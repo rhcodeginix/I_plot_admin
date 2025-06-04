@@ -312,7 +312,7 @@ export const Kunden = forwardRef<
                 {fields.map((product, index) => {
                   return (
                     <div key={product.id}>
-                      <div className="flex flex-col gap-3 md:gap-6">
+                      <div className="flex flex-col gap-4 md:gap-6">
                         <div className="flex items-center gap-2 justify-between">
                           {index === 0 ? (
                             <div>
@@ -363,7 +363,7 @@ export const Kunden = forwardRef<
                                     <InputMobile
                                       placeholder="Skriv inn Telefon"
                                       {...field}
-                                      className={`bg-white w-max rounded-[8px] border text-black
+                                      className={`bg-white w-full sm:w-max rounded-[8px] border text-black
                               ${
                                 fieldState?.error
                                   ? "border-red"
@@ -372,7 +372,7 @@ export const Kunden = forwardRef<
                                       type="tel"
                                     />
                                     <div
-                                      className="border-primary border-2 rounded-lg py-2 px-3 text-primary font-semibold cursor-pointer h-12 flex items-center justify-center"
+                                      className="border-primary border-2 rounded-lg py-2 px-3 text-primary font-semibold cursor-pointer h-10 md:h-12 flex items-center justify-center text-sm md:text-base"
                                       onClick={() =>
                                         handlePhoneChange(field.value, index)
                                       }
@@ -386,7 +386,7 @@ export const Kunden = forwardRef<
                             )}
                           />
                         </div>
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                           <div>
                             <FormField
                               control={form.control}
@@ -454,7 +454,7 @@ export const Kunden = forwardRef<
                             />
                           </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                           <div>
                             <FormField
                               control={form.control}
@@ -555,7 +555,7 @@ export const Kunden = forwardRef<
                             />
                           </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                           <div>
                             <FormField
                               control={form.control}
@@ -683,7 +683,7 @@ export const Kunden = forwardRef<
               </div>
             </div>
           </div>
-          <div className="mb-8 mx-10">
+          <div className="mb-8 mx-4 md:mx-8 lg:mx-10">
             <div
               className="text-white rounded-lg w-max bg-purple font-medium justify-center text-base flex items-center gap-1 cursor-pointer h-full px-4 py-[10px]"
               onClick={addProduct}

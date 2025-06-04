@@ -46,26 +46,37 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
           </div>
           {husmodellData?.Byggekostnader?.length > 0 && (
             <div className="flex flex-col gap-3 md:gap-5">
-              {husmodellData?.Byggekostnader?.map(
-                (item: any, index: number) => {
-                  return (
-                    <div
-                      className="flex items-center gap-2 justify-between"
-                      key={index}
-                    >
-                      <div className="flex items-center gap-2">
-                        <img src={Ic_info_circle} alt="icon" />
-                        <p className="text-gray text-sm font-medium">
-                          {item?.Headline}
-                        </p>
-                      </div>
-                      <h4 className="text-black font-medium text-base">
-                        {item?.pris ? `kr ${item.pris}` : "inkl. i tilbud"}
-                      </h4>
+              {husmodellData?.Byggekostnader?.sort((a: any, b: any) => {
+                const aPris =
+                  parseInt(String(a?.pris)?.replace(/\D/g, "")) || 0;
+                const bPris =
+                  parseInt(String(b?.pris)?.replace(/\D/g, "")) || 0;
+
+                const aHasPris = !!a?.pris;
+                const bHasPris = !!b?.pris;
+
+                if (aHasPris && !bHasPris) return -1;
+                if (!aHasPris && bHasPris) return 1;
+
+                return bPris - aPris;
+              }).map((item: any, index: number) => {
+                return (
+                  <div
+                    className="flex items-center gap-2 justify-between"
+                    key={index}
+                  >
+                    <div className="flex items-center gap-2">
+                      <img src={Ic_info_circle} alt="icon" />
+                      <p className="text-gray text-sm font-medium">
+                        {item?.Headline}
+                      </p>
                     </div>
-                  );
-                }
-              )}
+                    <h4 className="text-black font-medium text-base">
+                      {item?.pris ? `kr ${item.pris}` : "inkl. i tilbud"}
+                    </h4>
+                  </div>
+                );
+              })}
               <div className="border-t border-gray2"></div>
               <div className="flex items-center gap-2 justify-between">
                 <div className="flex items-center gap-2">
@@ -104,7 +115,20 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
               />
             </div>
             {husmodellData?.Tomtekost.length > 0 &&
-              husmodellData?.Tomtekost?.map((item: any, index: number) => {
+              husmodellData?.Tomtekost?.sort((a: any, b: any) => {
+                const aPris =
+                  parseInt(String(a?.pris)?.replace(/\D/g, "")) || 0;
+                const bPris =
+                  parseInt(String(b?.pris)?.replace(/\D/g, "")) || 0;
+
+                const aHasPris = !!a?.pris;
+                const bHasPris = !!b?.pris;
+
+                if (aHasPris && !bHasPris) return -1;
+                if (!aHasPris && bHasPris) return 1;
+
+                return bPris - aPris;
+              }).map((item: any, index: number) => {
                 return (
                   <div
                     className="flex items-center gap-2 justify-between"

@@ -119,7 +119,8 @@ export const BankleadsTabs = () => {
               </h3>
               <p className="text-[#4D4D4D] text-sm">
                 Her registrer du informasjon om kunden. Jo mer informasjon, jo
-                bedre kan banken forberede seg <br /> før de tar kontakt med
+                bedre kan banken forberede seg{" "}
+                <br className="hidden lg:block" /> før de tar kontakt med
                 kunden.
               </p>
             </div>
@@ -137,20 +138,21 @@ export const BankleadsTabs = () => {
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span className="text-[#5D6B98] text-sm">Tomt og husmodell</span>
             </div>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
                 <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
                 <p className="text-[#4D4D4D] text-sm">
                   Her registrer du informasjon om kunden. Jo mer informasjon, jo
-                  bedre kan banken forberede seg <br /> før de tar kontakt med
+                  bedre kan banken forberede seg{" "}
+                  <br className="hidden lg:block" /> før de tar kontakt med
                   kunden.
                 </p>
               </div>
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
-                <h3 className="text-darkBlack font-semibold text-xl">
+                <h3 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl whitespace-nowrap">
                   kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
@@ -184,13 +186,14 @@ export const BankleadsTabs = () => {
                 </h3>
                 <p className="text-[#4D4D4D] text-sm">
                   Her registrer du informasjon om kunden. Jo mer informasjon, jo
-                  bedre kan banken forberede seg <br /> før de tar kontakt med
+                  bedre kan banken forberede seg{" "}
+                  <br className="hidden lg:block" /> før de tar kontakt med
                   kunden.
                 </p>
               </div>
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
-                <h3 className="text-darkBlack font-semibold text-xl">
+                <h3 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl whitespace-nowrap">
                   kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
@@ -224,20 +227,21 @@ export const BankleadsTabs = () => {
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span className="text-[#5D6B98] text-sm">Forhåndstakst</span>
             </div>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
                 <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
                 <p className="text-[#4D4D4D] text-sm">
                   Her registrer du informasjon om kunden. Jo mer informasjon, jo
-                  bedre kan banken forberede seg <br /> før de tar kontakt med
+                  bedre kan banken forberede seg{" "}
+                  <br className="hidden lg:block" /> før de tar kontakt med
                   kunden.
                 </p>
               </div>
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
-                <h3 className="text-darkBlack font-semibold text-xl">
+                <h3 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl whitespace-nowrap">
                   kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>
@@ -278,20 +282,21 @@ export const BankleadsTabs = () => {
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span className="text-[#5D6B98] text-sm">Oppsummering</span>
             </div>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
                 <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
                 <p className="text-[#4D4D4D] text-sm">
                   Her registrer du informasjon om kunden. Jo mer informasjon, jo
-                  bedre kan banken forberede seg <br /> før de tar kontakt med
+                  bedre kan banken forberede seg{" "}
+                  <br className="hidden lg:block" /> før de tar kontakt med
                   kunden.
                 </p>
               </div>
               <div>
                 <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
-                <h3 className="text-darkBlack font-semibold text-xl">
+                <h3 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl whitespace-nowrap">
                   kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-sm text-gray">inkl. tomtepris</p>

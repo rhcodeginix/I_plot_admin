@@ -527,7 +527,12 @@ export const AddLeadForm = () => {
               </div>
             </div>
             <div className="flex justify-end w-full gap-5 items-center mt-8">
-              <div onClick={() => form.reset()}>
+              <div
+                onClick={() => {
+                  form.reset();
+                  navigate("/my-leads");
+                }}
+              >
                 <Button
                   text="Tilbake"
                   className="border border-lightPurple bg-lightPurple text-primary text-base rounded-[8px] h-[48px] font-medium relative py-[10px] flex items-center gap-2 px-[50px]"

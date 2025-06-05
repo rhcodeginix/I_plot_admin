@@ -140,10 +140,12 @@ export const AddNewCat: React.FC<{
             />
           </div>
           <div className="flex justify-end w-full gap-5 items-center left-0 mt-8">
-            <div onClick={() => {
-          form.reset();
-          onClose();
-        }} >
+            <div
+              onClick={() => {
+                form.reset();
+                // onClose();
+              }}
+            >
               <Button
                 text="Avbryt"
                 className="border border-lightPurple bg-lightPurple text-purple text-sm rounded-[8px] h-[40px] font-medium relative px-12 py-2 flex items-center gap-2"

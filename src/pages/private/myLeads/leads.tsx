@@ -80,7 +80,9 @@ export const MyLeadsTable = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<string | null>(
     null
   );
-  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(
+    "Til oppfølgning"
+  );
 
   const email = localStorage.getItem("Iplot_admin");
 

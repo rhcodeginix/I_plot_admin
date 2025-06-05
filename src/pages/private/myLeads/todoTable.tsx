@@ -354,19 +354,6 @@ export const TODOTable = () => {
             if (!isWithinDateRange) return null;
           }
 
-          if (selectedFilter === "Up for grabs") {
-            const logs = allLogMap?.[model.id] || [];
-            const firstLog = logs && logs?.[0];
-            if (
-              firstLog?.type === "initial" ||
-              firstLog?.Hurtigvalg === "initial"
-            ) {
-              return model;
-            } else {
-              return null;
-            }
-          }
-
           if (selectedFilter === "Fremtidige oppgaver") {
             const logs = Array.isArray(allLogMap?.[model.id])
               ? allLogMap[model.id]
@@ -655,17 +642,9 @@ export const TODOTable = () => {
                 />
               )}
             </div>
-            <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex flex-col sm:flex-row overflow-hidden md:w-max">
+            <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex flex-col sm:flex-row overflow-hidden sm:w-max">
               <div
-                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
-                  selectedFilter === "Up for grabs" && "bg-white"
-                }`}
-                onClick={() => setSelectedFilter("Up for grabs")}
-              >
-                Up for grabs
-              </div>
-              <div
-                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-b border-t sm:border-t-0 sm:border-b-0 sm:border-r sm:border-l border-gray1 cursor-pointer ${
+                className={`p-2.5 md:py-3 md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-b sm:border-b-0 sm:border-r border-gray1 cursor-pointer ${
                   selectedFilter === "Til oppfølgning" && "bg-white"
                 }`}
                 onClick={() => setSelectedFilter("Til oppfølgning")}

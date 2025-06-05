@@ -38,12 +38,13 @@ import {
   convertToFullDateString,
   fetchAdminDataByEmail,
   formatDateOnly,
-  formatTimestamp,
+  // formatTimestamp,
 } from "../../../lib/utils";
 import { HouseModelCell } from "./houseRow";
 import { StatusCell } from "./statusRow";
 import { BrokerCell } from "./brokerRow";
 import { monthMap } from "./myLeadsDetail";
+import { TodoDateCell } from "./todoDate";
 
 const calculateDateRange = (range: string) => {
   const currentDate = new Date();
@@ -533,11 +534,12 @@ export const TODOTable = () => {
     const updatedColumn: ColumnDef<any> = {
       accessorKey: "Oppdatert kl",
       header: "Oppdatert kl",
-      cell: ({ row }) => (
-        <p className="text-sm font-semibold text-black w-max">
-          {formatTimestamp(row.original.updatedAt)}
-        </p>
-      ),
+      // cell: ({ row }) => (
+      //   <p className="text-sm font-semibold text-black w-max">
+      //     {formatTimestamp(row.original.updatedAt)}
+      //   </p>
+      // ),
+      cell: ({ row }) => <TodoDateCell id={row.original.id} />,
     };
 
     if (selectedFilter === "Til oppfølgning") {

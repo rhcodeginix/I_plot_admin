@@ -48,6 +48,7 @@ const productSchema = z.object({
 const categorySchema = z.object({
   navn: z.string().min(1, "Kategorinavn må bestå av minst 1 tegn."),
   produkter: z.array(productSchema).min(1, "Minst ett produkt er påkrevd."),
+  isSelected: z.boolean().optional(),
 });
 
 const mainCategorySchema = z.object({
@@ -107,6 +108,7 @@ export const Eksterior: React.FC<{
                   Produktbeskrivelse: "",
                 },
               ],
+              isSelected: false,
             },
           ],
         },
@@ -185,6 +187,9 @@ export const Eksterior: React.FC<{
     const updatedProducts = form.watch(
       `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter`
     );
+    const updatedProductsSelector = form.watch(
+      `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.isSelected`
+    );
 
     if (!updatedProducts) return;
 
@@ -209,6 +214,9 @@ export const Eksterior: React.FC<{
               Produktbeskrivelse: product.Produktbeskrivelse || "",
             };
           });
+          updatedCategories[activeTabData].Kategorinavn[
+            activeSubTabData
+          ].isSelected = updatedProductsSelector ?? false;
         }
 
         return updatedCategories;
@@ -221,6 +229,9 @@ export const Eksterior: React.FC<{
       form.watch(
         `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter`
       )
+    ),
+    form.watch(
+      `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.isSelected`
     ),
   ]);
 
@@ -983,10 +994,13 @@ export const Eksterior: React.FC<{
               activeTabData={activeTabData}
               setCategory={setCategory}
               editIndex={editSubCatIndex}
-              defaultValue={
-                editSubCatIndex !== null
-                  ? hovedkategorinavn[editSubCatIndex]?.navn || ""
-                  : ""
+              // defaultValue={
+              //   editSubCatIndex !== null
+              //     ? hovedkategorinavn[editSubCatIndex]?.navn || ""
+              //     : ""
+              // }
+              editData={
+                editSubCatIndex !== null && hovedkategorinavn[editSubCatIndex]
               }
             />
           </div>

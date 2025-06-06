@@ -10,11 +10,13 @@ import {
 } from "../../../components/ui/form";
 import Button from "../../../components/common/button";
 import { Input } from "../../../components/ui/input";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   Kategorinavn: z.string().min(1, {
     message: "Kategorinavn må bestå av minst 2 tegn.",
   }),
+  isSelected: z.boolean().optional(),
 });
 
 export const AddNewSubCat: React.FC<{
@@ -23,24 +25,36 @@ export const AddNewSubCat: React.FC<{
   activeTabData: any;
   setCategory: any;
   editIndex?: any;
-  defaultValue?: string;
+  // defaultValue?: string;
+  editData?: any;
 }> = ({
   onClose,
   formData,
   activeTabData,
   setCategory,
   editIndex,
-  defaultValue,
+  // defaultValue,
+  editData,
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      Kategorinavn: defaultValue || "",
-    },
+    // defaultValues: {
+    //   Kategorinavn: defaultValue || "",
+    // },
   });
+
+  useEffect(() => {
+    if (editData?.navn) {
+      form.setValue("Kategorinavn", editData?.navn);
+    }
+    if (editData?.isSelected) {
+      form.setValue("isSelected", editData?.isSelected);
+    }
+  }, [form, editData?.navn, editData?.isSelected]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     onClose();
+
     const updatedName = data.Kategorinavn;
 
     const existingCategories =
@@ -50,12 +64,14 @@ export const AddNewSubCat: React.FC<{
     if (editIndex !== null && existingCategories[editIndex]) {
       const updatedCategories = [...existingCategories];
       updatedCategories[editIndex].navn = updatedName;
+      updatedCategories[editIndex].isSelected = data?.isSelected ?? false;
 
       setCategory((prev: any) => {
         const updatedCategory = [...prev];
         updatedCategory[activeTabData] = {
           ...updatedCategory[activeTabData],
           Kategorinavn: updatedCategories,
+          isSelected: data.isSelected ?? false,
         };
         return updatedCategory;
       });
@@ -65,22 +81,38 @@ export const AddNewSubCat: React.FC<{
         updatedCategories,
         { shouldValidate: true }
       );
+      // formData.setValue(
+      //   `hovedkategorinavn.${activeTabData}.isSelected`,
+      //   formData.getValues(`hovedkategorinavn.${activeTabData}.isSelected`) ??
+      //     false,
+      //   { shouldValidate: true }
+      // );
     } else {
-      const newSubCategory = { navn: updatedName, produkter: [] };
+      const newSubCategory = {
+        navn: updatedName,
+        isSelected: data?.isSelected ?? false,
+        produkter: [],
+      };
       setCategory((prev: any) => {
         const updatedCategory = [...prev];
         updatedCategory[activeTabData] = {
           ...updatedCategory[activeTabData],
           Kategorinavn: [...existingCategories, newSubCategory],
+          isSelected: data.isSelected ?? false,
         };
         return updatedCategory;
       });
-      formData.setValue(
-        `hovedkategorinavn.${activeTabData}.Kategorinavn`,
-        [...existingCategories, newSubCategory],
-        { shouldValidate: true }
-      );
+      // formData.setValue(
+      //   `hovedkategorinavn.${activeTabData}.Kategorinavn`,
+      //   [...existingCategories, newSubCategory],
+      //   { shouldValidate: true }
+      // );
     }
+    // formData.setValue(
+    //   `hovedkategorinavn.${activeTabData}.isSelected`,
+    //   data.isSelected ?? false,
+    //   { shouldValidate: true }
+    // );
   };
   return (
     <>
@@ -115,6 +147,44 @@ export const AddNewSubCat: React.FC<{
                                           } `}
                         type="text"
                       />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div>
+            <FormField
+              control={form.control}
+              name={`isSelected`}
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="relative flex items-center gap-2 mt-3">
+                      <input
+                        className={`bg-white rounded-[8px] accent-primary border text-black
+                                  ${
+                                    fieldState?.error
+                                      ? "border-red"
+                                      : "border-gray1"
+                                  } h-4 w-4`}
+                        type="radio"
+                        onChange={(e) => {
+                          const isChecked = e.target.checked;
+                          if (isChecked) {
+                            form.setValue("isSelected", isChecked);
+                          }
+                        }}
+                        checked={field.value}
+                      />
+                      <p
+                        className={`${
+                          fieldState.error ? "text-red" : "text-black"
+                        } text-sm font-medium`}
+                      >
+                        Is mandatory
+                      </p>
                     </div>
                   </FormControl>
                   <FormMessage />

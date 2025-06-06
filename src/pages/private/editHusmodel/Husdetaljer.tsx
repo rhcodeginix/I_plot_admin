@@ -370,7 +370,7 @@ export const Husdetaljer: React.FC<{
 
     let newImages = [
       ...(fieldName === "PlantegningerFasader"
-        ? uploadPlantegningerFasaderPhoto
+        ? uploadPlantegningerFasaderPhoto || []
         : upload3DPhoto || []),
     ];
 
@@ -598,6 +598,11 @@ export const Husdetaljer: React.FC<{
         await updateDoc(husmodellDocRef, {
           Husdetaljer: husdetaljerData,
           updatedAt: formatDate(new Date()),
+          updateDataBy: {
+            email: createData?.email,
+            photo: createData?.photo,
+            name: createData?.name,
+          },
         });
         toast.success("Lagret", {
           position: "top-right",
@@ -608,6 +613,11 @@ export const Husdetaljer: React.FC<{
           updatedAt: formatDate(new Date()),
           createdAt: formatDate(new Date()),
           createDataBy: {
+            email: createData?.email,
+            photo: createData?.photo,
+            name: createData?.name,
+          },
+          updateDataBy: {
             email: createData?.email,
             photo: createData?.photo,
             name: createData?.name,

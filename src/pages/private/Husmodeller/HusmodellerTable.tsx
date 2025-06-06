@@ -286,13 +286,13 @@ export const HusmodellerTable = () => {
         cell: ({ row }) => (
           <div className="flex items-start gap-3 w-max">
             <img
-              src={row.original?.createDataBy?.photo}
+              src={row.original?.updateDataBy?.photo}
               alt="avatar"
               className="w-8 h-8 rounded-full"
             />
             <div>
               <p className="font-medium text-black text-sm mb-[2px]">
-                {row.original?.createDataBy?.name}
+                {row.original?.updateDataBy?.name}
               </p>
               <p className="text-xs text-gray">
                 {formatDateTime(row.original.updatedAt)}

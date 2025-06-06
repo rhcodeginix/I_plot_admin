@@ -18,7 +18,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { fetchHusmodellData } from "../../../lib/utils";
+import { fetchAdminDataByEmail, fetchHusmodellData } from "../../../lib/utils";
 
 const formSchema = z.object({
   ByggekostnaderInfo: z.string().min(1, {
@@ -111,7 +111,18 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
     control: form.control,
     name: "Tomtekost",
   });
+  const [createData, setCreateData] = useState<any>(null);
 
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        setCreateData(data);
+      }
+    };
+
+    getData();
+  }, []);
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id: any = pathSegments.length > 2 ? pathSegments[2] : null;
@@ -181,6 +192,11 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
       await updateDoc(husmodellDocRef, {
         Prisliste: husdetaljerData,
         updatedAt: formatDate(new Date()),
+        updateDataBy: {
+          email: createData?.email,
+          photo: createData?.photo,
+          name: createData?.name,
+        },
       });
       toast.success("Lagret", { position: "top-right" });
 

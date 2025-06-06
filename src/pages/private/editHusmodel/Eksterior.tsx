@@ -24,6 +24,7 @@ import { db, storage } from "../../../config/firebaseConfig";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { doc, updateDoc } from "firebase/firestore";
+import { fetchAdminDataByEmail } from "../../../lib/utils";
 
 const fileSchema = z.union([
   z
@@ -68,6 +69,19 @@ export const Eksterior: React.FC<{
   setCategory: any;
 }> = ({ setActiveTab, labelName, Category, activeTabData, setCategory }) => {
   const [activeSubTabData, setActiveSubTabData] = useState(0);
+
+  const [createData, setCreateData] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        setCreateData(data);
+      }
+    };
+
+    getData();
+  }, []);
 
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
@@ -141,6 +155,11 @@ export const Eksterior: React.FC<{
       await updateDoc(husmodellDocRef, {
         Huskonfigurator: husdetaljerData,
         updatedAt: formatDate(new Date()),
+        updateDataBy: {
+          email: createData?.email,
+          photo: createData?.photo,
+          name: createData?.name,
+        },
       });
       toast.success("Lagret", { position: "top-right" });
 

@@ -195,7 +195,9 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
         updateDataBy: {
           email: createData?.email,
           photo: createData?.photo,
-          name: createData?.name,
+          // name: createData?.name,
+          name:
+              createData?.name || `${createData?.fname} ${createData?.lname}`,
         },
       });
       toast.success("Lagret", { position: "top-right" });

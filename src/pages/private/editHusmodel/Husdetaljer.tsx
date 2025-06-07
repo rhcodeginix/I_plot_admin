@@ -601,7 +601,8 @@ export const Husdetaljer: React.FC<{
           updateDataBy: {
             email: createData?.email,
             photo: createData?.photo,
-            name: createData?.name,
+            name:
+              createData?.name || `${createData?.fname} ${createData?.lname}`,
           },
         });
         toast.success("Lagret", {
@@ -615,12 +616,14 @@ export const Husdetaljer: React.FC<{
           createDataBy: {
             email: createData?.email,
             photo: createData?.photo,
-            name: createData?.name,
+            name:
+              createData?.name || `${createData?.fname} ${createData?.lname}`,
           },
           updateDataBy: {
             email: createData?.email,
             photo: createData?.photo,
-            name: createData?.name,
+            name:
+              createData?.name || `${createData?.fname} ${createData?.lname}`,
           },
         });
         toast.success("Added successfully", { position: "top-right" });

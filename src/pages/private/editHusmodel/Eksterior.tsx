@@ -160,7 +160,7 @@ export const Eksterior: React.FC<{
         updateDataBy: {
           email: createData?.email,
           photo: createData?.photo,
-          name: createData?.name,
+          name: createData?.name || `${createData?.fname} ${createData?.lname}`,
         },
       });
       toast.success("Lagret", { position: "top-right" });

@@ -55,12 +55,21 @@ export const HusmodellerTable = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [permission, setPermission] = useState<any>(null);
+  const [supp, setSupp] = useState<any>(null);
+  const [role, setRole] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
       if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+        if (data?.supplier) {
+          setSupp(data?.supplier);
+        }
+
         const finalData = data?.modulePermissions?.find(
           (item: any) => item.name === "Husmodell"
         );
@@ -161,18 +170,19 @@ export const HusmodellerTable = () => {
       setShowConfirmCopy(true);
     }
   };
+
   const fetchHusmodellData = async () => {
     setIsLoading(true);
     try {
       let q;
-      if (email === "andre.finger@gmail.com") {
-        q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
-      } else {
+      // if (email === "andre.finger@gmail.com") {
+      if (role === "Agent") {
         q = query(
           collection(db, "house_model"),
-          where("createDataBy.email", "==", email),
-          orderBy("updatedAt", "desc")
+          where("Husdetaljer.Leverandører", "==", supp)
         );
+      } else {
+        q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
       }
       const querySnapshot = await getDocs(q);
 
@@ -180,6 +190,7 @@ export const HusmodellerTable = () => {
         id: doc.id,
         ...doc.data(),
       }));
+
       setHouseModels(data);
     } catch (error) {
       console.error("Error fetching husmodell data:", error);
@@ -190,7 +201,7 @@ export const HusmodellerTable = () => {
 
   useEffect(() => {
     fetchHusmodellData();
-  }, []);
+  }, [role, supp]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const confirmDelete = (id: string, supplierId: string) => {
     setSelectedId(id);

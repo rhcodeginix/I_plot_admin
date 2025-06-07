@@ -617,13 +617,13 @@ export const Husdetaljer: React.FC<{
             email: createData?.email,
             photo: createData?.photo,
             name:
-              createData?.name || `${createData?.fname} ${createData?.lname}`,
+              createData?.name || `${createData?.f_name} ${createData?.l_name}`,
           },
           updateDataBy: {
             email: createData?.email,
             photo: createData?.photo,
             name:
-              createData?.name || `${createData?.fname} ${createData?.lname}`,
+              createData?.name || `${createData?.f_name} ${createData?.l_name}`,
           },
         });
         toast.success("Added successfully", { position: "top-right" });

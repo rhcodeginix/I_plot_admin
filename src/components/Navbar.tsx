@@ -56,6 +56,7 @@ export const Navbar: React.FC = () => {
   const [HusmodellPermission, setHusmodellPermission] = useState<any>(null);
   const [Role, setRole] = useState<any>(null);
   const [Supplier, setSupplier] = useState<any>(null);
+  const [name, setName] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
 
   useEffect(() => {
@@ -66,7 +67,9 @@ export const Navbar: React.FC = () => {
         if (data?.role) {
           setRole(data?.role);
         }
+
         setIsPhoto(data?.photo);
+        setName(data?.name || data?.f_name);
 
         if (data?.supplier) {
           setSupplier(data?.supplier);
@@ -266,9 +269,13 @@ export const Navbar: React.FC = () => {
             className="flex items-center gap-2 cursor-pointer"
             onClick={toggleDropdown}
           >
-            {isPhoto && (
+            {isPhoto ? (
               <div className="w-8 h-8 md:h-[40px] md:w-[40px]">
                 <img src={isPhoto} alt="profile" className="rounded-full" />
+              </div>
+            ) : (
+              <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center border border-primary bg-lightPurple rounded-full">
+                {name?.[0]}
               </div>
             )}
             <img src={Ic_chevron_up} alt="arrow" className="rotate-180" />

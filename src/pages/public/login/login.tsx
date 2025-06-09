@@ -48,19 +48,19 @@ export const Login = () => {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const supplierDocRef = doc(db, "admin", data.email);
-      const supplierSnap = await getDoc(supplierDocRef);
+      const adminDocRef = doc(db, "admin", data.email);
+      const adminSnap = await getDoc(adminDocRef);
 
-      if (!supplierSnap.exists()) {
+      if (!adminSnap.exists()) {
         toast.error("Admin not exist", { position: "top-right" });
       } else {
-        const adminData = supplierSnap.data();
+        const adminData = adminSnap.data();
         const storedPassword = adminData?.password;
 
         if (!storedPassword) {
           if (data.password) {
             const hashedPassword = bcrypt.hashSync(data.password, 10);
-            await updateDoc(supplierDocRef, { password: hashedPassword });
+            await updateDoc(adminDocRef, { password: hashedPassword });
 
             toast.success("Login successfully", {
               position: "top-right",
@@ -192,7 +192,7 @@ export const Login = () => {
                   </div>
                 </div>
                 <div className="flex justify-end w-full gap-5 items-center p-4">
-                  <div onClick={() => form.reset()} >
+                  <div onClick={() => form.reset()}>
                     <Button
                       text="Avbryt"
                       className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

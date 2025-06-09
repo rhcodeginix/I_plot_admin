@@ -48,11 +48,11 @@ export const BrokerCell: React.FC<{ id: string }> = ({ id }) => {
       {finalData ? (
         <div className="flex items-center gap-3 w-max">
           <div className="w-8 h-8 rounded-full border border-gray1 bg-gray3 flex items-center justify-center">
-            {finalData?.f_name[0]}
+            {finalData?.f_name[0] || finalData?.name[0]}
           </div>
           <div>
             <p className="font-medium text-black text-sm mb-[2px]">
-              {finalData?.f_name} {finalData?.l_name}
+              {finalData?.f_name || finalData?.name} {finalData?.l_name}
             </p>
             <p className="text-xs text-gray">{finalData?.email}</p>
           </div>

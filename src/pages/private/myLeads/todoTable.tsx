@@ -36,8 +36,11 @@ import { db } from "../../../config/firebaseConfig";
 import { Link, useNavigate } from "react-router-dom";
 import {
   convertToFullDateString,
+  fetchAdminData,
   fetchAdminDataByEmail,
+  fetchHusmodellData,
   formatDateOnly,
+  formatTimestamp,
   // formatTimestamp,
 } from "../../../lib/utils";
 import { HouseModelCell } from "./houseRow";
@@ -45,6 +48,7 @@ import { StatusCell } from "./statusRow";
 import { BrokerCell } from "./brokerRow";
 import { monthMap } from "./myLeadsDetail";
 import { TodoDateCell } from "./todoDate";
+import { NoteCell } from "./noteRow";
 
 const calculateDateRange = (range: string) => {
   const currentDate = new Date();
@@ -80,6 +84,8 @@ const calculateDateRange = (range: string) => {
 
 export const TODOTable = () => {
   const [selectedDate1, setSelectedDate1] = useState<Date | null>(null);
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const [page, setPage] = useState(1);
   const [leads, setLeads] = useState([]);
@@ -446,12 +452,205 @@ export const TODOTable = () => {
       fetchLeadsData();
     }
   }, [LoginUserId]);
+  // -----
+  const fetchPreferredFollowUp = async (id: any) => {
+    if (!id) return;
 
+    const logsCollectionRef = collection(
+      db,
+      "leads_from_supplier",
+      String(id),
+      "followups"
+    );
+
+    try {
+      const logsSnapshot = await getDocs(logsCollectionRef);
+
+      const fetchedLogs: any = logsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      const getTimestamp = (item: any): number => {
+        const updatedAt = item?.updatedAt;
+
+        if (typeof updatedAt === "string") {
+          const [datePart, timePart] = updatedAt
+            .split("|")
+            .map((s: string) => s.trim());
+          const [day, monthName, year] = datePart.split(" ");
+          const engMonth = monthMap[monthName.toLowerCase()] || monthName;
+          const dateStr = `${engMonth} ${day}, ${year} ${timePart}`;
+          const parsed = new Date(dateStr).getTime();
+          return isNaN(parsed) ? 0 : parsed;
+        } else if (updatedAt?.toMillis) {
+          return updatedAt.toMillis();
+        } else {
+          return item?.date?.seconds ? item.date.seconds * 1000 : 0;
+        }
+      };
+      fetchedLogs.sort((a: any, b: any) => getTimestamp(b) - getTimestamp(a));
+
+      return fetchedLogs;
+    } catch (error) {
+      console.error("Failed to fetch logs:", error);
+    }
+  };
+
+  const [preferredFollow, setPreferredFollow] = useState<any>(new Map());
+
+  useEffect(() => {
+    const loadPreferredHouses = async () => {
+      const newMap = new Map();
+
+      for (const row of filteredData) {
+        const id = row?.id;
+        if (id) {
+          const logs = await fetchPreferredFollowUp(id);
+          newMap.set(id, logs || []);
+        }
+      }
+
+      setPreferredFollow(newMap);
+    };
+
+    loadPreferredHouses();
+  }, [filteredData, sortDirection]);
+
+  const fetchPreferredHouse = async (id: any) => {
+    if (!id) return;
+
+    const subDocRef = doc(
+      db,
+      "leads_from_supplier",
+      String(id),
+      "preferred_house_model",
+      String(id)
+    );
+
+    const subDocSnap = await getDoc(subDocRef);
+
+    if (subDocSnap.exists()) {
+      return subDocSnap.data();
+    }
+  };
+
+  const [finalDataMap, setFinalDataMap] = useState<Map<string, any>>(new Map());
+  const [finalBrokerDataMap, setFinalBrokerDataMap] = useState<
+    Map<string, any>
+  >(new Map());
+
+  const fetchAndCacheHouseModel = async (id: string) => {
+    const data = await fetchPreferredHouse(id);
+    if (data?.Husmodell?.[0]) {
+      const houseData = await fetchHusmodellData(data.Husmodell[0]);
+      if (houseData && houseData.Husdetaljer) {
+        setFinalDataMap((prev) => new Map(prev).set(id, houseData));
+      }
+    }
+  };
+
+  const fetchAndCacheBroker = async (id: string) => {
+    const data = await fetchPreferredHouse(id);
+    if (data?.Tildelt) {
+      const adminData = await fetchAdminData(data?.Tildelt);
+      if (adminData) {
+        setFinalBrokerDataMap((prev) => new Map(prev).set(id, adminData));
+      }
+    }
+  };
+
+  useEffect(() => {
+    filteredData.forEach((row) => {
+      if (row.id && !finalDataMap.has(row.id)) {
+        fetchAndCacheHouseModel(row.id);
+        fetchAndCacheBroker(row.id);
+      }
+    });
+  }, [filteredData]);
+  const getSortableValue = (row: any, column: string) => {
+    let val = row.leadData;
+
+    switch (column) {
+      case "Aktivitet": {
+        const id = row?.id;
+        const logs = preferredFollow.get(String(id));
+        if (!logs || logs.length === 0) return "ubehandlet";
+        const firstLog = logs[0];
+        const status =
+          firstLog?.Hurtigvalg === "initial" || firstLog?.type === "initial"
+            ? "ubehandlet"
+            : firstLog?.Hurtigvalg || firstLog?.type;
+        return typeof status === "string" ? status.toLowerCase() : status;
+      }
+      case "Oppdatert kl": {
+        const id = row?.id;
+        const logs = preferredFollow.get(String(id));
+        if (!logs || logs.length === 0) return 0;
+        const firstLog = logs[0];
+
+        return formatTimestamp(firstLog?.date) ?? 0;
+      }
+      case "Kunde":
+        if (val?.name === null || val?.name === undefined) return "";
+        if (typeof val?.name === "string") return val?.name.toLowerCase();
+        if (typeof val?.name === "number") return val?.name;
+        return val?.name ?? "";
+      case "Husmodell": {
+        const dataForRow = finalDataMap.get(row.id);
+        return dataForRow?.Husdetaljer?.husmodell_name?.toLowerCase() ?? "";
+      }
+      case "Broker": {
+        const dataForRow = finalBrokerDataMap.get(row.id);
+        return (
+          (dataForRow?.f_name.toLowerCase() ||
+            dataForRow?.l_name.toLowerCase() ||
+            dataForRow?.name.toLowerCase()) ??
+          ""
+        );
+      }
+      case "Anleggsadresse":
+        if (val?.adresse === null || val?.adresse === undefined) return "";
+        if (typeof val?.adresse === "string") return val?.adresse.toLowerCase();
+        if (typeof val?.adresse === "number") return val?.adresse;
+        return val?.adresse ?? "";
+      case "Siste aktivitet": {
+        const id = row?.id;
+        const logs = preferredFollow.get(String(id));
+        if (!logs || logs.length === 0)
+          return val?.notaterFørsteSamtale?.toLowerCase() ?? "";
+        const firstLog = logs[0];
+        const status = firstLog?.notat || firstLog?.notes;
+        return typeof status === "string" ? status.toLowerCase() : status;
+      }
+      default:
+        return "";
+    }
+  };
+
+  const sortedData = useMemo(() => {
+    if (!sortColumn) return filteredData;
+
+    const sorted = [...filteredData].sort((a, b) => {
+      const aValue = getSortableValue(a, sortColumn);
+      const bValue = getSortableValue(b, sortColumn);
+      if (aValue === bValue) return 0;
+
+      if (sortDirection === "asc") {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
+
+    return sorted;
+  }, [filteredData, sortColumn, sortDirection, preferredFollow]);
+  // -----
   const columns = useMemo<ColumnDef<any>[]>(() => {
     const baseColumns: ColumnDef<any>[] = [
       {
-        accessorKey: "Status",
-        header: "Status",
+        accessorKey: "Aktivitet",
+        header: "Aktivitet",
         cell: ({ row }) => <StatusCell id={row.original.id} />,
       },
       {
@@ -502,9 +701,10 @@ export const TODOTable = () => {
         accessorKey: "Siste aktivitet",
         header: "Siste aktivitet",
         cell: ({ row }) => (
-          <p className="text-sm font-semibold text-black w-[500px]">
-            {row.original.leadData?.notaterFørsteSamtale}
-          </p>
+          <NoteCell
+            id={row.original.id}
+            rowData={row.original.leadData?.notaterFørsteSamtale}
+          />
         ),
       },
       {
@@ -541,8 +741,8 @@ export const TODOTable = () => {
   const pageSize = 10;
   const paginatedData = useMemo(() => {
     const start = (page - 1) * pageSize;
-    return filteredData.slice(start, start + pageSize);
-  }, [filteredData, page]);
+    return sortedData.slice(start, start + pageSize);
+  }, [sortedData, page]);
 
   const table = useReactTable({
     data: paginatedData,
@@ -556,7 +756,7 @@ export const TODOTable = () => {
         pageSize,
       },
     },
-    pageCount: Math.ceil(filteredData.length / pageSize),
+    pageCount: Math.ceil(sortedData.length / pageSize),
     manualPagination: true,
     onPaginationChange: (updater: any) => {
       if (typeof updater === "function") {
@@ -569,7 +769,7 @@ export const TODOTable = () => {
     },
   });
   const downloadExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(filteredData);
+    const ws = XLSX.utils.json_to_sheet(sortedData);
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Leads From Supplier");
@@ -690,10 +890,34 @@ export const TODOTable = () => {
                 <TableRow key={headerGroup.id} className="hover:bg-transparent">
                   {headerGroup.headers.map((header: any) => (
                     <TableHead key={header.id} className="h-8 text-sm">
-                      {flexRender(
+                      {/* {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
-                      )}
+                      )} */}
+                      <div
+                        className="flex items-center cursor-pointer select-none"
+                        onClick={() => {
+                          const column = header.column.columnDef.header;
+                          if (sortColumn === column) {
+                            setSortDirection(
+                              sortDirection === "asc" ? "desc" : "asc"
+                            );
+                          } else {
+                            setSortColumn(column as string);
+                            setSortDirection("asc");
+                          }
+                        }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {sortColumn === header.column.columnDef.header && (
+                          <span className="text-darkBlack">
+                            &nbsp;{sortDirection === "asc" ? "▲" : "▼"}
+                          </span>
+                        )}
+                      </div>
                     </TableHead>
                   ))}
                 </TableRow>
@@ -709,7 +933,7 @@ export const TODOTable = () => {
                     <Loader2 className="w-6 h-6 animate-spin mx-auto" />
                   </TableCell>
                 </TableRow>
-              ) : filteredData.length === 0 ? (
+              ) : sortedData.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}

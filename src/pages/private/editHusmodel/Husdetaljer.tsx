@@ -601,8 +601,9 @@ export const Husdetaljer: React.FC<{
           updateDataBy: {
             email: createData?.email,
             photo: createData?.photo,
-            name:
-              createData?.name || `${createData?.fname} ${createData?.lname}`,
+            name: createData?.f_name
+              ? `${createData?.f_name} ${createData?.l_name}`
+              : createData?.name,
           },
         });
         toast.success("Lagret", {
@@ -616,14 +617,16 @@ export const Husdetaljer: React.FC<{
           createDataBy: {
             email: createData?.email,
             photo: createData?.photo,
-            name:
-              createData?.name || `${createData?.f_name} ${createData?.l_name}`,
+            name: createData?.f_name
+              ? `${createData?.f_name} ${createData?.l_name}`
+              : createData?.name,
           },
           updateDataBy: {
             email: createData?.email,
             photo: createData?.photo,
-            name:
-              createData?.name || `${createData?.f_name} ${createData?.l_name}`,
+            name: createData?.f_name
+              ? `${createData?.f_name} ${createData?.l_name}`
+              : createData?.name,
           },
         });
         toast.success("Added successfully", { position: "top-right" });

@@ -79,7 +79,23 @@ export const KombinasjonerTable = () => {
         return b.updatedAt.toDate() - a.updatedAt.toDate();
       });
 
-      setLeads(sortedData);
+      const excludedEmails = [
+        "drashti.doubledotts@gmail.com",
+        "abc@gmail.com",
+        "keren@arnhoff.no",
+        "simen@askerhaandverk.no",
+        "ole@nestegg.no",
+        "fenger@iplot.no",
+        "drashtisavani22@gmail.com",
+        "rudraksh.shukla98@gmail.com",
+        "tanmaymundra01@gmail.com",
+      ];
+
+      const finalData = sortedData.filter((a: any) => {
+        return a?.user?.email && !excludedEmails.includes(a.user.email);
+      });
+
+      setLeads(finalData);
     } catch (error) {
       console.error("Error fetching leads data:", error);
     } finally {

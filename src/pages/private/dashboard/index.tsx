@@ -4,7 +4,7 @@ import DatePickerComponent from "../../../components/ui/datepicker";
 import {
   collection,
   getCountFromServer,
-  orderBy,
+  getDocs,
   query,
   where,
 } from "firebase/firestore";
@@ -44,6 +44,30 @@ export const Dashboard = () => {
   //   getToken();
   // }, []);
 
+  const [supp, setSupp] = useState<any>(null);
+  const [role, setRole] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+        if (data?.supplier) {
+          setSupp(data?.supplier);
+        }
+
+        const finalData = data?.modulePermissions?.find(
+          (item: any) => item.name === "Husmodell"
+        );
+        setPermission(finalData?.permissions);
+      }
+    };
+
+    getData();
+  }, []);
+
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
@@ -57,6 +81,18 @@ export const Dashboard = () => {
   }, [permission]);
 
   const fetchSuppliersData = async () => {
+    const excludedEmails = [
+      "drashti.doubledotts@gmail.com",
+      "abc@gmail.com",
+      "keren@arnhoff.no",
+      "simen@askerhaandverk.no",
+      "ole@nestegg.no",
+      "fenger@iplot.no",
+      "drashtisavani22@gmail.com",
+      "rudraksh.shukla98@gmail.com",
+      "tanmaymundra01@gmail.com",
+    ];
+
     try {
       setLoading(true);
       let q;
@@ -65,8 +101,17 @@ export const Dashboard = () => {
       let leadBankTrue;
       let suppliers;
 
+      if (role === "Agent") {
+        q = query(
+          collection(db, "house_model"),
+          where("Husdetaljer.Leverandører", "==", supp)
+        );
+      } else {
+        q = query(collection(db, "house_model"));
+      }
+
       if (email === "andre.finger@gmail.com") {
-        q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
+        // q = query(collection(db, "house_model"));
         leadTrue = query(collection(db, "leads"), where("Isopt", "==", true));
         leadFalse = query(collection(db, "leads"), where("Isopt", "==", false));
         leadBankTrue = query(
@@ -75,11 +120,11 @@ export const Dashboard = () => {
         );
         suppliers = query(collection(db, "suppliers"));
       } else {
-        q = query(
-          collection(db, "house_model"),
-          where("createDataBy.email", "==", email),
-          where("Husdetaljer.Leverandører", "==", String(permission))
-        );
+        // q = query(
+        //   collection(db, "house_model"),
+        //   where("createDataBy.email", "==", email),
+        //   where("Husdetaljer.Leverandører", "==", String(permission))
+        // );
         leadTrue = query(
           collection(db, "leads"),
           where("Isopt", "==", true),
@@ -127,18 +172,23 @@ export const Dashboard = () => {
         getCountFromServer(q),
         getCountFromServer(collection(db, "empty_plot")),
         getCountFromServer(leadTrue),
-        getCountFromServer(leadFalse),
+        leadFalse,
         getCountFromServer(collection(db, "plot_building")),
         getCountFromServer(leadBankTrue),
         getCountFromServer(suppliers),
       ]);
+      const querySnapshot = await getDocs(kombinasjonerCount);
+
+      const filteredLeads = querySnapshot.docs.filter(
+        (doc) => !excludedEmails.includes(doc.data()?.user?.email)
+      );
 
       setCounts({
         users: usersCount.data().count,
         husmodell: husmodellCount.data().count,
         plot: plotCount.data().count,
         householdLeads: householdLeadsCount.data().count,
-        kombinasjoner: kombinasjonerCount.data().count,
+        kombinasjoner: filteredLeads.length,
         constructedPlot: constructedPlotCount.data().count,
         bankLeads: bankLeadsCount.data().count,
         supplier: supplierCount.data().count,
@@ -191,7 +241,7 @@ export const Dashboard = () => {
       path: "/se-kombinasjoner",
     },
     {
-      title: "Antall bygget tomt teller",
+      title: "Søkte adresser",
       value: counts.constructedPlot,
       percentage: 10,
       path: "/constructed-plot",

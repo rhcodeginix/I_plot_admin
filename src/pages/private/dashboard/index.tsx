@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import Ic_filter from "../../../assets/images/Ic_filter.svg";
 import DatePickerComponent from "../../../components/ui/datepicker";
 import {
   collection,
@@ -233,10 +232,6 @@ export const Dashboard = () => {
               placeholderText="Velg dato"
               className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] w-full sm:w-max"
             />
-            <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 pr-8 cursor-pointer shadow-shadow1 h-[40px]">
-              <img src={Ic_filter} alt="" />
-              <span className="text-black font-medium text-sm">Filters</span>
-            </div>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5 desktop:gap-6">

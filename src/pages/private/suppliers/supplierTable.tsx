@@ -18,7 +18,6 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import Ic_search from "../../../assets/images/Ic_search.svg";
-import Ic_filter from "../../../assets/images/Ic_filter.svg";
 import DateRangePicker from "../../../components/ui/daterangepicker";
 import {
   collection,
@@ -313,10 +312,6 @@ export const SupplierTable = () => {
             endDate={endDate}
             onDateChange={handleDateChange}
           />
-          <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
-            <img src={Ic_filter} alt="" />
-            <span className="text-black font-medium text-sm">Filter</span>
-          </div>
         </div>
       </div>
       <div className="rounded-lg border border-gray2 shadow-shadow2 overflow-hidden">

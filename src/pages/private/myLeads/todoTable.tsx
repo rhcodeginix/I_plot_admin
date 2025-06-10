@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react";
-import Ic_filter from "../../../assets/images/Ic_filter.svg";
 import Ic_download from "../../../assets/images/Ic_download.svg";
 import * as XLSX from "xlsx";
 import DatePickerComponent from "../../../components/ui/datepicker";
@@ -876,10 +875,6 @@ export const TODOTable = () => {
             >
               <img src={Ic_download} alt="" />
               <span className="text-black font-medium text-sm">Eksporter</span>
-            </div>
-            <div className="border border-gray1 rounded-[8px] flex gap-2 items-center p-2.5 md:py-[10px] md:px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
-              <img src={Ic_filter} alt="" />
-              <span className="text-black font-medium text-sm">Filter</span>
             </div>
           </div>
         </div>

@@ -17,14 +17,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
-import Ic_filter from "../../../assets/images/Ic_filter.svg";
 import DateRangePicker from "../../../components/ui/daterangepicker";
 import {
   collection,
   deleteDoc,
   doc,
   getDocs,
-  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -119,7 +117,7 @@ export const BankTable = () => {
           where("status", "==", "Approved")
         );
       } else {
-        q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
+        q = query(collection(db, "bank_leads"));
       }
 
       const querySnapshot = await getDocs(q);
@@ -128,8 +126,36 @@ export const BankTable = () => {
         id: doc.id,
         ...doc.data(),
       }));
+      const norwegianMonths: { [key: string]: string } = {
+        januar: "January",
+        februar: "February",
+        mars: "March",
+        april: "April",
+        mai: "May",
+        juni: "June",
+        juli: "July",
+        august: "August",
+        september: "September",
+        oktober: "October",
+        november: "November",
+        desember: "December",
+      };
+      const parseNorwegianDate = (dateStr: string): Date => {
+        const parts = dateStr.toLowerCase().split(" ");
+        if (parts.length !== 3) return new Date(dateStr);
 
-      setBankLead(data);
+        const [day, norwegianMonth, year] = parts;
+        const englishMonth = norwegianMonths[norwegianMonth] || norwegianMonth;
+        return new Date(`${day} ${englishMonth} ${year}`);
+      };
+
+      const sortedData = data.sort((a: any, b: any) => {
+        const dateA = parseNorwegianDate(a.updatedAt);
+        const dateB = parseNorwegianDate(b.updatedAt);
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      setBankLead(sortedData);
     } catch (error) {
       console.error("Error fetching bank lead data:", error);
     } finally {
@@ -344,10 +370,6 @@ export const BankTable = () => {
             onDateChange={handleDateChange}
             className="w-full"
           />
-          <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
-            <img src={Ic_filter} alt="" />
-            <span className="text-black font-medium text-sm">Filter</span>
-          </div>
         </div>
       </div>
       <div className="rounded-lg border border-gray2 shadow-shadow2 overflow-hidden">

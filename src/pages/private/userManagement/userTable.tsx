@@ -93,7 +93,11 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
         data = data.filter((item: any) => item.supplier === supplier);
       }
 
-      setAdmins(data);
+      const sortedData = data.sort((a: any, b: any) => {
+        return b.updatedAt.toDate() - a.updatedAt.toDate();
+      });
+
+      setAdmins(sortedData);
     } catch (error) {
       console.error("Error fetching husmodell data:", error);
     } finally {
@@ -133,9 +137,21 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
         accessorKey: "photo",
         header: "Avatar",
         cell: ({ row }) => (
-          <div className="w-10">
-            <img src={row.original.photo} alt="logo" className="w-full" />
-          </div>
+          <>
+            {row.original.photo ? (
+              <div className="w-10">
+                <img src={row.original.photo} alt="logo" className="w-full" />
+              </div>
+            ) : (
+              <>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center border border-primary bg-lightPurple">
+                  {!row.original.f_name
+                    ? row.original.name[0]
+                    : `${row.original.f_name[0]}`}
+                </div>
+              </>
+            )}
+          </>
         ),
       },
       {

@@ -173,11 +173,6 @@ export const Dashboard = () => {
       path: "/Husmodeller",
     },
     {
-      title: "Antall husleverandører",
-      value: "2",
-      percentage: 12,
-    },
-    {
       title: "Antall husleads",
       value: counts.householdLeads,
       percentage: 12,
@@ -195,11 +190,6 @@ export const Dashboard = () => {
       value: counts.kombinasjoner,
       percentage: 10,
       path: "/se-kombinasjoner",
-    },
-    {
-      title: "Unike besøkende",
-      value: "2713",
-      percentage: 12,
     },
     {
       title: "Antall bygget tomt teller",
@@ -252,14 +242,6 @@ export const Dashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5 desktop:gap-6">
           {loading ? (
             <>
-              <div
-                className="w-full h-[125px] rounded-md custom-shimmer"
-                style={{ borderRadius: "8px" }}
-              ></div>
-              <div
-                className="w-full h-[125px] rounded-md custom-shimmer"
-                style={{ borderRadius: "8px" }}
-              ></div>
               <div
                 className="w-full h-[125px] rounded-md custom-shimmer"
                 style={{ borderRadius: "8px" }}

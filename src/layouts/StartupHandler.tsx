@@ -168,96 +168,97 @@ export const StartupHandler = () => {
   }, []);
 
   useEffect(() => {
-    if (hasRun.current) return; // ✅ Only run once
+    if (hasRun.current) return;
     hasRun.current = true;
+    if (location.pathname === "/") {
+      const urlParams = new URLSearchParams(location.search);
+      const token = urlParams.get("token");
 
-    const urlParams = new URLSearchParams(location.search);
-    const token = urlParams.get("token");
+      const verifyToken = async (token: string) => {
+        navigate(`/auth?token=${token}`);
 
-    const verifyToken = async (token: string) => {
-      navigate(`/auth?token=${token}`);
+        try {
+          const response = await fetch(
+            "https://tr1av984od.execute-api.eu-north-1.amazonaws.com/prod/sso/verify-token",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ token }),
+            }
+          );
 
-      try {
-        const response = await fetch(
-          "https://tr1av984od.execute-api.eu-north-1.amazonaws.com/prod/sso/verify-token",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ token }),
+          const result = await response.json();
+          const adminDocRef = doc(db, "admin", result?.userData?.email);
+          const adminSnap = await getDoc(adminDocRef);
+
+          if (!adminSnap.exists()) {
+            const uniqueId = uuidv4();
+            const [f_name, ...rest] = result?.userData?.name.trim().split(" ");
+            const l_name = rest.join(" ");
+
+            await setDoc(adminDocRef, {
+              email: result?.userData?.email,
+              f_name,
+              l_name,
+              id: uniqueId,
+              password: generateRandomPassword(),
+              createdAt: new Date(),
+              role: "Agent",
+              updatedAt: new Date(),
+              supplier: "9f523136-72ca-4bde-88e5-de175bc2fc71",
+            });
+
+            toast.success("Admin created successfully!", {
+              position: "top-right",
+            });
+            localStorage.setItem("Iplot_admin", result?.userData?.email);
+            navigate("/dashboard");
+          } else {
+            const adminData = adminSnap.data();
+            const storedPassword = adminData?.password;
+
+            const hashedPassword = bcrypt.hashSync(storedPassword, 10);
+            await updateDoc(adminDocRef, { password: hashedPassword });
+
+            toast.success("Login successfully", {
+              position: "top-right",
+            });
+            localStorage.setItem("Iplot_admin", result?.userData?.email);
+            const loginUserData = await fetchAdminDataByEmail();
+            if (loginUserData) {
+              navigate(
+                loginUserData?.role === "Bankansvarlig"
+                  ? "/bank-leads"
+                  : "/dashboard"
+              );
+            }
           }
-        );
-
-        const result = await response.json();
-        const adminDocRef = doc(db, "admin", result?.userData?.email);
-        const adminSnap = await getDoc(adminDocRef);
-
-        if (!adminSnap.exists()) {
-          const uniqueId = uuidv4();
-          const [f_name, ...rest] = result?.userData?.name.trim().split(" ");
-          const l_name = rest.join(" ");
-
-          await setDoc(adminDocRef, {
-            email: result?.userData?.email,
-            f_name,
-            l_name,
-            id: uniqueId,
-            password: generateRandomPassword(),
-            createdAt: new Date(),
-            role: "Agent",
-            updatedAt: new Date(),
-            supplier: "9f523136-72ca-4bde-88e5-de175bc2fc71",
-          });
-
-          toast.success("Admin created successfully!", {
-            position: "top-right",
-          });
-          localStorage.setItem("Iplot_admin", result?.userData?.email);
-          navigate("/dashboard");
-        } else {
-          const adminData = adminSnap.data();
-          const storedPassword = adminData?.password;
-
-          const hashedPassword = bcrypt.hashSync(storedPassword, 10);
-          await updateDoc(adminDocRef, { password: hashedPassword });
-
-          toast.success("Login successfully", {
-            position: "top-right",
-          });
-          localStorage.setItem("Iplot_admin", result?.userData?.email);
-          const loginUserData = await fetchAdminDataByEmail();
-          if (loginUserData) {
-            navigate(
-              loginUserData?.role === "Bankansvarlig"
-                ? "/bank-leads"
-                : "/dashboard"
-            );
-          }
-        }
-      } catch (error) {
-        console.error("Token verification failed:", error);
-        navigate("/login", { replace: true });
-      }
-    };
-
-    const init = async () => {
-      if (token) {
-        await verifyToken(token);
-      } else {
-        if (isAuthenticated) {
-          navigate(role === "Bankansvarlig" ? "/bank-leads" : "/dashboard", {
-            replace: true,
-          });
-        } else {
+        } catch (error) {
+          console.error("Token verification failed:", error);
           navigate("/login", { replace: true });
         }
-        setLoading(false);
-      }
-    };
+      };
 
-    init();
-  }, [location.search, isAuthenticated, role, navigate]); // ✅ keep correct dependencies
+      const init = async () => {
+        if (token) {
+          await verifyToken(token);
+        } else {
+          if (isAuthenticated) {
+            navigate(role === "Bankansvarlig" ? "/bank-leads" : "/dashboard", {
+              replace: true,
+            });
+          } else {
+            navigate("/login", { replace: true });
+          }
+          setLoading(false);
+        }
+      };
+
+      init();
+    }
+  }, [location.search, isAuthenticated, role, navigate]);
 
   if (loading) return <div>Loading...</div>;
 

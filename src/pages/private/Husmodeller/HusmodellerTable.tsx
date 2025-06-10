@@ -27,7 +27,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  orderBy,
   query,
   updateDoc,
   where,
@@ -182,14 +181,24 @@ export const HusmodellerTable = () => {
           where("Husdetaljer.Leverandører", "==", supp)
         );
       } else {
-        q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
+        q = query(collection(db, "house_model"));
       }
       const querySnapshot = await getDocs(q);
 
-      const data: any = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const data: any = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .sort((a: any, b: any) => {
+          const dateA = a.updatedAt?.toDate
+            ? a.updatedAt.toDate()
+            : new Date(a.updatedAt);
+          const dateB = b.updatedAt?.toDate
+            ? b.updatedAt.toDate()
+            : new Date(b.updatedAt);
+          return dateB - dateA; // descending order
+        });
 
       setHouseModels(data);
     } catch (error) {

@@ -95,10 +95,45 @@ export const SupplierTable = () => {
         filterData.push(findSupData);
       }
 
+      const norwegianMonths: { [key: string]: string } = {
+        januar: "January",
+        februar: "February",
+        mars: "March",
+        april: "April",
+        mai: "May",
+        juni: "June",
+        juli: "July",
+        august: "August",
+        september: "September",
+        oktober: "October",
+        november: "November",
+        desember: "December",
+      };
+
+      const parseNorwegianDate = (dateStr: string): Date => {
+        const parts = dateStr.toLowerCase().split(" ");
+        if (parts.length !== 3) return new Date(dateStr);
+
+        const [day, norwegianMonth, year] = parts;
+        const englishMonth = norwegianMonths[norwegianMonth] || norwegianMonth;
+        return new Date(`${day} ${englishMonth} ${year}`);
+      };
+
+      const sortedData = data.sort((a: any, b: any) => {
+        const dateA = parseNorwegianDate(a.updatedAt);
+        const dateB = parseNorwegianDate(b.updatedAt);
+        return dateB.getTime() - dateA.getTime();
+      });
+      const sortedFilterData = filterData.sort((a: any, b: any) => {
+        const dateA = parseNorwegianDate(a.updatedAt);
+        const dateB = parseNorwegianDate(b.updatedAt);
+        return dateB.getTime() - dateA.getTime();
+      });
+
       if (email === "andre.finger@gmail.com") {
-        setSuppliers(data);
+        setSuppliers(sortedData);
       } else {
-        setSuppliers(filterData);
+        setSuppliers(sortedFilterData);
       }
     } catch (error) {
       console.error("Error fetching husmodell data:", error);

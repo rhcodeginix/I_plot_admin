@@ -191,33 +191,39 @@ export const KombinasjonerTable = () => {
         accessorKey: "adresse",
         header: "Adresse",
         cell: ({ row }) => (
-          <div className="flex items-start gap-3 w-max">
-            <div className="w-8 h-8 rounded-full overflow-hidden">
-              {row.original.finalData.plot.lamdaDataFromApi?.coordinates
-                ?.convertedCoordinates && (
-                <NorkartMap
-                  coordinates={
-                    row.original.finalData.plot.lamdaDataFromApi?.coordinates
-                      ?.convertedCoordinates
-                  }
-                />
-              )}
-            </div>
-            <div>
-              <p className="font-medium text-black text-sm mb-[2px]">
-                {
-                  row.original.finalData.plot?.CadastreDataFromApi
-                    ?.presentationAddressApi.response.item.formatted.line1
-                }
-              </p>
-              <p className="text-xs text-gray">
-                {
-                  row.original.finalData.plot?.CadastreDataFromApi
-                    ?.presentationAddressApi.response.item.formatted.line2
-                }
-              </p>
-            </div>
-          </div>
+          <>
+            {row.original.finalData?.plot ? (
+              <div className="flex items-start gap-3 w-max">
+                <div className="w-8 h-8 rounded-full overflow-hidden">
+                  {row.original.finalData?.plot?.lamdaDataFromApi?.coordinates
+                    ?.convertedCoordinates && (
+                    <NorkartMap
+                      coordinates={
+                        row.original.finalData?.plot?.lamdaDataFromApi
+                          ?.coordinates?.convertedCoordinates
+                      }
+                    />
+                  )}
+                </div>
+                <div>
+                  <p className="font-medium text-black text-sm mb-[2px]">
+                    {
+                      row.original.finalData?.plot?.CadastreDataFromApi
+                        ?.presentationAddressApi.response.item.formatted.line1
+                    }
+                  </p>
+                  <p className="text-xs text-gray">
+                    {
+                      row.original.finalData?.plot?.CadastreDataFromApi
+                        ?.presentationAddressApi.response.item.formatted.line2
+                    }
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="px-9">-</div>
+            )}
+          </>
         ),
       },
       {
@@ -232,15 +238,15 @@ export const KombinasjonerTable = () => {
           </p>
         ),
       },
-      {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => (
-          <span className="px-3 py-1 rounded-full bg-[#F1F2FF] text-[#02107A] text-xs font-semibold whitespace-nowrap w-max">
-            Lead sendt
-          </span>
-        ),
-      },
+      // {
+      //   accessorKey: "status",
+      //   header: "Status",
+      //   cell: ({ row }) => (
+      //     <span className="px-3 py-1 rounded-full bg-[#F1F2FF] text-[#02107A] text-xs font-semibold whitespace-nowrap w-max">
+      //       Lead sendt
+      //     </span>
+      //   ),
+      // },
       {
         id: "handling",
         header: "Handling",
@@ -251,7 +257,7 @@ export const KombinasjonerTable = () => {
         ),
       },
     ],
-    []
+    [paginatedData]
   );
 
   const table = useReactTable({

@@ -219,15 +219,15 @@ export const HusleadsTable = () => {
           </p>
         ),
       },
-      {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => (
-          <span className="px-3 py-1 rounded-full bg-[#F1F2FF] text-[#02107A] text-xs font-semibold whitespace-nowrap w-max">
-            Lead sendt
-          </span>
-        ),
-      },
+      // {
+      //   accessorKey: "status",
+      //   header: "Status",
+      //   cell: ({ row }) => (
+      //     <span className="px-3 py-1 rounded-full bg-[#F1F2FF] text-[#02107A] text-xs font-semibold whitespace-nowrap w-max">
+      //       Lead sendt
+      //     </span>
+      //   ),
+      // },
       {
         id: "handling",
         header: "Handling",

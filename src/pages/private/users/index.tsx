@@ -28,6 +28,8 @@ export const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const fetchUsersData = async () => {
     setIsLoading(true);
@@ -52,11 +54,11 @@ export const Users = () => {
         })
       );
 
-      const sortedData = data.sort((a: any, b: any) =>
-        (a.name || "").localeCompare(b.name || "")
-      );
+      // const sortedData = data.sort((a: any, b: any) =>
+      //   (a.name || "").localeCompare(b.name || "")
+      // );
 
-      setUsers(sortedData);
+      setUsers(data);
     } catch (error) {
       console.error("Error fetching users data:", error);
     } finally {
@@ -74,6 +76,76 @@ export const Users = () => {
   useEffect(() => {
     fetchUsersData();
   }, []);
+
+  const getSortableValue = (row: any, column: string) => {
+    let val = row;
+
+    switch (column) {
+      case "Navn": {
+        const value = val?.name || val?.f_name || val?.l_name;
+        if (value === null || value === undefined) return "";
+        if (typeof value === "string") return value.toLowerCase();
+        if (typeof value === "number") return value;
+        return value ?? "";
+      }
+      case "E-post":
+        if (val?.email === null || val?.email === undefined) return "";
+        if (typeof val?.email === "string") return val?.email.toLowerCase();
+        if (typeof val?.email === "number") return val?.email;
+        return val?.email ?? "";
+      case "Søk Eiendom Count":
+        if (val?.propertyCount === null || val?.propertyCount === undefined)
+          return 0;
+        if (typeof val?.propertyCount === "string")
+          return val?.propertyCount.toLowerCase();
+        if (typeof val?.propertyCount === "number") return val?.propertyCount;
+        return val?.propertyCount ?? "";
+      case "Date registrated": {
+        const createdAt = val?.createdAt;
+        const date = convertTimestamp(
+          createdAt?.seconds,
+          createdAt?.nanoseconds
+        );
+
+        return date ?? 0;
+      }
+      case "OppdatertKlokke": {
+        const updatedAt = val?.updatedAt;
+        const date = convertTimestamp(
+          updatedAt?.seconds,
+          updatedAt?.nanoseconds
+        );
+
+        return date ?? 0;
+      }
+      case "Antall pålogginger":
+        if (val?.loginCount === null || val?.loginCount === undefined) return 0;
+        if (typeof val?.loginCount === "string")
+          return val?.loginCount.toLowerCase();
+        if (typeof val?.loginCount === "number") return val?.loginCount;
+        return val?.loginCount ?? "";
+      default:
+        return "";
+    }
+  };
+
+  const sortedData = useMemo(() => {
+    if (!sortColumn) return filteredData;
+
+    const sorted = [...filteredData].sort((a, b) => {
+      const aValue = getSortableValue(a, sortColumn);
+      const bValue = getSortableValue(b, sortColumn);
+      if (aValue === bValue) return 0;
+
+      if (sortDirection === "asc") {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
+
+    return sorted;
+  }, [filteredData, sortColumn, sortDirection]);
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -94,14 +166,14 @@ export const Users = () => {
         },
       },
       {
-        accessorKey: "e-post",
+        accessorKey: "E-post",
         header: "E-post",
         cell: ({ row }) => (
           <p className="text-sm text-gray">{row.original.email}</p>
         ),
       },
       {
-        accessorKey: "searchPropertyCount",
+        accessorKey: "Søk Eiendom Count",
         header: "Søk Eiendom Count",
         cell: ({ row }) => (
           <p className="text-sm text-darkBlack">
@@ -138,7 +210,7 @@ export const Users = () => {
         ),
       },
       {
-        accessorKey: "loginCount",
+        accessorKey: "Antall pålogginger",
         header: "Antall pålogginger",
         cell: ({ row }) => (
           <p className="text-sm text-darkBlack">
@@ -167,8 +239,8 @@ export const Users = () => {
   const pageSize = 10;
   const paginatedData = useMemo(() => {
     const start = (page - 1) * pageSize;
-    return filteredData.slice(start, start + pageSize);
-  }, [filteredData, page]);
+    return sortedData.slice(start, start + pageSize);
+  }, [sortedData, page]);
 
   const table = useReactTable({
     data: paginatedData,
@@ -182,7 +254,7 @@ export const Users = () => {
         pageSize,
       },
     },
-    pageCount: Math.ceil(filteredData.length / pageSize),
+    pageCount: Math.ceil(sortedData.length / pageSize),
     manualPagination: true,
     onPaginationChange: (updater: any) => {
       if (typeof updater === "function") {
@@ -223,10 +295,34 @@ export const Users = () => {
                   >
                     {headerGroup.headers.map((header: any) => (
                       <TableHead key={header.id} className="h-8 text-sm">
-                        {flexRender(
+                        {/* {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
-                        )}
+                        )} */}
+                        <div
+                          className="flex items-center cursor-pointer select-none"
+                          onClick={() => {
+                            const column = header.column.columnDef.header;
+                            if (sortColumn === column) {
+                              setSortDirection(
+                                sortDirection === "asc" ? "desc" : "asc"
+                              );
+                            } else {
+                              setSortColumn(column as string);
+                              setSortDirection("asc");
+                            }
+                          }}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {sortColumn === header.column.columnDef.header && (
+                            <span className="text-darkBlack">
+                              &nbsp;{sortDirection === "asc" ? "▲" : "▼"}
+                            </span>
+                          )}
+                        </div>
                       </TableHead>
                     ))}
                   </TableRow>
@@ -242,7 +338,7 @@ export const Users = () => {
                       <Loader2 className="w-6 h-6 animate-spin mx-auto" />
                     </TableCell>
                   </TableRow>
-                ) : filteredData.length === 0 ? (
+                ) : sortedData.length === 0 ? (
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}

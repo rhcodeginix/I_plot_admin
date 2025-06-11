@@ -406,7 +406,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                   <div className="flex flex-col gap-5 desktop:gap-8">
                     {sortedIndexes.map((sortedIndex) => {
                       const product = fields[sortedIndex];
-                      if (!product.byggkostnaderID) return null;
+                      // if (!product.byggkostnaderID) return null;
                       return (
                         <div key={product.id}>
                           {product.byggkostnaderID ? (
@@ -695,7 +695,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                     {/* {TomtekostFields.map((product, index) => { */}
                     {sortedIndexesTomtekostFields.map((sortedIndex) => {
                       const product = TomtekostFields[sortedIndex];
-                      if (!product.TomtekostID) return null;
+                      // if (!product.TomtekostID) return null;
                       return (
                         <div key={product.id}>
                           {product.TomtekostID ? (

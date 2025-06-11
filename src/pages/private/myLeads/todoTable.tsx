@@ -728,7 +728,10 @@ export const TODOTable = () => {
       cell: ({ row }) => <TodoDateCell id={row.original.id} />,
     };
 
-    if (selectedFilter === "Til oppfølgning") {
+    if (
+      selectedFilter === "Til oppfølgning" ||
+      selectedFilter === "Fremtidige oppgaver"
+    ) {
       baseColumns.splice(1, 0, updatedColumn);
     } else {
       baseColumns.splice(5, 0, updatedColumn);

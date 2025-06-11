@@ -708,7 +708,10 @@ export const MyLeadsTable = () => {
       ),
     };
 
-    if (selectedFilter === "Til oppfølgning") {
+    if (
+      selectedFilter === "Til oppfølgning" ||
+      selectedFilter === "Fremtidige oppgaver"
+    ) {
       baseColumns.splice(1, 0, updatedColumn);
     } else {
       baseColumns.splice(5, 0, updatedColumn);

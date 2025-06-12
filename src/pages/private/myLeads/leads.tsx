@@ -45,6 +45,7 @@ import { StatusCell } from "./statusRow";
 import { BrokerCell } from "./brokerRow";
 import { monthMap } from "./myLeadsDetail";
 import { NoteCell } from "./noteRow";
+import { TodoDateCell } from "./todoDate";
 
 const calculateDateRange = (range: string) => {
   const currentDate = new Date();
@@ -702,9 +703,15 @@ export const MyLeadsTable = () => {
       accessorKey: "Oppdatert kl",
       header: "Oppdatert kl",
       cell: ({ row }) => (
-        <p className="text-sm font-semibold text-black w-max">
-          {formatTimestamp(row.original.updatedAt)}
-        </p>
+        <>
+          {selectedFilter === "Fremtidige oppgaver" ? (
+            <TodoDateCell id={row.original.id} />
+          ) : (
+            <p className="text-sm font-semibold text-black w-max">
+              {formatTimestamp(row.original.updatedAt)}
+            </p>
+          )}
+        </>
       ),
     };
 

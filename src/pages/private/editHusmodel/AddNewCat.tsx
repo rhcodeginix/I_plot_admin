@@ -143,7 +143,7 @@ export const AddNewCat: React.FC<{
             <div
               onClick={() => {
                 form.reset();
-                // onClose();
+                onClose();
               }}
             >
               <Button

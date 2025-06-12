@@ -83,8 +83,23 @@ export const BankleadsTable = () => {
       const sortedData = data.sort((a: any, b: any) => {
         return b.updatedAt.toDate() - a.updatedAt.toDate();
       });
+      const excludedEmails = [
+        "drashti.doubledotts@gmail.com",
+        "abc@gmail.com",
+        "keren@arnhoff.no",
+        "simen@askerhaandverk.no",
+        "ole@nestegg.no",
+        "fenger@iplot.no",
+        "drashtisavani22@gmail.com",
+        "rudraksh.shukla98@gmail.com",
+        "tanmaymundra01@gmail.com",
+      ];
+      // setLeads(sortedData);
+      const finalData = sortedData.filter((a: any) => {
+        return a?.user?.email && !excludedEmails.includes(a.user.email);
+      });
 
-      setLeads(sortedData);
+      setLeads(finalData);
     } catch (error) {
       console.error("Error fetching leads data:", error);
     } finally {

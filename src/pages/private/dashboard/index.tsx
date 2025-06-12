@@ -171,10 +171,10 @@ export const Dashboard = () => {
         getCountFromServer(collection(db, "users")),
         getCountFromServer(q),
         getCountFromServer(collection(db, "empty_plot")),
-        getCountFromServer(leadTrue),
+        leadTrue,
         leadFalse,
         getCountFromServer(collection(db, "plot_building")),
-        getCountFromServer(leadBankTrue),
+        leadBankTrue,
         getCountFromServer(suppliers),
       ]);
       const querySnapshot = await getDocs(kombinasjonerCount);
@@ -182,15 +182,25 @@ export const Dashboard = () => {
       const filteredLeads = querySnapshot.docs.filter(
         (doc) => !excludedEmails.includes(doc.data()?.user?.email)
       );
+      const queryhusleadSnapshot = await getDocs(householdLeadsCount);
+
+      const filteredhusLeads = queryhusleadSnapshot.docs.filter(
+        (doc) => !excludedEmails.includes(doc.data()?.user?.email)
+      );
+      const querybankleadSnapshot = await getDocs(bankLeadsCount);
+
+      const filteredBankLeads = querybankleadSnapshot.docs.filter(
+        (doc) => !excludedEmails.includes(doc.data()?.user?.email)
+      );
 
       setCounts({
         users: usersCount.data().count,
         husmodell: husmodellCount.data().count,
         plot: plotCount.data().count,
-        householdLeads: householdLeadsCount.data().count,
+        householdLeads: filteredhusLeads.length,
         kombinasjoner: filteredLeads.length,
         constructedPlot: constructedPlotCount.data().count,
-        bankLeads: bankLeadsCount.data().count,
+        bankLeads: filteredBankLeads.length,
         supplier: supplierCount.data().count,
       });
       setLoading(false);

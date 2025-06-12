@@ -704,25 +704,25 @@ export const MyLeadsTable = () => {
       header: "Oppdatert kl",
       cell: ({ row }) => (
         <>
-          {selectedFilter === "Fremtidige oppgaver" ? (
-            <TodoDateCell id={row.original.id} />
-          ) : (
+          {/* {selectedFilter === "Fremtidige oppgaver" ? ( */}
+          <TodoDateCell id={row.original.id} />
+          {/* ) : (
             <p className="text-sm font-semibold text-black w-max">
               {formatTimestamp(row.original.updatedAt)}
             </p>
-          )}
+          )} */}
         </>
       ),
     };
 
-    if (
-      selectedFilter === "Til oppfølgning" ||
-      selectedFilter === "Fremtidige oppgaver"
-    ) {
-      baseColumns.splice(1, 0, updatedColumn);
-    } else {
-      baseColumns.splice(5, 0, updatedColumn);
-    }
+    // if (
+    //   selectedFilter === "Til oppfølgning" ||
+    //   selectedFilter === "Fremtidige oppgaver"
+    // ) {
+    baseColumns.splice(1, 0, updatedColumn);
+    // } else {
+    //   baseColumns.splice(5, 0, updatedColumn);
+    // }
 
     return baseColumns;
   }, [email, navigate, page, selectedFilter]);

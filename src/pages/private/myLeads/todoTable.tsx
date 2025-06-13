@@ -582,7 +582,7 @@ export const TODOTable = () => {
             : firstLog?.Hurtigvalg || firstLog?.type;
         return typeof status === "string" ? status.toLowerCase() : status;
       }
-      case "Oppdatert kl": {
+      case "Siste dato": {
         const id = row?.id;
         const logs = preferredFollow.get(String(id));
         if (!logs || logs.length === 0) return 0;
@@ -718,8 +718,8 @@ export const TODOTable = () => {
     ];
 
     const updatedColumn: ColumnDef<any> = {
-      accessorKey: "Oppdatert kl",
-      header: "Oppdatert kl",
+      accessorKey: "Siste dato",
+      header: "Siste dato",
       // cell: ({ row }) => (
       //   <p className="text-sm font-semibold text-black w-max">
       //     {formatTimestamp(row.original.updatedAt)}

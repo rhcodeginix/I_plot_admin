@@ -478,7 +478,7 @@ export const MyLeadsTable = () => {
             : firstLog?.Hurtigvalg || firstLog?.type;
         return typeof status === "string" ? status.toLowerCase() : status;
       }
-      case "Oppdatert kl":
+      case "Siste dato":
         return formatTimestamp(row.updatedAt) ?? 0;
       case "Kunde":
         if (val?.name === null || val?.name === undefined) return "";
@@ -592,8 +592,8 @@ export const MyLeadsTable = () => {
   //       ),
   //     },
   //     {
-  //       accessorKey: "Oppdatert kl",
-  //       header: "Oppdatert kl",
+  //       accessorKey: "Siste dato",
+  //       header: "Siste dato",
   //       cell: ({ row }) => (
   //         <p className="text-sm font-semibold text-black w-max">
   //           {formatTimestamp(row.original.updatedAt)}
@@ -700,8 +700,8 @@ export const MyLeadsTable = () => {
     ];
 
     const updatedColumn: ColumnDef<any> = {
-      accessorKey: "Oppdatert kl",
-      header: "Oppdatert kl",
+      accessorKey: "Siste dato",
+      header: "Siste dato",
       cell: ({ row }) => (
         <>
           {/* {selectedFilter === "Fremtidige oppgaver" ? ( */}

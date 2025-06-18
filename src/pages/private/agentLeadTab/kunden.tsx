@@ -232,7 +232,9 @@ export const Kunden = forwardRef<
           createDataBy: {
             email: createData?.email,
             photo: createData?.photo,
-            name: createData?.name,
+            name: createData?.f_name
+              ? `${createData?.f_name} ${createData?.l_name}`
+              : createData?.name,
           },
           supplierId: email !== "andre.finger@gmail.com" ? permission : null,
           status: "Sent",

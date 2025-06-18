@@ -236,7 +236,9 @@ export const AddSuppliersForm = () => {
           createDataBy: {
             email: createData?.email,
             photo: createData?.photo,
-            name: createData?.name,
+            name: createData?.f_name
+              ? `${createData?.f_name} ${createData?.l_name}`
+              : createData?.name,
           },
         });
         toast.success("Added successfully", { position: "top-right" });

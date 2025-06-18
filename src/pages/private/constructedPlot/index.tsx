@@ -17,7 +17,7 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import Ic_search from "../../../assets/images/Ic_search.svg";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +32,13 @@ export const ConstructedPlot = () => {
     setIsLoading(true);
 
     try {
-      const querySnapshot = await getDocs(collection(db, "plot_building"));
+      // const querySnapshot = await getDocs(collection(db, "plot_building"));
+      const q = query(
+        collection(db, "plot_building"),
+        orderBy("view_count", "desc")
+      );
+
+      const querySnapshot = await getDocs(q);
       const data: any = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

@@ -484,7 +484,7 @@
 
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import DatePickerComponent from "../../../components/ui/datepicker";
+// import DatePickerComponent from "../../../components/ui/datepicker";
 import {
   collection,
   getCountFromServer,
@@ -498,7 +498,7 @@ import { fetchAdminDataByEmail } from "../../../lib/utils";
 // import { signInAnonymously } from "firebase/auth";
 
 export const Dashboard = () => {
-  const [selectedDate1, setSelectedDate1] = useState<Date | null>(null);
+  // const [selectedDate1, setSelectedDate1] = useState<Date | null>(null);
   const [counts, setCounts] = useState({
     users: 0,
     husmodell: 0,
@@ -755,7 +755,7 @@ export const Dashboard = () => {
         <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
           Velkommen tilbake, {name}
         </h1>
-        <div className="flex lg:items-center flex-col lg:flex-row gap-2 justify-between">
+        {/* <div className="flex lg:items-center flex-col lg:flex-row gap-2 justify-between">
           <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max">
             <div className="p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm">
               12 måneder
@@ -779,7 +779,7 @@ export const Dashboard = () => {
               className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] w-full sm:w-max"
             />
           </div>
-        </div>
+        </div> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5 desktop:gap-6">
           {loading ? (
             <>

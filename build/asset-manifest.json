@@ -1,13 +1,12 @@
 {
   "files": {
-    "main.css": "/static/css/main.a6dab96c.css",
-    "main.js": "/static/js/main.6011d478.js",
+    "main.css": "/static/css/main.b488e297.css",
+    "main.js": "/static/js/main.a78aabeb.js",
     "static/js/453.2a83c92c.chunk.js": "/static/js/453.2a83c92c.chunk.js",
     "static/media/Img_opp.png": "/static/media/Img_opp.f0e49c4c09d088e60884.png",
     "static/media/Img_line_bg.png": "/static/media/Img_line_bg.ea53a5f7dd39bc3e2975.png",
     "static/media/Ic_generelt.svg": "/static/media/Ic_generelt.5587c7ffd08273c504698007822e7781.svg",
     "static/media/Ic_logo.svg": "/static/media/Ic_logo.f93094d3ad1c627dec4331dcfdf84527.svg",
-    "static/media/Ic_settings.svg": "/static/media/Ic_settings.102d11fd04defbee4f11c68a22703903.svg",
     "static/media/Ic_garaje.svg": "/static/media/Ic_garaje.b8c93a3f446cb95d4bab7931a7bc0cdf.svg",
     "static/media/Ic_upload_blue_img.svg": "/static/media/Ic_upload_blue_img.4fb885ee8aa78aea6e17ccaedb952721.svg",
     "static/media/Ic_build_housing.svg": "/static/media/Ic_build_housing.c15fbf97e6fbb9de7c121d2dc825bc7e.svg",
@@ -16,7 +15,6 @@
     "index.html": "/index.html",
     "static/media/Ic_delete_purple.svg": "/static/media/Ic_delete_purple.e86d0ef5ee16d2148126c2aa19d63041.svg",
     "static/media/Ic_trash.svg": "/static/media/Ic_trash.470840ab3fb61eb8b0c47fe0899784ba.svg",
-    "static/media/Ic_bell.svg": "/static/media/Ic_bell.9055458cea22ce602e3a8ee2d011912e.svg",
     "static/media/Ic_x_circle.svg": "/static/media/Ic_x_circle.d0042930fd1caed79d02556d7abbfece.svg",
     "static/media/Ic_file.svg": "/static/media/Ic_file.324c8ee680fc673c1552b8b82bb6f9d3.svg",
     "static/media/Ic_info_circle.svg": "/static/media/Ic_info_circle.f235c5d49af556aa298afcd66ae739cd.svg",
@@ -34,12 +32,12 @@
     "static/media/Ic_chevron_up.svg": "/static/media/Ic_chevron_up.70a7dde1eded3ff447c7485f89ecdbc4.svg",
     "static/media/Ic_x_close.svg": "/static/media/Ic_x_close.2927b7d219cf8c2897b9d9e9074a80c1.svg",
     "static/media/Ic_chevron_right.svg": "/static/media/Ic_chevron_right.d0df60b8083e393506a2a5531985f1d8.svg",
-    "main.a6dab96c.css.map": "/static/css/main.a6dab96c.css.map",
-    "main.6011d478.js.map": "/static/js/main.6011d478.js.map",
+    "main.b488e297.css.map": "/static/css/main.b488e297.css.map",
+    "main.a78aabeb.js.map": "/static/js/main.a78aabeb.js.map",
     "453.2a83c92c.chunk.js.map": "/static/js/453.2a83c92c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a6dab96c.css",
-    "static/js/main.6011d478.js"
+    "static/css/main.b488e297.css",
+    "static/js/main.a78aabeb.js"
   ]
 }

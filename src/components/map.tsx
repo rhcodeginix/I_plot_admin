@@ -1,32 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 const DEFAULT_ZOOM = 18;
 const MAX_ZOOM = 18;
 
 const NorkartMap: React.FC<{ coordinates: any }> = ({ coordinates }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map: any = useRef<mapboxgl.Map | null>(null);
+  const map = useRef<any | null>(null);
   const mapApiKey = "E8C374EF-6B2A-4304-B935-A05DDBB79947";
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!mapContainer.current || !coordinates || coordinates.length === 0)
-      return;
+    const BOUNDARY_POINTS: [number, number][] =
+      coordinates?.map((item: any) => [item.longitude, item.latitude]) ?? [];
 
-    const BOUNDARY_POINTS: [number, number][] = coordinates.map((item: any) => [
-      item.longitude,
-      item.latitude,
-    ]);
+    if (!mapContainer.current || BOUNDARY_POINTS.length === 0) return;
 
     const DEFAULT_CENTER = BOUNDARY_POINTS[0];
 
     setIsLoading(true);
-    mapboxgl.accessToken = mapApiKey;
 
     if (!map.current) {
-      map.current = new mapboxgl.Map({
+      map.current = new maplibregl.Map({
         container: mapContainer.current,
         style: {
           version: 8,
@@ -56,24 +52,25 @@ const NorkartMap: React.FC<{ coordinates: any }> = ({ coordinates }) => {
         maxZoom: MAX_ZOOM,
         collectResourceTiming: false,
       });
-      map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
-      map.current.addControl(new mapboxgl.ScaleControl(), "bottom-left");
+
+      map.current.addControl(new maplibregl.NavigationControl(), "top-right");
+      map.current.addControl(new maplibregl.ScaleControl(), "bottom-left");
     }
 
     map.current.on("load", () => {
-      setIsLoading(false);
-
-      if (map.current && map.current.getSource("boundary")) {
-        (map.current.getSource("boundary") as mapboxgl.GeoJSONSource).setData({
-          type: "Feature",
-          geometry: {
-            type: "Polygon",
-            coordinates: [[...BOUNDARY_POINTS]],
-          },
-          properties: {},
-        });
-      } else if (map.current) {
-        map.current.addSource("boundary", {
+      if (map.current?.getSource("boundary")) {
+        (map.current.getSource("boundary") as maplibregl.GeoJSONSource).setData(
+          {
+            type: "Feature",
+            geometry: {
+              type: "Polygon",
+              coordinates: [[...BOUNDARY_POINTS]],
+            },
+            properties: {},
+          }
+        );
+      } else {
+        map.current?.addSource("boundary", {
           type: "geojson",
           data: {
             type: "Feature",
@@ -84,7 +81,8 @@ const NorkartMap: React.FC<{ coordinates: any }> = ({ coordinates }) => {
             properties: {},
           },
         });
-        map.current.addLayer({
+
+        map.current?.addLayer({
           id: "boundary-layer",
           type: "line",
           source: "boundary",
@@ -94,7 +92,8 @@ const NorkartMap: React.FC<{ coordinates: any }> = ({ coordinates }) => {
             "line-opacity": 0.85,
           },
         });
-        map.current.addLayer({
+
+        map.current?.addLayer({
           id: "boundary-fill-layer",
           type: "fill",
           source: "boundary",
@@ -105,22 +104,25 @@ const NorkartMap: React.FC<{ coordinates: any }> = ({ coordinates }) => {
         });
       }
 
-      const bounds = new mapboxgl.LngLatBounds();
+      const bounds = new maplibregl.LngLatBounds();
       BOUNDARY_POINTS.forEach((coord) => bounds.extend(coord));
+
       map.current?.fitBounds(bounds, {
         padding: 60,
         maxZoom: MAX_ZOOM,
         duration: 1500,
       });
 
-      setTimeout(() => {
-        if (map.current) {
-          const currentZoom = map.current.getZoom();
-          map.current.zoomTo(Math.min(currentZoom + 1, MAX_ZOOM), {
-            duration: 500,
-          });
-        }
-      }, 2000);
+      map.current.once("moveend", () => {
+        const currentZoom = map.current!.getZoom();
+        map.current?.zoomTo(Math.min(currentZoom + 1, MAX_ZOOM), {
+          duration: 500,
+        });
+
+        map.current?.once("moveend", () => {
+          setIsLoading(false);
+        });
+      });
     });
 
     return () => {

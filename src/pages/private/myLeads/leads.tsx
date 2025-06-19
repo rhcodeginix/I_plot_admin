@@ -247,13 +247,17 @@ export const MyLeadsTable = () => {
           if (selectedFilter === "Up for grabs") {
             const logs = allLogMap?.[model.id] || [];
             const firstLog = logs && logs?.[0];
-            if (
-              firstLog?.type === "initial" ||
-              firstLog?.Hurtigvalg === "initial"
-            ) {
-              return model;
+            if (firstLog?.type || firstLog?.Hurtigvalg) {
+              if (
+                firstLog?.type === "initial" ||
+                firstLog?.Hurtigvalg === "initial"
+              ) {
+                return model;
+              } else {
+                return null;
+              }
             } else {
-              return null;
+              return model;
             }
           }
 
@@ -691,7 +695,7 @@ export const MyLeadsTable = () => {
       {
         id: "handling",
         header: "Handling",
-        cell: () => (
+        cell: ({ row }) => (
           <button className="h-8 w-8 flex items-center justify-center">
             <Ellipsis className="h-4 w-4 text-gray-500" />
           </button>
@@ -705,7 +709,7 @@ export const MyLeadsTable = () => {
       cell: ({ row }) => (
         <>
           {/* {selectedFilter === "Fremtidige oppgaver" ? ( */}
-          <TodoDateCell id={row.original.id} />
+          <TodoDateCell id={row.original.id} date={row.original.updatedAt} />
           {/* ) : (
             <p className="text-sm font-semibold text-black w-max">
               {formatTimestamp(row.original.updatedAt)}

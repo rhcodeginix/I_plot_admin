@@ -1,8 +1,8 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Ic_logo from "../assets/images/Ic_logo.svg";
-import Ic_bell from "../assets/images/Ic_bell.svg";
-import Ic_search from "../assets/images/Ic_search.svg";
-import Ic_settings from "../assets/images/Ic_settings.svg";
+// import Ic_bell from "../assets/images/Ic_bell.svg";
+// import Ic_search from "../assets/images/Ic_search.svg";
+// import Ic_settings from "../assets/images/Ic_settings.svg";
 import Ic_chevron_up from "../assets/images/Ic_chevron_up.svg";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -132,7 +132,7 @@ export const Navbar: React.FC = () => {
               Dashboard
             </Link>
           )}
-          {(!Role || (Role && Role !== "Bankansvarlig")) && (
+          {/* {(!Role || (Role && Role !== "Bankansvarlig")) && (
             <Link
               to={"/Leverandorer"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -145,7 +145,7 @@ export const Navbar: React.FC = () => {
             >
               Leverandører
             </Link>
-          )}
+          )} */}
           {(email === "andre.finger@gmail.com" ||
             HusmodellPermission?.add === true ||
             HusmodellPermission?.delete === true ||
@@ -165,7 +165,7 @@ export const Navbar: React.FC = () => {
                 Husmodeller
               </Link>
             )}
-          {((loginUser && loginUser === "andre.finger@gmail.com") ||
+          {/* {((loginUser && loginUser === "andre.finger@gmail.com") ||
             (Role && Role === "Agent")) && (
             <Link
               to={"/Brukeradministrasjon"}
@@ -183,7 +183,7 @@ export const Navbar: React.FC = () => {
             >
               Brukeradministrasjon
             </Link>
-          )}
+          )} */}
           {(loginUser === "andre.finger@gmail.com" ||
             (loginUser !== "andre.finger@gmail.com" &&
               Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95")) &&
@@ -198,7 +198,8 @@ export const Navbar: React.FC = () => {
                     : "text-black"
                 }`}
               >
-                Mine leads
+                {/* Mine leads */}
+                Tilbudsforespørsler
               </Link>
             )}
           {Role && Role !== "Bankansvarlig" && (
@@ -213,7 +214,7 @@ export const Navbar: React.FC = () => {
                   : "text-black"
               }`}
             >
-              Søknad finansiering
+              Finansiering
             </Link>
           )}
           {Role && Role === "Bankansvarlig" && (
@@ -254,7 +255,7 @@ export const Navbar: React.FC = () => {
           )}
         </div>
         <div className="flex items-center gap-2 md:gap-3 relative">
-          <div className="flex items-center gap-0.5">
+          {/* <div className="flex items-center gap-0.5">
             <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center">
               <img src={Ic_search} alt="search" />
             </div>
@@ -264,7 +265,7 @@ export const Navbar: React.FC = () => {
             <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center">
               <img src={Ic_bell} alt="bell" />
             </div>
-          </div>
+          </div> */}
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={toggleDropdown}
@@ -291,6 +292,12 @@ export const Navbar: React.FC = () => {
                 onClick={handleLogout}
               >
                 Logout
+              </Link>
+              <Link
+                to={"/Brukeradministrasjon"}
+                className="block px-4 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer"
+              >
+                Brukeradministrasjon
               </Link>
             </div>
           )}
@@ -333,7 +340,7 @@ export const Navbar: React.FC = () => {
                 Dashboard
               </Link>
             )}
-            {(!Role || (Role && Role !== "Bankansvarlig")) && (
+            {/* {(!Role || (Role && Role !== "Bankansvarlig")) && (
               <Link
                 to={"/Leverandorer"}
                 className={`text-base font-medium py-2 px-3 rounded-[6px] ${
@@ -347,7 +354,7 @@ export const Navbar: React.FC = () => {
               >
                 Leverandører
               </Link>
-            )}
+            )} */}
             {(email === "andre.finger@gmail.com" ||
               HusmodellPermission?.add === true ||
               HusmodellPermission?.delete === true ||
@@ -368,7 +375,7 @@ export const Navbar: React.FC = () => {
                   Husmodeller
                 </Link>
               )}
-            {((loginUser && loginUser === "andre.finger@gmail.com") ||
+            {/* {((loginUser && loginUser === "andre.finger@gmail.com") ||
               (Role && Role === "Agent")) && (
               <Link
                 to={"/Brukeradministrasjon"}
@@ -383,7 +390,7 @@ export const Navbar: React.FC = () => {
               >
                 Brukeradministrasjon
               </Link>
-            )}
+            )} */}
             {(loginUser === "andre.finger@gmail.com" ||
               (loginUser !== "andre.finger@gmail.com" &&
                 Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95")) &&
@@ -398,7 +405,8 @@ export const Navbar: React.FC = () => {
                       : "text-black"
                   }`}
                 >
-                  Mine leads
+                  {/* Mine leads */}
+                  Tilbudsforespørsler
                 </Link>
               )}
             {Role && Role !== "Bankansvarlig" && (
@@ -413,7 +421,7 @@ export const Navbar: React.FC = () => {
                     : "text-black"
                 }`}
               >
-                Søknad finansiering
+                Finansiering
               </Link>
             )}
             {Role && Role === "Bankansvarlig" && (

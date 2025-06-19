@@ -725,7 +725,9 @@ export const TODOTable = () => {
       //     {formatTimestamp(row.original.updatedAt)}
       //   </p>
       // ),
-      cell: ({ row }) => <TodoDateCell id={row.original.id} />,
+      cell: ({ row }) => (
+        <TodoDateCell id={row.original.id} date={row.original.updatedAt} />
+      ),
     };
 
     // if (

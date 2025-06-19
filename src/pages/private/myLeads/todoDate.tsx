@@ -4,7 +4,10 @@ import { db } from "../../../config/firebaseConfig";
 import { monthMap } from "./myLeadsDetail";
 import { formatTimestamp } from "../../../lib/utils";
 
-export const TodoDateCell: React.FC<{ id: string }> = ({ id }) => {
+export const TodoDateCell: React.FC<{ id: string; date: any }> = ({
+  id,
+  date,
+}) => {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
@@ -62,7 +65,9 @@ export const TodoDateCell: React.FC<{ id: string }> = ({ id }) => {
           {data?.[0]?.date ? formatTimestamp(data?.[0]?.date) : "-"}
         </p>
       ) : (
-        <>-</>
+        <p className="text-sm font-semibold text-black w-max">
+          {formatTimestamp(date)}
+        </p>
       )}
     </>
   );

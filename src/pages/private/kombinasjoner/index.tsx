@@ -7,10 +7,10 @@ export const Kombinasjoner = () => {
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
-              Antall kombinasjoner (tomt+hus)
+              Kundesøk (tomt+hus)
             </h1>
             <p className="text-gray text-sm md:text-base">
-              Liste over alle Antall kombinasjoner (tomt+hus)
+              Liste over alle Kundesøk (tomt+hus)
             </p>
           </div>
         </div>

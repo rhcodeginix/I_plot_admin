@@ -71,6 +71,15 @@ export const EditProfile: React.FC<{
       data.telefon = removePlus(data.telefon);
     }
 
+    if (
+      data.adresse === "" ||
+      !data.adresse ||
+      data.adresse === undefined ||
+      data.adresse === null
+    ) {
+      delete data.adresse;
+    }
+
     try {
       try {
         await updateDoc(doc(db, "leads_from_supplier", String(id)), {
@@ -81,7 +90,7 @@ export const EditProfile: React.FC<{
           "leadData.name": data.name,
           "leadData.email": data.email,
           "leadData.telefon": data.telefon,
-          "leadData.adresse": data.adresse,
+          "leadData.adresse": data.adresse ?? "",
         });
 
         await getLeadData();

@@ -7,10 +7,10 @@ export const Husleads = () => {
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
-              Antall husleads
+              Antall leads
             </h1>
             <p className="text-gray text-sm md:text-base">
-              Liste over alle Antall husleads
+              Liste over alle Antall leads
             </p>
           </div>
         </div>

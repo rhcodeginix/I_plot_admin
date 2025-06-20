@@ -27,7 +27,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Button from "../../../components/common/button";
 import Modal from "../../../components/common/modal";
@@ -41,9 +41,8 @@ export const BankTable = () => {
   const [selectedId, setSelectedId] = useState<any>(null);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [status, setStatus] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
-  const location = useLocation();
-  const currentPath = location.pathname;
 
   const [permission, setPermission] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
@@ -111,7 +110,7 @@ export const BankTable = () => {
       // }
       let q;
 
-      if (currentPath === "/active-agent-leads") {
+      if (status === "Active") {
         q = query(
           collection(db, "bank_leads"),
           where("status", "==", "Approved")
@@ -165,7 +164,7 @@ export const BankTable = () => {
 
   useEffect(() => {
     fetchBankLeadData();
-  }, [permission, currentPath]);
+  }, [permission, status]);
 
   const handleConfirmPopup = () => {
     if (showConfirm) {
@@ -300,7 +299,7 @@ export const BankTable = () => {
           header: "Action",
           cell: ({ row }: any) => (
             <>
-              {currentPath === "/active-agent-leads" ? (
+              {status === "Active" ? (
                 <Eye
                   className="h-5 w-5 text-primary cursor-pointer"
                   onClick={() =>
@@ -362,7 +361,24 @@ export const BankTable = () => {
   return (
     <>
       <div className="flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
-        <div className="hidden sm:block"></div>
+        <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
+          <div
+            className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-r border-gray1 cursor-pointer ${
+              status === "" ? "bg-white" : ""
+            }`}
+            onClick={() => setStatus("")}
+          >
+            Alle
+          </div>
+          <div
+            className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
+              status === "Active" ? "bg-white" : ""
+            }`}
+            onClick={() => setStatus("Active")}
+          >
+            Aktive kunder
+          </div>
+        </div>
         <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full sm:w-auto">
           <DateRangePicker
             startDate={startDate}

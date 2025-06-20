@@ -230,7 +230,7 @@ export const Navbar: React.FC = () => {
               Leads
             </Link>
           )}
-          {Role && Role === "Bankansvarlig" ? (
+          {/* {Role && Role === "Bankansvarlig" ? (
             <Link
               to={"/active-bank-leads"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -252,7 +252,7 @@ export const Navbar: React.FC = () => {
             >
               Aktive kunder
             </Link>
-          )}
+          )} */}
         </div>
         <div className="flex items-center gap-2 md:gap-3 relative">
           {/* <div className="flex items-center gap-0.5">
@@ -437,7 +437,7 @@ export const Navbar: React.FC = () => {
                 Leads
               </Link>
             )}
-            {Role && Role === "Bankansvarlig" ? (
+            {/* {Role && Role === "Bankansvarlig" ? (
               <Link
                 to={"/active-bank-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -459,7 +459,7 @@ export const Navbar: React.FC = () => {
               >
                 Aktive kunder
               </Link>
-            )}
+            )} */}
           </div>
         </div>
       </div>

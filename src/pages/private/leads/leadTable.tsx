@@ -28,7 +28,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Button from "../../../components/common/button";
 import Modal from "../../../components/common/modal";
@@ -43,8 +43,7 @@ export const LeadTable = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const location = useLocation();
-  const currentPath = location.pathname;
+  const [status, setStatus] = useState<string>("");
 
   const [permission, setPermission] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
@@ -112,7 +111,7 @@ export const LeadTable = () => {
       // }
       let q;
 
-      if (currentPath === "/active-bank-leads") {
+      if (status === "Active") {
         q = query(
           collection(db, "bank_leads"),
           where("status", "==", "Approved")
@@ -166,7 +165,7 @@ export const LeadTable = () => {
 
   useEffect(() => {
     fetchBankLeadData();
-  }, [permission, currentPath]);
+  }, [permission, status]);
 
   const handleConfirmPopup = () => {
     if (showConfirm) {
@@ -383,7 +382,24 @@ export const LeadTable = () => {
   return (
     <>
       <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
-        <div></div>
+        <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
+          <div
+            className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-r border-gray1 cursor-pointer ${
+              status === "" ? "bg-white" : ""
+            }`}
+            onClick={() => setStatus("")}
+          >
+            Alle
+          </div>
+          <div
+            className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
+              status === "Active" ? "bg-white" : ""
+            }`}
+            onClick={() => setStatus("Active")}
+          >
+            Aktive kunder
+          </div>
+        </div>
         <div className="flex gap-3 items-center">
           <DateRangePicker
             startDate={startDate}

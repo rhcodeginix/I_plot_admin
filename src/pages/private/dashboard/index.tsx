@@ -705,6 +705,16 @@ export const Dashboard = () => {
     //   percentage: 10,
     //   path: "/users",
     // },
+    ...(email === "andre.finger@gmail.com"
+      ? [
+          {
+            title: "Antall brukere",
+            value: counts.users,
+            percentage: 10,
+            path: "/users",
+          },
+        ]
+      : []),
     {
       title: "Antall tomter",
       value: counts.plot,
@@ -783,10 +793,12 @@ export const Dashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5 desktop:gap-6">
           {loading ? (
             <>
-              {/* <div
-                className="w-full h-[125px] rounded-md custom-shimmer"
-                style={{ borderRadius: "8px" }}
-              ></div> */}
+              {email === "andre.finger@gmail.com" && (
+                <div
+                  className="w-full h-[125px] rounded-md custom-shimmer"
+                  style={{ borderRadius: "8px" }}
+                ></div>
+              )}
               {/* <div
                 className="w-full h-[125px] rounded-md custom-shimmer"
                 style={{ borderRadius: "8px" }}

@@ -132,7 +132,7 @@ export const Navbar: React.FC = () => {
               Dashboard
             </Link>
           )}
-          {/* {(!Role || (Role && Role !== "Bankansvarlig")) && (
+          {email === "andre.finger@gmail.com" && (
             <Link
               to={"/Leverandorer"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -145,7 +145,7 @@ export const Navbar: React.FC = () => {
             >
               Leverandører
             </Link>
-          )} */}
+          )}
           {(email === "andre.finger@gmail.com" ||
             HusmodellPermission?.add === true ||
             HusmodellPermission?.delete === true ||
@@ -340,7 +340,7 @@ export const Navbar: React.FC = () => {
                 Dashboard
               </Link>
             )}
-            {/* {(!Role || (Role && Role !== "Bankansvarlig")) && (
+            {email === "andre.finger@gmail.com" && (
               <Link
                 to={"/Leverandorer"}
                 className={`text-base font-medium py-2 px-3 rounded-[6px] ${
@@ -354,7 +354,7 @@ export const Navbar: React.FC = () => {
               >
                 Leverandører
               </Link>
-            )} */}
+            )}
             {(email === "andre.finger@gmail.com" ||
               HusmodellPermission?.add === true ||
               HusmodellPermission?.delete === true ||

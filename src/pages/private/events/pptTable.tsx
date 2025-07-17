@@ -400,7 +400,23 @@ export const PPTTable = () => {
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      className="hover:bg-muted/50"
+                      className="hover:bg-muted/50 cursor-pointer"
+                      onClick={() => {
+                        const url = `https://boligkonfigurator.mintomt.no/Room-Configurator/${row.original?.document_id}`;
+
+                        const currIndex = 0;
+                        const currVerticalIndex = 1;
+                        localStorage.setItem(
+                          "currIndexBolig",
+                          currIndex.toString()
+                        );
+                        localStorage.setItem(
+                          "currVerticalIndex",
+                          currVerticalIndex.toString()
+                        );
+
+                        window.open(url, "_blank");
+                      }}
                     >
                       {row.getVisibleCells().map((cell: any) => (
                         <TableCell key={cell.id} className="px-6 py-3">

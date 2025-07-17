@@ -255,9 +255,8 @@ export const LeadTable = () => {
                       data-state={row.getIsSelected() && "selected"}
                       className="hover:bg-muted/50 cursor-pointer"
                       onClick={() => {
-                        navigate(
-                          `https://boligkonfigurator.mintomt.no/Room-Configurator/${row.original?.id}`
-                        );
+                        const url = `https://boligkonfigurator.mintomt.no/Room-Configurator/${row.original?.id}`;
+
                         const currIndex = 0;
                         const currVerticalIndex = 1;
                         localStorage.setItem(
@@ -268,6 +267,8 @@ export const LeadTable = () => {
                           "currVerticalIndex",
                           currVerticalIndex.toString()
                         );
+
+                        window.open(url, "_blank");
                       }}
                     >
                       {row.getVisibleCells().map((cell: any) => (

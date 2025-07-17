@@ -37,7 +37,7 @@ const ApiUtils = {
         {
           method: "GET",
           headers: {
-            "Ocp-Apim-Subscription-Key": "cce12bb764f34e9083eec0f57fd0dc53",
+            "Ocp-Apim-Subscription-Key": `${process.env.REACT_APP_OCP_APIM_KEY}`,
           },
         }
       );

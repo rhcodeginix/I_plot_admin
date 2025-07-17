@@ -10,7 +10,6 @@ import {
 import { db } from "../../../config/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { fetchAdminDataByEmail } from "../../../lib/utils";
-// import { signInAnonymously } from "firebase/auth";
 
 export const Dashboard = () => {
   const [counts, setCounts] = useState({
@@ -27,19 +26,6 @@ export const Dashboard = () => {
   const navigate = useNavigate();
   const email = localStorage.getItem("Iplot_admin");
   const [permission, setPermission] = useState<any>(null);
-  // useEffect(() => {
-  //   const getToken = async () => {
-  //     try {
-  //       const result = await signInAnonymously(auth);
-  //       const token = await result.user.getIdToken();
-
-  //     } catch (error) {
-  //       console.error("Error signing in anonymously:", error);
-  //     }
-  //   };
-
-  //   getToken();
-  // }, []);
 
   const [supp, setSupp] = useState<any>(null);
   const [role, setRole] = useState<any>(null);

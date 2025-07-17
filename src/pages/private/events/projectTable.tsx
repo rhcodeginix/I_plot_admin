@@ -19,10 +19,18 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import Ic_search from "../../../assets/images/Ic_search.svg";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { formatDateTime } from "../../../lib/utils";
 import { useNavigate } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 export const ProjectTable = () => {
   const [page, setPage] = useState(1);
@@ -61,44 +69,108 @@ export const ProjectTable = () => {
     fetchHusmodellData();
   }, []);
 
-  const filteredData = useMemo(() => {
-    return houseModels.flatMap((item: any) => {
-      if (
-        item?.KundeInfo &&
-        item?.KundeInfo.length > 0 &&
-        Array.isArray(item.KundeInfo)
-      ) {
-        return item.KundeInfo.map((kunde: any) => ({
-          ...kunde,
-          photo: item.photo || null,
-          husmodell_name: kunde?.VelgSerie || item?.husmodell_name || null,
-          parentId: item.id,
-          createDataBy: item?.createDataBy || null,
-          tag: item?.tag || null,
-          placeOrder: item?.placeOrder || false,
-          configurator:
-            kunde?.Plantegninger &&
-            kunde?.Plantegninger.length > 0 &&
-            kunde?.Plantegninger.some((room: any) => !room.configurator)
-              ? false
-              : true,
-        })).filter((kunde: any) => {
-          const matchesSearch =
-            !searchTerm ||
-            kunde.Kundenavn?.toLowerCase().includes(searchTerm.toLowerCase());
-          const matchesFilter =
-            !selectedFilter ||
-            selectedFilter === "" ||
-            kunde.husmodell_name === selectedFilter;
-          const matchesTypeProsjekt =
-            !activeTab || kunde.tag.toLowerCase() === activeTab.toLowerCase();
+  const [officeFilter, setOfficeFilter] = useState("All");
 
-          return matchesSearch && matchesFilter && matchesTypeProsjekt;
-        });
+  const [offices, setOffices] = useState([]);
+
+  const fetchOfficeData = async () => {
+    try {
+      let querySnapshot = await getDocs(collection(db, "office"));
+
+      const data: any = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setOffices(data);
+    } catch (error) {
+      console.error("Error fetching husmodell data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOfficeData();
+  }, []);
+
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchFilteredData = async () => {
+      setIsLoading(true);
+
+      const results: any[] = [];
+
+      for (const item of houseModels as any) {
+        let office: any = null;
+
+        if (item?.createDataBy?.email) {
+          try {
+            const q = query(
+              collection(db, "admin"),
+              where("email", "==", item?.createDataBy?.email)
+            );
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+              office = querySnapshot.docs[0].data().office;
+            }
+          } catch (error) {
+            console.error("Error fetching admin data:", error);
+          }
+        }
+
+        if (
+          item?.KundeInfo &&
+          Array.isArray(item.KundeInfo) &&
+          item.KundeInfo.length > 0
+        ) {
+          const filteredKunder = item.KundeInfo.map((kunde: any) => {
+            return {
+              ...kunde,
+              photo: item.photo || null,
+              husmodell_name: kunde?.VelgSerie || item?.husmodell_name || null,
+              parentId: item.id,
+              createDataBy: item?.createDataBy || null,
+              tag: item?.tag || null,
+              placeOrder: item?.placeOrder || false,
+              configurator:
+                kunde?.Plantegninger &&
+                kunde.Plantegninger.length > 0 &&
+                kunde.Plantegninger.some((room: any) => !room.configurator)
+                  ? false
+                  : true,
+            };
+          }).filter((kunde: any) => {
+            const matchesSearch =
+              !searchTerm ||
+              kunde.Kundenavn?.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesFilter =
+              !selectedFilter ||
+              selectedFilter === "" ||
+              kunde.husmodell_name === selectedFilter;
+            const ofcFilter =
+              !officeFilter ||
+              officeFilter === "All" ||
+              office === officeFilter;
+            const matchesTypeProsjekt =
+              !activeTab ||
+              kunde.tag?.toLowerCase() === activeTab.toLowerCase();
+
+            return (
+              matchesSearch && matchesFilter && matchesTypeProsjekt && ofcFilter
+            );
+          });
+
+          results.push(...filteredKunder);
+        }
       }
-      return [];
-    });
-  }, [houseModels, searchTerm, selectedFilter, activeTab]);
+      setIsLoading(false);
+
+      setFilteredData(results);
+    };
+
+    fetchFilteredData();
+  }, [houseModels, searchTerm, selectedFilter, activeTab, officeFilter]);
 
   const columns = useMemo<ColumnDef<any>[]>(() => {
     const baseColumns: ColumnDef<any>[] = [
@@ -252,6 +324,30 @@ export const ProjectTable = () => {
                 </button>
               ))}
             </div>
+          </div>
+          <div className="w-[300px] ml-auto mb-4">
+            <Select
+              onValueChange={(value) => {
+                setOfficeFilter(value);
+              }}
+              value={officeFilter}
+            >
+              <SelectTrigger
+                className={`bg-white rounded-[8px] border text-black border-gray1`}
+              >
+                <SelectValue placeholder="Enter Type partner" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectGroup>
+                  <SelectItem value={"All"}>All</SelectItem>
+                  {offices.map((log: any, index) => (
+                    <SelectItem value={log?.id} key={index}>
+                      {log?.data?.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
           <div className="mb-2 flex gap-2 flex-col lg:flex-row lg:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
@@ -421,12 +517,18 @@ export const ProjectTable = () => {
                       className="hover:bg-muted/50 cursor-pointer"
                       onClick={() => {
                         const url = `https://boligkonfigurator.mintomt.no/se-series/${row.original.parentId}/edit-husmodell/${row.original?.uniqueId}`;
-                        
+
                         const currIndex = 0;
                         const currVerticalIndex = 1;
-                        localStorage.setItem("currIndexBolig", currIndex.toString());
-                        localStorage.setItem("currVerticalIndex", currVerticalIndex.toString());
-                    
+                        localStorage.setItem(
+                          "currIndexBolig",
+                          currIndex.toString()
+                        );
+                        localStorage.setItem(
+                          "currVerticalIndex",
+                          currVerticalIndex.toString()
+                        );
+
                         window.open(url, "_blank");
                       }}
                     >

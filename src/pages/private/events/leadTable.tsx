@@ -19,11 +19,18 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import Ic_search from "../../../assets/images/Ic_search.svg";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { formatDateTime } from "../../../lib/utils";
 import { useNavigate } from "react-router-dom";
-
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 export const LeadTable = () => {
   const [page, setPage] = useState(1);
   const [RoomConfigurator, setRoomConfigurator] = useState<any>([]);
@@ -56,11 +63,74 @@ export const LeadTable = () => {
     fetchRoomConfiguratorData();
   }, []);
 
-  const filteredData = useMemo(() => {
-    return RoomConfigurator.filter((model: any) =>
-      model.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [RoomConfigurator, searchTerm]);
+  const [officeFilter, setOfficeFilter] = useState("All");
+
+  const [offices, setOffices] = useState([]);
+
+  const fetchOfficeData = async () => {
+    try {
+      let querySnapshot = await getDocs(collection(db, "office"));
+
+      const data: any = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setOffices(data);
+    } catch (error) {
+      console.error("Error fetching husmodell data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOfficeData();
+  }, []);
+
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchFilteredModels = async () => {
+      setIsLoading(true);
+
+      const results: any[] = [];
+
+      for (const model of RoomConfigurator) {
+        let office: any = null;
+
+        if (model?.createDataBy?.email) {
+          try {
+            const q = query(
+              collection(db, "admin"),
+              where("email", "==", model.createDataBy.email)
+            );
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+              office = querySnapshot.docs[0].data().office;
+            }
+          } catch (error) {
+            console.error("Error fetching admin data:", error);
+          }
+        }
+
+        const matchesSearch = model.name
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase());
+
+        const matchesOffice =
+          !officeFilter || officeFilter === "All" || office === officeFilter;
+
+        if (matchesSearch && matchesOffice) {
+          results.push(model);
+        }
+      }
+
+      setIsLoading(false);
+      setFilteredData(results);
+    };
+
+    fetchFilteredModels();
+  }, [RoomConfigurator, searchTerm, officeFilter]);
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -194,6 +264,30 @@ export const LeadTable = () => {
           Leads
         </h1>
         <div>
+          <div className="w-[300px] ml-auto mb-4">
+            <Select
+              onValueChange={(value) => {
+                setOfficeFilter(value);
+              }}
+              value={officeFilter}
+            >
+              <SelectTrigger
+                className={`bg-white rounded-[8px] border text-black border-gray1`}
+              >
+                <SelectValue placeholder="Enter Type partner" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectGroup>
+                  <SelectItem value={"All"}>All</SelectItem>
+                  {offices.map((log: any, index) => (
+                    <SelectItem value={log?.id} key={index}>
+                      {log?.data?.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="mb-2 flex gap-2 flex-col lg:flex-row lg:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
               <img src={Ic_search} alt="search" />

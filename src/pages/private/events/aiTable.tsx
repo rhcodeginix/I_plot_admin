@@ -35,6 +35,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import DatePickerComponent from "../../../components/ui/datepicker";
 import { calculateDateRange } from "../myLeads/leads";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 export const AITable = () => {
   const [page, setPage] = useState(1);
@@ -71,33 +79,78 @@ export const AITable = () => {
     fetchRoomConfiguratorData();
   }, []);
 
-  const filteredData = useMemo(() => {
-    return RoomConfigurator.filter((model: any) => {
-      const date = new Date(model?.timeStamp);
-      const modalDate = date?.toISOString().split("T")[0];
+  const [officeFilter, setOfficeFilter] = useState("All");
 
-      if (selectedDate1 !== null) {
-        return modalDate === formatDateOnly(selectedDate1);
-      }
+  const [offices, setOffices] = useState([]);
 
-      if (selectedDateRange !== null) {
-        const { startDate, endDate }: any =
-          calculateDateRange(selectedDateRange);
+  const fetchOfficeData = async () => {
+    try {
+      let querySnapshot = await getDocs(collection(db, "office"));
 
-        const isWithinDateRange =
-          modalDate >= startDate && modalDate <= endDate;
-        if (!isWithinDateRange) return null;
-      }
-      return true;
-    });
-  }, [RoomConfigurator, selectedDate1, selectedDateRange]);
+      const data: any = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setOffices(data);
+    } catch (error) {
+      console.error("Error fetching husmodell data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOfficeData();
+  }, []);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
 
   const getData = async (id: string) => {
     const data = await fetchAdminData(id);
     if (data) {
       return data;
     }
+    return null;
   };
+
+  useEffect(() => {
+    const filterDataAsync = async () => {
+      setIsLoading(true);
+      const result: any[] = [];
+
+      for (const model of RoomConfigurator) {
+        const date = new Date(model?.timeStamp);
+        const modalDate = date?.toISOString().split("T")[0];
+
+        let office: any = null;
+        if (model?.created_by) {
+          const data = await getData(model?.created_by);
+          office = data?.office;
+        }
+
+        if (selectedDate1 !== null) {
+          if (modalDate !== formatDateOnly(selectedDate1)) continue;
+        }
+
+        if (officeFilter && officeFilter !== "All" && office !== officeFilter) {
+          continue;
+        }
+
+        if (selectedDateRange !== null) {
+          const { startDate, endDate }: any =
+            calculateDateRange(selectedDateRange);
+          const isWithinDateRange =
+            modalDate >= startDate && modalDate <= endDate;
+          if (!isWithinDateRange) continue;
+        }
+
+        result.push(model);
+      }
+
+      setIsLoading(false);
+      setFilteredData(result);
+    };
+
+    filterDataAsync();
+  }, [RoomConfigurator, selectedDate1, selectedDateRange, officeFilter]);
 
   const fetchDocumentData = async (id: string) => {
     try {
@@ -264,6 +317,30 @@ export const AITable = () => {
           AI
         </h1>
         <div>
+          <div className="w-[300px] ml-auto mb-4">
+            <Select
+              onValueChange={(value) => {
+                setOfficeFilter(value);
+              }}
+              value={officeFilter}
+            >
+              <SelectTrigger
+                className={`bg-white rounded-[8px] border text-black border-gray1`}
+              >
+                <SelectValue placeholder="Enter Type partner" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectGroup>
+                  <SelectItem value={"All"}>All</SelectItem>
+                  {offices.map((log: any, index) => (
+                    <SelectItem value={log?.id} key={index}>
+                      {log?.data?.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="mb-6 flex lg:items-center flex-col lg:flex-row gap-2 justify-between">
             <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max">
               <div

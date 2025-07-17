@@ -4,13 +4,19 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   isOpen?: boolean;
+  outSideClick?: any;
 }
 
-const Modal: React.FC<ModalProps> = ({ onClose, children, isOpen }) => {
+const Modal: React.FC<ModalProps> = ({
+  onClose,
+  children,
+  isOpen,
+  outSideClick,
+}) => {
   const popup = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !outSideClick) {
       document.body?.classList.add("h-screen");
       document.body.style.overflow = "hidden";
     } else {
@@ -26,7 +32,11 @@ const Modal: React.FC<ModalProps> = ({ onClose, children, isOpen }) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (popup.current && !popup.current.contains(event.target as Node)) {
+      if (
+        popup.current &&
+        !popup.current.contains(event.target as Node) &&
+        !outSideClick
+      ) {
         onClose();
       }
     };

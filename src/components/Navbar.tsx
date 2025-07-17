@@ -146,6 +146,18 @@ export const Navbar: React.FC = () => {
               Leverandører
             </Link>
           )}
+          {email === "andre.finger@gmail.com" && (
+            <Link
+              to={"/events"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/events"
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Kontosammendrag
+            </Link>
+          )}
           {(email === "andre.finger@gmail.com" ||
             HusmodellPermission?.add === true ||
             HusmodellPermission?.delete === true ||
@@ -353,6 +365,18 @@ export const Navbar: React.FC = () => {
                 onClick={toggleDrawer}
               >
                 Leverandører
+              </Link>
+            )}
+            {email === "andre.finger@gmail.com" && (
+              <Link
+                to={"/events"}
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                  currentPath === "/events"
+                    ? "bg-lightPurple text-primary"
+                    : "text-black"
+                }`}
+              >
+                Kontosammendrag
               </Link>
             )}
             {(email === "andre.finger@gmail.com" ||

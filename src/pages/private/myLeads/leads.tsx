@@ -47,7 +47,7 @@ import { monthMap } from "./myLeadsDetail";
 import { NoteCell } from "./noteRow";
 import { TodoDateCell } from "./todoDate";
 
-const calculateDateRange = (range: string) => {
+export const calculateDateRange = (range: string) => {
   const currentDate = new Date();
   let startDate: Date;
   let endDate: Date = currentDate;
@@ -811,7 +811,7 @@ export const MyLeadsTable = () => {
             <DatePickerComponent
               selectedDate={selectedDate1}
               onDateChange={setSelectedDate1}
-              dateFormat="MM/dd/yyyy"
+              dateFormat="dd.MM.yyyy"
               placeholderText="Velg dato"
               className="border border-gray1 rounded-[8px] flex gap-2 items-center p-2.5 md:py-[10px] md:px-4 cursor-pointer shadow-shadow1 h-[40px] w-max"
             />

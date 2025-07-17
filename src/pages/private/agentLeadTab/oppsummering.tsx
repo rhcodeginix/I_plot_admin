@@ -54,40 +54,6 @@ export const Oppsummering: React.FC<{
   }, [bankData]);
   const plotData = bankData?.plotHusmodell?.plot;
   const houseData = bankData?.plotHusmodell?.house;
-  // const projectAccount = bankData?.ProjectAccount?.husmodellData;
-
-  // const parsePrice = (value: any): number => {
-  //   if (!value) return 0;
-  //   return parseFloat(
-  //     String(value).replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
-  //   );
-  // };
-
-  // const Byggekostnader = projectAccount?.Byggekostnader ?? [];
-  // const Tomtekost = projectAccount?.Tomtekost ?? [];
-
-  // const totalPrisOfByggekostnader = [...Byggekostnader].reduce(
-  //   (acc: number, prod: any, index: number) => {
-  //     const value = prod?.pris;
-  //     return acc + parsePrice(value);
-  //   },
-  //   0
-  // );
-
-  // const formattedNumberOfByggekostnader =
-  //   totalPrisOfByggekostnader.toLocaleString("nb-NO");
-
-  // const totalPrisOfTomtekost = [...Tomtekost].reduce(
-  //   (acc: number, prod: any) => {
-  //     const value = prod.pris;
-  //     return acc + parsePrice(value);
-  //   },
-  //   0
-  // );
-
-  // const formattedNumber = totalPrisOfTomtekost.toLocaleString("nb-NO");
-  // const grandTotal = totalPrisOfTomtekost + totalPrisOfByggekostnader;
-  // const formattedGrandTotal = grandTotal.toLocaleString("nb-NO");
 
   function norwegianToNumber(str: any) {
     if (typeof str !== "string") return 0;
@@ -375,7 +341,6 @@ export const Oppsummering: React.FC<{
         <Button
           text="Send til bank"
           className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-          // onClick={() => setActiveTab(5)}
           onClick={sendWelcomeEmail}
         />
       </div>

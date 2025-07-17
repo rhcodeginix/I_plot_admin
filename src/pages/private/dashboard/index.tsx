@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-// import DatePickerComponent from "../../../components/ui/datepicker";
 import {
   collection,
   getCountFromServer,
@@ -14,7 +13,6 @@ import { fetchAdminDataByEmail } from "../../../lib/utils";
 // import { signInAnonymously } from "firebase/auth";
 
 export const Dashboard = () => {
-  // const [selectedDate1, setSelectedDate1] = useState<Date | null>(null);
   const [counts, setCounts] = useState({
     users: 0,
     husmodell: 0,
@@ -112,7 +110,6 @@ export const Dashboard = () => {
       }
 
       if (email === "andre.finger@gmail.com") {
-        // q = query(collection(db, "house_model"));
         leadTrue = query(collection(db, "leads"), where("Isopt", "==", true));
         leadFalse = query(collection(db, "leads"), where("Isopt", "==", false));
         leadBankTrue = query(
@@ -121,11 +118,6 @@ export const Dashboard = () => {
         );
         suppliers = query(collection(db, "suppliers"));
       } else {
-        // q = query(
-        //   collection(db, "house_model"),
-        //   where("createDataBy.email", "==", email),
-        //   where("Husdetaljer.Leverandører", "==", String(permission))
-        // );
         leadTrue = query(
           collection(db, "leads"),
           where("Isopt", "==", true),
@@ -214,12 +206,6 @@ export const Dashboard = () => {
   }, [permission]);
 
   const data = [
-    // {
-    //   title: "Antall brukere",
-    //   value: counts.users,
-    //   percentage: 10,
-    //   path: "/users",
-    // },
     ...(email === "andre.finger@gmail.com"
       ? [
           {
@@ -267,12 +253,6 @@ export const Dashboard = () => {
       percentage: 10,
       path: "/constructed-plot",
     },
-    // {
-    //   title: "Leverandorer",
-    //   value: counts.supplier,
-    //   percentage: 10,
-    //   path: "/Leverandorer",
-    // },
   ];
   return (
     <>
@@ -280,31 +260,6 @@ export const Dashboard = () => {
         <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">
           Velkommen tilbake, {name}
         </h1>
-        {/* <div className="flex lg:items-center flex-col lg:flex-row gap-2 justify-between">
-          <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max">
-            <div className="p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm">
-              12 måneder
-            </div>
-            <div className="p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border border-t-0 border-b-0 border-gray1">
-              30 dager
-            </div>
-            <div className="p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-r border-gray1">
-              7 dager
-            </div>
-            <div className="p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm">
-              24 timer
-            </div>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:items-center">
-            <DatePickerComponent
-              selectedDate={selectedDate1}
-              onDateChange={setSelectedDate1}
-              dateFormat="dd.MM.yyyy"
-              placeholderText="Velg dato"
-              className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] w-full sm:w-max"
-            />
-          </div>
-        </div> */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5 desktop:gap-6">
           {loading ? (
             <>
@@ -314,10 +269,6 @@ export const Dashboard = () => {
                   style={{ borderRadius: "8px" }}
                 ></div>
               )}
-              {/* <div
-                className="w-full h-[125px] rounded-md custom-shimmer"
-                style={{ borderRadius: "8px" }}
-              ></div> */}
               <div
                 className="w-full h-[125px] rounded-md custom-shimmer"
                 style={{ borderRadius: "8px" }}

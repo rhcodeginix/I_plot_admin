@@ -996,11 +996,6 @@ export const Eksterior: React.FC<{
               activeTabData={activeTabData}
               setCategory={setCategory}
               editIndex={editSubCatIndex}
-              // defaultValue={
-              //   editSubCatIndex !== null
-              //     ? hovedkategorinavn[editSubCatIndex]?.navn || ""
-              //     : ""
-              // }
               editData={
                 editSubCatIndex !== null && hovedkategorinavn[editSubCatIndex]
               }

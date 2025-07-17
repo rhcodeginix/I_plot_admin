@@ -54,10 +54,6 @@ export const Users = () => {
         })
       );
 
-      // const sortedData = data.sort((a: any, b: any) =>
-      //   (a.name || "").localeCompare(b.name || "")
-      // );
-
       setUsers(data);
     } catch (error) {
       console.error("Error fetching users data:", error);

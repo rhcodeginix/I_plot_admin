@@ -122,12 +122,6 @@ export const Fremdriftsplan: React.FC<{
                 }
               }
               return (
-                // <div
-                //   key={index}
-                //   className={`py-3 px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-4 ${
-                //     currIndex > index ? "border-[#61C4A4]" : "border-[#FFAFAF]"
-                //   } ${currIndex === index && "border-[#FFB795]"}`}
-                // >
                 <div
                   key={index}
                   className={`py-3 px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-4 ${
@@ -359,7 +353,6 @@ export const Fremdriftsplan: React.FC<{
                         className="border border-[#A20000] bg-[#A20000] text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                         type="submit"
                         onClick={async () => {
-                          // setStatus("Reject");
                           try {
                             if (id) {
                               const bankDocRef = doc(

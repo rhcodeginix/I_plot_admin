@@ -32,7 +32,6 @@ export const ConstructedPlot = () => {
     setIsLoading(true);
 
     try {
-      // const querySnapshot = await getDocs(collection(db, "plot_building"));
       const q = query(
         collection(db, "plot_building"),
         orderBy("view_count", "desc")

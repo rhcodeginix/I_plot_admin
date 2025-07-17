@@ -195,7 +195,6 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
         updateDataBy: {
           email: createData?.email,
           photo: createData?.photo,
-          // name: createData?.name,
           name: createData?.f_name
             ? `${createData?.f_name} ${createData?.l_name}`
             : createData?.name,
@@ -279,38 +278,6 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
         return acc + (numericValue ? parseFloat(numericValue) : 0);
       }, 0)
     : 0;
-
-  // function parsePrice(price: any) {
-  //   if (!price || price === "-" || price.trim() === "") return null;
-  //   const digits = price.replace(/\D/g, "");
-  //   return digits ? Number(digits) : null;
-  // }
-
-  // // const sortedIndexes = React.useMemo(() => {
-  // //   return fields
-  // //     .map((product, index) => ({ index, price: parsePrice(product.pris) }))
-  // //     .sort((a, b) => {
-  // //       if (a.price === null && b.price === null) return 0;
-  // //       if (a.price === null) return 1;
-  // //       if (b.price === null) return -1;
-  // //       return b.price - a.price;
-  // //     })
-  // //     .map(({ index }) => index);
-  // // }, [fields]);
-
-  // // const sortedIndexesTomtekostFields = React.useMemo(() => {
-  // //   return TomtekostFields.map((product, index) => ({
-  // //     index,
-  // //     price: parsePrice(product.pris),
-  // //   }))
-  // //     .sort((a, b) => {
-  // //       if (a.price === null && b.price === null) return 0;
-  // //       if (a.price === null) return 1;
-  // //       if (b.price === null) return -1;
-  // //       return b.price - a.price;
-  // //     })
-  // //     .map(({ index }) => index);
-  // // }, [TomtekostFields]);
 
   const [dragIndex, setDragIndex] = useState<number | null>(null);
 
@@ -731,10 +698,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                   </div>
                   <div className="border-t border-gray2"></div>
                   <div className="flex flex-col gap-5 desktop:gap-8">
-                    {/* {TomtekostFields.map((product, index) => { */}
                     {TomtekostFields.map((product, index) => {
-                      // const product = TomtekostFields[index];
-                      // if (!product.TomtekostID) return null;
                       return (
                         <div
                           key={product.id}

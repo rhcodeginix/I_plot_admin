@@ -173,7 +173,6 @@ export const HusmodellerTable = () => {
     setIsLoading(true);
     try {
       let q;
-      // if (email === "andre.finger@gmail.com") {
       if (role === "Agent") {
         q = query(
           collection(db, "house_model"),
@@ -196,7 +195,7 @@ export const HusmodellerTable = () => {
           const dateB = b.updatedAt?.toDate
             ? b.updatedAt.toDate()
             : new Date(b.updatedAt);
-          return dateB - dateA; // descending order
+          return dateB - dateA;
         });
 
       setHouseModels(data);

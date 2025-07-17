@@ -115,12 +115,6 @@ export const Fremdriftsplan: React.FC<{
                       : step.status === "Sent" && "border-[#FFB795]"
                   }`}
                 >
-                  {/* // <div
-                //   key={index}
-                //   className={`py-3 px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-4 ${
-                //     currIndex > index ? "border-[#61C4A4]" : "border-[#FFAFAF]"
-                //   } ${currIndex === index && "border-[#FFB795]"}`}
-                // > */}
                   <div
                     className={`flex items-center gap-2 justify-between ${
                       currIndex > index && "cursor-pointer"

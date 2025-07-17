@@ -140,10 +140,6 @@ export const MyLeadsDetail = () => {
   const [houseModels, setHouseModels] = useState([]);
   const fetchHusmodellData = async () => {
     try {
-      // let q = query(
-      //   collection(db, "house_model"),
-      //   orderBy("updatedAt", "desc")
-      // );
       let q;
       if (email === "andre.finger@gmail.com") {
         q = query(
@@ -154,7 +150,6 @@ export const MyLeadsDetail = () => {
             "065f9498-6cdb-469b-8601-bb31114d7c95"
           )
         );
-        // q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
       } else {
         q = query(
           collection(db, "house_model"),
@@ -210,10 +205,8 @@ export const MyLeadsDetail = () => {
 
   const fetchSuppliersData = async () => {
     try {
-      // let q = query(collection(db, "suppliers"));
       let q;
       if (email === "andre.finger@gmail.com") {
-        // q = query(collection(db, "suppliers"));
         q = query(
           collection(db, "admin"),
           where("supplier", "==", "065f9498-6cdb-469b-8601-bb31114d7c95")

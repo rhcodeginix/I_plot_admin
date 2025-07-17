@@ -25,7 +25,6 @@ export const AddNewSubCat: React.FC<{
   activeTabData: any;
   setCategory: any;
   editIndex?: any;
-  // defaultValue?: string;
   editData?: any;
 }> = ({
   onClose,
@@ -33,14 +32,10 @@ export const AddNewSubCat: React.FC<{
   activeTabData,
   setCategory,
   editIndex,
-  // defaultValue,
   editData,
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    // defaultValues: {
-    //   Kategorinavn: defaultValue || "",
-    // },
   });
 
   useEffect(() => {
@@ -81,12 +76,6 @@ export const AddNewSubCat: React.FC<{
         updatedCategories,
         { shouldValidate: true }
       );
-      // formData.setValue(
-      //   `hovedkategorinavn.${activeTabData}.isSelected`,
-      //   formData.getValues(`hovedkategorinavn.${activeTabData}.isSelected`) ??
-      //     false,
-      //   { shouldValidate: true }
-      // );
     } else {
       const newSubCategory = {
         navn: updatedName,
@@ -102,17 +91,7 @@ export const AddNewSubCat: React.FC<{
         };
         return updatedCategory;
       });
-      // formData.setValue(
-      //   `hovedkategorinavn.${activeTabData}.Kategorinavn`,
-      //   [...existingCategories, newSubCategory],
-      //   { shouldValidate: true }
-      // );
     }
-    // formData.setValue(
-    //   `hovedkategorinavn.${activeTabData}.isSelected`,
-    //   data.isSelected ?? false,
-    //   { shouldValidate: true }
-    // );
   };
   return (
     <>

@@ -100,15 +100,6 @@ export const LeadTable = () => {
     setIsLoading(true);
 
     try {
-      // let q;
-      // if (email === "andre.finger@gmail.com") {
-      //   q = query(collection(db, "bank_leads"), orderBy("updatedAt", "desc"));
-      // } else {
-      //   q = query(
-      //     collection(db, "bank_leads"),
-      //     where("supplierId", "==", permission)
-      //   );
-      // }
       let q;
 
       if (status === "Active") {

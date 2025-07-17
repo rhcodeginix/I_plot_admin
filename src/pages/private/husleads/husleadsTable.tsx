@@ -19,8 +19,6 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import Ic_search from "../../../assets/images/Ic_search.svg";
-// import Ic_filter from "../../../assets/images/Ic_filter.svg";
-// import Ic_download from "../../../assets/images/Ic_download.svg";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import {
@@ -91,7 +89,6 @@ export const HusleadsTable = () => {
         "rudraksh.shukla98@gmail.com",
         "tanmaymundra01@gmail.com",
       ];
-      // setLeads(sortedData);
       const finalData = sortedData.filter((a: any) => {
         return a?.user?.email && !excludedEmails.includes(a.user.email);
       });
@@ -240,15 +237,6 @@ export const HusleadsTable = () => {
           </p>
         ),
       },
-      // {
-      //   accessorKey: "status",
-      //   header: "Status",
-      //   cell: ({ row }) => (
-      //     <span className="px-3 py-1 rounded-full bg-[#F1F2FF] text-[#02107A] text-xs font-semibold whitespace-nowrap w-max">
-      //       Lead sendt
-      //     </span>
-      //   ),
-      // },
       {
         id: "handling",
         header: "Handling",

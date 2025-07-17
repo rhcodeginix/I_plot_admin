@@ -141,7 +141,6 @@ const formSchema = z.object({
   TilgjengeligBolig: z
     .string()
     .min(1, { message: "TilgjengeligBolig must må spesifiseres." }),
-  // Tomtetype: z.string().min(1, { message: "Tomtetype must må spesifiseres." }),
   Tomtetype: z
     .array(z.string().min(1, { message: "Tomtetype må spesifiseres." }))
     .min(1, { message: "Minst én tomtetype må velges." }),

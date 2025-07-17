@@ -1,8 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Ic_logo from "../assets/images/Ic_logo.svg";
-// import Ic_bell from "../assets/images/Ic_bell.svg";
-// import Ic_search from "../assets/images/Ic_search.svg";
-// import Ic_settings from "../assets/images/Ic_settings.svg";
 import Ic_chevron_up from "../assets/images/Ic_chevron_up.svg";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -267,17 +264,6 @@ export const Navbar: React.FC = () => {
           )} */}
         </div>
         <div className="flex items-center gap-2 md:gap-3 relative">
-          {/* <div className="flex items-center gap-0.5">
-            <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center">
-              <img src={Ic_search} alt="search" />
-            </div>
-            <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center">
-              <img src={Ic_settings} alt="setting" />
-            </div>
-            <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center">
-              <img src={Ic_bell} alt="bell" />
-            </div>
-          </div> */}
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={toggleDropdown}

@@ -12,7 +12,6 @@ import { ProjectAccounting } from "./projectAccounting";
 import { Oppsummering } from "./oppsummering";
 import { useLocation } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
-// import { Fremdriftsplan } from "./Fremdriftsplan";
 import { Forhandstakst } from "./forhandstakst";
 
 export const BankleadsTabs = () => {
@@ -35,7 +34,6 @@ export const BankleadsTabs = () => {
       label: "Oppsummering",
       icon: <FileText className="w-4 h-4 md:w-6 md:h-6" />,
     },
-    // { label: "Fremdriftsplan", icon: <ChartPie className="w-4 h-4 md:w-6 md:h-6" /> },
   ];
   const location = useLocation();
   const pathSegments = location.pathname.split("/");

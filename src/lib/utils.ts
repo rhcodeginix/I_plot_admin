@@ -185,7 +185,7 @@ export function formatTimestamp(timestamp: any) {
   const month = date.toLocaleString("no-NO", { month: "long" });
   const year = date.getFullYear();
 
-  const hours = date.getHours().toString().padStart(2, "0"); // 24-hour format
+  const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
 
   return `${day}. ${month} ${year} | ${hours}:${minutes}`;
@@ -210,10 +210,6 @@ export function formatDateOnly(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-// export function formatSpaceSeparatedToNOK(value: string): string {
-//   const numericValue = Number(value.replace(/\s/g, ""));
-//   return numericValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " NOK";
-// }
 export function formatSpaceSeparatedToNOK(value: number | string) {
   const number =
     typeof value === "string"

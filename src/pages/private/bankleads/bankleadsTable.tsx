@@ -94,7 +94,6 @@ export const BankleadsTable = () => {
         "rudraksh.shukla98@gmail.com",
         "tanmaymundra01@gmail.com",
       ];
-      // setLeads(sortedData);
       const finalData = sortedData.filter((a: any) => {
         return a?.user?.email && !excludedEmails.includes(a.user.email);
       });

@@ -40,7 +40,6 @@ import {
   fetchHusmodellData,
   formatDateOnly,
   formatTimestamp,
-  // formatTimestamp,
 } from "../../../lib/utils";
 import { HouseModelCell } from "./houseRow";
 import { StatusCell } from "./statusRow";
@@ -205,69 +204,6 @@ export const TODOTable = () => {
     }
   };
 
-  // const filteredData = useMemo(() => {
-  //   return leads.filter((model: any) => {
-  //     const search = searchTerm.toLowerCase();
-  //     const leadSource = model?.leadSource?.toLowerCase();
-  //     const leadKilde = model?.leadData?.kilde?.toLowerCase();
-  //     const leadName = model?.leadData?.name?.toLowerCase();
-
-  //     let matchesSearch =
-  //       leadSource?.includes(search) ||
-  //       leadKilde?.includes(search) ||
-  //       leadName?.includes(search);
-
-  //     if (!matchesSearch) return false;
-  //     const modelDate: any = convertToFullDateString(model.createdAt);
-
-  //     if (selectedDate1 !== null) {
-  //       const matchDate = modelDate === formatDateOnly(selectedDate1);
-  //       matchesSearch = matchesSearch && matchDate;
-  //     }
-  //     if (selectedDateRange !== null) {
-  //       const { startDate, endDate }: any =
-  //         calculateDateRange(selectedDateRange);
-
-  //       const isWithinDateRange =
-  //         modelDate >= startDate && modelDate <= endDate;
-
-  //       matchesSearch = matchesSearch && isWithinDateRange;
-  //     }
-  //     return matchesSearch;
-  //   });
-  // }, [leads, searchTerm, selectedDate1, selectedDateRange]);
-
-  // const filteredData = useMemo(() => {
-  //   return leads.filter((model: any) => {
-  //     const search = searchTerm.toLowerCase();
-  //     const leadSource = model?.leadSource?.toLowerCase();
-  //     const leadKilde = model?.leadData?.kilde?.toLowerCase();
-  //     const leadName = model?.leadData?.name?.toLowerCase();
-
-  //     let matchesSearch =
-  //       leadSource?.includes(search) ||
-  //       leadKilde?.includes(search) ||
-  //       leadName?.includes(search);
-
-  //     if (!matchesSearch) return false;
-  //     const modelDate: any = convertToFullDateString(model.createdAt);
-
-  //     if (selectedDate1 !== null) {
-  //       const matchDate = modelDate === formatDateOnly(selectedDate1);
-  //       matchesSearch = matchesSearch && matchDate;
-  //     }
-  //     if (selectedDateRange !== null) {
-  //       const { startDate, endDate }: any =
-  //         calculateDateRange(selectedDateRange);
-
-  //       const isWithinDateRange =
-  //         modelDate >= startDate && modelDate <= endDate;
-
-  //       matchesSearch = matchesSearch && isWithinDateRange;
-  //     }
-  //     return matchesSearch;
-  //   });
-  // }, [leads, searchTerm, selectedDate1, selectedDateRange]);
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
   const [allLogMap, setAllLogMap] = useState<Record<string, any[]>>({});
@@ -451,7 +387,6 @@ export const TODOTable = () => {
       fetchLeadsData();
     }
   }, [LoginUserId]);
-  // -----
   const fetchPreferredFollowUp = async (id: any) => {
     if (!id) return;
 
@@ -644,7 +579,7 @@ export const TODOTable = () => {
 
     return sorted;
   }, [filteredData, sortColumn, sortDirection, preferredFollow]);
-  // -----
+
   const columns = useMemo<ColumnDef<any>[]>(() => {
     const baseColumns: ColumnDef<any>[] = [
       {
@@ -720,24 +655,13 @@ export const TODOTable = () => {
     const updatedColumn: ColumnDef<any> = {
       accessorKey: "Siste dato",
       header: "Siste dato",
-      // cell: ({ row }) => (
-      //   <p className="text-sm font-semibold text-black w-max">
-      //     {formatTimestamp(row.original.updatedAt)}
-      //   </p>
-      // ),
+
       cell: ({ row }) => (
         <TodoDateCell id={row.original.id} date={row.original.updatedAt} />
       ),
     };
 
-    // if (
-    //   selectedFilter === "Til oppfølgning" ||
-    //   selectedFilter === "Fremtidige oppgaver"
-    // ) {
     baseColumns.splice(1, 0, updatedColumn);
-    // } else {
-    //   baseColumns.splice(5, 0, updatedColumn);
-    // }
 
     return baseColumns;
   }, [email, navigate, page, selectedFilter]);

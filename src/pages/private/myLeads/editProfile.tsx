@@ -84,9 +84,6 @@ export const EditProfile: React.FC<{
       try {
         await updateDoc(doc(db, "leads_from_supplier", String(id)), {
           updatedAt: Timestamp.now(),
-          // leadData:{
-          //   ...data
-          // }
           "leadData.name": data.name,
           "leadData.email": data.email,
           "leadData.telefon": data.telefon,

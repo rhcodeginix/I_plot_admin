@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,js,jsx,ts,tsx}", // Ensure this includes your React files
-  ],
+  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {},
     colors: {
@@ -39,21 +37,13 @@ module.exports = {
     },
     screens: {
       sm: "576px",
-      // => @media (min-width: 576px) { ... }
       md: "768px",
-      // => @media (min-width: 768px) { ... }
       lg: "992px",
-      // => @media (min-width: 992px) { ... }
       laptop: "1024px",
-      // => @media (min-width: 1024px) { ... }
       desktop: "1280px",
-      // => @media (min-width: 1280px) { ... }
       big: "1440px",
-      // => @media (min-width: 1440px) { ... }
       sBig: "1600px",
-      // => @media (min-width: 1440px) { ... }
       xBig: "1920px",
-      // => @media (min-width: 1920px) { ... }
     },
   },
   plugins: [],

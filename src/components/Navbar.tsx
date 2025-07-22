@@ -109,8 +109,7 @@ export const Navbar: React.FC = () => {
         </div>
 
         <div className="hidden desktop:flex items-center gap-0.5">
-          {(!Role ||
-            (Role && Role !== "Bankansvarlig" && Role !== "Agent")) && (
+          {(!Role || (Role && Role !== "Bankansvarlig")) && (
             <Link
               to={"/dashboard"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -152,8 +151,7 @@ export const Navbar: React.FC = () => {
             HusmodellPermission?.add === true ||
             HusmodellPermission?.delete === true ||
             HusmodellPermission?.edit === true) &&
-            (!Role ||
-              (Role && Role !== "Bankansvarlig" && Role !== "Agent")) && (
+            (!Role || (Role && Role !== "Bankansvarlig")) && (
               <Link
                 to={"/Husmodeller"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -187,11 +185,10 @@ export const Navbar: React.FC = () => {
               Brukeradministrasjon
             </Link>
           )} */}
-          {(loginUser === "andre.finger@gmail.com" ||
+          {loginUser === "andre.finger@gmail.com" ||
             (loginUser !== "andre.finger@gmail.com" &&
-              Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95")) &&
-            (!Role ||
-              (Role && Role !== "Bankansvarlig" && Role !== "Agent")) && (
+              Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95") ||
+            ((!Role || (Role && Role !== "Bankansvarlig")) && (
               <Link
                 to={"/my-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -205,8 +202,8 @@ export const Navbar: React.FC = () => {
                 {/* Mine leads */}
                 Tilbudsforespørsler
               </Link>
-            )}
-          {Role && Role !== "Bankansvarlig" && Role !== "Agent" && (
+            ))}
+          {Role && Role !== "Bankansvarlig" && (
             <Link
               to={"/agent-leads"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -221,7 +218,7 @@ export const Navbar: React.FC = () => {
               Finansiering
             </Link>
           )}
-          {Role && Role === "Bankansvarlig" && Role === "Agent" && (
+          {Role && Role === "Bankansvarlig" && (
             <Link
               to={"/bank-leads"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -234,7 +231,7 @@ export const Navbar: React.FC = () => {
               Leads
             </Link>
           )}
-          {/* {Role && Role === "Bankansvarlig" && Role ==="Agent" ? (
+          {/* {Role && Role === "Bankansvarlig" ? (
             <Link
               to={"/active-bank-leads"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -320,8 +317,7 @@ export const Navbar: React.FC = () => {
             </button>
           </div>
           <div className="flex flex-col items-start font-medium gap-3">
-            {(!Role ||
-              (Role && Role !== "Bankansvarlig" && Role !== "Agent")) && (
+            {(!Role || (Role && Role !== "Bankansvarlig")) && (
               <Link
                 to={"/dashboard"}
                 className={`text-base font-medium py-2 px-3 rounded-[6px] ${
@@ -365,8 +361,7 @@ export const Navbar: React.FC = () => {
               HusmodellPermission?.add === true ||
               HusmodellPermission?.delete === true ||
               HusmodellPermission?.edit === true) &&
-              (!Role ||
-                (Role && Role !== "Bankansvarlig" && Role !== "Agent")) && (
+              (!Role || (Role && Role !== "Bankansvarlig")) && (
                 <Link
                   to={"/Husmodeller"}
                   className={`text-base font-medium py-2 px-3 rounded-[6px] ${
@@ -398,11 +393,10 @@ export const Navbar: React.FC = () => {
                 Brukeradministrasjon
               </Link>
             )} */}
-            {(loginUser === "andre.finger@gmail.com" ||
+            {loginUser === "andre.finger@gmail.com" ||
               (loginUser !== "andre.finger@gmail.com" &&
-                Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95")) &&
-              (!Role ||
-                (Role && Role !== "Bankansvarlig" && Role !== "Agent")) && (
+                Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95") ||
+              ((!Role || (Role && Role !== "Bankansvarlig")) && (
                 <Link
                   to={"/my-leads"}
                   className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -416,8 +410,8 @@ export const Navbar: React.FC = () => {
                   {/* Mine leads */}
                   Tilbudsforespørsler
                 </Link>
-              )}
-            {Role && Role !== "Bankansvarlig" && Role !== "Agent" && (
+              ))}
+            {Role && Role !== "Bankansvarlig" && (
               <Link
                 to={"/agent-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -432,7 +426,7 @@ export const Navbar: React.FC = () => {
                 Finansiering
               </Link>
             )}
-            {Role && Role === "Bankansvarlig" && Role === "Agent" && (
+            {Role && Role === "Bankansvarlig" && (
               <Link
                 to={"/bank-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -445,7 +439,7 @@ export const Navbar: React.FC = () => {
                 Leads
               </Link>
             )}
-            {/* {Role && Role === "Bankansvarlig" && Role ==="Agent" ? (
+            {/* {Role && Role === "Bankansvarlig" ? (
               <Link
                 to={"/active-bank-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${

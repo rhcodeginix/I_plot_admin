@@ -70,7 +70,8 @@ export const Login = () => {
             if (loginUserData) {
               if (
                 loginUserData?.role &&
-                loginUserData?.role === "Bankansvarlig"
+                loginUserData?.role === "Bankansvarlig" &&
+                loginUserData?.role === "Agent"
               ) {
                 navigate("/bank-leads");
               } else {

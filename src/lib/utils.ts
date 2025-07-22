@@ -163,6 +163,31 @@ export const fetchAdminDataByEmail = async () => {
   }
 };
 
+export const fetchAdminRole = async (): Promise<string[] | null> => {
+  try {
+    const email: string | null = localStorage.getItem("Iplot_admin");
+
+    if (!email) {
+      console.warn("No admin email found in localStorage.");
+      return null;
+    }
+
+    const q = query(collection(db, "admin"), where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      console.warn("No document found for Email:", email);
+      return null;
+    }
+
+    const docData = querySnapshot.docs[0].data();
+    return docData?.role ?? null; // ✅ no await needed
+  } catch (error) {
+    console.error("Error fetching admin data:", error);
+    return null;
+  }
+};
+
 export const fetchLeadData = async (id: string) => {
   try {
     const supplierDocRef = doc(db, "leads_from_supplier", id);

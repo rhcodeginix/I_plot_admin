@@ -39,6 +39,7 @@ import {
 } from "./pages";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { StartupHandler } from "./layouts/StartupHandler";
+import { ProtectedRoute } from "./layouts/ProtectedRoute";
 
 export const routes = createBrowserRouter([
   {
@@ -58,51 +59,345 @@ export const routes = createBrowserRouter([
         path: "/",
         element: <Layout />,
         children: [
-          { path: "/dashboard", element: <Dashboard /> },
-          { path: "/Leverandorer", element: <Suppliers /> },
-          { path: "/legg-til-leverandor", element: <AddSuppliers /> },
-          { path: "/edit-til-leverandor/*", element: <AddSuppliers /> },
-          { path: "/Husmodeller", element: <Husmodeller /> },
-          { path: "/se-husmodell/*", element: <SeHouseModel /> },
-          { path: "/edit-husmodell/*", element: <EditHouseModel /> },
-          { path: "/add-husmodell", element: <EditHouseModel /> },
-          { path: "/plot", element: <Plot /> },
-          { path: "/se-plot/*", element: <PlotDetail /> },
-          { path: "/users", element: <Users /> },
-          { path: "/se-user/*", element: <UserDetail /> },
-          { path: "/property", element: <PropertyDetail /> },
-          { path: "/Brukeradministrasjon", element: <UserManagement /> },
-          { path: "/legg-user", element: <AddUsers /> },
-          { path: "/edit-user/*", element: <AddUsers /> },
-          { path: "/se-husleads", element: <Husleads /> },
-          { path: "/se-kombinasjoner", element: <Kombinasjoner /> },
-          { path: "/constructed-plot", element: <ConstructedPlot /> },
+          {
+            path: "/dashboard",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <Dashboard />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/Leverandorer",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <Suppliers />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/legg-til-leverandor",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AddSuppliers />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/edit-til-leverandor/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AddSuppliers />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/Husmodeller",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <Husmodeller />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/se-husmodell/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <SeHouseModel />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/edit-husmodell/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <EditHouseModel />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/add-husmodell",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <EditHouseModel />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/plot",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <Plot />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/se-plot/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <PlotDetail />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/users",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <Users />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/se-user/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <UserDetail />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/property",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <PropertyDetail />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/Brukeradministrasjon",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <UserManagement />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/legg-user",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AddUsers />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/edit-user/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AddUsers />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/se-husleads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <Husleads />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/se-kombinasjoner",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <Kombinasjoner />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/constructed-plot",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <ConstructedPlot />
+              </ProtectedRoute>
+            ),
+          },
           {
             path: "/se-constructed-plot/*",
-            element: <ConstructedPlotDetail />,
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <ConstructedPlotDetail />,
+              </ProtectedRoute>
+            ),
           },
-          { path: "/se-bankleads", element: <Bankleads /> },
-          { path: "/my-leads", element: <MyLeads /> },
-          { path: "/my-leads-details/*", element: <MyLeadsDetail /> },
-          { path: "/add-agent-leads", element: <BankleadsTabs /> },
-          { path: "/edit-agent-leads/*", element: <BankleadsTabs /> },
-          { path: "/agent-leads", element: <AllBankLeads /> },
-          { path: "/active-agent-leads", element: <AllBankLeads /> },
-          { path: "/agent-leads-detail/*", element: <BankLeadsDetails /> },
-          { path: "/bank-leads", element: <AllLeads /> },
-          { path: "/active-bank-leads", element: <AllLeads /> },
-          { path: "/bank-leads-detail/*", element: <LeadsDetails /> },
-          { path: "/add-bank-user", element: <AddBankUserForm /> },
-          { path: "/edit-bank-user/*", element: <AddBankUserForm /> },
-          { path: "/add-agent-user", element: <AddAgentUserForm /> },
-          { path: "/edit-agent-user/*", element: <AddAgentUserForm /> },
-          { path: "/add-lead", element: <AddLeadForm /> },
-          { path: "/events", element: <Events /> },
-          { path: "/events/projects", element: <ProjectTable /> },
-          { path: "/events/leads", element: <LeadTable /> },
-          { path: "/events/ai", element: <AITable /> },
-          { path: "/events/pdf", element: <PDFTable /> },
-          { path: "/events/ppt", element: <PPTTable /> },
+          {
+            path: "/se-bankleads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <Bankleads />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/my-leads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <MyLeads />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/my-leads-details/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <MyLeadsDetail />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/add-agent-leads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <BankleadsTabs />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/edit-agent-leads/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <BankleadsTabs />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/agent-leads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AllBankLeads />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/active-agent-leads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AllBankLeads />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/agent-leads-detail/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <BankLeadsDetails />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/add-bank-user",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AddBankUserForm />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/edit-bank-user/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AddBankUserForm />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/add-agent-user",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AddAgentUserForm />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/edit-agent-user/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AddAgentUserForm />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/add-lead",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AddLeadForm />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/events",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <Events />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/events/projects",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <ProjectTable />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/events/leads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <LeadTable />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/events/ai",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <AITable />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/events/pdf",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <PDFTable />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/events/ppt",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+                <PPTTable />
+              </ProtectedRoute>
+            ),
+          },
+
+          // -----
+
+          {
+            path: "/bank-leads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+                <AllLeads />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/active-bank-leads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+                <AllLeads />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/bank-leads-detail/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+                <LeadsDetails />
+              </ProtectedRoute>
+            ),
+          },
         ],
       },
     ],

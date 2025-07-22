@@ -109,7 +109,7 @@ export const Navbar: React.FC = () => {
         </div>
 
         <div className="hidden desktop:flex items-center gap-0.5">
-          {(!Role || (Role && Role !== "Bankansvarlig")) && (
+          {(!Role || (Role !== "Bankansvarlig" && Role !== "Agent")) && (
             <Link
               to={"/dashboard"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -151,7 +151,7 @@ export const Navbar: React.FC = () => {
             HusmodellPermission?.add === true ||
             HusmodellPermission?.delete === true ||
             HusmodellPermission?.edit === true) &&
-            (!Role || (Role && Role !== "Bankansvarlig")) && (
+            (!Role || (Role !== "Bankansvarlig" && Role !== "Agent")) && (
               <Link
                 to={"/Husmodeller"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -188,7 +188,7 @@ export const Navbar: React.FC = () => {
           {loginUser === "andre.finger@gmail.com" ||
             (loginUser !== "andre.finger@gmail.com" &&
               Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95") ||
-            ((!Role || (Role && Role !== "Bankansvarlig")) && (
+            ((!Role || (Role !== "Bankansvarlig" && Role !== "Agent")) && (
               <Link
                 to={"/my-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -203,7 +203,7 @@ export const Navbar: React.FC = () => {
                 Tilbudsforespørsler
               </Link>
             ))}
-          {Role && Role !== "Bankansvarlig" && (
+          {(!Role || (Role !== "Bankansvarlig" && Role !== "Agent")) && (
             <Link
               to={"/agent-leads"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -218,7 +218,7 @@ export const Navbar: React.FC = () => {
               Finansiering
             </Link>
           )}
-          {Role && Role === "Bankansvarlig" && (
+          {(!Role || Role === "Bankansvarlig" || Role === "Agent") && (
             <Link
               to={"/bank-leads"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -317,15 +317,14 @@ export const Navbar: React.FC = () => {
             </button>
           </div>
           <div className="flex flex-col items-start font-medium gap-3">
-            {(!Role || (Role && Role !== "Bankansvarlig")) && (
+            {(!Role || (Role !== "Bankansvarlig" && Role !== "Agent")) && (
               <Link
                 to={"/dashboard"}
-                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                   currentPath === "/dashboard"
                     ? "bg-lightPurple text-primary"
                     : "text-black"
                 }`}
-                onClick={toggleDrawer}
               >
                 Dashboard
               </Link>
@@ -333,14 +332,13 @@ export const Navbar: React.FC = () => {
             {email === "andre.finger@gmail.com" && (
               <Link
                 to={"/Leverandorer"}
-                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                   currentPath === "/Leverandorer" ||
                   currentPath.startsWith("/edit-til-leverandor/") ||
                   currentPath === "/legg-til-leverandor"
                     ? "bg-lightPurple text-primary"
                     : "text-black"
                 }`}
-                onClick={toggleDrawer}
               >
                 Leverandører
               </Link>
@@ -361,10 +359,10 @@ export const Navbar: React.FC = () => {
               HusmodellPermission?.add === true ||
               HusmodellPermission?.delete === true ||
               HusmodellPermission?.edit === true) &&
-              (!Role || (Role && Role !== "Bankansvarlig")) && (
+              (!Role || (Role !== "Bankansvarlig" && Role !== "Agent")) && (
                 <Link
                   to={"/Husmodeller"}
-                  className={`text-base font-medium py-2 px-3 rounded-[6px] ${
+                  className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                     currentPath === "/Husmodeller" ||
                     currentPath.startsWith("/se-husmodell/") ||
                     currentPath === "/add-husmodell" ||
@@ -372,31 +370,33 @@ export const Navbar: React.FC = () => {
                       ? "bg-lightPurple text-primary"
                       : "text-black"
                   }`}
-                  onClick={toggleDrawer}
                 >
                   Husmodeller
                 </Link>
               )}
             {/* {((loginUser && loginUser === "andre.finger@gmail.com") ||
-              (Role && Role === "Agent")) && (
-              <Link
-                to={"/Brukeradministrasjon"}
-                className={`text-base font-medium py-2 px-3 rounded-[6px] ${
-                  currentPath === "/Brukeradministrasjon" ||
-                  currentPath.startsWith("/edit-user") ||
-                  currentPath.startsWith("/legg-user")
-                    ? "bg-lightPurple text-primary"
-                    : "text-black"
-                }`}
-                onClick={toggleDrawer}
-              >
-                Brukeradministrasjon
-              </Link>
-            )} */}
+            (Role && Role === "Agent")) && (
+            <Link
+              to={"/Brukeradministrasjon"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/Brukeradministrasjon" ||
+                currentPath.startsWith("/edit-user") ||
+                currentPath.startsWith("/edit-bank-user") ||
+                currentPath.startsWith("/edit-agent-user") ||
+                currentPath.startsWith("/legg-user") ||
+                currentPath.startsWith("/add-agent-user") ||
+                currentPath.startsWith("/add-bank-user")
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Brukeradministrasjon
+            </Link>
+          )} */}
             {loginUser === "andre.finger@gmail.com" ||
               (loginUser !== "andre.finger@gmail.com" &&
                 Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95") ||
-              ((!Role || (Role && Role !== "Bankansvarlig")) && (
+              ((!Role || (Role !== "Bankansvarlig" && Role !== "Agent")) && (
                 <Link
                   to={"/my-leads"}
                   className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -411,7 +411,7 @@ export const Navbar: React.FC = () => {
                   Tilbudsforespørsler
                 </Link>
               ))}
-            {Role && Role !== "Bankansvarlig" && (
+            {(!Role || (Role !== "Bankansvarlig" && Role !== "Agent")) && (
               <Link
                 to={"/agent-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -426,7 +426,7 @@ export const Navbar: React.FC = () => {
                 Finansiering
               </Link>
             )}
-            {Role && Role === "Bankansvarlig" && (
+            {(!Role || Role === "Bankansvarlig" || Role === "Agent") && (
               <Link
                 to={"/bank-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -440,28 +440,28 @@ export const Navbar: React.FC = () => {
               </Link>
             )}
             {/* {Role && Role === "Bankansvarlig" ? (
-              <Link
-                to={"/active-bank-leads"}
-                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
-                  currentPath === "/active-bank-leads"
-                    ? "bg-lightPurple text-primary"
-                    : "text-black"
-                }`}
-              >
-                Aktive kunder
-              </Link>
-            ) : (
-              <Link
-                to={"/active-agent-leads"}
-                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
-                  currentPath === "/active-agent-leads"
-                    ? "bg-lightPurple text-primary"
-                    : "text-black"
-                }`}
-              >
-                Aktive kunder
-              </Link>
-            )} */}
+            <Link
+              to={"/active-bank-leads"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/active-bank-leads"
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Aktive kunder
+            </Link>
+          ) : (
+            <Link
+              to={"/active-agent-leads"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/active-agent-leads"
+                  ? "bg-lightPurple text-primary"
+                  : "text-black"
+              }`}
+            >
+              Aktive kunder
+            </Link>
+          )} */}
           </div>
         </div>
       </div>

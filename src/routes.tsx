@@ -62,7 +62,7 @@ export const routes = createBrowserRouter([
           {
             path: "/dashboard",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Dashboard />
               </ProtectedRoute>
             ),
@@ -70,7 +70,7 @@ export const routes = createBrowserRouter([
           {
             path: "/Leverandorer",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Suppliers />
               </ProtectedRoute>
             ),
@@ -78,7 +78,7 @@ export const routes = createBrowserRouter([
           {
             path: "/legg-til-leverandor",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AddSuppliers />
               </ProtectedRoute>
             ),
@@ -86,7 +86,7 @@ export const routes = createBrowserRouter([
           {
             path: "/edit-til-leverandor/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AddSuppliers />
               </ProtectedRoute>
             ),
@@ -94,7 +94,7 @@ export const routes = createBrowserRouter([
           {
             path: "/Husmodeller",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Husmodeller />
               </ProtectedRoute>
             ),
@@ -102,7 +102,7 @@ export const routes = createBrowserRouter([
           {
             path: "/se-husmodell/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <SeHouseModel />
               </ProtectedRoute>
             ),
@@ -110,7 +110,7 @@ export const routes = createBrowserRouter([
           {
             path: "/edit-husmodell/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <EditHouseModel />
               </ProtectedRoute>
             ),
@@ -118,7 +118,7 @@ export const routes = createBrowserRouter([
           {
             path: "/add-husmodell",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <EditHouseModel />
               </ProtectedRoute>
             ),
@@ -126,7 +126,7 @@ export const routes = createBrowserRouter([
           {
             path: "/plot",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Plot />
               </ProtectedRoute>
             ),
@@ -134,7 +134,7 @@ export const routes = createBrowserRouter([
           {
             path: "/se-plot/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <PlotDetail />
               </ProtectedRoute>
             ),
@@ -142,7 +142,7 @@ export const routes = createBrowserRouter([
           {
             path: "/users",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Users />
               </ProtectedRoute>
             ),
@@ -150,7 +150,7 @@ export const routes = createBrowserRouter([
           {
             path: "/se-user/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <UserDetail />
               </ProtectedRoute>
             ),
@@ -158,7 +158,7 @@ export const routes = createBrowserRouter([
           {
             path: "/property",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <PropertyDetail />
               </ProtectedRoute>
             ),
@@ -166,7 +166,7 @@ export const routes = createBrowserRouter([
           {
             path: "/Brukeradministrasjon",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <UserManagement />
               </ProtectedRoute>
             ),
@@ -174,7 +174,7 @@ export const routes = createBrowserRouter([
           {
             path: "/legg-user",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AddUsers />
               </ProtectedRoute>
             ),
@@ -182,7 +182,7 @@ export const routes = createBrowserRouter([
           {
             path: "/edit-user/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AddUsers />
               </ProtectedRoute>
             ),
@@ -190,7 +190,7 @@ export const routes = createBrowserRouter([
           {
             path: "/se-husleads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Husleads />
               </ProtectedRoute>
             ),
@@ -198,7 +198,7 @@ export const routes = createBrowserRouter([
           {
             path: "/se-kombinasjoner",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Kombinasjoner />
               </ProtectedRoute>
             ),
@@ -206,7 +206,7 @@ export const routes = createBrowserRouter([
           {
             path: "/constructed-plot",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <ConstructedPlot />
               </ProtectedRoute>
             ),
@@ -214,7 +214,7 @@ export const routes = createBrowserRouter([
           {
             path: "/se-constructed-plot/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <ConstructedPlotDetail />,
               </ProtectedRoute>
             ),
@@ -222,7 +222,7 @@ export const routes = createBrowserRouter([
           {
             path: "/se-bankleads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Bankleads />
               </ProtectedRoute>
             ),
@@ -230,7 +230,7 @@ export const routes = createBrowserRouter([
           {
             path: "/my-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <MyLeads />
               </ProtectedRoute>
             ),
@@ -238,7 +238,7 @@ export const routes = createBrowserRouter([
           {
             path: "/my-leads-details/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <MyLeadsDetail />
               </ProtectedRoute>
             ),
@@ -246,7 +246,7 @@ export const routes = createBrowserRouter([
           {
             path: "/add-agent-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <BankleadsTabs />
               </ProtectedRoute>
             ),
@@ -254,7 +254,7 @@ export const routes = createBrowserRouter([
           {
             path: "/edit-agent-leads/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <BankleadsTabs />
               </ProtectedRoute>
             ),
@@ -262,7 +262,7 @@ export const routes = createBrowserRouter([
           {
             path: "/agent-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AllBankLeads />
               </ProtectedRoute>
             ),
@@ -270,7 +270,7 @@ export const routes = createBrowserRouter([
           {
             path: "/active-agent-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AllBankLeads />
               </ProtectedRoute>
             ),
@@ -278,7 +278,7 @@ export const routes = createBrowserRouter([
           {
             path: "/agent-leads-detail/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <BankLeadsDetails />
               </ProtectedRoute>
             ),
@@ -286,7 +286,7 @@ export const routes = createBrowserRouter([
           {
             path: "/add-bank-user",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AddBankUserForm />
               </ProtectedRoute>
             ),
@@ -294,7 +294,7 @@ export const routes = createBrowserRouter([
           {
             path: "/edit-bank-user/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AddBankUserForm />
               </ProtectedRoute>
             ),
@@ -302,7 +302,7 @@ export const routes = createBrowserRouter([
           {
             path: "/add-agent-user",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AddAgentUserForm />
               </ProtectedRoute>
             ),
@@ -310,7 +310,7 @@ export const routes = createBrowserRouter([
           {
             path: "/edit-agent-user/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AddAgentUserForm />
               </ProtectedRoute>
             ),
@@ -318,7 +318,7 @@ export const routes = createBrowserRouter([
           {
             path: "/add-lead",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AddLeadForm />
               </ProtectedRoute>
             ),
@@ -326,7 +326,7 @@ export const routes = createBrowserRouter([
           {
             path: "/events",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Events />
               </ProtectedRoute>
             ),
@@ -334,7 +334,7 @@ export const routes = createBrowserRouter([
           {
             path: "/events/projects",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <ProjectTable />
               </ProtectedRoute>
             ),
@@ -342,7 +342,7 @@ export const routes = createBrowserRouter([
           {
             path: "/events/leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <LeadTable />
               </ProtectedRoute>
             ),
@@ -350,7 +350,7 @@ export const routes = createBrowserRouter([
           {
             path: "/events/ai",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <AITable />
               </ProtectedRoute>
             ),
@@ -358,7 +358,7 @@ export const routes = createBrowserRouter([
           {
             path: "/events/pdf",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <PDFTable />
               </ProtectedRoute>
             ),
@@ -366,7 +366,7 @@ export const routes = createBrowserRouter([
           {
             path: "/events/ppt",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <PPTTable />
               </ProtectedRoute>
             ),

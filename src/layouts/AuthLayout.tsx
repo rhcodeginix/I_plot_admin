@@ -37,7 +37,11 @@ export const AuthLayout = () => {
   if (isAuthenticated && !loading) {
     return (
       <Navigate
-        to={role === "Bankansvarlig" ? "/bank-leads" : "/dashboard"}
+        to={
+          role === "Bankansvarlig" || role === "Agent"
+            ? "/bank-leads"
+            : "/dashboard"
+        }
         replace
       />
     );

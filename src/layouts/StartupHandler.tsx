@@ -102,7 +102,8 @@ export const StartupHandler = () => {
             const loginUserData = await fetchAdminDataByEmail();
             if (loginUserData) {
               navigate(
-                loginUserData?.role === "Bankansvarlig"
+                loginUserData?.role === "Bankansvarlig" ||
+                  loginUserData?.role === "Agent"
                   ? "/bank-leads"
                   : "/dashboard"
               );
@@ -119,9 +120,14 @@ export const StartupHandler = () => {
           await verifyToken(token);
         } else {
           if (isAuthenticated) {
-            navigate(role === "Bankansvarlig" ? "/bank-leads" : "/dashboard", {
-              replace: true,
-            });
+            navigate(
+              role === "Bankansvarlig" || role === "Agent"
+                ? "/bank-leads"
+                : "/dashboard",
+              {
+                replace: true,
+              }
+            );
           } else {
             navigate("/login", { replace: true });
           }

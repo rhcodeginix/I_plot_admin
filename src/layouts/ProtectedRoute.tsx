@@ -24,7 +24,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }, []);
 
   if (loading) return <div>Loading...</div>;
-  if (!allowedRoles.includes(userRole)) {
+  if (!userRole || !allowedRoles.includes(userRole)) {
+    if (userRole === "Agent" || userRole === "Bankansvarlig") {
+      return <Navigate to="/bank-leads" replace />;
+    }
     return <Navigate to="/dashboard" replace />;
   }
 

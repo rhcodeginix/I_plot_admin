@@ -37,9 +37,9 @@ export const LeadsDetails = () => {
 
   const [activeTab, setActiveTab] = useState<any>(0);
   const tabData = [
-    { label: "Summary", icon: <BookText /> },
-    { label: "Dokumentasjon", icon: <FileText /> },
-    { label: "Fremdriftsplan", icon: <ChartPie /> },
+    { label: "Summary", icon: <BookText className="w-5 h-5 md:w-6 md:h-6" /> },
+    { label: "Dokumentasjon", icon: <FileText className="w-5 h-5 md:w-6 md:h-6" /> },
+    { label: "Fremdriftsplan", icon: <ChartPie className="w-5 h-5 md:w-6 md:h-6" /> },
   ];
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -51,25 +51,27 @@ export const LeadsDetails = () => {
 
   return (
     <>
-      <div className="px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+      <div className="px-4 md:px-6 lg:px-8 pt-4 pb-8 flex flex-col gap-4 md:gap-6 bg-[#F5F3FF]">
         <div className="flex items-center gap-1">
           <span
-            className="text-[#7839EE] text-sm font-medium cursor-pointer"
+            className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
             onClick={() => navigate("/agent-leads")}
           >
             Leads sendt til banken
           </span>
           <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-          <span className="text-[#5D6B98] text-sm">
+          <span className="text-[#5D6B98] text-xs md:text-sm">
             Detaljer om potensielle kunder
           </span>
         </div>
         <div>
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <div className="text-darkBlack text-[2rem] font-medium">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1">
+            <div className="text-darkBlack text-2xl md:text-[28px] desktop:text-[32px] font-medium">
               {bankData?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
               {bankData?.Kunden?.Kundeinformasjon[0]?.l_name}{" "}
-              <span className="text-[#5D6B98] text-xl">({id})</span>
+              <span className="text-[#5D6B98] text-base md:text-lg desktop:text-xl whitespace-nowrap">
+                <br className="sm:hidden" />({id})
+              </span>
             </div>
             <div>
               {bankData?.status === "Sent" ? (
@@ -99,9 +101,9 @@ export const LeadsDetails = () => {
         </div>
       </div>
       <div className="relative">
-        <div className="flex items-center justify-between gap-2 mb-6 px-10 mt-4">
+        <div className="flex items-center justify-between gap-2 mb-6 px-4 md:px-6 lg:px-10 mt-4">
           <div
-            className="flex gap-4 rounded-lg bg-white p-[6px]"
+            className="flex gap-2.5 md:gap-4 rounded-lg bg-white p-[6px] overflow-auto"
             style={{
               boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
             }}
@@ -111,7 +113,7 @@ export const LeadsDetails = () => {
                 key={index}
                 className={`${
                   id ? "cursor-pointer" : "cursor-auto"
-                } flex items-center gap-2 text-darkBlack py-2 px-3 rounded-lg ${
+                } flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-darkBlack py-1.5 sm:py-2 px-2 md:px-3 rounded-lg ${
                   activeTab === index
                     ? "font-semibold bg-[#7839EE] text-white"
                     : "text-[#4D4D4D]"

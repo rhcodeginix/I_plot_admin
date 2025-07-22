@@ -136,7 +136,7 @@ export const Documenters: React.FC<{
 
   return (
     <>
-      <div className="mx-10 mb-28">
+      <div className="mx-4 md:mx-6 lg:mx-10 mb-28">
         <div className="flex flex-col gap-5">
           <div className="rounded-lg border-[#DCDFEA] border">
             <h4 className="text-darkBlack text-xl font-semibold mb-4 p-5 border-b border-[#DCDFEA]">

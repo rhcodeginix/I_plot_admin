@@ -11,7 +11,7 @@ import {
   AllLeads,
   Bankleads,
   BankLeadsDetails,
-  BankleadsTabs,
+  AgentleadsTabs,
   ConstructedPlot,
   ConstructedPlotDetail,
   Dashboard,
@@ -36,6 +36,7 @@ import {
   UserDetail,
   UserManagement,
   Users,
+  BankleadsTabs,
 } from "./pages";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { StartupHandler } from "./layouts/StartupHandler";
@@ -247,7 +248,7 @@ export const routes = createBrowserRouter([
             path: "/add-agent-leads",
             element: (
               <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
-                <BankleadsTabs />
+                <AgentleadsTabs />
               </ProtectedRoute>
             ),
           },
@@ -255,7 +256,7 @@ export const routes = createBrowserRouter([
             path: "/edit-agent-leads/*",
             element: (
               <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
-                <BankleadsTabs />
+                <AgentleadsTabs />
               </ProtectedRoute>
             ),
           },
@@ -395,6 +396,22 @@ export const routes = createBrowserRouter([
             element: (
               <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
                 <LeadsDetails />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/add-bank-leads",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+                <BankleadsTabs />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/edit-bank-leads/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+                <BankleadsTabs />
               </ProtectedRoute>
             ),
           },

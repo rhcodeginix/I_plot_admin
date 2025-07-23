@@ -215,7 +215,7 @@ export const Fremdriftsplan = forwardRef<
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div
-            className="mx-10 rounded-lg mb-10"
+            className="mx-4 md:mx-8 lg:mx-10 rounded-lg mb-10"
             style={{
               boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
             }}
@@ -1317,7 +1317,7 @@ export const Fremdriftsplan = forwardRef<
           </div>
 
           <div className="flex justify-end w-full gap-5 items-center sticky bottom-0 bg-white z-50 border-t border-gray2 p-4 left-0">
-            <div onClick={() => setActiveTab(3)} >
+            <div onClick={() => setActiveTab(3)}>
               <Button
                 text="Tilbake"
                 className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

@@ -315,7 +315,7 @@ export const BankTable = () => {
           ),
         },
       ].filter(Boolean) as ColumnDef<any>[],
-    [email, navigate, permission]
+    [email, navigate, permission, status]
   );
 
   const pageSize = 10;

@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 import { fetchBankLeadData } from "../../../lib/utils";
 import { Forhandstakst } from "./forhandstakst";
 
-export const AgentleadsTabs = () => {
+export const BankleadsTabs = () => {
   const [activeTab, setActiveTab] = useState<any>(0);
   const tabData = [
     { label: "Kunden", icon: <User className="w-4 h-4 md:w-6 md:h-6" /> },

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Loader2, Pencil, Trash } from "lucide-react";
+import { Eye, Loader2, Pencil, Trash } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -374,17 +374,32 @@ export const LeadTable = () => {
           header: "Action",
           cell: ({ row }: any) => (
             <>
-              <div className="flex items-center gap-3">
-                <Trash
+              {status === "Active" ? (
+                <Eye
                   className="h-5 w-5 text-primary cursor-pointer"
-                  onClick={() => confirmDelete(row.original.id)}
+                  onClick={() =>
+                    navigate(`/bank-leads-detail/${row.original?.id}`)
+                  }
                 />
-              </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <Pencil
+                    className="h-5 w-5 text-primary cursor-pointer"
+                    onClick={() =>
+                      navigate(`/edit-bank-leads/${row.original.id}`)
+                    }
+                  />
+                  <Trash
+                    className="h-5 w-5 text-primary cursor-pointer"
+                    onClick={() => confirmDelete(row.original.id)}
+                  />
+                </div>
+              )}
             </>
           ),
         },
       ].filter(Boolean) as ColumnDef<any>[],
-    [email, navigate, permission]
+    [email, navigate, permission, status]
   );
 
   const pageSize = 10;

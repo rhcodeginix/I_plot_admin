@@ -222,7 +222,9 @@ export const Navbar: React.FC = () => {
               to={"/bank-leads"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                 currentPath === "/bank-leads" ||
-                currentPath.startsWith("/bank-leads-detail")
+                currentPath.startsWith("/bank-leads-detail") ||
+                currentPath.startsWith("/add-bank-leads") ||
+                currentPath.startsWith("/edit-bank-leads/")
                   ? "bg-lightPurple text-primary"
                   : "text-black"
               }`}
@@ -429,7 +431,9 @@ export const Navbar: React.FC = () => {
                 to={"/bank-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                   currentPath === "/bank-leads" ||
-                  currentPath.startsWith("/bank-leads-detail")
+                  currentPath.startsWith("/bank-leads-detail") ||
+                  currentPath.startsWith("/add-bank-leads") ||
+                  currentPath.startsWith("/edit-bank-leads/")
                     ? "bg-lightPurple text-primary"
                     : "text-black"
                 }`}

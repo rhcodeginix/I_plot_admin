@@ -44,10 +44,10 @@ const FileInfo = ({ file }: { file: string }) => {
 
   return (
     <div className="truncate">
-      <h5 className="text-darkBlack text-sm font-medium mb-1 truncate">
+      <h5 className="text-darkBlack text-xs md:text-sm font-medium mb-1 truncate">
         {fileInfo.fileName || "Loading..."}
       </h5>
-      <p className="text-gray text-xs">
+      <p className="text-gray text-[10px] md:text-xs">
         {fileInfo.fileSize || "Fetching size..."}
       </p>
     </div>

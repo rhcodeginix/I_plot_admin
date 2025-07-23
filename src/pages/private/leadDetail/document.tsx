@@ -29,6 +29,7 @@ export const Documenters: React.FC<{
 
     const getData = async () => {
       const data = await fetchBankLeadData(id);
+
       if (data && data.Documenter) {
         setEntreprenørgaranti(data?.Documenter?.Entreprenørgaranti);
         setForsikringsbevis(data?.Documenter?.Forsikringsbevis);
@@ -137,20 +138,20 @@ export const Documenters: React.FC<{
   return (
     <>
       <div className="mx-4 md:mx-6 lg:mx-10 mb-28">
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4 md:gap-5">
           <div className="rounded-lg border-[#DCDFEA] border">
-            <h4 className="text-darkBlack text-xl font-semibold mb-4 p-5 border-b border-[#DCDFEA]">
+            <h4 className="text-darkBlack text-base md:text-lg lg:text-xl font-semibold p-3 md:p-5 border-b border-[#DCDFEA]">
               Entreprenørgaranti
             </h4>
-            <div className="p-5">
+            <div className="p-3 md:p-5">
               {Entreprenørgaranti && Entreprenørgaranti.length > 0 ? (
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 lg:gap-6">
                   {Entreprenørgaranti?.map((file: any, index: number) => (
                     <div
-                      className="border border-gray2 rounded-lg p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
+                      className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
                       key={index}
                     >
-                      <div className="flex items-start gap-4 truncate">
+                      <div className="flex items-start gap-2.5 md:gap-4 truncate w-[calc(100%-60px)] md:w-[calc(100%-65px)]">
                         <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
                           <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
                             <img src={Ic_file} alt="file" />
@@ -158,11 +159,11 @@ export const Documenters: React.FC<{
                         </div>
                         <FileInfo file={file} />
                       </div>
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 w-[52px] sm:w-[56px] md:w-auto">
                         <img
                           src={Ic_trash}
                           alt="delete"
-                          className="cursor-pointer"
+                          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                           onClick={() => {
                             handleDeleteClick(index);
                             setDeleteField("Entreprenørgaranti");
@@ -171,7 +172,7 @@ export const Documenters: React.FC<{
                         <img
                           src={Ic_download_primary}
                           alt="download"
-                          className="cursor-pointer"
+                          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                           onClick={() => handleDownload(file)}
                         />
                       </div>
@@ -184,18 +185,18 @@ export const Documenters: React.FC<{
             </div>
           </div>
           <div className="rounded-lg border-[#DCDFEA] border">
-            <h4 className="text-darkBlack text-xl font-semibold mb-4 p-5 border-b border-[#DCDFEA]">
+            <h4 className="text-darkBlack text-base md:text-lg lg:text-xl font-semibold p-3 md:p-5 border-b border-[#DCDFEA]">
               Forsikringsbevis
             </h4>
-            <div className="p-5">
+            <div className="p-3 md:p-5">
               {Forsikringsbevis && Forsikringsbevis.length > 0 ? (
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 lg:gap-6">
                   {Forsikringsbevis?.map((file: any, index: number) => (
                     <div
-                      className="border border-gray2 rounded-lg p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
+                      className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
                       key={index}
                     >
-                      <div className="flex items-start gap-4 truncate">
+                      <div className="flex items-start gap-2.5 md:gap-4 truncate">
                         <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
                           <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
                             <img src={Ic_file} alt="file" />
@@ -203,11 +204,11 @@ export const Documenters: React.FC<{
                         </div>
                         <FileInfo file={file} />
                       </div>
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
                         <img
                           src={Ic_trash}
                           alt="delete"
-                          className="cursor-pointer"
+                          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                           onClick={() => {
                             handleDeleteClick(index);
                             setDeleteField("Forsikringsbevis");
@@ -216,7 +217,7 @@ export const Documenters: React.FC<{
                         <img
                           src={Ic_download_primary}
                           alt="download"
-                          className="cursor-pointer"
+                          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                           onClick={() => handleDownload(file)}
                         />
                       </div>
@@ -229,18 +230,18 @@ export const Documenters: React.FC<{
             </div>
           </div>
           <div className="rounded-lg border-[#DCDFEA] border">
-            <h4 className="text-darkBlack text-xl font-semibold mb-4 p-5 border-b border-[#DCDFEA]">
+            <h4 className="text-darkBlack text-base md:text-lg lg:text-xl font-semibold p-3 md:p-5 border-b border-[#DCDFEA]">
               Kontrakt <span className="text-[#5D6B98]">(eks. NS-3425)</span>
             </h4>
-            <div className="p-5">
+            <div className="p-3 md:p-5">
               {Kontrakt && Kontrakt.length > 0 ? (
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 lg:gap-6">
                   {Kontrakt?.map((file: any, index: number) => (
                     <div
-                      className="border border-gray2 rounded-lg p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
+                      className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
                       key={index}
                     >
-                      <div className="flex items-start gap-4 truncate">
+                      <div className="flex items-start gap-2.5 md:gap-4 truncate">
                         <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
                           <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
                             <img src={Ic_file} alt="file" />
@@ -248,7 +249,7 @@ export const Documenters: React.FC<{
                         </div>
                         <FileInfo file={file} />
                       </div>
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
                         <img
                           src={Ic_trash}
                           alt="delete"
@@ -256,12 +257,12 @@ export const Documenters: React.FC<{
                             handleDeleteClick(index);
                             setDeleteField("Kontrakt");
                           }}
-                          className="cursor-pointer"
+                          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                         />
                         <img
                           src={Ic_download_primary}
                           alt="download"
-                          className="cursor-pointer"
+                          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                           onClick={() => handleDownload(file)}
                         />
                       </div>
@@ -282,7 +283,7 @@ export const Documenters: React.FC<{
             <div className="bg-white p-6 rounded-lg">
               <p className="mb-4">Er du sikker på at du vil slette?</p>
               <div className="flex justify-center gap-4">
-                <div onClick={handleCancelDelete} >
+                <div onClick={handleCancelDelete}>
                   <Button
                     text="Avbryt"
                     className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

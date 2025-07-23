@@ -636,7 +636,9 @@ export const ProjectAccounting = forwardRef<
                                   ref={fileDocumentsInputRef}
                                   className="hidden"
                                   accept=".pdf"
-                                  onChange={handleDocumentsFileChange}
+                                  onChange={(e) => {
+                                    handleDocumentsFileChange(e);
+                                  }}
                                   name="documents"
                                   multiple
                                 />

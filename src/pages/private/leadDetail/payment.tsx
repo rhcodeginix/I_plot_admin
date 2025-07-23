@@ -187,11 +187,11 @@ export const Payment: React.FC<{
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <h2 className="text-darkBlack text-xl font-semibold p-5 border-b border-[#DCDFEA]">
+          <h2 className="text-darkBlack text-base md:text-lg lg:text-xl font-semibold p-3 md:p-5 border-b border-[#DCDFEA]">
             Grunnarbeider: Svar til utbygger
           </h2>
-          <div className="mb-5 p-5">
-            <div className="grid grid-cols-2 gap-5">
+          <div className="mb-5 p-3 md:p-5">
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-3 md:gap-5">
               <div className="col-span-2">
                 <FormField
                   control={form.control}
@@ -303,12 +303,12 @@ export const Payment: React.FC<{
                   )}
                 />
               </div>
-              <div className="flex items-center gap-5 col-span-2">
+              <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-5 col-span-2">
                 <FormField
                   control={form.control}
                   name="pdf"
                   render={({ fieldState }) => (
-                    <FormItem className="w-max">
+                    <FormItem className="w-full md:w-max">
                       <p
                         className={`${
                           fieldState.error ? "text-red" : "text-black"
@@ -317,7 +317,7 @@ export const Payment: React.FC<{
                         Bilder fra jobben:
                       </p>
                       <FormControl>
-                        <div className="flex items-center gap-5 w-full">
+                        <div className="flex items-center gap-3 md:gap-5 w-full">
                           <div className="relative w-full">
                             <div
                               className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer w-full"
@@ -326,13 +326,13 @@ export const Payment: React.FC<{
                               onDrop={handlepdfDrop}
                             >
                               <img src={Ic_upload_photo} alt="upload" />
-                              <p className="text-gray text-sm text-center truncate w-full">
+                              <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                 <span className="text-primary font-medium truncate">
                                   Klikk for opplasting
                                 </span>{" "}
                                 eller dra-og-slipp
                               </p>
-                              <p className="text-gray text-sm text-center truncate w-full">
+                              <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                 PDF (maks. 800x400px)
                               </p>
                               <input
@@ -353,10 +353,10 @@ export const Payment: React.FC<{
                 />
                 <div>
                   {uploadpdf && (
-                    <div className="mt-5 flex items-center gap-5 flex-wrap">
+                    <div className="flex items-center gap-3 md:gap-5 flex-wrap">
                       {uploadpdf?.map((_file: any, index: number) => (
                         <div
-                          className="relative h-[140px] w-[140px]"
+                          className="relative h-[130px] md:h-[140px] w-[130px] md:w-[140px]"
                           key={index}
                         >
                           <img

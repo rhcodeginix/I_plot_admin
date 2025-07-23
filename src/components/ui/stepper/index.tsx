@@ -21,8 +21,8 @@ const Stepper: React.FC<StepperProps> = ({ steps, currIndex, Style }) => {
   return (
     <>
       <>
-        <div className="py-3">
-          <div className="stepper_main overFlowScrollHidden">
+        <div className="py-3 overflow-auto overflowXAuto">
+          <div className="stepper_main min-w-[1200px] w-full px-1">
             <div className="stepper-wrapper gap-3 big:gap-5 sBig:gap-[28px]">
               <div className="progress"></div>
               {steps.map((step: any, index: number) => {

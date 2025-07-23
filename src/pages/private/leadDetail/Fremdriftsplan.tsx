@@ -90,17 +90,17 @@ export const Fremdriftsplan: React.FC<{
   return (
     <>
       <div className="mx-4 md:mx-6 lg:mx-10 rounded-lg mb-20">
-        <h3 className="text-darkBlack text-xl font-semibold mb-2">
+        <h3 className="text-darkBlack text-base md:text-lg lg:text-xl font-semibold mb-2">
           Fremdrifts- og faktureringsplan
         </h3>
-        <p className="text-darkBlack text-sm font-medium mb-6">
+        <p className="text-darkBlack text-xs md:text-sm font-medium mb-6">
           Her oppdaterer du status på fremdriften slik at banken får oppdatert
-          informasjon om fremdriften.{" "}
+          informasjon om fremdriften.
         </p>
-        <div className="flex flex-col gap-6 mb-6">
+        <div className="mb-6">
           <Stepper steps={steps} currIndex={currIndex} Style="true" />
         </div>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 md:gap-6">
           {steps &&
             steps.map((step: any, index: number) => {
               let diffText = "";
@@ -124,7 +124,7 @@ export const Fremdriftsplan: React.FC<{
               return (
                 <div
                   key={index}
-                  className={`py-3 px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-4 ${
+                  className={`py-3 px-3 md:px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-3 md:gap-4 ${
                     step.status === "Approve"
                       ? "border-[#61C4A4]"
                       : step.status === "Unpaid" || step.status === "Reject"
@@ -133,7 +133,7 @@ export const Fremdriftsplan: React.FC<{
                   }`}
                 >
                   <div
-                    className={`flex items-center gap-2 justify-between ${
+                    className={`flex flex-col sm:flex-row sm:items-center gap-2 justify-between ${
                       currIndex > index && "cursor-pointer"
                     } `}
                     onClick={() => {
@@ -146,28 +146,28 @@ export const Fremdriftsplan: React.FC<{
                     </h4>
 
                     {currIndex > index ? (
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2 md:gap-4 justify-end">
                         {step.status === "Approve" ? (
-                          <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-2 text-xs text-[#00857A]">
+                          <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#00857A]">
                             Betalt {formatPrice(step.pris)} (
                             {step.date &&
                               step.date.split("-").reverse().join(".")}
                             )
                           </div>
                         ) : step.status === "Reject" ? (
-                          <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
+                          <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#A20000]">
                             Avvis
                           </div>
                         ) : (
                           step.status === "Sent" && (
-                            <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-2 text-xs text-[#C84D00]">
+                            <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#C84D00]">
                               Send Information
                             </div>
                           )
                         )}
                         {step.status !== "Approve" && !step?.payment && (
                           <div
-                            className="bg-[#6941C6] rounded-[16px] py-0.5 px-2 text-xs text-white cursor-pointer"
+                            className="bg-[#6941C6] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-white cursor-pointer"
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
@@ -180,13 +180,13 @@ export const Fremdriftsplan: React.FC<{
                         )}
 
                         <ChevronDown
-                          className={`text-primary transition-transform duration-200 ${
+                          className={`text-primary transition-transform duration-200 w-5 h-5 md:w-6 md:h-6 ${
                             openStepIndex === index ? "rotate-180" : ""
                           }`}
                         />
                       </div>
                     ) : currIndex === index ? (
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2 md:gap-4 justify-end">
                         <span
                           className="text-primary text-sm font-semibold cursor-pointer"
                           onClick={() => {
@@ -196,32 +196,34 @@ export const Fremdriftsplan: React.FC<{
                         >
                           Fullfør steget
                         </span>
-                        <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
+                        <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#A20000]">
                           Ubetalt
                         </div>
                       </div>
                     ) : (
                       currIndex < index && (
-                        <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-2 text-xs text-[#A20000]">
+                        <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#A20000] w-max ml-auto">
                           Ubetalt
                         </div>
                       )
                     )}
                   </div>
-                  <div className="flex gap-4 items-center">
-                    <div className="w-full flex flex-col gap-2">
-                      <p className="text-[#5D6B98] text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 desktop:gap-4">
+                    <div className="w-full flex flex-col gap-1 md:gap-2">
+                      <p className="text-[#5D6B98] text-xs md:text-sm">
                         Forventet oppstart
                       </p>
-                      <h6 className="text-darkBlack font-medium">
+                      <h6 className="text-darkBlack font-medium text-sm md:text-base">
                         {step?.date &&
                           step?.date.split("-").reverse().join(".")}
                       </h6>
                     </div>
                     {step?.comment && (
-                      <div className="w-full flex flex-col gap-2">
-                        <p className="text-[#5D6B98] text-sm">Fullført</p>
-                        <h6 className="text-darkBlack font-medium">
+                      <div className="w-full flex flex-col gap-1 md:gap-2">
+                        <p className="text-[#5D6B98] text-xs md:text-sm">
+                          Fullført
+                        </p>
+                        <h6 className="text-darkBlack font-medium text-sm md:text-base">
                           {step.comment.full_fort_date
                             .split("-")
                             .reverse()
@@ -230,47 +232,47 @@ export const Fremdriftsplan: React.FC<{
                         </h6>
                       </div>
                     )}
-                    <div className="w-full flex flex-col gap-2">
-                      <p className="text-[#5D6B98] text-sm">
+                    <div className="w-full flex flex-col gap-1 md:gap-2">
+                      <p className="text-[#5D6B98] text-xs md:text-sm">
                         Antatt antall dager til å fullføre
                       </p>
-                      <h6 className="text-darkBlack font-medium">
+                      <h6 className="text-darkBlack font-medium text-sm md:text-base">
                         {step?.day} dager
                       </h6>
                     </div>
-                    <div className="w-full flex flex-col gap-2">
-                      <p className="text-[#5D6B98] text-sm">
+                    <div className="w-full flex flex-col gap-1 md:gap-2">
+                      <p className="text-[#5D6B98] text-xs md:text-sm whitespace-nowrap">
                         Utbetaling ihht. faktureringsplan
                       </p>
-                      <h6 className="text-darkBlack font-medium">
+                      <h6 className="text-darkBlack font-medium text-sm md:text-base">
                         {formatPrice(step.pris)}
                       </h6>
                     </div>
                   </div>
                   {currIndex > index && openStepIndex === index && (
                     <div className="border border-[#EAECF0] rounded-lg">
-                      <div className="flex items-center justify-between gap-2 p-4 border-b border-[#EAECF0]">
-                        <h3 className="text-darkBlack font-semibold">
+                      <div className="flex items-center justify-between gap-2 p-2 md:p-4 border-b border-[#EAECF0]">
+                        <h3 className="text-darkBlack font-semibold text-sm md:text-base">
                           Grunnarbeider: Kommentar fra utbygger
                         </h3>
                         <Pencil
-                          className="text-primary cursor-pointer"
+                          className="text-primary cursor-pointer w-5 h-5 md:w-6 md:h-6"
                           onClick={() => {
                             setIsModalOpen(true);
                             setSelectIndex(step.name);
                           }}
                         />
                       </div>
-                      <div className="p-4">
-                        <p className="text-[#5D6B98] text-base mb-6">
+                      <div className="p-2 md:p-4">
+                        <p className="text-[#5D6B98] text-sm md:text-base mb-4 md:mb-6">
                           {step.comment.text}
                         </p>
                         <div>
-                          <h4 className="text-darkBlack font-semibold">
+                          <h4 className="text-darkBlack font-semibold text-sm md:text-base">
                             Bilder fra jobben:
                           </h4>
                           {step.comment.photo && (
-                            <div className="mt-5 flex items-center gap-5 flex-wrap">
+                            <div className="mt-3 md:mt-5 flex items-center gap-3 md:gap-5 flex-wrap">
                               {step.comment.photo?.map(
                                 (file: string, index: number) => {
                                   const isPdf = file
@@ -278,7 +280,7 @@ export const Fremdriftsplan: React.FC<{
                                     .includes(".pdf");
                                   return (
                                     <div
-                                      className="relative h-[140px] w-[140px]"
+                                      className="relative h-[130px] md:h-[140px] w-[130px] md:w-[140px]"
                                       key={index}
                                     >
                                       <img
@@ -302,13 +304,13 @@ export const Fremdriftsplan: React.FC<{
                     openStepIndex === index &&
                     step?.payment && (
                       <div className="border border-[#EAECF0] rounded-lg">
-                        <div className="flex items-center justify-between gap-2 p-4 border-b border-[#EAECF0]">
-                          <h3 className="text-darkBlack font-semibold">
+                        <div className="flex items-center justify-between gap-2 p-2 md:p-4 border-b border-[#EAECF0]">
+                          <h3 className="text-darkBlack font-semibold text-sm md:text-base">
                             Grunnarbeider: Svar til utbygger
                           </h3>
                           {step.status !== "Approve" && (
                             <Pencil
-                              className="text-primary cursor-pointer"
+                              className="text-primary cursor-pointer w-5 h-5 md:w-6 md:h-6"
                               onClick={() => {
                                 setIsPDFModalOpen(true);
                                 setSelectIndex(step.name);
@@ -316,20 +318,20 @@ export const Fremdriftsplan: React.FC<{
                             />
                           )}
                         </div>
-                        <div className="p-4">
-                          <p className="text-[#5D6B98] text-base mb-6">
+                        <div className="p-2 md:p-4">
+                          <p className="text-[#5D6B98] text-sm md:text-base mb-4 md:mb-6">
                             {step.payment.text}
                           </p>
                           <div>
-                            <h4 className="text-darkBlack font-semibold">
+                            <h4 className="text-darkBlack font-semibold text-sm md:text-base">
                               Dokumenter
                             </h4>
                             {step.payment.pdf && (
-                              <div className="mt-5 flex items-center gap-5 flex-wrap">
+                              <div className="mt-3 md:mt-5 flex items-center gap-3 md:gap-5 flex-wrap">
                                 {step.payment.pdf?.map(
                                   (_file: any, index: number) => (
                                     <div
-                                      className="relative h-[140px] w-[140px]"
+                                      className="relative h-[130px] md:h-[140px] w-[130px] md:w-[140px]"
                                       key={index}
                                     >
                                       <img
@@ -347,7 +349,7 @@ export const Fremdriftsplan: React.FC<{
                       </div>
                     )}
                   {currIndex > index && openStepIndex === index && (
-                    <div className="flex justify-end items-center gap-4">
+                    <div className="flex justify-end items-center gap-2.5 md:gap-4">
                       <Button
                         text="Avvis"
                         className="border border-[#A20000] bg-[#A20000] text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
@@ -430,7 +432,7 @@ export const Fremdriftsplan: React.FC<{
       {isModalOpen && (
         <Modal onClose={handleConfirmPopup} isOpen={true}>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 mx-4">
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden w-[80%]">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full md:w-[80%] max-h-[80vh] overflow-y-auto">
               <AddComment
                 SelectIndex={SelectIndex}
                 setIsModalOpen={setIsModalOpen}
@@ -443,7 +445,7 @@ export const Fremdriftsplan: React.FC<{
       {isPDFModalOpen && (
         <Modal onClose={handleConfirmPDFPopup} isOpen={true}>
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 mx-4">
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden w-[80%]">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full md:w-[80%] max-h-[80vh] overflow-y-auto">
               <Payment
                 SelectIndex={SelectIndex}
                 setIsPDFModalOpen={setIsPDFModalOpen}

@@ -222,7 +222,7 @@ export const FremdriftsplanOg: React.FC<{
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div
-            className="mx-10 rounded-lg mb-10"
+            className="mx-4 md:mx-6 lg:mx-10 rounded-lg mb-10"
             style={{
               boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
             }}

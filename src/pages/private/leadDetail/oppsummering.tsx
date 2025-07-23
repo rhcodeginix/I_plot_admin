@@ -139,7 +139,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Adresse:
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   {plotData?.address}
                 </div>
               </div>
@@ -147,7 +147,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Kunden eier tomten allerede:
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   {plotData?.alreadyHavePlot
                     ? plotData?.alreadyHavePlot
                     : "Nei"}
@@ -157,7 +157,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Totale tomtekostnader:
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   kr {plotData?.tomtekostnader}
                 </div>
               </div>
@@ -165,7 +165,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Kommentar:
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   {plotData?.Kommentar}
                 </div>
               </div>
@@ -181,7 +181,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Husmodell
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   {finalData?.Husdetaljer?.husmodell_name}
                 </div>
               </div>
@@ -189,7 +189,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Totale byggekostnader:
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   kr {houseData?.byggekostnader}
                 </div>
               </div>
@@ -197,7 +197,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Kommentar:
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   {houseData?.Kommentar}
                 </div>
               </div>
@@ -213,7 +213,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Lastet opp
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   {bankData?.ProjectAccount?.Økonomisk ===
                   "Last opp en økonomisk plan"
                     ? "Ja"
@@ -224,7 +224,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Operettet
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   {bankData?.ProjectAccount?.Økonomisk ===
                   "Opprett en økonomisk plan"
                     ? "Ja"
@@ -235,7 +235,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Ettersendes
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   {bankData?.ProjectAccount?.Økonomisk ===
                   "Ettersend en økonomisk plan"
                     ? "Ja"
@@ -254,7 +254,7 @@ export const Oppsummering: React.FC<{ bankData: any }> = ({ bankData }) => {
                 <div className="w-[130px] sm:w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
                   Ønskes forhåndstakst?
                 </div>
-                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-allmd:text-base">
+                <div className="w-[calc(100%-130px)] sm:w-[calc(100%-200px)] md:w-[calc(100%-300px)] break-all text-sm md:text-base">
                   {bankData?.Forhandstakst?.advance_quote ===
                   "Ja, jeg ønsker forhåndstakst"
                     ? "Ja (lead sendes til megler når du sendes inn banktipset)"

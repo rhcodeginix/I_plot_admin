@@ -71,7 +71,7 @@ export const Fremdriftsplan: React.FC<{
 
   return (
     <>
-      <div className="mx-10 rounded-lg mb-20">
+      <div className="mx-4 md:mx-6 lg:mx-10 rounded-lg mb-20">
         <h3 className="text-darkBlack text-xl font-semibold mb-2">
           Fremdrifts- og faktureringsplan
         </h3>

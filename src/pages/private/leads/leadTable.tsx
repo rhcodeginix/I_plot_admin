@@ -46,14 +46,27 @@ export const LeadTable = () => {
   const [status, setStatus] = useState<string>("");
 
   const [permission, setPermission] = useState<any>(null);
+  const [Role, setRole] = useState<any>(null);
+  const [Office, setOffice] = useState<any>(null);
+  const [IsAdmin, setIsAdmin] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
+
       if (data) {
         const finalSupData = data?.supplier;
         setPermission(finalSupData);
+        if (data?.role) {
+          setRole(data?.role);
+        }
+        if (data?.office) {
+          setOffice(data?.office);
+        }
+        // if (data?.is_admin) {
+        setIsAdmin(data?.is_admin);
+        // }
       }
     };
 
@@ -96,6 +109,21 @@ export const LeadTable = () => {
     }
   };
 
+  const getData = async (email: string) => {
+    try {
+      if (email) {
+        const q = query(collection(db, "admin"), where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          return querySnapshot.docs[0].data();
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching admin data:", error);
+    }
+  };
+
   const fetchBankLeadData = async () => {
     setIsLoading(true);
 
@@ -112,10 +140,28 @@ export const LeadTable = () => {
       }
       const querySnapshot = await getDocs(q);
 
-      const data: any = querySnapshot.docs.map((doc) => ({
+      const docsData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+
+      const filteredData = await Promise.all(
+        docsData.map(async (item: any) => {
+          if (IsAdmin === true) {
+            return item;
+          } else if (IsAdmin === false) {
+            const email = item?.createDataBy?.email;
+            if (!email) return null;
+
+            const userData = await getData(email);
+
+            return userData?.office === Office ? item : null;
+          }
+          return item;
+        })
+      );
+
+      const data = filteredData.filter((item) => item !== null);
 
       const norwegianMonths: { [key: string]: string } = {
         januar: "January",
@@ -140,7 +186,7 @@ export const LeadTable = () => {
         return new Date(`${day} ${englishMonth} ${year}`);
       };
 
-      const sortedData = data.sort((a: any, b: any) => {
+      const sortedData: any = data.sort((a: any, b: any) => {
         const dateA = parseNorwegianDate(a.updatedAt);
         const dateB = parseNorwegianDate(b.updatedAt);
         return dateB.getTime() - dateA.getTime();
@@ -155,8 +201,10 @@ export const LeadTable = () => {
   };
 
   useEffect(() => {
-    fetchBankLeadData();
-  }, [permission, status]);
+    if (Role) {
+      fetchBankLeadData();
+    }
+  }, [permission, status, Role, Office, IsAdmin]);
 
   const handleConfirmPopup = () => {
     if (showConfirm) {

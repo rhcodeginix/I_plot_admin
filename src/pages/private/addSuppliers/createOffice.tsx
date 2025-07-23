@@ -36,6 +36,7 @@ const formSchema = z.object({
   supplier: z.string().min(1, {
     message: "Leverandør må velges",
   }),
+  is_financing: z.boolean(),
 });
 
 export const CreateNewOffice: React.FC<{
@@ -45,6 +46,9 @@ export const CreateNewOffice: React.FC<{
 }> = ({ editId, setEditId, setActiveTab }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      is_financing: false,
+    },
   });
 
   const location = useLocation();
@@ -62,7 +66,7 @@ export const CreateNewOffice: React.FC<{
 
     getData();
   }, []);
-  
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const formatDate = (date: Date) => {
@@ -212,6 +216,36 @@ export const CreateNewOffice: React.FC<{
                     </FormItem>
                   )}
                 />
+              </div>
+              <div className="col-span-2">
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="is_financing"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="relative flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              id="is_financing"
+                              checked={field.value}
+                              onChange={field.onChange}
+                              className="accent-primary h-[18px] w-[18px]"
+                            />
+                            <label
+                              htmlFor="is_financing"
+                              className="text-sm md:text-base"
+                            >
+                              Er finansieringsavtalen signert?
+                            </label>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             </div>
           </div>

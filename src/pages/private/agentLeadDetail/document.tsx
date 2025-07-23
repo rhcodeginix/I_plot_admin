@@ -343,50 +343,50 @@ export const Documenters: React.FC<{
               boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
             }}
           >
-            <div className="p-5 border-b border-[#DCDFEA]">
-              <div className="text-xl text-darkBlack font-semibold mb-2">
+            <div className="p-3 md:p-5 border-b border-[#DCDFEA]">
+              <div className="text-base md:text-lg desktop:text-xl text-darkBlack font-semibold mb-2">
                 Dokumentasjon
               </div>
-              <p className="text-[#5D6B98] text-sm">
+              <p className="text-[#5D6B98] text-xs md:text-sm">
                 Her laster du opp dokumentasjon som er relevant for prosjektet
               </p>
             </div>
-            <div className="p-5 flex flex-col gap-5">
+            <div className="p-3 md:p-5 flex flex-col gap-3 md:gap-5">
               <div>
-                <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-4">
+                <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-2 md:mb-4">
                   Entreprenørgaranti
                 </h4>
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <FormField
                     control={form.control}
                     name="Entreprenørgaranti"
                     render={() => (
                       <FormItem className="w-full">
                         <FormControl>
-                          <div className="flex items-center gap-5 w-full">
+                          <div className="flex items-center gap-4 md:gap-5 w-full">
                             <div
-                              className="relative w-full p-3 rounded-lg"
+                              className="relative w-full p-2 md:p-3 rounded-lg"
                               style={{
                                 boxShadow:
                                   "0px 2px 4px -2px #1018280F, 0px 4px 8px -2px #1018281A",
                               }}
                             >
                               <div
-                                className="border border-gray2 rounded-[8px] px-3 border-dashed laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer w-full"
+                                className="border border-gray2 rounded-[8px] px-3 border-dashed laptop:px-6 py-4 flex justify-center items-center flex-col gap-2 md:gap-3 cursor-pointer w-full"
                                 onDragOver={handleEntreprenørgarantiDragOver}
                                 onClick={handleEntreprenørgarantiClick}
                                 onDrop={handleEntreprenørgarantiDrop}
                               >
                                 <img src={Ic_upload_blue_img} alt="upload" />
-                                <div className="flex items-center gap-3">
-                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-2 px-4 font-medium whitespace-nowrap">
+                                <div className="flex items-center gap-2 md:gap-3">
+                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
                                     Last opp
                                   </span>
-                                  <p className="text-[#111322] text-sm text-center truncate w-full">
+                                  <p className="text-[#111322] text-xs md:text-sm text-center truncate w-full">
                                     Slipp fil for å laste opp her
                                   </p>
                                 </div>
-                                <p className="text-gray text-sm text-center truncate w-full">
+                                <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                   Filformater: kun PDF, max 5 MB
                                 </p>
                                 <input
@@ -414,10 +414,10 @@ export const Documenters: React.FC<{
                       <div className="flex flex-col items-center gap-3">
                         {Entreprenørgaranti?.map((file: any, index: number) => (
                           <div
-                            className="border border-gray2 rounded-lg p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
+                            className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
                             key={index}
                           >
-                            <div className="flex items-start gap-4 truncate">
+                            <div className="flex items-start gap-2.5 md:gap-4 truncate">
                               <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
                                 <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
                                   <img src={Ic_file} alt="file" />
@@ -425,11 +425,11 @@ export const Documenters: React.FC<{
                               </div>
                               <FileInfo file={file} />
                             </div>
-                            <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
                               <img
                                 src={Ic_trash}
                                 alt="delete"
-                                className="cursor-pointer"
+                                className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                                 onClick={() => {
                                   handleDeleteClick(index);
                                   setDeleteField("Entreprenørgaranti");
@@ -438,7 +438,7 @@ export const Documenters: React.FC<{
                               <img
                                 src={Ic_download_primary}
                                 alt="download"
-                                className="cursor-pointer"
+                                className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                                 onClick={() => handleDownload(file)}
                               />
                             </div>
@@ -456,16 +456,16 @@ export const Documenters: React.FC<{
                 <h4 className="text-darkBlack text-sm md:text-base desktop:text-lg font-semibold mb-4">
                   Forsikringsbevis
                 </h4>
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <FormField
                     control={form.control}
                     name="Forsikringsbevis"
                     render={() => (
                       <FormItem className="w-full">
                         <FormControl>
-                          <div className="flex items-center gap-5 w-full">
+                          <div className="flex items-center gap-4 md:gap-5 w-full">
                             <div
-                              className="relative w-full p-3 rounded-lg"
+                              className="relative w-full p-2 md:p-3 rounded-lg"
                               style={{
                                 boxShadow:
                                   "0px 2px 4px -2px #1018280F, 0px 4px 8px -2px #1018281A",
@@ -478,15 +478,15 @@ export const Documenters: React.FC<{
                                 onDrop={handleForsikringsbevisDrop}
                               >
                                 <img src={Ic_upload_blue_img} alt="upload" />
-                                <div className="flex items-center gap-3">
-                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-2 px-4 font-medium whitespace-nowrap">
+                                <div className="flex items-center gap-2 md:gap-3">
+                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
                                     Last opp
                                   </span>
-                                  <p className="text-[#111322] text-sm text-center truncate w-full">
+                                  <p className="text-[#111322] text-xs md:text-sm text-center truncate w-full">
                                     Slipp fil for å laste opp her
                                   </p>
                                 </div>
-                                <p className="text-gray text-sm text-center truncate w-full">
+                                <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                   Filformater: kun PDF, max 5 MB
                                 </p>
                                 <input
@@ -514,10 +514,10 @@ export const Documenters: React.FC<{
                       <div className="flex flex-col items-center gap-3">
                         {Forsikringsbevis?.map((file: any, index: number) => (
                           <div
-                            className="border border-gray2 rounded-lg p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
+                            className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
                             key={index}
                           >
-                            <div className="flex items-start gap-4 truncate">
+                            <div className="flex items-start gap-2.5 md:gap-4 truncate">
                               <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
                                 <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
                                   <img src={Ic_file} alt="file" />
@@ -525,11 +525,11 @@ export const Documenters: React.FC<{
                               </div>
                               <FileInfo file={file} />
                             </div>
-                            <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
                               <img
                                 src={Ic_trash}
                                 alt="delete"
-                                className="cursor-pointer"
+                                className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                                 onClick={() => {
                                   handleDeleteClick(index);
                                   setDeleteField("Forsikringsbevis");
@@ -538,7 +538,7 @@ export const Documenters: React.FC<{
                               <img
                                 src={Ic_download_primary}
                                 alt="download"
-                                className="cursor-pointer"
+                                className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                                 onClick={() => handleDownload(file)}
                               />
                             </div>
@@ -557,16 +557,16 @@ export const Documenters: React.FC<{
                   Kontrakt{" "}
                   <span className="text-[#5D6B98]">(eks. NS-3425)</span>
                 </h4>
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <FormField
                     control={form.control}
                     name="Kontrakt"
                     render={() => (
                       <FormItem className="w-full">
                         <FormControl>
-                          <div className="flex items-center gap-5 w-full">
+                          <div className="flex items-center gap-4 md:gap-5 w-full">
                             <div
-                              className="relative w-full p-3 rounded-lg"
+                              className="relative w-full p-2 md:p-3 rounded-lg"
                               style={{
                                 boxShadow:
                                   "0px 2px 4px -2px #1018280F, 0px 4px 8px -2px #1018281A",
@@ -579,15 +579,15 @@ export const Documenters: React.FC<{
                                 onDrop={handleKontraktDrop}
                               >
                                 <img src={Ic_upload_blue_img} alt="upload" />
-                                <div className="flex items-center gap-3">
-                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-2 px-4 font-medium whitespace-nowrap">
+                                <div className="flex items-center gap-2 md:gap-3">
+                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
                                     Last opp
                                   </span>
-                                  <p className="text-[#111322] text-sm text-center truncate w-full">
+                                  <p className="text-[#111322] text-xs md:text-sm text-center truncate w-full">
                                     Slipp fil for å laste opp her
                                   </p>
                                 </div>
-                                <p className="text-gray text-sm text-center truncate w-full">
+                                <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                   Filformater: kun PDF, max 5 MB
                                 </p>
                                 <input
@@ -615,10 +615,10 @@ export const Documenters: React.FC<{
                       <div className="flex flex-col items-center gap-3">
                         {Kontrakt?.map((file: any, index: number) => (
                           <div
-                            className="border border-gray2 rounded-lg p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
+                            className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
                             key={index}
                           >
-                            <div className="flex items-start gap-4 truncate">
+                            <div className="flex items-start gap-2.5 md:gap-4 truncate">
                               <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
                                 <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
                                   <img src={Ic_file} alt="file" />
@@ -626,7 +626,7 @@ export const Documenters: React.FC<{
                               </div>
                               <FileInfo file={file} />
                             </div>
-                            <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
                               <img
                                 src={Ic_trash}
                                 alt="delete"
@@ -634,12 +634,12 @@ export const Documenters: React.FC<{
                                   handleDeleteClick(index);
                                   setDeleteField("Kontrakt");
                                 }}
-                                className="cursor-pointer"
+                                className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                               />
                               <img
                                 src={Ic_download_primary}
                                 alt="download"
-                                className="cursor-pointer"
+                                className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
                                 onClick={() => handleDownload(file)}
                               />
                             </div>

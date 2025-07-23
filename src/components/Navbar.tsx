@@ -227,7 +227,7 @@ export const Navbar: React.FC = () => {
                   : "text-black"
               }`}
             >
-              Leads
+              Tips til bank
             </Link>
           )}
           {/* {Role && Role === "Bankansvarlig" ? (
@@ -434,7 +434,7 @@ export const Navbar: React.FC = () => {
                     : "text-black"
                 }`}
               >
-                Leads
+                Tips til bank
               </Link>
             )}
             {/* {Role && Role === "Bankansvarlig" ? (

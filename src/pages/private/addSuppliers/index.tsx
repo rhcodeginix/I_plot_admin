@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AddSuppliersForm } from "./addSuppliersForm";
 import { useEffect, useState } from "react";
 import { CreateNewOffice } from "./createOffice";
@@ -11,6 +11,10 @@ export const AddSuppliers = () => {
   >("Leverandører");
 
   const [editId, setEditId] = useState(null);
+
+  const location = useLocation();
+  const pathSegments = location.pathname.split("/");
+  const id = pathSegments.length > 2 ? pathSegments[2] : null;
 
   useEffect(() => {
     if (editId && activeTab !== "Legg til kontor") {
@@ -33,29 +37,34 @@ export const AddSuppliers = () => {
             Legg til nye leverandører
           </span>
         </div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-center gap-2">
-          <div className="flex gap-1.5">
-            {["Leverandører", "Legg til kontor", "Kontorliste"]
-              .filter(Boolean)
-              .map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() =>
-                    setActiveTab(
-                      tab as "Leverandører" | "Legg til kontor" | "Kontorliste"
-                    )
-                  }
-                  className={`px-2 md:px-4 py-2 text-sm font-medium ${
-                    activeTab === tab
-                      ? "border-b-2 border-purple text-purple"
-                      : "text-gray-500"
-                  }`}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
+        {id && (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-center gap-2">
+            <div className="flex gap-1.5">
+              {["Leverandører", "Legg til kontor", "Kontorliste"]
+                .filter(Boolean)
+                .map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() =>
+                      setActiveTab(
+                        tab as
+                          | "Leverandører"
+                          | "Legg til kontor"
+                          | "Kontorliste"
+                      )
+                    }
+                    className={`px-2 md:px-4 py-2 text-sm font-medium ${
+                      activeTab === tab
+                        ? "border-b-2 border-purple text-purple"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                ))}
+            </div>
           </div>
-        </div>
+        )}
         {activeTab === "Leverandører" && (
           <>
             <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">

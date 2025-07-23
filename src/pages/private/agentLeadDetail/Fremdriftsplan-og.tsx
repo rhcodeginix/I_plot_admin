@@ -227,11 +227,11 @@ export const FremdriftsplanOg: React.FC<{
               boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
             }}
           >
-            <div className="py-4 px-5 border-b border-[#E8E8E8]">
-              <span className="text-xl font-semibold">
+            <div className="py-3 md:py-4 px-3 md:px-5 border-b border-[#E8E8E8]">
+              <span className="text-base desktop:text-xl font-semibold">
                 Fremdrifts- og faktureringsplan
               </span>
-              <p className="text-[#5D6B98] font-bold text-sm mt-2">
+              <p className="text-[#5D6B98] font-bold text-xs md:text-sm mt-1 md:mt-2">
                 Her legge du inn forventet tidsbruk i antall dager{" "}
                 <span className="font-normal">
                   (medregnet helger og helligdager)
@@ -239,12 +239,12 @@ export const FremdriftsplanOg: React.FC<{
               </p>
             </div>
 
-            <div className="p-5 flex flex-col gap-5">
-              <div className="flex flex-col gap-4">
+            <div className="p-3 md:p-5 flex flex-col gap-3 md:gap-5">
+              <div className="flex flex-col gap-3 md:gap-4">
                 <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 1: <span className="font-bold">Byggekontrakt</span>
                 </h4>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                   <div>
                     <FormField
                       control={form.control}
@@ -360,11 +360,11 @@ export const FremdriftsplanOg: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
                 <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 2: <span className="font-bold">Grunnarbeider</span>
                 </h4>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                   <div>
                     <FormField
                       control={form.control}
@@ -481,11 +481,11 @@ export const FremdriftsplanOg: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
                 <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 3: <span className="font-bold">Betongarbeid</span>
                 </h4>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                   <div>
                     <FormField
                       control={form.control}
@@ -602,11 +602,11 @@ export const FremdriftsplanOg: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
                 <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 4: <span className="font-bold">Levering byggesett</span>
                 </h4>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                   <div>
                     <FormField
                       control={form.control}
@@ -723,11 +723,11 @@ export const FremdriftsplanOg: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
                 <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 5: <span className="font-bold">Tett bygg</span>
                 </h4>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                   <div>
                     <FormField
                       control={form.control}
@@ -844,11 +844,11 @@ export const FremdriftsplanOg: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
                 <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 6: <span className="font-bold">Ferdig ute</span>
                 </h4>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                   <div>
                     <FormField
                       control={form.control}
@@ -965,11 +965,11 @@ export const FremdriftsplanOg: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
                 <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 7: <span className="font-bold">Ferdig inne</span>
                 </h4>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                   <div>
                     <FormField
                       control={form.control}
@@ -1086,11 +1086,11 @@ export const FremdriftsplanOg: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
                 <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 8: <span className="font-bold">Forhåndsbefaring</span>
                 </h4>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                   <div>
                     <FormField
                       control={form.control}
@@ -1207,11 +1207,11 @@ export const FremdriftsplanOg: React.FC<{
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 md:gap-4">
                 <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
                   Step 9: <span className="font-bold">Overtakelse</span>
                 </h4>
-                <div className="grid grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                   <div>
                     <FormField
                       control={form.control}

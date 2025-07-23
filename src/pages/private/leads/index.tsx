@@ -13,14 +13,14 @@ export const AllLeads = () => {
             </h1>
             <p className="text-gray">Liste over alle Leads</p>
           </div>
-          <div className="flex gap-3">
+          {/* <div className="flex gap-3">
             <Button
               text="Legg til"
               className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-3 md:px-4 py-[10px] flex items-center gap-2"
               icon={<Plus className="text-white w-5 h-5" />}
               path="/add-agent-leads"
             />
-          </div>
+          </div> */}
         </div>
         <LeadTable />
       </div>

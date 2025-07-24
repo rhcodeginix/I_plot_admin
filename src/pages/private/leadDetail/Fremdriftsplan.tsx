@@ -97,9 +97,11 @@ export const Fremdriftsplan: React.FC<{
           Her oppdaterer du status på fremdriften slik at banken får oppdatert
           informasjon om fremdriften.
         </p>
-        <div className="mb-6">
-          <Stepper steps={steps} currIndex={currIndex} Style="true" />
-        </div>
+        {steps && steps.length > 0 && (
+          <div className="mb-6">
+            <Stepper steps={steps} currIndex={currIndex} Style="true" />
+          </div>
+        )}
         <div className="flex flex-col gap-4 md:gap-6">
           {steps &&
             steps.map((step: any, index: number) => {
@@ -208,7 +210,11 @@ export const Fremdriftsplan: React.FC<{
                       )
                     )}
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 desktop:gap-4">
+                  <div
+                    className={`grid grid-cols-1 sm:grid-cols-2 ${
+                      step?.comment ? "lg:grid-cols-4" : "lg:grid-cols-3"
+                    } gap-2 md:gap-3 desktop:gap-4`}
+                  >
                     <div className="w-full flex flex-col gap-1 md:gap-2">
                       <p className="text-[#5D6B98] text-xs md:text-sm">
                         Forventet oppstart

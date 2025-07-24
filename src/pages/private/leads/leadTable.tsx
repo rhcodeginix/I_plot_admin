@@ -64,9 +64,7 @@ export const LeadTable = () => {
         if (data?.office) {
           setOffice(data?.office);
         }
-        // if (data?.is_admin) {
         setIsAdmin(data?.is_admin);
-        // }
       }
     };
 

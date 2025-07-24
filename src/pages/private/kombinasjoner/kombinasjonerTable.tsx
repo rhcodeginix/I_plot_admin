@@ -303,12 +303,6 @@ export const KombinasjonerTable = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        {/* <div className="flex gap-3 items-center">
-          <div className="border border-gray1 rounded-[8px] flex gap-2 items-center py-[10px] px-4 cursor-pointer shadow-shadow1 h-[40px] bg-[#fff]">
-            <img src={Ic_download} alt="" />
-            <span className="text-black font-medium text-sm">Eksporter</span>
-          </div>
-        </div> */}
       </div>
       <div className="rounded-lg border border-gray2 shadow-shadow2 overflow-hidden">
         <Table>

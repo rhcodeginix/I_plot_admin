@@ -374,7 +374,6 @@ export const routes = createBrowserRouter([
           },
 
           // -----
-
           {
             path: "/bank-leads",
             element: (

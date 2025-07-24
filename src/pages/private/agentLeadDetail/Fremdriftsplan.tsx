@@ -165,9 +165,6 @@ export const Fremdriftsplan: React.FC<{
                         >
                           Fullfør steget
                         </span>
-                        {/* <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#C84D00]">
-                          Send Information
-                        </div> */}
                         <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#A20000]">
                           Ubetalt
                         </div>

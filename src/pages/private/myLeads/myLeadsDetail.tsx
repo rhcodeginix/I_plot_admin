@@ -725,38 +725,7 @@ export const MyLeadsDetail = () => {
                     )}
                   />
                 </div>
-                {/* <div className="col-span-2"> */}
                 <div className="">
-                  {/* <div className="flex items-center gap-3">
-                    <span className="text-gray text-xs font-medium">
-                      Tildelt:
-                    </span>
-                    {suppliers &&
-                      suppliers.length > 0 &&
-                      suppliers.map((sup: any, index) => {
-                        return (
-                          <Button
-                            text={`+ ${sup?.f_name} ${sup?.l_name}`}
-                            className={`border-2 border-purple text-xs rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2 ${
-                              form.watch("Tildelt") === sup?.id
-                                ? "bg-purple text-white"
-                                : "bg-white text-purple"
-                            }`}
-                            type="button"
-                            key={index}
-                            onClick={() => {
-                              form.setValue("Tildelt", sup?.id);
-                            }}
-                          />
-                        );
-                      })}
-                  </div>
-                  {form.formState.errors.Tildelt && !form.watch("Tildelt") && (
-                    <div className="text-red text-sm mt-2">
-                      {form.formState.errors.Tildelt?.message}
-                    </div>
-                  )} */}
-
                   <div>
                     <FormField
                       control={form.control}
@@ -793,7 +762,6 @@ export const MyLeadsDetail = () => {
                                     {suppliers?.map((sup: any, index) => {
                                       return (
                                         <SelectItem value={sup?.id} key={index}>
-                                          {/* {sup?.company_name} */}
                                           {sup?.f_name} {sup?.l_name}
                                         </SelectItem>
                                       );
@@ -811,12 +779,6 @@ export const MyLeadsDetail = () => {
                 </div>
               </div>
               <div className="flex justify-end w-full gap-3 md:gap-5 items-center mt-4 md:mt-8">
-                {/* <div onClick={() => form.reset()}>
-                  <Button
-                    text="kansellere"
-                    className="border border-lightPurple bg-lightPurple text-primary text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative py-[10px] flex items-center gap-2 px-6 md:px-[50px]"
-                  />
-                </div> */}
                 <Button
                   text="Lagre"
                   className="border border-green2 bg-green2 text-white text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative px-px-6 md:[50px] py-[10px] flex items-center gap-2"

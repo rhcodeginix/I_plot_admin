@@ -181,7 +181,7 @@ export const fetchAdminRole = async (): Promise<string[] | null> => {
     }
 
     const docData = querySnapshot.docs[0].data();
-    return docData?.role ?? null; // ✅ no await needed
+    return docData?.role ?? null;
   } catch (error) {
     console.error("Error fetching admin data:", error);
     return null;

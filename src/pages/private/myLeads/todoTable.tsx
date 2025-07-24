@@ -814,10 +814,6 @@ export const TODOTable = () => {
                 <TableRow key={headerGroup.id} className="hover:bg-transparent">
                   {headerGroup.headers.map((header: any) => (
                     <TableHead key={header.id} className="h-8 text-sm">
-                      {/* {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )} */}
                       <div
                         className="flex items-center cursor-pointer select-none"
                         onClick={() => {

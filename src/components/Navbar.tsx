@@ -232,29 +232,6 @@ export const Navbar: React.FC = () => {
               Tips til bank
             </Link>
           )}
-          {/* {Role && Role === "Bankansvarlig" ? (
-            <Link
-              to={"/active-bank-leads"}
-              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
-                currentPath === "/active-bank-leads"
-                  ? "bg-lightPurple text-primary"
-                  : "text-black"
-              }`}
-            >
-              Aktive kunder
-            </Link>
-          ) : (
-            <Link
-              to={"/active-agent-leads"}
-              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
-                currentPath === "/active-agent-leads"
-                  ? "bg-lightPurple text-primary"
-                  : "text-black"
-              }`}
-            >
-              Aktive kunder
-            </Link>
-          )} */}
         </div>
         <div className="flex items-center gap-2 md:gap-3 relative">
           <div
@@ -441,29 +418,6 @@ export const Navbar: React.FC = () => {
                 Tips til bank
               </Link>
             )}
-            {/* {Role && Role === "Bankansvarlig" ? (
-            <Link
-              to={"/active-bank-leads"}
-              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
-                currentPath === "/active-bank-leads"
-                  ? "bg-lightPurple text-primary"
-                  : "text-black"
-              }`}
-            >
-              Aktive kunder
-            </Link>
-          ) : (
-            <Link
-              to={"/active-agent-leads"}
-              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
-                currentPath === "/active-agent-leads"
-                  ? "bg-lightPurple text-primary"
-                  : "text-black"
-              }`}
-            >
-              Aktive kunder
-            </Link>
-          )} */}
           </div>
         </div>
       </div>

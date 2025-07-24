@@ -4,7 +4,7 @@ import Ic_chevron_up from "../assets/images/Ic_chevron_up.svg";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { fetchAdminDataByEmail } from "../lib/utils";
-import { Menu, X } from "lucide-react";
+import { LogOut, Menu, User, Users, X } from "lucide-react";
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
@@ -55,6 +55,7 @@ export const Navbar: React.FC = () => {
   const [Supplier, setSupplier] = useState<any>(null);
   const [name, setName] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
+  const [id, setId] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -64,6 +65,7 @@ export const Navbar: React.FC = () => {
         if (data?.role) {
           setRole(data?.role);
         }
+        setId(data?.id);
 
         setIsPhoto(data?.photo);
         setName(data?.name || data?.f_name);
@@ -251,21 +253,32 @@ export const Navbar: React.FC = () => {
           </div>
           {isDropdownOpen && (
             <div
-              className="absolute right-0 mt-2 w-48 bg-white shadow-shadow1 rounded-md shadow-lg p-2 top-10 border border-gray2"
+              className="absolute right-0 mt-2 bg-white shadow-shadow1 rounded-md shadow-lg p-2 top-10 border border-gray2"
               ref={dropdownRef}
             >
               <Link
+                to={`/profile/${id}`}
+                className="px-3 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer flex items-center gap-2"
+                onClick={() => setIsDropdownOpen(false)}
+              >
+                <User className="w-5 h-5 text-primary" /> Profil
+              </Link>
+              {loginUser === "andre.finger@gmail.com" && (
+                <Link
+                  to={"/Brukeradministrasjon"}
+                  className="px-3 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer flex items-center gap-2"
+                  onClick={() => setIsDropdownOpen(false)}
+                >
+                  <Users className="w-5 h-5 text-primary" />
+                  Brukeradministrasjon
+                </Link>
+              )}
+              <Link
                 to={"/login"}
-                className="block px-4 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer"
+                className="px-3 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer flex items-center gap-2"
                 onClick={handleLogout}
               >
-                Logout
-              </Link>
-              <Link
-                to={"/Brukeradministrasjon"}
-                className="block px-4 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer"
-              >
-                Brukeradministrasjon
+                <LogOut className="w-5 h-5 text-primary" /> Logout
               </Link>
             </div>
           )}

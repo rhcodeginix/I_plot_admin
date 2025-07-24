@@ -356,14 +356,16 @@ export const LeadTable = () => {
                   </p>
                 )
               )}
-              <Pencil
-                className="h-[18px] w-[18px] text-primary cursor-pointer"
-                onClick={() => {
-                  setShowModal(true);
-                  setSelectedId(row.original.id);
-                  setSelectedOption(row.original.status);
-                }}
-              />
+              {Role === "Bankansvarlig" && (
+                <Pencil
+                  className="h-[18px] w-[18px] text-primary cursor-pointer"
+                  onClick={() => {
+                    setShowModal(true);
+                    setSelectedId(row.original.id);
+                    setSelectedOption(row.original.status);
+                  }}
+                />
+              )}
             </div>
           ),
         },

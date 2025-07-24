@@ -37,6 +37,7 @@ import {
   UserManagement,
   Users,
   BankleadsTabs,
+  Profile,
 } from "./pages";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { StartupHandler } from "./layouts/StartupHandler";
@@ -411,6 +412,21 @@ export const routes = createBrowserRouter([
             element: (
               <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
                 <BankleadsTabs />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/profile/*",
+            element: (
+              <ProtectedRoute
+                allowedRoles={[
+                  "Agent",
+                  "Bankansvarlig",
+                  "Admin",
+                  "super-admin",
+                ]}
+              >
+                <Profile />
               </ProtectedRoute>
             ),
           },

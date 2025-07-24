@@ -160,7 +160,7 @@ export const CreateNewOffice: React.FC<{
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <div className="p-5 laptop:p-6">
+          <div className="p-4 md:p-5 laptop:p-6">
             <div className="flex items-center gap-2 justify-between mb-6">
               <h4 className="text-darkBlack text-xl font-semibold">
                 Opprett nytt kontor
@@ -170,7 +170,7 @@ export const CreateNewOffice: React.FC<{
                 onClick={() => setIsOfficePopup(false)}
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+            <div className="flex flex-col md:grid grid-cols-2 gap-4 lg:gap-6">
               <div>
                 <FormField
                   control={form.control}

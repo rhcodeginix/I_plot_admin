@@ -55,7 +55,7 @@ export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
   };
 
   return (
-    <td className="px-3 md:px-4 py-3 md:py-6 text-xs md:text-sm text-black font-medium flex items-center gap-2 justify-between w-[600px] md:w-full">
+    <td className="px-3 md:px-4 py-3 md:py-6 text-xs md:text-sm text-black font-medium flex items-center gap-2 justify-between w-max max-w-[600px] md:w-full">
       {isEditing ? (
         <>
           <input
@@ -72,12 +72,12 @@ export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
         </>
       ) : (
         <>
-          {log?.notat || log?.notes}
+          <p className="break-all">{log?.notat || log?.notes}</p>
           <button
             onClick={() => setIsEditing(true)}
             className="ml-2 rounded-lg"
           >
-            <Pencil className="h-6 w-6 text-purple" />
+            <Pencil className="h-5 md:h-6 w-5 md:w-6 text-purple" />
           </button>
         </>
       )}

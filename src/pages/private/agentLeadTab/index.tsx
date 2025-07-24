@@ -126,22 +126,22 @@ export const AgentleadsTabs = () => {
         )}
         {activeTab === 1 && (
           <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap">
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(0)}
               >
                 Kunderegistrering
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-sm">Tomt og husmodell</span>
+              <span className="text-[#5D6B98] text-xs md:text-sm">Tomt og husmodell</span>
             </div>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
                 <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
-                <p className="text-[#4D4D4D] text-sm">
+                <p className="text-[#4D4D4D] text-xs md:text-sm">
                   Her registrer du informasjon om kunden. Jo mer informasjon, jo
                   bedre kan banken forberede seg{" "}
                   <br className="hidden lg:block" /> før de tar kontakt med
@@ -160,29 +160,29 @@ export const AgentleadsTabs = () => {
         )}
         {activeTab === 2 && (
           <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap">
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(0)}
               >
                 Kunderegistrering
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(1)}
               >
                 Tomt og husmodell
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-sm">Prosjektregnskap</span>
+              <span className="text-[#5D6B98] text-xs md:text-sm">Prosjektregnskap</span>
             </div>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
                 <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
-                <p className="text-[#4D4D4D] text-sm">
+                <p className="text-[#4D4D4D] text-xs md:text-sm">
                   Her registrer du informasjon om kunden. Jo mer informasjon, jo
                   bedre kan banken forberede seg{" "}
                   <br className="hidden lg:block" /> før de tar kontakt med
@@ -194,43 +194,43 @@ export const AgentleadsTabs = () => {
                 <h3 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl whitespace-nowrap">
                   kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
-                <p className="text-sm text-gray">inkl. tomtepris</p>
+                <p className="text-xs md:text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
           </div>
         )}
         {activeTab === 3 && (
           <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap">
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(0)}
               >
                 Kunderegistrering
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(1)}
               >
                 Tomt og husmodell
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(2)}
               >
                 Prosjektregnskap
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-sm">Forhåndstakst</span>
+              <span className="text-[#5D6B98] text-xs md:text-sm">Forhåndstakst</span>
             </div>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
                 <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
-                <p className="text-[#4D4D4D] text-sm">
+                <p className="text-[#4D4D4D] text-xs md:text-sm">
                   Her registrer du informasjon om kunden. Jo mer informasjon, jo
                   bedre kan banken forberede seg{" "}
                   <br className="hidden lg:block" /> før de tar kontakt med
@@ -238,54 +238,54 @@ export const AgentleadsTabs = () => {
                 </p>
               </div>
               <div>
-                <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
+                <p className="text-[#5D6B98] mb-2 text-xs md:text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl whitespace-nowrap">
                   kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
-                <p className="text-sm text-gray">inkl. tomtepris</p>
+                <p className="text-xs md:text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
           </div>
         )}
         {activeTab === 4 && (
           <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap">
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(0)}
               >
                 Kunderegistrering
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(1)}
               >
                 Tomt og husmodell
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(2)}
               >
                 Prosjektregnskap
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-sm font-medium cursor-pointer"
+                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(3)}
               >
                 Forhåndstakst
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-sm">Oppsummering</span>
+              <span className="text-[#5D6B98] text-xs md:text-sm">Oppsummering</span>
             </div>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
                 <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                   Registrer lead til bank
                 </h3>
-                <p className="text-[#4D4D4D] text-sm">
+                <p className="text-[#4D4D4D] text-xs md:text-sm">
                   Her registrer du informasjon om kunden. Jo mer informasjon, jo
                   bedre kan banken forberede seg{" "}
                   <br className="hidden lg:block" /> før de tar kontakt med
@@ -293,19 +293,19 @@ export const AgentleadsTabs = () => {
                 </p>
               </div>
               <div>
-                <p className="text-[#5D6B98] mb-2 text-sm">Tilbudspris</p>
+                <p className="text-[#5D6B98] mb-2 text-xs md:text-sm">Tilbudspris</p>
                 <h3 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl whitespace-nowrap">
                   kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
-                <p className="text-sm text-gray">inkl. tomtepris</p>
+                <p className="text-xs md:text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
           </div>
         )}
         <div className="relative">
-          <div className="flex items-center justify-between gap-2 mb-6 px-4 py-1 md:px-8 lg:px-10 mt-4 overflow-x-auto">
+          <div className="flex items-center justify-between gap-2 mb-6 px-4 py-1 md:px-8 lg:px-10 mt-4">
             <div
-              className="flex gap-2 md:gap-3 lg:gap-4 rounded-lg bg-white p-1 md:p-1.2"
+              className="flex gap-2 md:gap-3 lg:gap-4 rounded-lg bg-white p-1 md:p-1.2 overflow-auto"
               style={{
                 boxShadow:
                   "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",

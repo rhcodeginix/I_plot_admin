@@ -485,7 +485,7 @@ export const ProjectAccounting = forwardRef<
                   render={({ field, fieldState }) => (
                     <FormItem>
                       <FormControl>
-                        <div className="flex flex-wrap items-center gap-3 md:gap-5">
+                        <div className="flex flex-wrap items-center gap-3 lg:gap-5">
                           <div
                             className="relative flex items-center gap-2 cursor-pointer"
                             onClick={() =>
@@ -598,7 +598,7 @@ export const ProjectAccounting = forwardRef<
                 />
               </div>
               {okonomi === "Last opp en økonomisk plan" && (
-                <div className="grid grid-cols-2 gap-6 mb-[62px]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 lg:gap-6 mb-[96px]">
                   <FormField
                     control={form.control}
                     name="documents"
@@ -607,28 +607,28 @@ export const ProjectAccounting = forwardRef<
                         <FormControl>
                           <div className="flex items-center gap-5 w-full">
                             <div
-                              className="relative w-full p-3 rounded-lg"
+                              className="relative w-full p-2 md:p-3 rounded-lg"
                               style={{
                                 boxShadow:
                                   "0px 2px 4px -2px #1018280F, 0px 4px 8px -2px #1018281A",
                               }}
                             >
                               <div
-                                className="border border-gray2 rounded-[8px] px-3 border-dashed laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer w-full"
+                                className="border border-gray2 rounded-[8px] px-2 md:px-3 border-dashed laptop:px-6 py-2 md:py-4 flex justify-center items-center flex-col gap-3 cursor-pointer w-full"
                                 onDragOver={handleDocumentsDragOver}
                                 onClick={handleDocumentsClick}
                                 onDrop={handleDocumentsDrop}
                               >
                                 <img src={Ic_upload_blue_img} alt="upload" />
-                                <div className="flex items-center gap-3">
-                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-2 px-4 font-medium whitespace-nowrap">
+                                <div className="flex items-center gap-2 md:gap-3">
+                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
                                     Last opp
                                   </span>
-                                  <p className="text-[#111322] text-sm text-center truncate w-full">
+                                  <p className="text-[#111322] text-xs md:text-sm text-center truncate w-full">
                                     Slipp fil for å laste opp her
                                   </p>
                                 </div>
-                                <p className="text-gray text-sm text-center truncate w-full">
+                                <p className="text-gray text-xs md:text-sm text-center truncate w-full">
                                   Filformater: kun PDF, max 5 MB
                                 </p>
                                 <input
@@ -658,10 +658,10 @@ export const ProjectAccounting = forwardRef<
                       <div className="flex flex-col items-center gap-3">
                         {documents?.map((file: any, index: number) => (
                           <div
-                            className="border border-gray2 rounded-lg p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
+                            className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
                             key={index}
                           >
-                            <div className="flex items-start gap-4 truncate">
+                            <div className="flex items-start gap-2 md:gap-4 truncate">
                               <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
                                 <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
                                   <img src={Ic_file} alt="file" />

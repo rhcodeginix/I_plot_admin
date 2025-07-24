@@ -149,8 +149,8 @@ export const CreateNewOffice: React.FC<{
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <div className="p-5 laptop:p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+          <div className="p-4 md:p-5 laptop:p-6">
+            <div className="flex flex-col md:grid grid-cols-2 gap-4 lg:gap-6">
               <div>
                 <FormField
                   control={form.control}

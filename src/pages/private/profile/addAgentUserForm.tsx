@@ -256,7 +256,6 @@ export const AgentProfileForm = () => {
           id: uniqueId,
           password: hashedPassword,
           updatedAt: new Date(),
-          role: "Agent",
         });
         toast.success("Lagret", {
           position: "top-right",

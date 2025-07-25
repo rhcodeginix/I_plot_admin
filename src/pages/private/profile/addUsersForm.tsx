@@ -41,21 +41,6 @@ const formSchema = z.object({
     .string()
     .email({ message: "Vennligst skriv inn en gyldig e-postadresse." })
     .min(1, { message: "E-posten må være på minst 2 tegn." }),
-  modulePermissions: z
-    .array(
-      z.object({
-        id: z.number(),
-        name: z.string(),
-        permissions: z.object({
-          all: z.boolean(),
-          add: z.boolean(),
-          edit: z.boolean(),
-          delete: z.boolean(),
-          duplicate: z.boolean().optional(),
-        }),
-      })
-    )
-    .min(1, "At least one permission is required"),
   password: z
     .string()
     .min(8, { message: "Passordet må være minst 8 tegn langt." })
@@ -86,7 +71,6 @@ export const AdminProfileForm = () => {
       f_name: "",
       l_name: "",
       email: "",
-      modulePermissions: [],
       password: "",
     },
   });
@@ -160,7 +144,6 @@ export const AdminProfileForm = () => {
           id: uniqueId,
           password: hashedPassword,
           updatedAt: new Date(),
-          role: "Admin",
         });
         toast.success("Lagret", {
           position: "top-right",
@@ -179,79 +162,6 @@ export const AdminProfileForm = () => {
     }
   };
 
-  const [modulePermissions, setModulePermissions] = useState([
-    {
-      id: 1,
-      name: "Husmodell",
-      permissions: {
-        all: true,
-        add: true,
-        edit: true,
-        delete: true,
-        duplicate: true,
-      },
-    },
-  ]);
-
-  const permissionTypes = [
-    { key: "all", label: "All" },
-    { key: "add", label: "Add" },
-    { key: "edit", label: "Edit" },
-    { key: "delete", label: "Delete" },
-    { key: "duplicate", label: "Duplicate" },
-  ];
-
-  const handlePermissionChange = (
-    moduleName: string,
-    permissionKey: string
-  ) => {
-    setModulePermissions((prevState) => {
-      return prevState.map((module: any, index: number) => {
-        if (module.id === moduleName) {
-          if (permissionKey === "all") {
-            const newAllValue = !module.permissions.all;
-            const updatedPermissions: any = {};
-
-            Object.keys(module.permissions).forEach((key) => {
-              updatedPermissions[key] = newAllValue;
-            });
-
-            return {
-              ...module,
-              permissions: updatedPermissions,
-            };
-          } else {
-            const newPermissions = {
-              ...module.permissions,
-              [permissionKey]: !module.permissions[permissionKey],
-            };
-
-            const allSpecificPermissionsEnabled = Object.entries(newPermissions)
-              .filter(([key]) => key !== "all")
-              .every(([_, value]) => value === true);
-
-            if (allSpecificPermissionsEnabled) {
-              newPermissions.all = true;
-            } else {
-              newPermissions.all = false;
-            }
-
-            return {
-              ...module,
-              permissions: newPermissions,
-            };
-          }
-        }
-
-        return module;
-      });
-    });
-  };
-
-  useEffect(() => {
-    form.setValue("modulePermissions", modulePermissions);
-  }, [form, modulePermissions]);
-
   useEffect(() => {
     if (!id) {
       return;
@@ -264,9 +174,6 @@ export const AdminProfileForm = () => {
 
           if (value !== undefined && value !== null)
             form.setValue(key as any, value);
-          if (key === "modulePermissions") {
-            setModulePermissions(value);
-          }
         });
       }
     };
@@ -449,101 +356,6 @@ export const AdminProfileForm = () => {
                           </FormItem>
                         )}
                       />
-                    </div>
-                    <div className="col-span-2">
-                      <p
-                        className={`text-black mb-[6px] text-sm md:text-base desktop:text-lg font-medium`}
-                      >
-                        Informasjon om tilgangsnivå
-                      </p>
-                      <div className="border border-gray1 border-r-0 border-b-0 rounded shadow-sm overflow-x-auto">
-                        <table className="min-w-full bg-white border-r border-gray1">
-                          <thead>
-                            <tr className="bg-gray-50 border-b border-gray1">
-                              <th className="py-3 px-3 md:px-4 text-sm md:text-base text-left font-medium text-gray-500 tracking-wider border-r border-gray1 text-black">
-                                #/Modules
-                              </th>
-                              {permissionTypes.map((permission) => (
-                                <th
-                                  key={permission.key}
-                                  className="py-3 px-3 md:px-4 text-sm md:text-base text-center font-medium text-gray-500 tracking-wider border-r border-gray1 text-black"
-                                >
-                                  {permission.label}
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {modulePermissions.map((module: any, index) => (
-                              <tr
-                                key={module.id}
-                                className={
-                                  index === 2
-                                    ? "border-t-2 border-b-2 border-primary"
-                                    : "border-b border-gray1"
-                                }
-                              >
-                                <td className="py-3 px-3 md:px-4 border-r border-gray1 text-black text-sm md:text-base">
-                                  {module.name}
-                                </td>
-                                {permissionTypes.map((permission) => (
-                                  <td
-                                    key={`${module.id}-${permission.key}`}
-                                    className="text-center py-2 px-3 md:px-4 border-r border-gray1"
-                                  >
-                                    <label className="inline-flex items-center justify-center cursor-pointer">
-                                      <input
-                                        type="checkbox"
-                                        className="hidden"
-                                        checked={
-                                          module.permissions[permission.key]
-                                        }
-                                        onChange={() =>
-                                          handlePermissionChange(
-                                            module.id,
-                                            permission.key
-                                          )
-                                        }
-                                      />
-                                      <div
-                                        className={`w-6 h-6 border rounded flex items-center justify-center ${
-                                          module.permissions[permission.key]
-                                            ? "bg-primary border-[#fff]"
-                                            : "bg-white border-gray1"
-                                        }`}
-                                      >
-                                        {module.permissions[permission.key] && (
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            className="w-4 h-4 text-white"
-                                          >
-                                            <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth="2"
-                                              d="M5 13l4 4L19 7"
-                                            />
-                                          </svg>
-                                        )}
-                                      </div>
-                                    </label>
-                                  </td>
-                                ))}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-
-                      {typeof form.formState.errors.modulePermissions
-                        ?.message === "string" && (
-                        <div className="text-red text-xs mt-2">
-                          {form.formState.errors.modulePermissions?.message}
-                        </div>
-                      )}
                     </div>
                     <div>
                       <FormField

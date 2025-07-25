@@ -6,6 +6,7 @@ import { AgentProfileForm } from "./addAgentUserForm";
 
 export const Profile = () => {
   const [Role, setRole] = useState(null);
+  const [IsAdmin, setIsAdmin] = useState(null);
   useEffect(() => {
     const getData = async () => {
       const data: any = await fetchAdminDataByEmail();
@@ -13,6 +14,8 @@ export const Profile = () => {
         if (data?.role) {
           setRole(data?.role);
         }
+
+        setIsAdmin(data?.is_admin ?? false);
       }
     };
 
@@ -23,7 +26,11 @@ export const Profile = () => {
       {Role === "Admin" && <AdminProfileForm />}
       {Role === "Bankansvarlig" && <BankProfileForm />}
       {Role === "super-admin" && <BankProfileForm />}
-      {Role === "Agent" && <AgentProfileForm />}
+      {Role === "Agent" && IsAdmin === true ? (
+        <AgentProfileForm />
+      ) : (
+        <AdminProfileForm />
+      )}
     </>
   );
 };

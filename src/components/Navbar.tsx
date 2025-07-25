@@ -56,6 +56,7 @@ export const Navbar: React.FC = () => {
   const [name, setName] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
   const [id, setId] = useState(null);
+  const [IsAdmin, setIsAdmin] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -69,6 +70,7 @@ export const Navbar: React.FC = () => {
 
         setIsPhoto(data?.photo);
         setName(data?.name || data?.f_name);
+        setIsAdmin(data?.is_admin ?? false);
 
         if (data?.supplier) {
           setSupplier(data?.supplier);
@@ -253,7 +255,7 @@ export const Navbar: React.FC = () => {
           </div>
           {isDropdownOpen && (
             <div
-              className="absolute right-0 mt-2 bg-white shadow-shadow1 rounded-md shadow-lg p-2 top-10 border border-gray2"
+              className="absolute right-0 mt-2 bg-white shadow-shadow1 rounded-md shadow-lg p-2 top-10 border border-gray2 min-w-40"
               ref={dropdownRef}
             >
               <Link
@@ -263,7 +265,7 @@ export const Navbar: React.FC = () => {
               >
                 <User className="w-5 h-5 text-primary" /> Profil
               </Link>
-              {loginUser === "andre.finger@gmail.com" && (
+              {(loginUser === "andre.finger@gmail.com" || IsAdmin === true) && (
                 <Link
                   to={"/Brukeradministrasjon"}
                   className="px-3 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer flex items-center gap-2"

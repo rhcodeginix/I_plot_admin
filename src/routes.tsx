@@ -168,7 +168,7 @@ export const routes = createBrowserRouter([
           {
             path: "/Brukeradministrasjon",
             element: (
-              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Admin", "super-admin", "Agent"]}>
                 <UserManagement />
               </ProtectedRoute>
             ),

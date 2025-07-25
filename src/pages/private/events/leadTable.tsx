@@ -89,8 +89,8 @@ export const LeadTable = () => {
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchFilteredModels = async () => {
-      setIsLoading(true);
 
       const results: any[] = [];
 

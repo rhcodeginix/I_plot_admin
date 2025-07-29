@@ -242,7 +242,7 @@ export const ProjectTable = () => {
       },
       {
         accessorKey: "sisteoppdatertav",
-        header: "Siste oppdatert av",
+        header: "Sist oppdatert",
         cell: ({ row }) => (
           <p className="text-sm font-medium text-black w-max">
             {formatDateTime(row.original?.updatedAt)}

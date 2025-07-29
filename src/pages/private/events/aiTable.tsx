@@ -181,13 +181,13 @@ export const AITable = () => {
         if (finalData) {
           return finalData;
         } else {
-          const supplierDocRef = doc(db, "room_configurator", id);
-          const docSnap = await getDoc(supplierDocRef);
+          if (id) {
+            const supplierDocRef = doc(db, "room_configurator", id);
+            const docSnap = await getDoc(supplierDocRef);
 
-          if (docSnap.exists()) {
-            return docSnap.data();
-          } else {
-            console.error("No document found in either collection for ID:", id);
+            if (docSnap.exists()) {
+              return docSnap.data();
+            }
           }
         }
       }
@@ -209,7 +209,9 @@ export const AITable = () => {
               const data = await fetchDocumentData(row.original?.document_id);
               setDocData(data);
             };
-            fetchData();
+            if (row.original?.document_id) {
+              fetchData();
+            }
           }, [row.original?.document_id]);
 
           return (
@@ -233,12 +235,14 @@ export const AITable = () => {
               const data = await fetchDocumentData(row.original?.document_id);
               setDocData(data);
             };
-            fetchData();
+            if (row.original?.document_id) {
+              fetchData();
+            }
           }, [row.original?.document_id]);
 
           return (
             <p className="text-sm font-medium text-black w-max">
-              {docData?.Anleggsadresse}
+              {docData?.Anleggsadresse ?? "-"}
             </p>
           );
         },
@@ -254,7 +258,9 @@ export const AITable = () => {
               const data = await getData(row.original?.created_by);
               setAdminData(data);
             };
-            fetchData();
+            if (row.original?.created_by) {
+              fetchData();
+            }
           }, [row.original?.created_by]);
 
           return (

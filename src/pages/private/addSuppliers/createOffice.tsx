@@ -132,6 +132,7 @@ export const CreateNewOffice: React.FC<{
             if (data) {
               form.setValue("Adresse", data?.data?.Adresse);
               form.setValue("name", data?.data?.name);
+              form.setValue("is_financing", data?.data?.is_financing);
             }
           } else {
             console.error("No document found for ID:", id);
@@ -225,7 +226,7 @@ export const CreateNewOffice: React.FC<{
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <div className="relative flex items-center gap-2">
+                          <div className="relative flex items-center gap-2 cursor-pointer">
                             <input
                               type="checkbox"
                               id="is_financing"

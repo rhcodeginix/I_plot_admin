@@ -205,7 +205,7 @@ export const PDFTable = () => {
 
           return (
             <p className="text-sm font-medium text-black w-max">
-              {docData?.Anleggsadresse}
+              {docData?.Anleggsadresse ?? "-"}
             </p>
           );
         },

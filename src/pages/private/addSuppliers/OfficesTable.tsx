@@ -110,6 +110,25 @@ export const OfficesTable: React.FC<{ setEditId: any; setActiveTab: any }> = ({
     );
   }, [offices, searchTerm]);
 
+  const getuserData = async (id: string) => {
+    try {
+      const q = query(collection(db, "admin"), where("office", "==", id));
+
+      const querySnapshot = await getDocs(q);
+
+      let data: any = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      return data;
+    } catch (error) {
+      console.error("Error fetching husmodell data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
@@ -129,6 +148,39 @@ export const OfficesTable: React.FC<{ setEditId: any; setActiveTab: any }> = ({
             {row.original?.data?.Adresse}
           </p>
         ),
+      },
+      {
+        accessorKey: "",
+        header: "Brukere", // brukere
+        cell: ({ row }) => {
+          const [usersData, setUsersData] = useState<any>(null);
+
+          useEffect(() => {
+            const fetchData = async () => {
+              const data = await getuserData(row.original?.id);
+              setUsersData(data);
+            };
+            fetchData();
+          }, [row.original?.id]);
+
+          return (
+            <div className="w-max">
+              {usersData && usersData.length > 0
+                ? usersData?.map((item: any, index: number) => {
+                    return (
+                      <ul key={index}>
+                        <li className="list-disc">
+                          {item?.f_name
+                            ? `${item?.f_name} ${item?.l_name}`
+                            : item?.name}
+                        </li>
+                      </ul>
+                    );
+                  })
+                : "-"}
+            </div>
+          );
+        },
       },
       {
         id: "action",

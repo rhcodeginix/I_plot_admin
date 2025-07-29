@@ -303,7 +303,7 @@ export const CreateNewOffice: React.FC<{
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <div className="relative flex items-center gap-2">
+                          <div className="relative flex items-center gap-2 cursor-pointer">
                             <input
                               type="checkbox"
                               id="is_financing"

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Loader2, Pencil, Trash } from "lucide-react";
 import {
   Table,
@@ -29,7 +31,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Button from "../../../components/common/button";
 import Modal from "../../../components/common/modal";
-import { fetchAdminDataByEmail } from "../../../lib/utils";
+import { fetchAdminDataByEmail, fetchOfficeData } from "../../../lib/utils";
 
 export const UserTable: React.FC<{ role: any }> = ({ role }) => {
   const [page, setPage] = useState(1);
@@ -130,8 +132,15 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
     setShowConfirm(true);
   };
 
-  const columns = useMemo<ColumnDef<any>[]>(
-    () => [
+  const getOfficeData = async (id: string) => {
+    const data = await fetchOfficeData(id);
+    if (data) {
+      return data;
+    }
+  };
+
+  const columns = useMemo<ColumnDef<any>[]>(() => {
+    const baseColumns: ColumnDef<any>[] = [
       {
         accessorKey: "photo",
         header: "Avatar",
@@ -204,9 +213,37 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
           </>
         ),
       },
-    ],
-    [navigate, role]
-  );
+    ];
+
+    const updatedColumn: ColumnDef<any> = {
+      accessorKey: "office",
+      header: "Kontor",
+      cell: ({ row }) => {
+        const [officeData, setOfficeData] = useState<any>(null);
+
+        useEffect(() => {
+          const fetchData = async () => {
+            const data = await getOfficeData(row.original.office);
+            setOfficeData(data);
+          };
+          if (row.original.office) {
+            fetchData();
+          }
+        }, [row.original.office]);
+
+        return (
+          <p className="text-sm text-darkBlack">
+            {row.original.office ? officeData?.data?.name : "-"}
+          </p>
+        );
+      },
+    };
+    if (role === "Agent") {
+      baseColumns.splice(4, 0, updatedColumn);
+    }
+
+    return baseColumns;
+  }, [navigate, role]);
 
   const pageSize = 10;
   const paginatedData = useMemo(() => {

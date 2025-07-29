@@ -274,13 +274,6 @@ export const HusmodellerTable = () => {
         },
       },
       {
-        accessorKey: "kategori",
-        header: "Kategori",
-        cell: ({ row }) => (
-          <p className="text-sm text-gray w-max">Herskapelig</p>
-        ),
-      },
-      {
         accessorKey: "husdetaljer",
         header: "Husdetaljer",
         cell: ({ row }) => (
@@ -300,7 +293,7 @@ export const HusmodellerTable = () => {
       },
       {
         accessorKey: "sisteoppdatertav",
-        header: "Siste oppdatert av",
+        header: "Sist oppdatert",
         cell: ({ row }) => (
           <div className="flex items-start gap-3 w-max">
             <img

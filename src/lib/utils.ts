@@ -202,6 +202,20 @@ export const fetchLeadData = async (id: string) => {
     console.error("Error fetching lead data:", error);
   }
 };
+export const fetchOfficeData = async (id: string) => {
+  try {
+    const officeDocRef = doc(db, "office", id);
+    const docSnap = await getDoc(officeDocRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.error("No document found for ID:", id);
+    }
+  } catch (error) {
+    console.error("Error fetching office data:", error);
+  }
+};
 
 export function formatTimestamp(timestamp: any) {
   const date = new Date(timestamp?.seconds * 1000);

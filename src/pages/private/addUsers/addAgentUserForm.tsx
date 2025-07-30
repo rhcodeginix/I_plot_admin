@@ -82,6 +82,8 @@ const formSchema = z.object({
     message: "Kontor må velges",
   }),
   is_admin: z.boolean(),
+  is_bank: z.boolean(),
+  is_boligkonfigurator: z.boolean(),
   password: z
     .string()
     .min(8, { message: "Passordet må være minst 8 tegn langt." })
@@ -116,6 +118,8 @@ export const AddAgentUserForm = () => {
       supplier: "",
       office: "",
       is_admin: false,
+      is_bank: false,
+      is_boligkonfigurator: true,
       password: "",
     },
   });
@@ -639,11 +643,7 @@ export const AddAgentUserForm = () => {
                             {modulePermissions.map((module: any, index) => (
                               <tr
                                 key={module.id}
-                                className={
-                                  index === 2
-                                    ? "border-t-2 border-b-2 border-primary"
-                                    : "border-b border-gray1"
-                                }
+                                className={"border-b border-gray1"}
                               >
                                 <td className="py-3 px-3 md:px-4 border-r border-gray1 text-black text-sm md:text-base">
                                   {module.name}
@@ -731,6 +731,16 @@ export const AddAgentUserForm = () => {
                                         keepTouched: false,
                                         keepDirty: false,
                                       });
+                                    }
+                                    if (
+                                      value ===
+                                      "9f523136-72ca-4bde-88e5-de175bc2fc71"
+                                    ) {
+                                      form.setValue(
+                                        "is_boligkonfigurator",
+                                        true
+                                      );
+                                      form.setValue("is_bank", false);
                                     }
                                   }}
                                   value={field.value}
@@ -852,27 +862,28 @@ export const AddAgentUserForm = () => {
                         )}
                       />
                     </div>
-                    <div className="col-span-2">
+                    {form.watch("supplier") ===
+                      "9f523136-72ca-4bde-88e5-de175bc2fc71" && (
                       <div>
                         <FormField
                           control={form.control}
-                          name="is_admin"
+                          name="is_bank"
                           render={({ field }) => (
                             <FormItem>
                               <FormControl>
                                 <div className="relative flex items-center gap-2">
                                   <input
                                     type="checkbox"
-                                    id="is_admin"
+                                    id="is_bank"
                                     checked={field.value}
                                     onChange={field.onChange}
                                     className="accent-primary h-[18px] w-[18px]"
                                   />
                                   <label
-                                    htmlFor="is_admin"
+                                    htmlFor="is_bank"
                                     className="text-sm md:text-base"
                                   >
-                                    Give access as a super admin?
+                                    Tips til bank
                                   </label>
                                 </div>
                               </FormControl>
@@ -881,6 +892,65 @@ export const AddAgentUserForm = () => {
                           )}
                         />
                       </div>
+                    )}
+                    {form.watch("supplier") ===
+                      "9f523136-72ca-4bde-88e5-de175bc2fc71" && (
+                      <div>
+                        <FormField
+                          control={form.control}
+                          name="is_boligkonfigurator"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <div className="relative flex items-center gap-2">
+                                  <input
+                                    type="checkbox"
+                                    id="is_boligkonfigurator"
+                                    checked={field.value}
+                                    onChange={field.onChange}
+                                    className="accent-primary h-[18px] w-[18px]"
+                                  />
+                                  <label
+                                    htmlFor="is_boligkonfigurator"
+                                    className="text-sm md:text-base"
+                                  >
+                                    Boligkonfigurator
+                                  </label>
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name="is_admin"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="relative flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  id="is_admin"
+                                  checked={field.value}
+                                  onChange={field.onChange}
+                                  className="accent-primary h-[18px] w-[18px]"
+                                />
+                                <label
+                                  htmlFor="is_admin"
+                                  className="text-sm md:text-base"
+                                >
+                                  Give access as a super admin?
+                                </label>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   </div>
                 </div>

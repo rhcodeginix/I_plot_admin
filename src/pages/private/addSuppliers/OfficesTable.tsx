@@ -151,7 +151,7 @@ export const OfficesTable: React.FC<{ setEditId: any; setActiveTab: any }> = ({
       },
       {
         accessorKey: "",
-        header: "Brukere", // brukere
+        header: "Antall brukere",
         cell: ({ row }) => {
           const [usersData, setUsersData] = useState<any>(null);
 
@@ -165,19 +165,9 @@ export const OfficesTable: React.FC<{ setEditId: any; setActiveTab: any }> = ({
 
           return (
             <div className="w-max">
-              {usersData && usersData.length > 0
-                ? usersData?.map((item: any, index: number) => {
-                    return (
-                      <ul key={index}>
-                        <li className="list-disc">
-                          {item?.f_name
-                            ? `${item?.f_name} ${item?.l_name}`
-                            : item?.name}
-                        </li>
-                      </ul>
-                    );
-                  })
-                : "-"}
+              <p className="font-semibold text-black text-sm w-max">
+                {usersData && usersData?.length}
+              </p>
             </div>
           );
         },

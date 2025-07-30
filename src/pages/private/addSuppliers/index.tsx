@@ -1,15 +1,19 @@
-import { ChevronRight } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { ChevronRight, Plus, X } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AddSuppliersForm } from "./addSuppliersForm";
 import { useEffect, useState } from "react";
 import { CreateNewOffice } from "./createOffice";
 import { OfficesTable } from "./OfficesTable";
+import { OfficesUserTable } from "./OfficeUserTable";
+import Button from "../../../components/common/button";
+import Modal from "../../../components/common/modal";
+import { AddUserPerOffice } from "./addNewUser";
 
 export const AddSuppliers = () => {
   const [activeTab, setActiveTab] = useState<
     "Leverandører" | "Legg til kontor" | "Kontorliste"
   >("Leverandører");
-
+  const navigate = useNavigate();
   const [editId, setEditId] = useState(null);
 
   const location = useLocation();
@@ -21,6 +25,17 @@ export const AddSuppliers = () => {
       setEditId(null);
     }
   }, [activeTab]);
+
+  const [isUserPopup, setIsUserPopup] = useState(false);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isRefetch, setIsRefetch] = useState(false);
+
+  useEffect(() => {
+    if (!isUserPopup) {
+      navigate(`/edit-til-leverandor/${id}`);
+    }
+  }, [isUserPopup]);
 
   return (
     <>
@@ -98,6 +113,27 @@ export const AddSuppliers = () => {
                   setActiveTab={setActiveTab}
                 />
               </div>
+              <div>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-10 py-5 border-t border-gray1">
+                  <h1 className="text-darkBlack font-medium text-lg md:text-xl desktop:text-2xl">
+                    Liste over alle bruker
+                  </h1>
+                  <Button
+                    text="Legg til ny bruker"
+                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                    icon={<Plus className="text-white w-5 h-5" />}
+                    onClick={() => setIsUserPopup(true)}
+                  />
+                </div>
+                {editId && (
+                  <OfficesUserTable
+                    editId={editId}
+                    isRefetch={isRefetch}
+                    setIsRefetch={setIsRefetch}
+                    setIsUserPopup={setIsUserPopup}
+                  />
+                )}
+              </div>
             </div>
           </>
         )}
@@ -112,6 +148,35 @@ export const AddSuppliers = () => {
           </>
         )}
       </div>
+
+      {isUserPopup && (
+        <Modal
+          onClose={() => {
+            if (!isDropdownOpen) {
+              setIsUserPopup(false);
+            }
+          }}
+          isOpen={true}
+        >
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-lg w-[90vw] md:w-[80vw] lg:w-[70vw] overflow-hidden max-h-[90vh] overflow-y-auto relative">
+              <X
+                className="text-primary absolute top-3 right-3 w-6 h-6 cursor-pointer"
+                onClick={() => setIsUserPopup(false)}
+              />
+              <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px] p-4 laptop:p-6 pb-0 laptop:pb-0">
+                Legg til bruker
+              </h1>
+              <AddUserPerOffice
+                editId={editId}
+                setIsUserPopup={setIsUserPopup}
+                setDropdownOpen={setIsDropdownOpen}
+                setIsRefetch={setIsRefetch}
+              />
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

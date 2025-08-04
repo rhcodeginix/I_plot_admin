@@ -302,7 +302,10 @@ export const AddAgentUserForm = () => {
                 firstName: data.f_name,
                 lastName: data.l_name,
                 password: data.password,
-                link: "https://admin.mintomt.no/",
+                link:
+                  data?.supplier === "9f523136-72ca-4bde-88e5-de175bc2fc71"
+                    ? "https://boligkonfigurator.mintomt.no/login"
+                    : "https://admin.mintomt.no/",
                 company: offic?.data?.name,
               }),
             }

@@ -36,11 +36,15 @@ export const HusleadsTable = () => {
 
   const email = localStorage.getItem("Iplot_admin");
   const [permission, setPermission] = useState<any>(null);
+  const [role, setRole] = useState<any>(null);
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
       if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
         const finalData = data?.supplier;
         setPermission(finalData);
       }
@@ -54,7 +58,7 @@ export const HusleadsTable = () => {
 
     try {
       let q;
-      if (email === "andre.finger@gmail.com") {
+      if (email === "andre.finger@gmail.com" || role === "Admin") {
         q = query(collection(db, "leads"), where("Isopt", "==", true));
       } else {
         q = query(

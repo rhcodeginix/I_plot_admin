@@ -1,9 +1,10 @@
 import { Plus } from "lucide-react";
 import Button from "../../../components/common/button";
 import { SupplierTable } from "./supplierTable";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
+import { fetchAdminDataByEmail } from "../../../lib/utils";
 
 export const Suppliers = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -39,6 +40,21 @@ export const Suppliers = () => {
   };
   const email = localStorage.getItem("Iplot_admin");
 
+  const [role, setRole] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+      }
+    };
+
+    getData();
+  }, []);
+
   return (
     <>
       <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
@@ -68,7 +84,7 @@ export const Suppliers = () => {
               className="hidden"
               onChange={handleFileChange}
             />
-            {email === "andre.finger@gmail.com" && (
+            {(email === "andre.finger@gmail.com" || role === "Admin") && (
               <Button
                 text="Legg til"
                 className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

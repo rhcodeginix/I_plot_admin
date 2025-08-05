@@ -319,14 +319,16 @@ export const HusmodellerTable = () => {
           <>
             <div className="flex items-center justify-center gap-3">
               {((permission && permission?.edit) ||
-                email === "andre.finger@gmail.com") && (
+                email === "andre.finger@gmail.com" ||
+                role === "Admin") && (
                 <Pencil
                   className="h-5 w-5 text-primary cursor-pointer"
                   onClick={() => navigate(`/edit-husmodell/${row.original.id}`)}
                 />
               )}
               {((permission && permission?.delete) ||
-                email === "andre.finger@gmail.com") && (
+                email === "andre.finger@gmail.com" ||
+                role === "Admin") && (
                 <Trash
                   className="h-5 w-5 text-primary cursor-pointer"
                   onClick={() =>
@@ -342,7 +344,8 @@ export const HusmodellerTable = () => {
                 onClick={() => navigate(`/se-husmodell/${row.original.id}`)}
               />
               {((permission && permission?.duplicate) ||
-                email === "andre.finger@gmail.com") && (
+                email === "andre.finger@gmail.com" ||
+                role === "Admin") && (
                 <Copy
                   className="h-5 w-5 text-primary cursor-pointer"
                   onClick={() =>

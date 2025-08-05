@@ -36,11 +36,15 @@ export const BankleadsTable = () => {
 
   const email = localStorage.getItem("Iplot_admin");
   const [permission, setPermission] = useState<any>(null);
+  const [role, setRole] = useState<any>(null);
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
       if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
         const finalData = data?.supplier;
         setPermission(finalData);
       }
@@ -53,11 +57,8 @@ export const BankleadsTable = () => {
     setIsLoading(true);
 
     try {
-      let leadBankTrue = query(
-        collection(db, "leads"),
-        where("IsoptForBank", "==", true)
-      );
-      if (email === "andre.finger@gmail.com") {
+      let leadBankTrue;
+      if (email === "andre.finger@gmail.com" || role === "Admin") {
         leadBankTrue = query(
           collection(db, "leads"),
           where("IsoptForBank", "==", true)

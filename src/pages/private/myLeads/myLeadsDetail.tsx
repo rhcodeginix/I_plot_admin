@@ -99,11 +99,15 @@ export const MyLeadsDetail = () => {
   const [leadData, setLeadData] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
   const [permission, setPermission] = useState<any>(null);
+  const [role, setRole] = useState<any>(null);
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
       if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
         const finalData = data?.supplier;
         setPermission(finalData);
       }
@@ -141,7 +145,7 @@ export const MyLeadsDetail = () => {
   const fetchHusmodellData = async () => {
     try {
       let q;
-      if (email === "andre.finger@gmail.com") {
+      if (email === "andre.finger@gmail.com" || role === "Admin") {
         q = query(
           collection(db, "house_model"),
           where(
@@ -206,7 +210,7 @@ export const MyLeadsDetail = () => {
   const fetchSuppliersData = async () => {
     try {
       let q;
-      if (email === "andre.finger@gmail.com") {
+      if (email === "andre.finger@gmail.com" || role === "Admin") {
         q = query(
           collection(db, "admin"),
           where("supplier", "==", "065f9498-6cdb-469b-8601-bb31114d7c95")

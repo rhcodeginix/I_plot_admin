@@ -125,7 +125,7 @@ export const Navbar: React.FC = () => {
               Dashboard
             </Link>
           )}
-          {email === "andre.finger@gmail.com" && (
+          {(email === "andre.finger@gmail.com" || Role === "Admin") && (
             <Link
               to={"/Leverandorer"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -139,7 +139,7 @@ export const Navbar: React.FC = () => {
               Leverandører
             </Link>
           )}
-          {email === "andre.finger@gmail.com" && (
+          {(email === "andre.finger@gmail.com" || Role === "Admin") && (
             <Link
               to={"/events"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -152,6 +152,7 @@ export const Navbar: React.FC = () => {
             </Link>
           )}
           {(email === "andre.finger@gmail.com" ||
+            Role === "Admin" ||
             HusmodellPermission?.add === true ||
             HusmodellPermission?.delete === true ||
             HusmodellPermission?.edit === true) &&
@@ -322,7 +323,7 @@ export const Navbar: React.FC = () => {
                 Dashboard
               </Link>
             )}
-            {email === "andre.finger@gmail.com" && (
+            {(email === "andre.finger@gmail.com" || Role === "Admin") && (
               <Link
                 to={"/Leverandorer"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -336,7 +337,7 @@ export const Navbar: React.FC = () => {
                 Leverandører
               </Link>
             )}
-            {email === "andre.finger@gmail.com" && (
+            {(email === "andre.finger@gmail.com" || Role === "Admin") && (
               <Link
                 to={"/events"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -349,6 +350,7 @@ export const Navbar: React.FC = () => {
               </Link>
             )}
             {(email === "andre.finger@gmail.com" ||
+              Role === "Admin" ||
               HusmodellPermission?.add === true ||
               HusmodellPermission?.delete === true ||
               HusmodellPermission?.edit === true) &&

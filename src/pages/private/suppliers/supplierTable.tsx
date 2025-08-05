@@ -46,12 +46,17 @@ export const SupplierTable = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [permission, setPermission] = useState<any>(null);
+  const [role, setRole] = useState<any>(null);
+
   const email = localStorage.getItem("Iplot_admin");
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
       if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
         const finalSupData = data?.supplier;
         setPermission(finalSupData);
       }
@@ -129,7 +134,7 @@ export const SupplierTable = () => {
         return dateB.getTime() - dateA.getTime();
       });
 
-      if (email === "andre.finger@gmail.com") {
+      if (email === "andre.finger@gmail.com" || role === "Admin") {
         setSuppliers(sortedData);
       } else {
         setSuppliers(sortedFilterData);
@@ -236,7 +241,7 @@ export const SupplierTable = () => {
             </div>
           ),
         },
-        email === "andre.finger@gmail.com"
+        email === "andre.finger@gmail.com" || role === "Admin"
           ? {
               id: "action",
               header: "Action",
@@ -259,7 +264,7 @@ export const SupplierTable = () => {
             }
           : null,
       ].filter(Boolean) as ColumnDef<any>[],
-    [email, navigate, permission]
+    [email, navigate, permission, role]
   );
 
   const pageSize = 10;

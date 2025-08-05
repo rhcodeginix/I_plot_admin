@@ -95,7 +95,7 @@ export const Dashboard = () => {
         q = query(collection(db, "house_model"));
       }
 
-      if (email === "andre.finger@gmail.com") {
+      if (email === "andre.finger@gmail.com" || role === "Admin") {
         leadTrue = query(collection(db, "leads"), where("Isopt", "==", true));
         leadFalse = query(collection(db, "leads"), where("Isopt", "==", false));
         leadBankTrue = query(
@@ -192,7 +192,7 @@ export const Dashboard = () => {
   }, [permission]);
 
   const data = [
-    ...(email === "andre.finger@gmail.com"
+    ...(email === "andre.finger@gmail.com" || role === "Admin"
       ? [
           {
             title: "Antall brukere",
@@ -249,7 +249,7 @@ export const Dashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5 desktop:gap-6">
           {loading ? (
             <>
-              {email === "andre.finger@gmail.com" && (
+              {(email === "andre.finger@gmail.com" || role === "Admin") && (
                 <div
                   className="w-full h-[125px] rounded-md custom-shimmer"
                   style={{ borderRadius: "8px" }}

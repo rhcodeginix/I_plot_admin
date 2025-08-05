@@ -101,11 +101,15 @@ export const FremdriftsplanOg: React.FC<{
   };
 
   const email = localStorage.getItem("Iplot_admin");
+  const [role, setRole] = useState<any>(null);
   const [permission, setPermission] = useState<any>(null);
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
+      if (data?.role) {
+        setRole(data?.role);
+      }
       if (data && data?.supplier) {
         const finalData = data?.supplier;
         setPermission(finalData);
@@ -122,7 +126,7 @@ export const FremdriftsplanOg: React.FC<{
   const fetchHusmodellData = async () => {
     try {
       let q;
-      if (email === "andre.finger@gmail.com") {
+      if (email === "andre.finger@gmail.com" || role === "Admin") {
         q = query(collection(db, "house_model"), orderBy("updatedAt", "desc"));
       } else {
         if (permission || permission !== null) {

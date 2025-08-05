@@ -33,6 +33,7 @@ export const KombinasjonerTable = () => {
   const [leads, setLeads] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [role, setRole] = useState<any>(null);
 
   const email = localStorage.getItem("Iplot_admin");
   const [permission, setPermission] = useState<any>(null);
@@ -43,6 +44,9 @@ export const KombinasjonerTable = () => {
       if (data) {
         const finalData = data?.supplier;
         setPermission(finalData);
+        if (data?.role) {
+          setRole(data?.role);
+        }
       }
     };
 
@@ -54,7 +58,7 @@ export const KombinasjonerTable = () => {
 
     try {
       let leadFalse;
-      if (email === "andre.finger@gmail.com") {
+      if (email === "andre.finger@gmail.com" || role === "Admin") {
         leadFalse = query(collection(db, "leads"), where("Isopt", "==", false));
       } else {
         leadFalse = query(

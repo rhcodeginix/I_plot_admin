@@ -57,60 +57,58 @@ export const Login = () => {
         const adminData = adminSnap.data();
         const storedPassword = adminData?.password;
 
-        console.log(adminData);
+        // if (adminData?.supplier !== "9f523136-72ca-4bde-88e5-de175bc2fc71") {
+        if (!storedPassword) {
+          if (data.password) {
+            const hashedPassword = bcrypt.hashSync(data.password, 10);
+            await updateDoc(adminDocRef, { password: hashedPassword });
 
-        if (adminData?.supplier !== "9f523136-72ca-4bde-88e5-de175bc2fc71") {
-          if (!storedPassword) {
-            if (data.password) {
-              const hashedPassword = bcrypt.hashSync(data.password, 10);
-              await updateDoc(adminDocRef, { password: hashedPassword });
-
-              toast.success("Login successfully", {
-                position: "top-right",
-              });
-              localStorage.setItem("Iplot_admin", data.email);
-              const loginUserData = await fetchAdminDataByEmail();
-              if (loginUserData) {
-                if (
-                  loginUserData?.role &&
-                  (loginUserData?.role === "Bankansvarlig" ||
-                    loginUserData?.role === "Agent")
-                ) {
-                  navigate("/bank-leads");
-                } else {
-                  navigate("/dashboard");
-                }
+            toast.success("Login successfully", {
+              position: "top-right",
+            });
+            localStorage.setItem("Iplot_admin", data.email);
+            const loginUserData = await fetchAdminDataByEmail();
+            if (loginUserData) {
+              if (
+                loginUserData?.role &&
+                (loginUserData?.role === "Bankansvarlig" ||
+                  loginUserData?.role === "Agent")
+              ) {
+                navigate("/bank-leads");
+              } else {
+                navigate("/dashboard");
               }
-            }
-          } else {
-            const isPasswordCorrect = bcrypt.compareSync(
-              data.password,
-              storedPassword
-            );
-            if (isPasswordCorrect) {
-              toast.success("Login successfully", { position: "top-right" });
-              localStorage.setItem("Iplot_admin", data.email);
-              const loginUserData = await fetchAdminDataByEmail();
-              if (loginUserData) {
-                if (
-                  loginUserData?.role &&
-                  (loginUserData?.role === "Bankansvarlig" ||
-                    loginUserData?.role === "Agent")
-                ) {
-                  navigate("/bank-leads");
-                } else {
-                  navigate("/dashboard");
-                }
-              }
-            } else {
-              toast.error("Incorrect password", { position: "top-right" });
             }
           }
         } else {
-          toast.error("Please login with Bolig Partner user.", {
-            position: "top-right",
-          });
+          const isPasswordCorrect = bcrypt.compareSync(
+            data.password,
+            storedPassword
+          );
+          if (isPasswordCorrect) {
+            toast.success("Login successfully", { position: "top-right" });
+            localStorage.setItem("Iplot_admin", data.email);
+            const loginUserData = await fetchAdminDataByEmail();
+            if (loginUserData) {
+              if (
+                loginUserData?.role &&
+                (loginUserData?.role === "Bankansvarlig" ||
+                  loginUserData?.role === "Agent")
+              ) {
+                navigate("/bank-leads");
+              } else {
+                navigate("/dashboard");
+              }
+            }
+          } else {
+            toast.error("Incorrect password", { position: "top-right" });
+          }
         }
+        // } else {
+        //   toast.error("Please login with Bolig Partner user.", {
+        //     position: "top-right",
+        //   });
+        // }
       }
     } catch (error) {
       console.error("Error during sign-in", error);

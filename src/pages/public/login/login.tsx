@@ -63,7 +63,7 @@ export const Login = () => {
               const hashedPassword = bcrypt.hashSync(data.password, 10);
               await updateDoc(adminDocRef, { password: hashedPassword });
 
-              toast.success("Login successfully", {
+              toast.success("Logg inn", {
                 position: "top-right",
               });
               localStorage.setItem("Iplot_admin", data.email);
@@ -86,7 +86,7 @@ export const Login = () => {
               storedPassword
             );
             if (isPasswordCorrect) {
-              toast.success("Login successfully", { position: "top-right" });
+              toast.success("Logg inn", { position: "top-right" });
               localStorage.setItem("Iplot_admin", data.email);
               const loginUserData = await fetchAdminDataByEmail();
               if (loginUserData) {

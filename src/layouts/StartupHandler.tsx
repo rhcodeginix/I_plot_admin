@@ -95,7 +95,7 @@ export const StartupHandler = () => {
             const hashedPassword = bcrypt.hashSync(storedPassword, 10);
             await updateDoc(adminDocRef, { password: hashedPassword });
 
-            toast.success("Login successfully", {
+            toast.success("Logg inn", {
               position: "top-right",
             });
             localStorage.setItem("Iplot_admin", result?.userData?.email);

@@ -52,7 +52,7 @@ export const Login = () => {
       const adminSnap = await getDoc(adminDocRef);
 
       if (!adminSnap.exists()) {
-        toast.error("Admin not exist", { position: "top-right" });
+        toast.error("Admin finnes ikke", { position: "top-right" });
       } else {
         const adminData = adminSnap.data();
         const storedPassword = adminData?.password;
@@ -105,7 +105,7 @@ export const Login = () => {
             }
           }
         } else {
-          toast.error("Please login with Bolig Partner user.", {
+          toast.error("Vennligst logg inn som Bolig Partner-bruker.", {
             position: "top-right",
           });
         }

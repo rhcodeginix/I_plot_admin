@@ -173,6 +173,15 @@ export const OfficesTable: React.FC<{ setEditId: any; setActiveTab: any }> = ({
         },
       },
       {
+        accessorKey: "Finansiering",
+        header: "Finansiering",
+        cell: ({ row }) => (
+          <p className="font-semibold text-black text-sm w-max">
+            {row.original?.data?.is_financing === true ? "Ja" : "Nei"}
+          </p>
+        ),
+      },
+      {
         id: "action",
         header: "Action",
         cell: ({ row }) => (

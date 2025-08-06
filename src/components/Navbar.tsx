@@ -89,6 +89,7 @@ export const Navbar: React.FC = () => {
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
+
   return (
     <>
       <div
@@ -266,7 +267,9 @@ export const Navbar: React.FC = () => {
               >
                 <User className="w-5 h-5 text-primary" /> Profil
               </Link>
-              {(loginUser === "andre.finger@gmail.com" || IsAdmin === true) && (
+              {(loginUser === "andre.finger@gmail.com" ||
+                Role === "Admin" ||
+                IsAdmin === true) && (
                 <Link
                   to={"/Brukeradministrasjon"}
                   className="px-3 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer flex items-center gap-2"

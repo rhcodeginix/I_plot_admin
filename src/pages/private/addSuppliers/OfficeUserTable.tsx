@@ -121,6 +121,15 @@ export const OfficesUserTable: React.FC<{
         ),
       },
       {
+        accessorKey: "email",
+        header: "Finansiering",
+        cell: ({ row }) => (
+          <p className="font-semibold text-black text-sm w-max">
+            {row.original?.is_bank === true ? "Ja" : "Nei"}
+          </p>
+        ),
+      },
+      {
         accessorKey: "sisteoppdatertav",
         header: "Sist oppdatert",
         cell: ({ row }) => (

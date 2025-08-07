@@ -12,7 +12,7 @@ export const Events = () => {
     lead: 0,
     AI: 0,
     pdf: 0,
-    ppt: 0,
+    // ppt: 0,
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -87,7 +87,7 @@ export const Events = () => {
         lead: roomModels.length,
         AI: typeCounts[0],
         pdf: typeCounts[1],
-        ppt: typeCounts[2],
+        // ppt: typeCounts[2],
       });
 
       setLoading(false);
@@ -122,11 +122,11 @@ export const Events = () => {
       value: counts.pdf,
       path: "/events/pdf",
     },
-    {
-      title: "PPT",
-      value: counts.ppt,
-      path: "/events/ppt",
-    },
+    // {
+    //   title: "PPT",
+    //   value: counts.ppt,
+    //   path: "/events/ppt",
+    // },
   ];
 
   return (
@@ -202,10 +202,10 @@ export const Events = () => {
                 className="w-full h-[125px] rounded-md custom-shimmer"
                 style={{ borderRadius: "8px" }}
               ></div>
-              <div
+              {/* <div
                 className="w-full h-[125px] rounded-md custom-shimmer"
                 style={{ borderRadius: "8px" }}
-              ></div>
+              ></div> */}
             </>
           ) : (
             <>

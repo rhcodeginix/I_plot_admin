@@ -63,10 +63,20 @@ export const AITable = () => {
       );
       const querySnapshot = await getDocs(q);
 
-      const data: any = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const data: any = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .sort((a: any, b: any) => {
+          const dateA = a.updatedAt?.toDate
+            ? a.updatedAt.toDate()
+            : new Date(a.updatedAt);
+          const dateB = b.updatedAt?.toDate
+            ? b.updatedAt.toDate()
+            : new Date(b.updatedAt);
+          return dateA - dateB;
+        });
       setRoomConfigurator(data);
     } catch (error) {
       console.error("Error fetching husmodell data:", error);
@@ -133,7 +143,6 @@ export const AITable = () => {
         if (officeFilter && officeFilter !== "All" && office !== officeFilter) {
           continue;
         }
-
         if (selectedDateRange !== null) {
           const { startDate, endDate }: any =
             calculateDateRange(selectedDateRange);
@@ -155,40 +164,11 @@ export const AITable = () => {
   const fetchDocumentData = async (id: string) => {
     try {
       if (id) {
-        const projectDocs = await getDocs(
-          collection(db, "housemodell_configure_broker")
-        );
+        const husmodellDocRef = doc(db, "projects", id);
+        const docSnap = await getDoc(husmodellDocRef);
 
-        const houseModels = projectDocs.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        let finalData: any = null;
-
-        for (const item of houseModels as any) {
-          if (Array.isArray(item.KundeInfo)) {
-            const match = item.KundeInfo.find(
-              (k: any) => String(k.uniqueId) === String(id)
-            );
-            if (match) {
-              finalData = match;
-              break;
-            }
-          }
-        }
-
-        if (finalData) {
-          return finalData;
-        } else {
-          if (id) {
-            const supplierDocRef = doc(db, "room_configurator", id);
-            const docSnap = await getDoc(supplierDocRef);
-
-            if (docSnap.exists()) {
-              return docSnap.data();
-            }
-          }
+        if (docSnap.exists()) {
+          return docSnap.data();
         }
       }
     } catch (error) {

@@ -63,10 +63,20 @@ export const PPTTable = () => {
       );
       const querySnapshot = await getDocs(q);
 
-      const data: any = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const data: any = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .sort((a: any, b: any) => {
+          const dateA = a.updatedAt?.toDate
+            ? a.updatedAt.toDate()
+            : new Date(a.updatedAt);
+          const dateB = b.updatedAt?.toDate
+            ? b.updatedAt.toDate()
+            : new Date(b.updatedAt);
+            return dateA - dateB;
+          });
       setRoomConfigurator(data);
     } catch (error) {
       console.error("Error fetching husmodell data:", error);
@@ -154,7 +164,7 @@ export const PPTTable = () => {
   const fetchDocumentData = async (id: string) => {
     try {
       if (id) {
-        const supplierDocRef = doc(db, "room_configurator", id);
+        const supplierDocRef = doc(db, "projects", id);
         const docSnap = await getDoc(supplierDocRef);
 
         if (docSnap.exists()) {

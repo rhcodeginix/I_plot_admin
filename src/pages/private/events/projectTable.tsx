@@ -21,7 +21,7 @@ import { useEffect, useMemo, useState } from "react";
 import Ic_search from "../../../assets/images/Ic_search.svg";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { formatDateTime } from "../../../lib/utils";
+import { fetchAdminData, formatDateTime } from "../../../lib/utils";
 import { useNavigate } from "react-router-dom";
 import {
   Select,
@@ -47,10 +47,7 @@ export const ProjectTable = () => {
   const fetchHusmodellData = async () => {
     setIsLoading(true);
     try {
-      let q = query(
-        collection(db, "housemodell_configure_broker"),
-        orderBy("updatedAt", "desc")
-      );
+      let q = query(collection(db, "projects"), orderBy("updatedAt", "desc"));
       const querySnapshot = await getDocs(q);
 
       const data: any = querySnapshot.docs.map((doc) => ({
@@ -92,84 +89,126 @@ export const ProjectTable = () => {
     fetchOfficeData();
   }, []);
 
+  const fetchUserData = async (id: string) => {
+    if (!id) return null;
+
+    try {
+      const officeData = await fetchAdminData(id);
+      if (officeData) {
+        return officeData;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching office data:", error);
+      return null;
+    }
+  };
+
+  const fetchTagData = async (id: string) => {
+    if (!id) return null;
+
+    try {
+      const officeQuery = query(
+        collection(db, "housemodell_configure_broker"),
+        where("id", "==", id)
+      );
+
+      const querySnapshot = await getDocs(officeQuery);
+
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error fetching tag data:", error);
+      return null;
+    }
+  };
+
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchFilteredData = async () => {
-      setIsLoading(true);
+    const getData = async () => {
+      try {
+        setIsLoading(true);
 
-      const results: any[] = [];
+        const allKunder: any[] = [];
 
-      for (const item of houseModels as any) {
-        let office: any = null;
+        for (const item of (houseModels as any) || []) {
+          // let officeData: any = null;
+          let tagData: any = null;
+          let userData: any = null;
 
-        if (item?.createDataBy?.email) {
-          try {
-            const q = query(
-              collection(db, "admin"),
-              where("email", "==", item?.createDataBy?.email)
-            );
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-              office = querySnapshot.docs[0].data().office;
-            }
-          } catch (error) {
-            console.error("Error fetching admin data:", error);
+          // if (item?.office_id) {
+          //   officeData = await fetchOfficeData(item.office_id);
+          // }
+          if (item?.category_id) {
+            tagData = await fetchTagData(item?.category_id);
           }
+          if (item?.created_by) {
+            userData = await fetchUserData(item?.created_by);
+          }
+
+          const mappedKunde = {
+            ...item,
+            husmodell_name: item?.VelgSerie || tagData?.husmodell_name || null,
+            parentId: item.category_id,
+            createDataBy: userData || null,
+            tag: tagData?.tag || null,
+            placeOrder: item?.placeOrder || false,
+            configurator:
+              item?.Plantegninger?.length > 0
+                ? item.Plantegninger.some((room: any) => !room.configurator)
+                : true,
+            updatedAt: item?.updatedAt || item?.createdAt || null,
+            kundeId: item?.uniqueId,
+            id: item?.uniqueId,
+            // office_name: officeData?.data?.name || null,
+            self_id: item?.self_id,
+            office_id: item?.office_id,
+          };
+
+          allKunder.push(mappedKunde);
         }
 
-        if (
-          item?.KundeInfo &&
-          Array.isArray(item.KundeInfo) &&
-          item.KundeInfo.length > 0
-        ) {
-          const filteredKunder = item.KundeInfo.map((kunde: any) => {
-            return {
-              ...kunde,
-              photo: item.photo || null,
-              husmodell_name: kunde?.VelgSerie || item?.husmodell_name || null,
-              parentId: item.id,
-              createDataBy: item?.createDataBy || null,
-              tag: item?.tag || null,
-              placeOrder: item?.placeOrder || false,
-              configurator:
-                kunde?.Plantegninger &&
-                kunde.Plantegninger.length > 0 &&
-                kunde.Plantegninger.some((room: any) => !room.configurator)
-                  ? false
-                  : true,
-            };
-          }).filter((kunde: any) => {
-            const matchesSearch =
-              !searchTerm ||
-              kunde.Kundenavn?.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesFilter =
-              !selectedFilter ||
-              selectedFilter === "" ||
-              kunde.husmodell_name === selectedFilter;
-            const ofcFilter =
-              !officeFilter ||
-              officeFilter === "All" ||
-              office === officeFilter;
-            const matchesTypeProsjekt =
-              !activeTab ||
-              kunde.tag?.toLowerCase() === activeTab.toLowerCase();
+        const filtered = allKunder.filter((kunde) => {
+          const matchesSearch =
+            !searchTerm ||
+            kunde.Kundenavn?.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesFilter =
+            !selectedFilter || kunde.husmodell_name === selectedFilter;
+          const matchesTypeProsjekt =
+            !activeTab || kunde.tag?.toLowerCase() === activeTab.toLowerCase();
 
-            return (
-              matchesSearch && matchesFilter && matchesTypeProsjekt && ofcFilter
-            );
-          });
+          const ofcFilter =
+            !officeFilter ||
+            officeFilter === "All" ||
+            kunde.office_id === officeFilter;
+          return (
+            matchesSearch && matchesFilter && matchesTypeProsjekt && ofcFilter
+          );
+        });
 
-          results.push(...filteredKunder);
-        }
+        const sorted = filtered.sort((a, b) => {
+          const dateA = new Date(a.updatedAt || 0).getTime();
+          const dateB = new Date(b.updatedAt || 0).getTime();
+          return dateB - dateA;
+        });
+
+        setFilteredData(sorted);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
-
-      setFilteredData(results);
     };
 
-    fetchFilteredData();
+    getData();
   }, [houseModels, searchTerm, selectedFilter, activeTab, officeFilter]);
 
   const columns = useMemo<ColumnDef<any>[]>(() => {
@@ -206,7 +245,9 @@ export const ProjectTable = () => {
         header: "Boligkonsulent",
         cell: ({ row }) => (
           <p className="text-sm font-medium text-black w-max">
-            {row.original?.createDataBy?.name}
+            {row.original?.createDataBy?.f_name
+              ? `${row.original?.createDataBy?.f_name} ${row.original?.createDataBy?.l_name}`
+              : row.original?.createDataBy?.name}
           </p>
         ),
       },
@@ -516,7 +557,7 @@ export const ProjectTable = () => {
                       data-state={row.getIsSelected() && "selected"}
                       className="hover:bg-muted/50 cursor-pointer"
                       onClick={() => {
-                        const url = `https://boligkonfigurator.mintomt.no/se-series/${row.original.parentId}/edit-husmodell/${row.original?.uniqueId}`;
+                        const url = `https://boligkonfigurator.mintomt.no/se-series/${row.original.parentId}/edit-husmodell/${row.original?.self_id}`;
 
                         const currIndex = 0;
                         const currVerticalIndex = 1;

@@ -19,9 +19,9 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import Ic_search from "../../../assets/images/Ic_search.svg";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import { formatDateTime } from "../../../lib/utils";
+import { fetchAdminData, formatDateTime } from "../../../lib/utils";
 import { useNavigate } from "react-router-dom";
 import {
   Select,
@@ -42,15 +42,26 @@ export const LeadTable = () => {
     setIsLoading(true);
     try {
       let q = query(
-        collection(db, "room_configurator"),
-        orderBy("updatedAt", "desc")
+        collection(db, "projects"),
+        where("placeOrder", "==", true)
       );
       const querySnapshot = await getDocs(q);
 
-      const data: any = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const data: any = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .sort((a: any, b: any) => {
+          const dateA = a.updatedAt?.toDate
+            ? a.updatedAt.toDate()
+            : new Date(a.updatedAt);
+          const dateB = b.updatedAt?.toDate
+            ? b.updatedAt.toDate()
+            : new Date(b.updatedAt);
+          return dateB - dateA;
+        });
+
       setRoomConfigurator(data);
     } catch (error) {
       console.error("Error fetching husmodell data:", error);
@@ -86,47 +97,112 @@ export const LeadTable = () => {
     fetchOfficeData();
   }, []);
 
+  const fetchUserData = async (id: string) => {
+    if (!id) return null;
+
+    try {
+      const officeData = await fetchAdminData(id);
+      if (officeData) {
+        return officeData;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching office data:", error);
+      return null;
+    }
+  };
+
+  const fetchTagData = async (id: string) => {
+    if (!id) return null;
+
+    try {
+      const officeQuery = query(
+        collection(db, "housemodell_configure_broker"),
+        where("id", "==", id)
+      );
+
+      const querySnapshot = await getDocs(officeQuery);
+
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        return {
+          id: doc.id,
+          ...doc.data(),
+        };
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error fetching tag data:", error);
+      return null;
+    }
+  };
+
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
   useEffect(() => {
     setIsLoading(true);
     const fetchFilteredModels = async () => {
+      const allKunder: any[] = [];
 
-      const results: any[] = [];
+      for (const item of (RoomConfigurator as any) || []) {
+        // let officeData: any = null;
+        let tagData: any = null;
+        let userData: any = null;
 
-      for (const model of RoomConfigurator) {
-        let office: any = null;
-
-        if (model?.createDataBy?.email) {
-          try {
-            const q = query(
-              collection(db, "admin"),
-              where("email", "==", model.createDataBy.email)
-            );
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-              office = querySnapshot.docs[0].data().office;
-            }
-          } catch (error) {
-            console.error("Error fetching admin data:", error);
-          }
+        // if (item?.office_id) {
+        //   officeData = await fetchOfficeData(item.office_id);
+        // }
+        if (item?.category_id) {
+          tagData = await fetchTagData(item?.category_id);
+        }
+        if (item?.created_by) {
+          userData = await fetchUserData(item?.created_by);
         }
 
-        const matchesSearch = model.name
-          ?.toLowerCase()
-          .includes(searchTerm.toLowerCase());
+        const mappedKunde = {
+          ...item,
+          husmodell_name: item?.VelgSerie || tagData?.husmodell_name || null,
+          parentId: item.category_id,
+          createDataBy: userData || null,
+          tag: tagData?.tag || null,
+          placeOrder: item?.placeOrder || false,
+          configurator:
+            item?.Plantegninger?.length > 0
+              ? item.Plantegninger.some((room: any) => !room.configurator)
+              : true,
+          updatedAt: item?.updatedAt || item?.createdAt || null,
+          kundeId: item?.uniqueId,
+          id: item?.uniqueId,
+          // office_name: officeData?.data?.name || null,
+          self_id: item?.self_id,
+          name: item?.name,
+          office_id: item?.office_id,
+        };
 
-        const matchesOffice =
-          !officeFilter || officeFilter === "All" || office === officeFilter;
-
-        if (matchesSearch && matchesOffice) {
-          results.push(model);
-        }
+        allKunder.push(mappedKunde);
       }
 
+      const filtered = allKunder.filter((kunde) => {
+        const matchesSearch =
+          !searchTerm ||
+          kunde.Kundenavn?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const matchesOffice =
+          !officeFilter ||
+          officeFilter === "All" ||
+          kunde?.office_id === officeFilter;
+        return matchesSearch && matchesOffice;
+      });
+
+      const sorted = filtered.sort((a, b) => {
+        const dateA = new Date(a.updatedAt || 0).getTime();
+        const dateB = new Date(b.updatedAt || 0).getTime();
+        return dateB - dateA;
+      });
+
       setIsLoading(false);
-      setFilteredData(results);
+      setFilteredData(sorted);
     };
 
     fetchFilteredModels();
@@ -185,7 +261,9 @@ export const LeadTable = () => {
         header: "Boligkonsulent",
         cell: ({ row }) => (
           <p className="text-sm font-medium text-black w-max">
-            {row.original?.createDataBy?.name ?? "-"}
+            {row.original?.createDataBy?.f_name
+              ? `${row.original?.createDataBy?.f_name} ${row.original?.createDataBy?.l_name}`
+              : row.original?.createDataBy?.name}
           </p>
         ),
       },
@@ -349,7 +427,7 @@ export const LeadTable = () => {
                       data-state={row.getIsSelected() && "selected"}
                       className="hover:bg-muted/50 cursor-pointer"
                       onClick={() => {
-                        const url = `https://boligkonfigurator.mintomt.no/Room-Configurator/${row.original?.id}`;
+                        const url = `https://boligkonfigurator.mintomt.no/Room-Configurator/${row.original?.parentId}/${row.original?.self_id}`;
 
                         const currIndex = 0;
                         const currVerticalIndex = 1;

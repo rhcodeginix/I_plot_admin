@@ -57,13 +57,15 @@ export const Events = () => {
         );
       };
 
-      const houseModels = await getFilteredDocs("housemodell_configure_broker");
-      const projectCount = houseModels.reduce(
-        (acc, item) => acc + (item?.KundeInfo?.length || 0),
-        0
+      const houseModels = await getFilteredDocs("projects");
+
+      const roomModelsSnap = await getDocs(
+        query(collection(db, "projects"), where("placeOrder", "==", true))
       );
 
-      const roomModels = await getFilteredDocs("room_configurator");
+      const roomModels = formatDocData(roomModelsSnap.docs).filter((item) =>
+        filterByDate(item?.updatedAt)
+      );
 
       const types = ["AI", "PDF", "PPT"];
       const typeCounts = await Promise.all(
@@ -81,7 +83,7 @@ export const Events = () => {
       );
 
       setCounts({
-        project: projectCount,
+        project: houseModels.length,
         lead: roomModels.length,
         AI: typeCounts[0],
         pdf: typeCounts[1],

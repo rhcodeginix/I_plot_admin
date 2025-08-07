@@ -137,24 +137,44 @@ export const ProjectTable = () => {
       try {
         setIsLoading(true);
 
-        const allKunder: any[] = [];
+        const categoryIds = new Set<string>();
+        const userIds = new Set<string>();
 
-        for (const item of (houseModels as any) || []) {
-          // let officeData: any = null;
-          let tagData: any = null;
-          let userData: any = null;
+        for (const item of houseModels as any) {
+          if (item?.category_id) categoryIds.add(item.category_id);
+          if (item?.created_by) userIds.add(item.created_by);
+        }
 
-          // if (item?.office_id) {
-          //   officeData = await fetchOfficeData(item.office_id);
-          // }
-          if (item?.category_id) {
-            tagData = await fetchTagData(item?.category_id);
-          }
-          if (item?.created_by) {
-            userData = await fetchUserData(item?.created_by);
-          }
+        const fetchTags = async () => {
+          const results: Record<string, any> = {};
+          const promises = Array.from(categoryIds).map(async (id) => {
+            const data = await fetchTagData(id);
+            if (data) results[id] = data;
+          });
+          await Promise.all(promises);
+          return results;
+        };
 
-          const mappedKunde = {
+        const fetchUsers = async () => {
+          const results: Record<string, any> = {};
+          const promises = Array.from(userIds).map(async (id) => {
+            const data = await fetchUserData(id);
+            if (data) results[id] = data;
+          });
+          await Promise.all(promises);
+          return results;
+        };
+
+        const [tagMap, userMap] = await Promise.all([
+          fetchTags(),
+          fetchUsers(),
+        ]);
+
+        const allKunder = houseModels.map((item: any) => {
+          const tagData = item?.category_id ? tagMap[item.category_id] : null;
+          const userData = item?.created_by ? userMap[item.created_by] : null;
+
+          return {
             ...item,
             husmodell_name: item?.VelgSerie || tagData?.husmodell_name || null,
             parentId: item.category_id,
@@ -168,13 +188,10 @@ export const ProjectTable = () => {
             updatedAt: item?.updatedAt || item?.createdAt || null,
             kundeId: item?.uniqueId,
             id: item?.uniqueId,
-            // office_name: officeData?.data?.name || null,
             self_id: item?.self_id,
-            office_id: item?.office_id,
+            office_id: item.office_id,
           };
-
-          allKunder.push(mappedKunde);
-        }
+        });
 
         const filtered = allKunder.filter((kunde) => {
           const matchesSearch =
@@ -184,7 +201,6 @@ export const ProjectTable = () => {
             !selectedFilter || kunde.husmodell_name === selectedFilter;
           const matchesTypeProsjekt =
             !activeTab || kunde.tag?.toLowerCase() === activeTab.toLowerCase();
-
           const ofcFilter =
             !officeFilter ||
             officeFilter === "All" ||
@@ -209,7 +225,7 @@ export const ProjectTable = () => {
     };
 
     getData();
-  }, [houseModels, searchTerm, selectedFilter, activeTab, officeFilter]);
+  }, [houseModels, searchTerm, selectedFilter, activeTab]);
 
   const columns = useMemo<ColumnDef<any>[]>(() => {
     const baseColumns: ColumnDef<any>[] = [

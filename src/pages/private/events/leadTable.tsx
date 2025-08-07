@@ -141,71 +141,94 @@ export const LeadTable = () => {
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
   useEffect(() => {
-    setIsLoading(true);
-    const fetchFilteredModels = async () => {
-      const allKunder: any[] = [];
+    const getData = async () => {
+      try {
+        setIsLoading(true);
 
-      for (const item of (RoomConfigurator as any) || []) {
-        // let officeData: any = null;
-        let tagData: any = null;
-        let userData: any = null;
+        const categoryIds = new Set<string>();
+        const userIds = new Set<string>();
 
-        // if (item?.office_id) {
-        //   officeData = await fetchOfficeData(item.office_id);
-        // }
-        if (item?.category_id) {
-          tagData = await fetchTagData(item?.category_id);
-        }
-        if (item?.created_by) {
-          userData = await fetchUserData(item?.created_by);
+        for (const item of RoomConfigurator) {
+          if (item?.category_id) categoryIds.add(item.category_id);
+          if (item?.created_by) userIds.add(item.created_by);
         }
 
-        const mappedKunde = {
-          ...item,
-          husmodell_name: item?.VelgSerie || tagData?.husmodell_name || null,
-          parentId: item.category_id,
-          createDataBy: userData || null,
-          tag: tagData?.tag || null,
-          placeOrder: item?.placeOrder || false,
-          configurator:
-            item?.Plantegninger?.length > 0
-              ? item.Plantegninger.some((room: any) => !room.configurator)
-              : true,
-          updatedAt: item?.updatedAt || item?.createdAt || null,
-          kundeId: item?.uniqueId,
-          id: item?.uniqueId,
-          // office_name: officeData?.data?.name || null,
-          self_id: item?.self_id,
-          name: item?.name,
-          office_id: item?.office_id,
+        const fetchTags = async () => {
+          const result: Record<string, any> = {};
+          await Promise.all(
+            Array.from(categoryIds).map(async (id) => {
+              const tag = await fetchTagData(id);
+              if (tag) result[id] = tag;
+            })
+          );
+          return result;
         };
 
-        allKunder.push(mappedKunde);
+        const fetchUsers = async () => {
+          const result: Record<string, any> = {};
+          await Promise.all(
+            Array.from(userIds).map(async (id) => {
+              const user = await fetchUserData(id);
+              if (user) result[id] = user;
+            })
+          );
+          return result;
+        };
+
+        const [tagMap, userMap] = await Promise.all([
+          fetchTags(),
+          fetchUsers(),
+        ]);
+
+        const allKunder = RoomConfigurator.map((item: any) => {
+          const tagData = item?.category_id ? tagMap[item.category_id] : null;
+          const userData = item?.created_by ? userMap[item.created_by] : null;
+
+          return {
+            ...item,
+            husmodell_name: item?.VelgSerie || tagData?.husmodell_name || null,
+            parentId: item.category_id,
+            createDataBy: userData || null,
+            tag: tagData?.tag || null,
+            placeOrder: item?.placeOrder || false,
+            configurator:
+              item?.Plantegninger?.length > 0
+                ? item.Plantegninger.some((room: any) => !room.configurator)
+                : true,
+            updatedAt: item?.updatedAt || item?.createdAt || null,
+            kundeId: item?.uniqueId,
+            id: item?.uniqueId,
+            self_id: item?.self_id,
+            name: item?.name,
+          };
+        });
+
+        const filtered = allKunder.filter((kunde: any) => {
+          const matchesSearch =
+            !searchTerm ||
+            kunde.Kundenavn?.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesOffice =
+            !officeFilter ||
+            officeFilter === "All" ||
+            kunde?.office_id === officeFilter;
+          return matchesSearch && matchesOffice;
+        });
+
+        const sorted = filtered.sort((a: any, b: any) => {
+          const dateA = new Date(a.updatedAt || 0).getTime();
+          const dateB = new Date(b.updatedAt || 0).getTime();
+          return dateB - dateA;
+        });
+
+        setFilteredData(sorted);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setIsLoading(false);
       }
-
-      const filtered = allKunder.filter((kunde) => {
-        const matchesSearch =
-          !searchTerm ||
-          kunde.Kundenavn?.toLowerCase().includes(searchTerm.toLowerCase());
-
-        const matchesOffice =
-          !officeFilter ||
-          officeFilter === "All" ||
-          kunde?.office_id === officeFilter;
-        return matchesSearch && matchesOffice;
-      });
-
-      const sorted = filtered.sort((a, b) => {
-        const dateA = new Date(a.updatedAt || 0).getTime();
-        const dateB = new Date(b.updatedAt || 0).getTime();
-        return dateB - dateA;
-      });
-
-      setIsLoading(false);
-      setFilteredData(sorted);
     };
 
-    fetchFilteredModels();
+    getData();
   }, [RoomConfigurator, searchTerm, officeFilter]);
 
   const columns = useMemo<ColumnDef<any>[]>(

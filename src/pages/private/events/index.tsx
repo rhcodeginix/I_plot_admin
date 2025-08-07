@@ -26,60 +26,56 @@ export const Events = () => {
     try {
       setLoading(true);
 
-      const formatDocData = (docs: any[]) => docs.map((doc) => doc.data());
+      let formattedSelectedDate: string | null = null;
+      let startDate: string | null = null;
+      let endDate: string | null = null;
 
-      const formatDate = (date: any) =>
-        new Date(date).toISOString().split("T")[0];
+      if (selectedDate1) {
+        formattedSelectedDate = formatDateOnly(selectedDate1);
+      } else if (selectedDateRange) {
+        const range: any = calculateDateRange(selectedDateRange);
+        startDate = range.startDate;
+        endDate = range.endDate;
+      }
 
       const filterByDate = (date: any) => {
-        const formattedItemDate = formatDate(date);
-
-        if (selectedDate1) {
-          return formattedItemDate === formatDateOnly(selectedDate1);
-        }
-
-        if (selectedDateRange) {
-          const { startDate, endDate }: any =
-            calculateDateRange(selectedDateRange);
+        const formattedItemDate = new Date(date).toISOString().split("T")[0];
+        if (formattedSelectedDate)
+          return formattedItemDate === formattedSelectedDate;
+        if (startDate && endDate)
           return formattedItemDate >= startDate && formattedItemDate <= endDate;
-        }
-
         return true;
       };
 
-      const getFilteredDocs = async (
-        collectionName: string,
-        dateField = "updatedAt"
-      ) => {
-        const docs = await getDocs(collection(db, collectionName));
-        return formatDocData(docs.docs).filter((item) =>
-          filterByDate(item?.[dateField])
-        );
-      };
+      const formatDocData = (docs: any[]) => docs.map((doc) => doc.data());
 
-      const houseModels = await getFilteredDocs("projects");
+      const [allProjectsSnap, placedOrdersSnap, ...typeSnaps] =
+        await Promise.all([
+          getDocs(collection(db, "projects")),
+          getDocs(
+            query(collection(db, "projects"), where("placeOrder", "==", true))
+          ),
+          ...["AI", "PDF", "PPT"].map((type) =>
+            getDocs(
+              query(
+                collection(db, "boligconfigurator_count"),
+                where("type", "==", type)
+              )
+            )
+          ),
+        ]);
 
-      const roomModelsSnap = await getDocs(
-        query(collection(db, "projects"), where("placeOrder", "==", true))
-      );
-
-      const roomModels = formatDocData(roomModelsSnap.docs).filter((item) =>
+      const houseModels = formatDocData(allProjectsSnap.docs).filter((item) =>
         filterByDate(item?.updatedAt)
       );
-
-      const types = ["AI", "PDF", "PPT"];
-      const typeCounts = await Promise.all(
-        types.map(async (type) => {
-          const snap = await getDocs(
-            query(
-              collection(db, "boligconfigurator_count"),
-              where("type", "==", type)
-            )
-          );
-          return formatDocData(snap.docs).filter((item) =>
+      const roomModels = formatDocData(placedOrdersSnap.docs).filter((item) =>
+        filterByDate(item?.updatedAt)
+      );
+      const typeCounts = typeSnaps.map(
+        (snap) =>
+          formatDocData(snap.docs).filter((item) =>
             filterByDate(item?.timeStamp)
-          ).length;
-        })
+          ).length
       );
 
       setCounts({
@@ -89,10 +85,9 @@ export const Events = () => {
         pdf: typeCounts[1],
         // ppt: typeCounts[2],
       });
-
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
       setLoading(false);
     }
   };

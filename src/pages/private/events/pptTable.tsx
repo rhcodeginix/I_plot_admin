@@ -69,14 +69,14 @@ export const PPTTable = () => {
           ...doc.data(),
         }))
         .sort((a: any, b: any) => {
-          const dateA = a.updatedAt?.toDate
-            ? a.updatedAt.toDate()
-            : new Date(a.updatedAt);
-          const dateB = b.updatedAt?.toDate
-            ? b.updatedAt.toDate()
-            : new Date(b.updatedAt);
-            return dateA - dateB;
-          });
+          const dateA = a.timeStamp?.toDate
+            ? a.timeStamp.toDate()
+            : new Date(a.timeStamp);
+          const dateB = b.timeStamp?.toDate
+            ? b.timeStamp.toDate()
+            : new Date(b.timeStamp);
+          return dateB - dateA;
+        });
       setRoomConfigurator(data);
     } catch (error) {
       console.error("Error fetching husmodell data:", error);

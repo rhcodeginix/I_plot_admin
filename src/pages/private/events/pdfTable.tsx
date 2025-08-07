@@ -69,13 +69,13 @@ export const PDFTable = () => {
           ...doc.data(),
         }))
         .sort((a: any, b: any) => {
-          const dateA = a.updatedAt?.toDate
-            ? a.updatedAt.toDate()
-            : new Date(a.updatedAt);
-          const dateB = b.updatedAt?.toDate
-            ? b.updatedAt.toDate()
-            : new Date(b.updatedAt);
-          return dateA - dateB;
+          const dateA = a.timeStamp?.toDate
+            ? a.timeStamp.toDate()
+            : new Date(a.timeStamp);
+          const dateB = b.timeStamp?.toDate
+            ? b.timeStamp.toDate()
+            : new Date(b.timeStamp);
+          return dateB - dateA;
         });
       setRoomConfigurator(data);
     } catch (error) {
@@ -120,6 +120,35 @@ export const PDFTable = () => {
     return null;
   };
 
+  const [adminMap, setAdminMap] = useState<Record<string, any>>({});
+  const preloadAdminData = async (createdByIds: string[]) => {
+    const map: Record<string, any> = {};
+    const uniqueIds = [...(new Set(createdByIds) as any)];
+
+    const promises = uniqueIds.map(async (id) => {
+      if (!id) return;
+      const data = await fetchAdminData(id);
+      if (data) {
+        map[id] = data;
+      }
+    });
+
+    await Promise.all(promises);
+    return map;
+  };
+
+  useEffect(() => {
+    const loadAdmins = async () => {
+      const ids = RoomConfigurator.map((item: any) => item.created_by);
+      const map = await preloadAdminData(ids);
+      setAdminMap(map);
+    };
+
+    if (RoomConfigurator.length > 0) {
+      loadAdmins();
+    }
+  }, [RoomConfigurator]);
+
   useEffect(() => {
     const filterDataAsync = async () => {
       setIsLoading(true);
@@ -129,11 +158,8 @@ export const PDFTable = () => {
         const date = new Date(model?.timeStamp);
         const modalDate = date?.toISOString().split("T")[0];
 
-        let office: any = null;
-        if (model?.created_by) {
-          const data = await getData(model?.created_by);
-          office = data?.office;
-        }
+        const adminData = adminMap[model?.created_by];
+        const office = adminData?.office;
 
         if (selectedDate1 !== null) {
           if (modalDate !== formatDateOnly(selectedDate1)) continue;
@@ -154,12 +180,18 @@ export const PDFTable = () => {
         result.push(model);
       }
 
-      setIsLoading(false);
       setFilteredData(result);
+      setIsLoading(false);
     };
 
     filterDataAsync();
-  }, [RoomConfigurator, selectedDate1, selectedDateRange, officeFilter]);
+  }, [
+    RoomConfigurator,
+    selectedDate1,
+    selectedDateRange,
+    officeFilter,
+    adminMap,
+  ]);
 
   const fetchDocumentData = async (id: string) => {
     try {

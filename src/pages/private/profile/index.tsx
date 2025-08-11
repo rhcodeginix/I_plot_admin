@@ -29,7 +29,7 @@ export const Profile = () => {
       {Role === "Agent" && IsAdmin === true ? (
         <AgentProfileForm />
       ) : (
-        <AdminProfileForm />
+        Role === "Agent" && IsAdmin === true && <AdminProfileForm />
       )}
     </>
   );

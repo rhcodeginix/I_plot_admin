@@ -373,14 +373,6 @@ export const routes = createBrowserRouter([
               </ProtectedRoute>
             ),
           },
-          // {
-          //   path: "/bank-leads-detail/*",
-          //   element: (
-          //     <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
-          //       <LeadsDetails />
-          //     </ProtectedRoute>
-          //   ),
-          // },
 
           // -----
           {

@@ -378,7 +378,9 @@ export const routes = createBrowserRouter([
           {
             path: "/bank-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+              <ProtectedRoute
+                allowedRoles={["Agent", "Bankansvarlig", "Admin"]}
+              >
                 <AllLeads />
               </ProtectedRoute>
             ),
@@ -386,7 +388,9 @@ export const routes = createBrowserRouter([
           {
             path: "/active-bank-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+              <ProtectedRoute
+                allowedRoles={["Agent", "Bankansvarlig", "Admin"]}
+              >
                 <AllLeads />
               </ProtectedRoute>
             ),
@@ -394,7 +398,9 @@ export const routes = createBrowserRouter([
           {
             path: "/bank-leads-detail/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+              <ProtectedRoute
+                allowedRoles={["Agent", "Bankansvarlig", "Admin"]}
+              >
                 <LeadsDetails />
               </ProtectedRoute>
             ),
@@ -402,7 +408,9 @@ export const routes = createBrowserRouter([
           {
             path: "/add-bank-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+              <ProtectedRoute
+                allowedRoles={["Agent", "Bankansvarlig", "Admin"]}
+              >
                 <BankleadsTabs />
               </ProtectedRoute>
             ),
@@ -410,7 +418,9 @@ export const routes = createBrowserRouter([
           {
             path: "/edit-bank-leads/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+              <ProtectedRoute
+                allowedRoles={["Agent", "Bankansvarlig", "Admin"]}
+              >
                 <BankleadsTabs />
               </ProtectedRoute>
             ),

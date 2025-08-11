@@ -5,6 +5,7 @@ import { fetchBankLeadData } from "../../../lib/utils";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { toast } from "react-hot-toast";
+import Modal from "../../../components/common/modal";
 
 export const Oppsummering: React.FC<{
   setActiveTab: any;
@@ -101,9 +102,19 @@ export const Oppsummering: React.FC<{
       toast.success(result.message, {
         position: "top-right",
       });
+      setIsPopup(false);
       navigate("/agent-leads");
     } catch (error) {
       console.error("Error:", error);
+    }
+  };
+
+  const [isPopup, setIsPopup] = useState(false);
+  const handleConfirmPopup = () => {
+    if (isPopup) {
+      setIsPopup(false);
+    } else {
+      setIsPopup(true);
     }
   };
 
@@ -371,9 +382,46 @@ export const Oppsummering: React.FC<{
         <Button
           text="Send til bank"
           className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-          onClick={sendWelcomeEmail}
+          onClick={handleConfirmPopup}
         />
       </div>
+
+      {isPopup && (
+        <Modal onClose={handleConfirmPopup} isOpen={true}>
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <p className="text-lg font-semibold mb-4">
+                Er du sikker på at du vil sende denne e-posten til banken?
+              </p>
+
+              <div className="flex justify-center mt-5 w-full gap-5 items-center">
+                <div
+                  onClick={() => {
+                    setIsPopup(false);
+                    navigate("/agent-leads");
+                  }}
+                >
+                  <Button
+                    text="Avbryt"
+                    className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  />
+                </div>
+                <div
+                  onClick={() => {
+                    sendWelcomeEmail();
+                    setIsPopup(false);
+                  }}
+                >
+                  <Button
+                    text="Bekrefte"
+                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

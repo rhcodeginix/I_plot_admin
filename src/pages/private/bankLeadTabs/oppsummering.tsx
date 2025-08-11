@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/common/button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { fetchBankLeadData } from "../../../lib/utils";
+import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { toast } from "react-hot-toast";
+import Modal from "../../../components/common/modal";
 
 export const Oppsummering: React.FC<{
   setActiveTab: any;
@@ -68,6 +69,22 @@ export const Oppsummering: React.FC<{
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
 
+  const [Role, setRole] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+
+      if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+      }
+    };
+
+    getData();
+  }, []);
+
   const sendWelcomeEmail = async () => {
     try {
       const response = await fetch(
@@ -104,6 +121,15 @@ export const Oppsummering: React.FC<{
       navigate("/bank-leads");
     } catch (error) {
       console.error("Error:", error);
+    }
+  };
+
+  const [isPopup, setIsPopup] = useState(false);
+  const handleConfirmPopup = () => {
+    if (isPopup) {
+      setIsPopup(false);
+    } else {
+      setIsPopup(true);
     }
   };
 
@@ -371,9 +397,52 @@ export const Oppsummering: React.FC<{
         <Button
           text="Send til bank"
           className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-          onClick={sendWelcomeEmail}
+          onClick={() => {
+            if (Role === "Admin" || Role === "super-admin") {
+              handleConfirmPopup();
+            } else {
+              sendWelcomeEmail();
+            }
+          }}
         />
       </div>
+
+      {isPopup && (
+        <Modal onClose={handleConfirmPopup} isOpen={true}>
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <p className="text-lg font-semibold mb-4">
+                Er du sikker på at du vil sende denne e-posten til banken?
+              </p>
+
+              <div className="flex justify-center mt-5 w-full gap-5 items-center">
+                <div
+                  onClick={() => {
+                    setIsPopup(false);
+                    navigate("/agent-leads");
+                  }}
+                >
+                  <Button
+                    text="Avbryt"
+                    className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  />
+                </div>
+                <div
+                  onClick={() => {
+                    sendWelcomeEmail();
+                    setIsPopup(false);
+                  }}
+                >
+                  <Button
+                    text="Bekrefte"
+                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

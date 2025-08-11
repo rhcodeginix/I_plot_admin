@@ -2,7 +2,7 @@
 import { BookText, ChartPie, ChevronRight, FileText } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { fetchBankLeadData } from "../../../lib/utils";
+import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
 import { Oppsummering } from "./oppsummering";
 import { Fremdriftsplan } from "./Fremdriftsplan";
 import { Documenters } from "./document";
@@ -13,6 +13,19 @@ export const LeadsDetails = () => {
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const [bankData, setBankData] = useState<any>();
+
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data?.role) {
+        setRole(data.role);
+      }
+    };
+
+    getData();
+  }, []);
 
   const getData = useCallback(async () => {
     if (!id) return;
@@ -38,8 +51,14 @@ export const LeadsDetails = () => {
   const [activeTab, setActiveTab] = useState<any>(0);
   const tabData = [
     { label: "Summary", icon: <BookText className="w-5 h-5 md:w-6 md:h-6" /> },
-    { label: "Dokumentasjon", icon: <FileText className="w-5 h-5 md:w-6 md:h-6" /> },
-    { label: "Fremdriftsplan", icon: <ChartPie className="w-5 h-5 md:w-6 md:h-6" /> },
+    {
+      label: "Dokumentasjon",
+      icon: <FileText className="w-5 h-5 md:w-6 md:h-6" />,
+    },
+    {
+      label: "Fremdriftsplan",
+      icon: <ChartPie className="w-5 h-5 md:w-6 md:h-6" />,
+    },
   ];
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -55,7 +74,15 @@ export const LeadsDetails = () => {
         <div className="flex items-center gap-1">
           <span
             className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
-            onClick={() => navigate("/agent-leads")}
+            onClick={() =>
+              navigate(
+                `${
+                  role === "Agent" || role === "Bankansvarlig"
+                    ? "/bank-leads"
+                    : "/agent-leads"
+                }`
+              )
+            }
           >
             Leads sendt til banken
           </span>

@@ -419,7 +419,7 @@ export const Oppsummering: React.FC<{
                 <div
                   onClick={() => {
                     setIsPopup(false);
-                    navigate("/agent-leads");
+                    navigate("/bank-leads");
                   }}
                 >
                   <Button

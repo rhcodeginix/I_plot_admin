@@ -160,7 +160,6 @@ export const Oppsummering: React.FC<{
   //       link: `https://admin.mintomt.no/bank-leads-detail/${id}`,
   //     };
 
-  //     console.log("Fields to send:", fields);
   //   } catch (error) {
   //     console.error("Error:", error);
   //   }

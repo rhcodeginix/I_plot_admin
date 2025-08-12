@@ -218,7 +218,6 @@ export const Kunden = forwardRef<
       remove(index);
     }
   };
-  const email = localStorage.getItem("Iplot_admin");
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setActiveTab(1);
@@ -261,7 +260,7 @@ export const Kunden = forwardRef<
               ? `${createData?.f_name} ${createData?.l_name}`
               : createData?.name,
           },
-          supplierId: email !== "andre.finger@gmail.com" ? permission : null,
+          supplierId: permission ?? null,
           status: "Sent",
         });
         toast.success("Added successfully", { position: "top-right" });

@@ -262,7 +262,7 @@ export const Kunden = forwardRef<
               ? `${createData?.f_name} ${createData?.l_name}`
               : createData?.name,
           },
-          supplierId: email !== "andre.finger@gmail.com" ? permission : null,
+          supplierId: permission ?? null,
           status: "Sent",
         });
         toast.success("Added successfully", { position: "top-right" });

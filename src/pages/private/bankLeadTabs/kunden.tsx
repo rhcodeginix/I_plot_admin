@@ -47,55 +47,6 @@ import {
 import { db } from "../../../config/firebaseConfig";
 import ApiUtils from "../../../api";
 
-const formSchema = z.object({
-  Kundeinformasjon: z
-    .array(
-      z.object({
-        mobileNummer: z.string().refine(
-          (value) => {
-            const parsedNumber = parsePhoneNumber(value);
-            const countryCode = parsedNumber?.countryCallingCode
-              ? `+${parsedNumber.countryCallingCode}`
-              : "";
-            const phoneNumber = parsedNumber?.nationalNumber || "";
-            if (countryCode !== "+47") {
-              return false;
-            }
-            const validator = phoneNumberValidations[countryCode];
-            return validator ? validator(phoneNumber) : false;
-          },
-          {
-            message:
-              "Vennligst skriv inn et gyldig telefonnummer for det valgte landet.",
-          }
-        ),
-        f_name: z.string().min(1, {
-          message: "Fornavn må bestå av minst 2 tegn.",
-        }),
-        l_name: z.string().min(1, {
-          message: "Etternavn må bestå av minst 2 tegn.",
-        }),
-        Adresse: z.string().min(1, {
-          message: "Adresse må bestå av minst 2 tegn.",
-        }),
-        EPost: z
-          .string()
-          .email({ message: "Vennligst skriv inn en gyldig e-postadresse." })
-          .min(1, { message: "E-posten må være på minst 2 tegn." }),
-        dato: z.string().optional(),
-        Personnummer: z.string().optional(),
-        supplier: z.string().min(1, {
-          message: "Leverandør må velges",
-        }),
-        office: z.string().min(1, {
-          message: "Kontor må velges",
-        }),
-        Kundetype: z.string().min(1, { message: "Kundetype må spesifiseres." }),
-      })
-    )
-    .min(1, "Minst ett produkt er påkrevd."),
-});
-
 export type KundenHandle = {
   validateForm: () => Promise<boolean>;
 };
@@ -108,6 +59,73 @@ export const Kunden = forwardRef<
   const navigate = useNavigate();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
+  const [offices, setOffices] = useState<{ [key: number]: any[] }>({});
+
+  const formSchema = z.object({
+    Kundeinformasjon: z
+      .array(
+        z
+          .object({
+            mobileNummer: z.string().refine(
+              (value) => {
+                const parsedNumber = parsePhoneNumber(value);
+                const countryCode = parsedNumber?.countryCallingCode
+                  ? `+${parsedNumber.countryCallingCode}`
+                  : "";
+                const phoneNumber = parsedNumber?.nationalNumber || "";
+                if (countryCode !== "+47") {
+                  return false;
+                }
+                const validator = phoneNumberValidations[countryCode];
+                return validator ? validator(phoneNumber) : false;
+              },
+              {
+                message:
+                  "Vennligst skriv inn et gyldig telefonnummer for det valgte landet.",
+              }
+            ),
+            f_name: z.string().min(1, {
+              message: "Fornavn må bestå av minst 2 tegn.",
+            }),
+            l_name: z.string().min(1, {
+              message: "Etternavn må bestå av minst 2 tegn.",
+            }),
+            Adresse: z.string().min(1, {
+              message: "Adresse må bestå av minst 2 tegn.",
+            }),
+            EPost: z
+              .string()
+              .email({
+                message: "Vennligst skriv inn en gyldig e-postadresse.",
+              })
+              .min(1, { message: "E-posten må være på minst 2 tegn." }),
+            dato: z.string().optional(),
+            Personnummer: z.string().optional(),
+            supplier: z.string().min(1, {
+              message: "Leverandør må velges",
+            }),
+            office: z.string().optional(),
+            Kundetype: z
+              .string()
+              .min(1, { message: "Kundetype må spesifiseres." }),
+          })
+          .superRefine((data, ctx: any) => {
+            const index = Number(ctx.path[1]);
+
+            const passedOffices = offices;
+            const hasOffices = passedOffices?.[index]?.length > 0;
+
+            if (data.supplier && hasOffices && !data.office) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Kontor må velges",
+                path: ["office"],
+              });
+            }
+          })
+      )
+      .min(1, "Minst ett produkt er påkrevd."),
+  });
 
   const form = useForm<any>({
     resolver: zodResolver(formSchema),
@@ -333,8 +351,6 @@ export const Kunden = forwardRef<
   useEffect(() => {
     fetchSuppliersData();
   }, []);
-
-  const [offices, setOffices] = useState<{ [key: number]: any[] }>({});
 
   const fetchOfficeData = async (supplierId: string, idx: number) => {
     try {

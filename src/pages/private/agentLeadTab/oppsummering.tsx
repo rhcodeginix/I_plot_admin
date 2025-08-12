@@ -87,7 +87,7 @@ export const Oppsummering: React.FC<{
               phone: bankData?.Kunden?.Kundeinformasjon[0]?.mobileNummer,
               email: bankData?.Kunden?.Kundeinformasjon[0]?.EPost,
               dealer: "BoligPartner",
-              office: "BoligPartner",
+              office: bankData?.Kunden?.Kundeinformasjon[0]?.office,
               projectAddress: bankData?.plotHusmodell?.plot?.address,
               landCost: `kr ${plotData?.tomtekostnader}`,
               buildingCost: `kr ${houseData?.byggekostnader}`,

@@ -372,7 +372,6 @@ export const Kunden = forwardRef<
       }
     });
   }, [fields, form.watch("Kundeinformasjon")]);
-  console.log(form.getValues());
 
   return (
     <>
@@ -783,17 +782,6 @@ export const Kunden = forwardRef<
                                               `Kundeinformasjon.${index}.office`,
                                               ""
                                             );
-
-                                            if (
-                                              value ===
-                                              "9f523136-72ca-4bde-88e5-de175bc2fc71"
-                                            ) {
-                                              form.setValue(
-                                                "is_boligkonfigurator",
-                                                true
-                                              );
-                                              form.setValue("is_bank", false);
-                                            }
 
                                             fetchOfficeData(value, index);
                                           }}

@@ -35,15 +35,7 @@ import {
 import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  collection,
-  doc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import ApiUtils from "../../../api";
 
@@ -84,12 +76,6 @@ const formSchema = z.object({
           .min(1, { message: "E-posten må være på minst 2 tegn." }),
         dato: z.string().optional(),
         Personnummer: z.string().optional(),
-        supplier: z.string().min(1, {
-          message: "Leverandør må velges",
-        }),
-        office: z.string().min(1, {
-          message: "Kontor må velges",
-        }),
         Kundetype: z.string().min(1, { message: "Kundetype må spesifiseres." }),
       })
     )
@@ -122,38 +108,16 @@ export const Kunden = forwardRef<
           dato: "",
           Personnummer: "",
           Kundetype: "",
-          supplier: "",
-          office: "",
         },
       ],
     },
   });
-  const [permission, setPermission] = useState<any>(null);
   const [createData, setCreateData] = useState<any>(null);
-  const [office, setOffice] = useState<any>(null);
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
       if (data) {
         setCreateData(data);
-        const finalSupData = data?.supplier;
-        setPermission(finalSupData);
-        if (finalSupData || data?.office) {
-          const updatedFields = form
-            .getValues("Kundeinformasjon")
-            .map((item: any) => ({
-              ...item,
-              supplier: finalSupData || "",
-              office: data?.office || "",
-            }));
-
-          form.reset({
-            Kundeinformasjon: updatedFields,
-          });
-        }
-        if (data?.office) {
-          setOffice(data?.office);
-        }
       }
     };
 
@@ -210,8 +174,6 @@ export const Kunden = forwardRef<
       dato: "",
       Personnummer: "",
       Kundetype: "",
-      supplier: "",
-      office: "",
     } as any);
   };
   const removeProduct = (index: number) => {
@@ -219,8 +181,20 @@ export const Kunden = forwardRef<
       remove(index);
     }
   };
+  const [permission, setPermission] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
 
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        const finalSupData = data?.supplier;
+        setPermission(finalSupData);
+      }
+    };
+
+    getData();
+  }, []);
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setActiveTab(1);
 
@@ -315,63 +289,6 @@ export const Kunden = forwardRef<
       }
     }
   };
-  const [suppliers, setSuppliers] = useState([]);
-
-  const fetchSuppliersData = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "suppliers"));
-      let data: any = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      setSuppliers(data);
-    } catch (error) {
-      console.error("Error fetching husmodell data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchSuppliersData();
-  }, []);
-
-  const [offices, setOffices] = useState<{ [key: number]: any[] }>({});
-
-  const fetchOfficeData = async (supplierId: string, idx: number) => {
-    try {
-      let querySnapshot;
-      if (supplierId) {
-        const officeQuery = query(
-          collection(db, "office"),
-          where("data.supplier", "==", supplierId)
-        );
-        querySnapshot = await getDocs(officeQuery);
-      } else {
-        querySnapshot = await getDocs(collection(db, "office"));
-      }
-
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      setOffices((prev) => ({
-        ...prev,
-        [idx]: data,
-      }));
-    } catch (error) {
-      console.error("Error fetching office data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fields.forEach((_, index) => {
-      const supplierId = form.watch(`Kundeinformasjon.${index}.supplier`);
-      if (supplierId) {
-        fetchOfficeData(supplierId, index);
-      }
-    });
-  }, [fields, form.watch("Kundeinformasjon")]);
 
   return (
     <>
@@ -756,136 +673,6 @@ export const Kunden = forwardRef<
                               )}
                             />
                           </div>
-                          {!office && (
-                            <div>
-                              <FormField
-                                control={form.control}
-                                name={`Kundeinformasjon.${index}.supplier`}
-                                render={({ field, fieldState }) => (
-                                  <FormItem>
-                                    <p
-                                      className={`${
-                                        fieldState.error
-                                          ? "text-red"
-                                          : "text-black"
-                                      } mb-[6px] text-sm font-medium`}
-                                    >
-                                      Leverandører
-                                    </p>
-                                    <FormControl>
-                                      <div className="relative">
-                                        <Select
-                                          onValueChange={(value) => {
-                                            field.onChange(value);
-
-                                            form.setValue(
-                                              `Kundeinformasjon.${index}.office`,
-                                              ""
-                                            );
-
-                                            if (
-                                              value ===
-                                              "9f523136-72ca-4bde-88e5-de175bc2fc71"
-                                            ) {
-                                              form.setValue(
-                                                "is_boligkonfigurator",
-                                                true
-                                              );
-                                              form.setValue("is_bank", false);
-                                            }
-
-                                            fetchOfficeData(value, index);
-                                          }}
-                                          value={field.value}
-                                        >
-                                          <SelectTrigger
-                                            className={`bg-white rounded-[8px] border text-black ${
-                                              fieldState?.error
-                                                ? "border-red"
-                                                : "border-gray1"
-                                            } `}
-                                          >
-                                            <SelectValue placeholder="Select Leverandører" />
-                                          </SelectTrigger>
-                                          <SelectContent className="bg-white">
-                                            <SelectGroup>
-                                              {suppliers?.map(
-                                                (sup: any, idx) => (
-                                                  <SelectItem
-                                                    value={sup?.id}
-                                                    key={idx}
-                                                  >
-                                                    {sup?.company_name}
-                                                  </SelectItem>
-                                                )
-                                              )}
-                                            </SelectGroup>
-                                          </SelectContent>
-                                        </Select>
-                                      </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                          )}
-                          {!office && (
-                            <div>
-                              <FormField
-                                control={form.control}
-                                name={`Kundeinformasjon.${index}.office`}
-                                render={({ field, fieldState }) => (
-                                  <FormItem>
-                                    <p
-                                      className={`${
-                                        fieldState.error
-                                          ? "text-red"
-                                          : "text-black"
-                                      } mb-[6px] text-sm font-medium`}
-                                    >
-                                      Kontor
-                                    </p>
-                                    <FormControl>
-                                      <div className="relative">
-                                        <Select
-                                          onValueChange={(value) => {
-                                            field.onChange(value);
-                                          }}
-                                          value={field.value}
-                                        >
-                                          <SelectTrigger
-                                            className={`bg-white rounded-[8px] border text-black ${
-                                              fieldState?.error
-                                                ? "border-red"
-                                                : "border-gray1"
-                                            } `}
-                                          >
-                                            <SelectValue placeholder="Select Kontor" />
-                                          </SelectTrigger>
-                                          <SelectContent className="bg-white">
-                                            <SelectGroup>
-                                              {(offices[index] || []).map(
-                                                (off: any, idx) => (
-                                                  <SelectItem
-                                                    value={off.id}
-                                                    key={idx}
-                                                  >
-                                                    {off?.data?.name}
-                                                  </SelectItem>
-                                                )
-                                              )}
-                                            </SelectGroup>
-                                          </SelectContent>
-                                        </Select>
-                                      </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                          )}
                         </div>
 
                         {index !== fields.length - 1 && (

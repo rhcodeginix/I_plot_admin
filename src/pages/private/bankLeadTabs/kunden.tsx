@@ -372,6 +372,7 @@ export const Kunden = forwardRef<
       }
     });
   }, [fields, form.watch("Kundeinformasjon")]);
+  console.log(form.getValues());
 
   return (
     <>

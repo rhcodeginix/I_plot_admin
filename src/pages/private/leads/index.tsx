@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { MoveLeft, Plus } from "lucide-react";
 import Button from "../../../components/common/button";
 import { LeadTable } from "./leadTable";
 import { useEffect, useState } from "react";
@@ -6,14 +6,20 @@ import { fetchAdminDataByEmail } from "../../../lib/utils";
 
 export const AllLeads = () => {
   const [Role, setRole] = useState<any>(null);
+  const [Supplier, setSupplier] = useState<any>(null);
+  const [Email, setEmail] = useState<any>(null);
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchAdminDataByEmail();
 
       if (data) {
+        setEmail(data?.email);
         if (data?.role) {
           setRole(data?.role);
+        }
+        if (data?.supplier) {
+          setSupplier(data?.supplier);
         }
       }
     };
@@ -24,6 +30,19 @@ export const AllLeads = () => {
   return (
     <>
       <div className="px-6 pt-6 pb-16 flex flex-col gap-6">
+        {Supplier && Supplier === "9f523136-72ca-4bde-88e5-de175bc2fc71" && (
+          <div
+            className="text-primary text-sm md:text-base lg:text-lg font-semibold flex items-center gap-4 cursor-pointer"
+            onClick={() => {
+              const url = `https://boligkonfigurator.mintomt.no?email=${encodeURIComponent(
+                Email
+              )}`;
+              window.location.href = url;
+            }}
+          >
+            <MoveLeft /> Gå til romkonfiguratoren
+          </div>
+        )}
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-darkBlack font-medium text-xl md:text-2xl desktop:text-[30px]">

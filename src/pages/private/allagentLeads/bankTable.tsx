@@ -265,20 +265,20 @@ export const BankTable = () => {
             <>
               {row.original.status === "Sent" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  Sendt
                 </p>
               ) : row.original.status === "Rejected" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  Avvist
                 </p>
               ) : row.original.status === "Approved" ? (
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  Godkjent
                 </p>
               ) : (
                 row.original.status === "In Process" && (
                   <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                    {row.original.status}
+                    Under behandling
                   </p>
                 )
               )}

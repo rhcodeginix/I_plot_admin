@@ -339,20 +339,20 @@ export const LeadTable = () => {
             <div className="flex items-center gap-2">
               {row.original.status === "Sent" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  Sendt
                 </p>
               ) : row.original.status === "Rejected" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  Avvist
                 </p>
               ) : row.original.status === "Approved" ? (
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  Godkjent
                 </p>
               ) : (
                 row.original.status === "In Process" && (
                   <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                    {row.original.status}
+                    Under behandling
                   </p>
                 )
               )}
@@ -572,7 +572,7 @@ export const LeadTable = () => {
             <div className="bg-white p-6 rounded-xl w-[300px] shadow-lg relative">
               <form onSubmit={handleSubmit}>
                 <h2 className="text-sm md:text-base desktop:text-lg font-semibold mb-4">
-                  Change Status
+                  Endre status
                 </h2>
 
                 <div className="space-y-2">
@@ -585,7 +585,7 @@ export const LeadTable = () => {
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />
-                    Sent
+                    Sendt
                   </label>
 
                   <label className="flex items-center gap-2">
@@ -597,7 +597,7 @@ export const LeadTable = () => {
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />
-                    Approved
+                    Godkjent
                   </label>
                   <label className="flex items-center gap-2">
                     <input
@@ -608,7 +608,7 @@ export const LeadTable = () => {
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />
-                    Rejected
+                    Avvist
                   </label>
                   <label className="flex items-center gap-2">
                     <input
@@ -619,7 +619,7 @@ export const LeadTable = () => {
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />
-                    In Process
+                    Under behandling
                   </label>
                 </div>
 

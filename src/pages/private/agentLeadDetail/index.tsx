@@ -114,7 +114,8 @@ export const BankLeadsDetails = () => {
               </span>
             </div>
             <div>
-              {bankData?.status === "Sent" ? (
+              {bankData?.status === "Sent" ||
+              bankData?.status === "Ikke sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
                   {bankData?.status}
                 </p>

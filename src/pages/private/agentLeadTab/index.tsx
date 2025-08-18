@@ -23,7 +23,7 @@ export const AgentleadsTabs = () => {
       icon: <Banknote className="w-4 h-4 md:w-6 md:h-6" />,
     },
     {
-      label: "Prosjektregnskap",
+      label: "Økonomisk plan",
       icon: <ScrollText className="w-4 h-4 md:w-6 md:h-6" />,
     },
     {

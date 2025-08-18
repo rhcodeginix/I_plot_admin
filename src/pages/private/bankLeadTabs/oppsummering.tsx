@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "../../../components/common/button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { toast } from "react-hot-toast";
 import Modal from "../../../components/common/modal";
@@ -123,6 +123,28 @@ export const Oppsummering: React.FC<{
           }),
         }
       );
+      const formatDate = (date: Date) => {
+        return date
+          .toLocaleString("sv-SE", { timeZone: "UTC" })
+          .replace(",", "");
+      };
+
+      const docRef = doc(db, "bank_leads", String(id));
+
+      if (id) {
+        const snap = await getDoc(docRef);
+      
+        if (snap.exists()) {
+          const data = snap.data();
+      
+          if (data.status === "Ikke sendt") {
+            await updateDoc(docRef, {
+              status: "Sent",
+              updatedAt: formatDate(new Date()),
+            });
+          }
+        }
+      }
 
       const result = await response.json();
       toast.success(result.message, {

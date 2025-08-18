@@ -136,7 +136,9 @@ export const Fremdriftsplan: React.FC<{
                       ? "border-[#61C4A4]"
                       : step.status === "Unpaid" || step.status === "Reject"
                       ? "border-[#FFAFAF]"
-                      : step.status === "Sent" && "border-[#FFB795]"
+                      : (step.status === "Sent" ||
+                          step.status === "Ikke sendt") &&
+                        "border-[#FFB795]"
                   }`}
                 >
                   <div

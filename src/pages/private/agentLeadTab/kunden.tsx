@@ -283,7 +283,8 @@ export const Kunden = forwardRef<
               : createData?.name,
           },
           supplierId: permission ?? null,
-          status: "Sent",
+          // status: "Sent",
+          status: "Ikke sendt",
         });
         toast.success("Added successfully", { position: "top-right" });
         navigate(`/edit-agent-leads/${uniqueId}`);

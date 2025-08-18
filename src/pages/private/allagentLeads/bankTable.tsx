@@ -223,8 +223,8 @@ export const BankTable = () => {
           ),
         },
         {
-          accessorKey: "Lead sendt videre",
-          header: "Lead sendt videre",
+          accessorKey: "Lead sent",
+          header: "Lead sent",
           cell: ({ row }: any) => (
             <p className="text-sm font-semibold text-black w-max">
               {row.original.createdAt}
@@ -263,7 +263,8 @@ export const BankTable = () => {
           header: "Status",
           cell: ({ row }: any) => (
             <>
-              {row.original.status === "Sent" ? (
+              {row.original.status === "Sent" ||
+              row.original.status === "Ikke sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
                   Sendt
                 </p>

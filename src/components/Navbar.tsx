@@ -119,7 +119,7 @@ export const Navbar: React.FC = () => {
               to={"/dashboard"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                 currentPath === "/dashboard"
-                  ? "bg-lightPurple text-primary"
+                  ? "bg-lightGreen text-primary"
                   : "text-black"
               }`}
             >
@@ -133,7 +133,7 @@ export const Navbar: React.FC = () => {
                 currentPath === "/Leverandorer" ||
                 currentPath.startsWith("/edit-til-leverandor/") ||
                 currentPath === "/legg-til-leverandor"
-                  ? "bg-lightPurple text-primary"
+                  ? "bg-lightGreen text-primary"
                   : "text-black"
               }`}
             >
@@ -145,7 +145,7 @@ export const Navbar: React.FC = () => {
               to={"/events"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                 currentPath === "/events"
-                  ? "bg-lightPurple text-primary"
+                  ? "bg-lightGreen text-primary"
                   : "text-black"
               }`}
             >
@@ -165,7 +165,7 @@ export const Navbar: React.FC = () => {
                   currentPath.startsWith("/se-husmodell/") ||
                   currentPath === "/add-husmodell" ||
                   currentPath.startsWith("/edit-husmodell/")
-                    ? "bg-lightPurple text-primary"
+                    ? "bg-lightGreen text-primary"
                     : "text-black"
                 }`}
               >
@@ -184,7 +184,7 @@ export const Navbar: React.FC = () => {
                 currentPath.startsWith("/legg-user") ||
                 currentPath.startsWith("/add-agent-user") ||
                 currentPath.startsWith("/add-bank-user")
-                  ? "bg-lightPurple text-primary"
+                  ? "bg-lightGreen text-primary"
                   : "text-black"
               }`}
             >
@@ -201,7 +201,7 @@ export const Navbar: React.FC = () => {
                 currentPath === "/my-leads" ||
                 currentPath === "/add-lead" ||
                 currentPath.startsWith("/my-leads-details/")
-                  ? "bg-lightPurple text-primary"
+                  ? "bg-lightGreen text-primary"
                   : "text-black"
               }`}
             >
@@ -216,7 +216,7 @@ export const Navbar: React.FC = () => {
                 currentPath.startsWith("/add-agent-leads") ||
                 currentPath.startsWith("/edit-agent-leads/") ||
                 currentPath.startsWith("/agent-leads-detail/")
-                  ? "bg-lightPurple text-primary"
+                  ? "bg-lightGreen text-primary"
                   : "text-black"
               }`}
             >
@@ -231,7 +231,7 @@ export const Navbar: React.FC = () => {
                 currentPath.startsWith("/bank-leads-detail") ||
                 currentPath.startsWith("/add-bank-leads") ||
                 currentPath.startsWith("/edit-bank-leads/")
-                  ? "bg-lightPurple text-primary"
+                  ? "bg-lightGreen text-primary"
                   : "text-black"
               }`}
             >
@@ -249,7 +249,7 @@ export const Navbar: React.FC = () => {
                 <img src={isPhoto} alt="profile" className="rounded-full" />
               </div>
             ) : (
-              <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center border border-primary bg-lightPurple rounded-full">
+              <div className="w-8 h-8 md:h-[40px] md:w-[40px] flex items-center justify-center border border-primary bg-lightGreen rounded-full">
                 {name?.[0]}
               </div>
             )}
@@ -262,7 +262,7 @@ export const Navbar: React.FC = () => {
             >
               <Link
                 to={`/profile/${id}`}
-                className="px-3 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer flex items-center gap-2"
+                className="px-3 py-2 text-sm hover:bg-lightGreen text-black w-full text-left cursor-pointer flex items-center gap-2"
                 onClick={() => setIsDropdownOpen(false)}
               >
                 <User className="w-5 h-5 text-primary" /> Profil
@@ -272,7 +272,7 @@ export const Navbar: React.FC = () => {
                 IsAdmin === true) && (
                 <Link
                   to={"/Brukeradministrasjon"}
-                  className="px-3 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer flex items-center gap-2"
+                  className="px-3 py-2 text-sm hover:bg-lightGreen text-black w-full text-left cursor-pointer flex items-center gap-2"
                   onClick={() => setIsDropdownOpen(false)}
                 >
                   <Users className="w-5 h-5 text-primary" />
@@ -281,7 +281,7 @@ export const Navbar: React.FC = () => {
               )}
               <Link
                 to={"/login"}
-                className="px-3 py-2 text-sm hover:bg-lightPurple text-black w-full text-left cursor-pointer flex items-center gap-2"
+                className="px-3 py-2 text-sm hover:bg-lightGreen text-black w-full text-left cursor-pointer flex items-center gap-2"
                 onClick={handleLogout}
               >
                 <LogOut className="w-5 h-5 text-primary" /> Logout
@@ -319,7 +319,7 @@ export const Navbar: React.FC = () => {
                 to={"/dashboard"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                   currentPath === "/dashboard"
-                    ? "bg-lightPurple text-primary"
+                    ? "bg-lightGreen text-primary"
                     : "text-black"
                 }`}
               >
@@ -333,7 +333,7 @@ export const Navbar: React.FC = () => {
                   currentPath === "/Leverandorer" ||
                   currentPath.startsWith("/edit-til-leverandor/") ||
                   currentPath === "/legg-til-leverandor"
-                    ? "bg-lightPurple text-primary"
+                    ? "bg-lightGreen text-primary"
                     : "text-black"
                 }`}
               >
@@ -345,7 +345,7 @@ export const Navbar: React.FC = () => {
                 to={"/events"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
                   currentPath === "/events"
-                    ? "bg-lightPurple text-primary"
+                    ? "bg-lightGreen text-primary"
                     : "text-black"
                 }`}
               >
@@ -365,7 +365,7 @@ export const Navbar: React.FC = () => {
                     currentPath.startsWith("/se-husmodell/") ||
                     currentPath === "/add-husmodell" ||
                     currentPath.startsWith("/edit-husmodell/")
-                      ? "bg-lightPurple text-primary"
+                      ? "bg-lightGreen text-primary"
                       : "text-black"
                   }`}
                 >
@@ -384,7 +384,7 @@ export const Navbar: React.FC = () => {
                 currentPath.startsWith("/legg-user") ||
                 currentPath.startsWith("/add-agent-user") ||
                 currentPath.startsWith("/add-bank-user")
-                  ? "bg-lightPurple text-primary"
+                  ? "bg-lightGreen text-primary"
                   : "text-black"
               }`}
             >
@@ -401,7 +401,7 @@ export const Navbar: React.FC = () => {
                   currentPath === "/my-leads" ||
                   currentPath === "/add-lead" ||
                   currentPath.startsWith("/my-leads-details/")
-                    ? "bg-lightPurple text-primary"
+                    ? "bg-lightGreen text-primary"
                     : "text-black"
                 }`}
               >
@@ -416,7 +416,7 @@ export const Navbar: React.FC = () => {
                   currentPath.startsWith("/add-agent-leads") ||
                   currentPath.startsWith("/edit-agent-leads/") ||
                   currentPath.startsWith("/agent-leads-detail/")
-                    ? "bg-lightPurple text-primary"
+                    ? "bg-lightGreen text-primary"
                     : "text-black"
                 }`}
               >
@@ -431,7 +431,7 @@ export const Navbar: React.FC = () => {
                   currentPath.startsWith("/bank-leads-detail") ||
                   currentPath.startsWith("/add-bank-leads") ||
                   currentPath.startsWith("/edit-bank-leads/")
-                    ? "bg-lightPurple text-primary"
+                    ? "bg-lightGreen text-primary"
                     : "text-black"
                 }`}
               >

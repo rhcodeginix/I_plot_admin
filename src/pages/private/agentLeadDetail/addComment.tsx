@@ -13,7 +13,7 @@ import {
 import Button from "../../../components/common/button";
 import Img_pdf from "../../../assets/images/Img_pdf.png";
 import Ic_upload_photo from "../../../assets/images/Ic_upload_photo.svg";
-import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
+import Ic_delete_green from "../../../assets/images/Ic_delete_green.svg";
 import { TextArea } from "../../../components/ui/textarea";
 import { useLocation } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -327,7 +327,7 @@ export const AddComment: React.FC<{
                                 form.setValue("photo", updatedFiles);
                               }}
                             >
-                              <img src={Ic_delete_purple} alt="delete" />
+                              <img src={Ic_delete_green} alt="delete" />
                             </div>
                           </div>
                         );
@@ -346,7 +346,7 @@ export const AddComment: React.FC<{
             />
             <Button
               text="Lagre"
-              className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+              className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
               type="submit"
             />
           </div>

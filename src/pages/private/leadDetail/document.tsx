@@ -152,8 +152,8 @@ export const Documenters: React.FC<{
                       key={index}
                     >
                       <div className="flex items-start gap-2.5 md:gap-4 truncate w-[calc(100%-60px)] md:w-[calc(100%-65px)]">
-                        <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                          <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                        <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                          <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                             <img src={Ic_file} alt="file" />
                           </div>
                         </div>
@@ -197,8 +197,8 @@ export const Documenters: React.FC<{
                       key={index}
                     >
                       <div className="flex items-start gap-2.5 md:gap-4 truncate">
-                        <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                          <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                        <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                          <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                             <img src={Ic_file} alt="file" />
                           </div>
                         </div>
@@ -242,8 +242,8 @@ export const Documenters: React.FC<{
                       key={index}
                     >
                       <div className="flex items-start gap-2.5 md:gap-4 truncate">
-                        <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                          <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                        <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                          <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                             <img src={Ic_file} alt="file" />
                           </div>
                         </div>
@@ -291,7 +291,7 @@ export const Documenters: React.FC<{
                 </div>
                 <Button
                   text="Bekrefte"
-                  className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   onClick={handleConfirmDelete}
                 />
               </div>

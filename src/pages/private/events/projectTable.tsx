@@ -286,7 +286,7 @@ export const ProjectTable = () => {
                 Overført til oppmelding
               </p>
             ) : row.original?.configurator ? (
-              <p className="text-sm font-medium text-primary w-max bg-lightPurple py-1 px-2 rounded-full">
+              <p className="text-sm font-medium text-primary w-max bg-lightGreen py-1 px-2 rounded-full">
                 Ferdig konfiguert
               </p>
             ) : (
@@ -373,7 +373,7 @@ export const ProjectTable = () => {
                   }}
                   className={`px-2 md:px-4 py-2 text-sm font-medium ${
                     activeTab === tab
-                      ? "border-b-2 border-purple text-purple"
+                      ? "border-b-2 border-primary text-primary"
                       : "text-gray-500"
                   }`}
                 >
@@ -406,7 +406,7 @@ export const ProjectTable = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="mb-2 flex gap-2 flex-col lg:flex-row lg:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+          <div className="mb-2 flex gap-2 flex-col lg:flex-row lg:items-center justify-between bg-lightGreen rounded-[12px] py-3 px-4">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
               <img src={Ic_search} alt="search" />
               <input

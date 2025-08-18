@@ -389,7 +389,7 @@ export const LeadTable = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="mb-2 flex gap-2 flex-col lg:flex-row lg:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+          <div className="mb-2 flex gap-2 flex-col lg:flex-row lg:items-center justify-between bg-lightGreen rounded-[12px] py-3 px-4">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
               <img src={Ic_search} alt="search" />
               <input

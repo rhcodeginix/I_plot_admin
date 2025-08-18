@@ -29,7 +29,7 @@ export const MyLeads = () => {
                   onClick={() => setActiveTab(tab)}
                   className={`px-2 md:px-4 py-2 text-sm font-medium ${
                     activeTab === tab
-                      ? "border-b-2 border-purple text-purple"
+                      ? "border-b-2 border-primary text-primary"
                       : "text-gray-500"
                   }`}
                 >
@@ -39,7 +39,7 @@ export const MyLeads = () => {
           </div>
           <Button
             text="Opprett nytt lead"
-            className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+            className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
             icon={<Plus className="text-white w-5 h-5" />}
             path="/add-lead"
           />

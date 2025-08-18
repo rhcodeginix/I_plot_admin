@@ -318,7 +318,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
           <div className="w-full bg-white sticky top-[70px] md:top-[80px] shadow-shadow1 py-2 z-50">
-            <div className="bg-lightPurple flex items-center gap-2 rounded-lg p-[6px] mx-4 md:mx-6 w-max">
+            <div className="bg-lightGreen flex items-center gap-2 rounded-lg p-[6px] mx-4 md:mx-6 w-max">
               <div
                 className={`cursor-pointer px-5 py-2 text-sm rounded-lg ${
                   currentDiv === "byggekostnader" &&
@@ -457,7 +457,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                   className={`w-max text-sm md:text-base whitespace-nowrap flex items-center gap-1 font-medium ${
                                     fields.length === 1
                                       ? "text-gray cursor-not-allowed text-opacity-55"
-                                      : "text-purple cursor-pointer"
+                                      : "text-primary cursor-pointer"
                                   }`}
                                   onClick={() => {
                                     if (fields.length > 1) {
@@ -631,7 +631,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
 
                     <div className="flex justify-end">
                       <div
-                        className="text-white rounded-lg w-max bg-purple font-medium justify-center text-base flex items-center gap-1 cursor-pointer h-full px-4 py-[10px]"
+                        className="text-white rounded-lg w-max bg-primary font-medium justify-center text-base flex items-center gap-1 cursor-pointer h-full px-4 py-[10px]"
                         onClick={addProduct}
                       >
                         + Legg til ny byggekostnad
@@ -750,7 +750,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                   className={`flex text-sm md:text-base whitespace-nowrap w-max items-center gap-1 font-medium ${
                                     TomtekostFields.length === 1
                                       ? "text-gray cursor-not-allowed text-opacity-55"
-                                      : "text-purple cursor-pointer"
+                                      : "text-primary cursor-pointer"
                                   }`}
                                   onClick={() => {
                                     if (TomtekostFields.length > 1) {
@@ -921,7 +921,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
 
                     <div className="flex justify-end">
                       <div
-                        className="text-white rounded-lg w-max bg-purple font-medium justify-center text-base flex items-center gap-1 cursor-pointer h-full px-4 py-[10px]"
+                        className="text-white rounded-lg w-max bg-primary font-medium justify-center text-base flex items-center gap-1 cursor-pointer h-full px-4 py-[10px]"
                         onClick={addTomtekostProduct}
                       >
                         + Legg til ny tomtekost
@@ -941,7 +941,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
             </div>
             <Button
               text="Lagre"
-              className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+              className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
               type="submit"
             />
           </div>

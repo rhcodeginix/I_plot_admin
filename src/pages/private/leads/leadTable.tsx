@@ -343,16 +343,20 @@ export const LeadTable = () => {
                 </p>
               ) : row.original.status === "Rejected" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
-                  Avvist
+                  Avsluttet
                 </p>
               ) : row.original.status === "Approved" ? (
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  Godkjent
+                  Kunde
+                </p>
+              ) : row.original.status === "In Process" ? (
+                <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
+                  Under behandling
                 </p>
               ) : (
-                row.original.status === "In Process" && (
-                  <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                    Under behandling
+                row.original.status === "Tilbud" && (
+                  <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
+                    Tilbud
                   </p>
                 )
               )}
@@ -435,7 +439,7 @@ export const LeadTable = () => {
 
   return (
     <>
-      <div className="mb-2 flex items-center justify-between bg-lightPurple rounded-[12px] py-3 px-4">
+      <div className="mb-2 flex items-center justify-between bg-lightGreen rounded-[12px] py-3 px-4">
         <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
           <div
             className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-r border-gray1 cursor-pointer ${
@@ -557,7 +561,7 @@ export const LeadTable = () => {
                 <div onClick={() => handleDelete(selectedId)}>
                   <Button
                     text="Bekrefte"
-                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                    className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   />
                 </div>
               </div>
@@ -597,7 +601,7 @@ export const LeadTable = () => {
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />
-                    Godkjent
+                    Kunde
                   </label>
                   <label className="flex items-center gap-2">
                     <input
@@ -608,7 +612,7 @@ export const LeadTable = () => {
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />
-                    Avvist
+                    Avsluttet
                   </label>
                   <label className="flex items-center gap-2">
                     <input
@@ -620,6 +624,17 @@ export const LeadTable = () => {
                       className="accent-primary h-4 w-4"
                     />
                     Under behandling
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="status"
+                      value="Tilbud"
+                      checked={selectedOption === "Tilbud"}
+                      onChange={(e) => setSelectedOption(e.target.value)}
+                      className="accent-primary h-4 w-4"
+                    />
+                    Tilbud
                   </label>
                 </div>
 
@@ -633,7 +648,7 @@ export const LeadTable = () => {
                   <div>
                     <Button
                       text="Bekrefte"
-                      className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                      className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                       type="submit"
                     />
                   </div>

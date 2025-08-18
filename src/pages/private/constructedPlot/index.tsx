@@ -186,7 +186,7 @@ export const ConstructedPlot = () => {
           Antall bygget tomt teller
         </h1>
         <div>
-          <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 md:px-4 gap-2">
+          <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between bg-lightGreen rounded-[12px] py-3 px-3 md:px-4 gap-2">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
               <img src={Ic_search} alt="search" />
               <input

@@ -380,7 +380,7 @@ export const MyLeadsDetail = () => {
   };
 
   const getTextStyle = (index: number) => {
-    if (index <= activeStep) return "text-purple";
+    if (index <= activeStep) return "text-primary";
     return "text-black";
   };
 
@@ -548,7 +548,7 @@ export const MyLeadsDetail = () => {
 
   return (
     <>
-      <div className="bg-lightPurple py-4 px-4 md:px-6">
+      <div className="bg-lightGreen py-4 px-4 md:px-6">
         <div className="flex items-center gap-1.5 md:gap-3">
           <Link
             to="/my-leads"
@@ -574,7 +574,7 @@ export const MyLeadsDetail = () => {
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:items-center justify-between">
           <div className="flex items-center gap-4 md:gap-6">
             <div
-              className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] desktop:w-[160px] desktop:h-[160px] rounded-full flex items-center justify-center border-[4px] border-[#fff] bg-lightPurple text-primary text-[2rem] md:text-[40px] desktop:text-[48px] font-medium"
+              className="w-[100px] h-[100px] md:w-[120px] md:h-[120px] desktop:w-[160px] desktop:h-[160px] rounded-full flex items-center justify-center border-[4px] border-[#fff] bg-lightGreen text-primary text-[2rem] md:text-[40px] desktop:text-[48px] font-medium"
               style={{
                 boxShadow:
                   "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
@@ -625,7 +625,7 @@ export const MyLeadsDetail = () => {
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-gray text-xs sm:text-sm">Kilde:</span>
-                <div className="bg-lightPurple py-1 px-3 h-[28px] rounded-[40px] flex items-center justify-between clear-start text-black text-xs sm:text-sm font-medium">
+                <div className="bg-lightGreen py-1 px-3 h-[28px] rounded-[40px] flex items-center justify-between clear-start text-black text-xs sm:text-sm font-medium">
                   {supplierData?.company_name}
                 </div>
               </div>
@@ -644,7 +644,7 @@ export const MyLeadsDetail = () => {
           />
           <Button
             text="Ny loggføring"
-            className="border border-lightPurple bg-lightPurple text-primary text-sm md:text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative px-4 md:px-[30px] py-[10px] flex items-center gap-2"
+            className="border border-lightGreen bg-lightGreen text-primary text-sm md:text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative px-4 md:px-[30px] py-[10px] flex items-center gap-2"
             type="button"
             onClick={() => {
               handleLoggingPopup();
@@ -801,7 +801,7 @@ export const MyLeadsDetail = () => {
               <div className="absolute top-3.5 md:top-5 left-[50px] md:left-[72px] right-[50px] md:right-[72px] h-0.5 bg-gray2 z-0"></div>
 
               <div
-                className="absolute top-3.5 md:top-5 left-[50px] md:left-[72px] h-0.5 bg-purple z-10 transition-all duration-300 ease-in-out"
+                className="absolute top-3.5 md:top-5 left-[50px] md:left-[72px] h-0.5 bg-primary z-10 transition-all duration-300 ease-in-out"
                 style={{
                   width: `calc((100% - 144px) * ${
                     activeStep / (steps.length - 1)

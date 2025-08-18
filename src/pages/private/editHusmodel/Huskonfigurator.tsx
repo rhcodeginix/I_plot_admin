@@ -84,13 +84,13 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
               onDrop={() => handleDrop(index)}
               className={`bg-white cursor-pointer rounded-lg flex items-center justify-between gap-2 px-3 md:px-5 ${
                 activeTabData === index
-                  ? "border-2 border-primary bg-lightPurple rounded-t-[12px]"
+                  ? "border-2 border-primary bg-lightGreen rounded-t-[12px]"
                   : "border border-gray2"
               }`}
               onClick={() => setActiveTabData(index)}
             >
               <div className="text-xs md:text-sm text-darkBlack py-1.5 md:py-3 flex items-center gap-1 md:gap-2 font-semibold">
-                <span className="w-5 h-5 rounded-full bg-lightPurple flex items-center justify-center text-darkBlack font-semibold text-[10px] md:text-xs">
+                <span className="w-5 h-5 rounded-full bg-lightGreen flex items-center justify-center text-darkBlack font-semibold text-[10px] md:text-xs">
                   {index + 1}
                 </span>
                 {tab.navn}
@@ -124,7 +124,7 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
             </div>
           ))}
           <div
-            className="desktop:sticky bottom-0 desktop:mb-3 bg-purple border-gray2 rounded-lg p-1.5 md:p-3 flex items-center gap-2 text-white font-semibold text-xs md:text-sm cursor-pointer"
+            className="desktop:sticky bottom-0 desktop:mb-3 bg-primary border-gray2 rounded-lg p-1.5 md:p-3 flex items-center gap-2 text-white font-semibold text-xs md:text-sm cursor-pointer"
             onClick={() => setAddCategory(true)}
           >
             <div className="w-5 h-5">
@@ -149,7 +149,7 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
         ) : (
           <div className="w-full desktop:w-[80%] relative z-40">
             <div
-              className="text-purple font-semibold text-base cursor-pointer flex justify-end w-full"
+              className="text-primary font-semibold text-base cursor-pointer flex justify-end w-full"
               onClick={() => setActiveTab(2)}
             >
               Hopp over steget
@@ -162,7 +162,7 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
               >
                 <Button
                   text="Avbryt"
-                  className="border border-lightPurple bg-lightPurple text-purple text-sm rounded-[8px] h-[40px] font-medium relative px-10 py-2 flex items-center gap-2"
+                  className="border border-lightGreen bg-lightGreen text-primary text-sm rounded-[8px] h-[40px] font-medium relative px-10 py-2 flex items-center gap-2"
                 />
               </div>
             </div>

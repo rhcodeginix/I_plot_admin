@@ -91,10 +91,10 @@ export const BankLeadsDetails = () => {
   }, []);
   return (
     <>
-      <div className="px-4 md:px-6 lg:px-8 pt-4 pb-8 flex flex-col gap-4 md:gap-6 bg-[#F5F3FF]">
+      <div className="px-4 md:px-6 lg:px-8 pt-4 pb-8 flex flex-col gap-4 md:gap-6 bg-lightGreen">
         <div className="flex items-center gap-1">
           <span
-            className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+            className="text-primary text-xs md:text-sm font-medium cursor-pointer"
             onClick={() => navigate("/agent-leads")}
           >
             Leads sendt til banken
@@ -155,7 +155,7 @@ export const BankLeadsDetails = () => {
                   id ? "cursor-pointer" : "cursor-auto"
                 } flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-darkBlack py-1.5 sm:py-2 px-2 md:px-3 rounded-lg ${
                   activeTab === index
-                    ? "font-semibold bg-[#7839EE] text-white"
+                    ? "font-semibold bg-primary text-white"
                     : "text-[#4D4D4D]"
                 }`}
                 onClick={() => setActiveTab(index)}

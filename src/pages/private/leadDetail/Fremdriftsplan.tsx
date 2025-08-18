@@ -42,13 +42,18 @@ export const Fremdriftsplan: React.FC<{
   ];
 
   const steps = bankData?.Fremdriftsplan
-    ? Object.entries(bankData?.Fremdriftsplan)
+    ? Object.entries(bankData.Fremdriftsplan)
         .filter(([key]) => key !== "id")
         .map(([key, value]: any) => ({
           name: key,
           ...value,
         }))
-        .sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name))
+        .sort((a, b) => {
+          if (typeof a.order === "number" && typeof b.order === "number") {
+            return a.order - b.order;
+          }
+          return order.indexOf(a.name) - order.indexOf(b.name);
+        })
     : [];
 
   useEffect(() => {
@@ -169,7 +174,7 @@ export const Fremdriftsplan: React.FC<{
                         )}
                         {step.status !== "Approve" && !step?.payment && (
                           <div
-                            className="bg-[#6941C6] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-white cursor-pointer"
+                            className="bg-primary rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-white cursor-pointer"
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();

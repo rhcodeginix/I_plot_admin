@@ -22,7 +22,7 @@ import {
 } from "../../../components/ui/form";
 import toast from "react-hot-toast";
 import { getDownloadURL, ref as reff, uploadBytes } from "firebase/storage";
-import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
+import Ic_delete_green from "../../../assets/images/Ic_delete_green.svg";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
 import { fetchBankLeadData } from "../../../lib/utils";
@@ -621,7 +621,7 @@ export const ProjectAccounting = forwardRef<
                               >
                                 <img src={Ic_upload_blue_img} alt="upload" />
                                 <div className="flex items-center gap-2 md:gap-3">
-                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
+                                  <span className="text-primary border-2 border-primary rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
                                     Last opp
                                   </span>
                                   <p className="text-[#111322] text-xs md:text-sm text-center truncate w-full">
@@ -662,8 +662,8 @@ export const ProjectAccounting = forwardRef<
                             key={index}
                           >
                             <div className="flex items-start gap-2 md:gap-4 truncate">
-                              <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                                <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                              <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                                <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                                   <img src={Ic_file} alt="file" />
                                 </div>
                               </div>
@@ -674,7 +674,7 @@ export const ProjectAccounting = forwardRef<
                                 className="bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer w-8 h-8"
                                 onClick={() => handleDeleteClick(index)}
                               >
-                                <img src={Ic_delete_purple} alt="delete" />
+                                <img src={Ic_delete_green} alt="delete" />
                               </div>
                             </div>
                           </div>
@@ -948,7 +948,7 @@ export const ProjectAccounting = forwardRef<
                     </div>
                     <div className="flex items-center justify-center">
                       <div
-                        className="bg-[#7839EE] rounded-[40px] py-2 md:py-3.5 px-3 md:px-5 flex items-center gap-2 cursor-pointer"
+                        className="bg-primary rounded-[40px] py-2 md:py-3.5 px-3 md:px-5 flex items-center gap-2 cursor-pointer"
                         onClick={() => openModal("byggekost")}
                       >
                         <Plus className="text-white w-4 md:w-5 h-4 md:h-5" />
@@ -1157,7 +1157,7 @@ export const ProjectAccounting = forwardRef<
                     </div>
                     <div className="flex items-center justify-center">
                       <div
-                        className="bg-[#7839EE] rounded-[40px] py-2 md:py-3.5 px-3 md:px-5 flex items-center gap-2 cursor-pointer"
+                        className="bg-primary rounded-[40px] py-2 md:py-3.5 px-3 md:px-5 flex items-center gap-2 cursor-pointer"
                         onClick={() => openModal("tomtekost")}
                       >
                         <Plus className="text-white w-4 md:w-5 h-4 md:h-5" />
@@ -1185,7 +1185,7 @@ export const ProjectAccounting = forwardRef<
             </div>
             <Button
               text="Lagre"
-              className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+              className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
               type="submit"
             />
           </div>
@@ -1206,7 +1206,7 @@ export const ProjectAccounting = forwardRef<
                 </div>
                 <Button
                   text="Bekrefte"
-                  className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   onClick={handleConfirmDelete}
                 />
               </div>
@@ -1297,7 +1297,7 @@ export const ProjectAccounting = forwardRef<
 
                 <Button
                   text="Lagre"
-                  className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   onClick={handleSubmitNewCost}
                 />
               </div>

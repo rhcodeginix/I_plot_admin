@@ -907,7 +907,7 @@ export const Kunden = forwardRef<
           </div>
           <div className="mb-8 mx-4 md:mx-8 lg:mx-10">
             <div
-              className="text-white rounded-lg w-max bg-purple font-medium justify-center text-base flex items-center gap-1 cursor-pointer h-full px-4 py-[10px]"
+              className="text-white rounded-lg w-max bg-primary font-medium justify-center text-base flex items-center gap-1 cursor-pointer h-full px-4 py-[10px]"
               onClick={addProduct}
             >
               + Legg til medlåntaker
@@ -922,7 +922,7 @@ export const Kunden = forwardRef<
             <div id="submit">
               <Button
                 text="Neste"
-                className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                 type="submit"
               />
             </div>

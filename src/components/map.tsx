@@ -87,7 +87,7 @@ const NorkartMap: React.FC<{ coordinates: any }> = ({ coordinates }) => {
           type: "line",
           source: "boundary",
           paint: {
-            "line-color": "#6941C6",
+            "line-color": "#006555",
             "line-width": 3,
             "line-opacity": 0.85,
           },
@@ -98,7 +98,7 @@ const NorkartMap: React.FC<{ coordinates: any }> = ({ coordinates }) => {
           type: "fill",
           source: "boundary",
           paint: {
-            "fill-color": "#6941C6",
+            "fill-color": "#006555",
             "fill-opacity": 0.15,
           },
         });

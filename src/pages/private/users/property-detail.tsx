@@ -177,7 +177,7 @@ export const PropertyDetail = () => {
 
   return (
     <>
-      <div className="bg-lightPurple py-4 md:py-5 relative px-4 md:px-6">
+      <div className="bg-lightGreen py-4 md:py-5 relative px-4 md:px-6">
         <img
           src={Img_line_bg}
           alt="images"
@@ -946,7 +946,7 @@ export const PropertyDetail = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3 md:px-4 py-2 text-black border-b-[3px] text-sm md:text-base desktop:text-lg transition-colors duration-300 ${
                   activeTab === tab.id
-                    ? "border-[#6941C6] font-semibold"
+                    ? "border-primary font-semibold"
                     : "border-transparent"
                 }`}
               >

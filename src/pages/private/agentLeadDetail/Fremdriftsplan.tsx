@@ -32,14 +32,29 @@ export const Fremdriftsplan: React.FC<{
     "Overtakelse",
   ];
 
+  // const steps = bankData?.Fremdriftsplan
+  //   ? Object.entries(bankData?.Fremdriftsplan)
+  //       .filter(([key]) => key !== "id")
+  //       .map(([key, value]: any) => ({
+  //         name: key,
+  //         ...value,
+  //       }))
+  //       .sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name))
+  //   : [];
+
   const steps = bankData?.Fremdriftsplan
-    ? Object.entries(bankData?.Fremdriftsplan)
+    ? Object.entries(bankData.Fremdriftsplan)
         .filter(([key]) => key !== "id")
         .map(([key, value]: any) => ({
           name: key,
           ...value,
         }))
-        .sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name))
+        .sort((a, b) => {
+          if (typeof a.order === "number" && typeof b.order === "number") {
+            return a.order - b.order;
+          }
+          return order.indexOf(a.name) - order.indexOf(b.name);
+        })
     : [];
 
   useEffect(() => {

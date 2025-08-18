@@ -598,7 +598,7 @@ export const TODOTable = () => {
             <div>
               <Link
                 to={`/my-leads-details/${row.original.id}`}
-                className="font-medium text-purple text-sm mb-[2px]"
+                className="font-medium text-primary text-sm mb-[2px]"
               >
                 {row.original.leadData.name}
               </Link>
@@ -752,7 +752,7 @@ export const TODOTable = () => {
             />
           </div>
         </div>
-        <div className="mb-2 flex flex-col desktop:flex-row desktop:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 gap-2 md:px-4">
+        <div className="mb-2 flex flex-col desktop:flex-row desktop:items-center justify-between bg-lightGreen rounded-[12px] py-3 px-3 gap-2 md:px-4">
           <div className="flex flex-col lg:flex-row gap-2 md:gap-3 lg:items-center">
             <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px] relative">
               <img src={Ic_search} alt="search" />

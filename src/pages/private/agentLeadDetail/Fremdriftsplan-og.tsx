@@ -57,33 +57,52 @@ export const FremdriftsplanOg: React.FC<{
   const form = useForm<any>({
     resolver: zodResolver(formSchema),
   });
+  const [stepOrder, setStepOrder] = useState([
+    "Byggekontrakt",
+    "Grunnarbeider",
+    "Betongarbeid",
+    "LeveringByggesett",
+    "TettBygg",
+    "FerdigUte",
+    "FerdigInne",
+    "Forhåndsbefaring",
+    "Overtakelse",
+  ]);
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: any) => {
     try {
       const docRef = doc(db, "bank_leads", String(id));
 
-      const addStatus = (section: any) => ({
+      // const addStatus = (section: any) => ({
+      const addStatus = (section: any, index: number) => ({
         ...section,
         status: "Unpaid",
+        order: index,
       });
 
-      const BankData = {
-        Byggekontrakt: addStatus(data.Byggekontrakt),
-        Grunnarbeider: addStatus(data.Grunnarbeider),
-        Betongarbeid: addStatus(data.Betongarbeid),
-        LeveringByggesett: addStatus(data.LeveringByggesett),
-        TettBygg: addStatus(data.TettBygg),
-        FerdigUte: addStatus(data.FerdigUte),
-        FerdigInne: addStatus(data.FerdigInne),
-        Forhåndsbefaring: addStatus(data.Forhåndsbefaring),
-        Overtakelse: addStatus(data.Overtakelse),
-        id,
-      };
+      // const BankData = {
+      //   Byggekontrakt: addStatus(data.Byggekontrakt),
+      //   Grunnarbeider: addStatus(data.Grunnarbeider),
+      //   Betongarbeid: addStatus(data.Betongarbeid),
+      //   LeveringByggesett: addStatus(data.LeveringByggesett),
+      //   TettBygg: addStatus(data.TettBygg),
+      //   FerdigUte: addStatus(data.FerdigUte),
+      //   FerdigInne: addStatus(data.FerdigInne),
+      //   Forhåndsbefaring: addStatus(data.Forhåndsbefaring),
+      //   Overtakelse: addStatus(data.Overtakelse),
+      //   id,
+      // };
+      const BankData: any = { id };
+
+      stepOrder.forEach((stepName, index) => {
+        BankData[stepName] = addStatus(data[stepName], index);
+      });
       const formatDate = (date: Date) => {
         return date
           .toLocaleString("sv-SE", { timeZone: "UTC" })
           .replace(",", "");
       };
+
       await updateDoc(docRef, {
         Fremdriftsplan: BankData,
         updatedAt: formatDate(new Date()),
@@ -221,6 +240,37 @@ export const FremdriftsplanOg: React.FC<{
     return () => subscription.unsubscribe();
   }, [form]);
 
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    e.dataTransfer.setData("dragIndex", index.toString());
+  };
+
+  // const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+  //   e.preventDefault();
+  //   const dragIndex = Number(e.dataTransfer.getData("dragIndex"));
+  //   if (dragIndex === dropIndex) return;
+
+  //   const newOrder = [...stepOrder];
+  //   const [moved] = newOrder.splice(dragIndex, 1);
+  //   newOrder.splice(dropIndex, 0, moved);
+  //   setStepOrder(newOrder);
+  // };
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    const dragIndex = Number(e.dataTransfer.getData("dragIndex"));
+    if (dragIndex === dropIndex) return;
+
+    const newOrder = [...stepOrder];
+    const temp = newOrder[dragIndex];
+    newOrder[dragIndex] = newOrder[dropIndex];
+    newOrder[dropIndex] = temp;
+
+    setStepOrder(newOrder);
+  };
+
+  const allowDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       <Form {...form}>
@@ -244,135 +294,24 @@ export const FremdriftsplanOg: React.FC<{
             </div>
 
             <div className="p-3 md:p-5 flex flex-col gap-3 md:gap-5">
-              <div className="flex flex-col gap-3 md:gap-4">
-                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
-                  Step 1: <span className="font-bold">Byggekontrakt</span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-                  <div>
+              {stepOrder.map((stepName, index) => (
+                <div
+                  key={stepName}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={allowDrop}
+                  onDrop={(e) => handleDrop(e, index)}
+                  className="flex flex-col gap-3 md:gap-4 cursor-move"
+                >
+                  <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
+                    Step {index + 1}:{" "}
+                    <span className="font-bold">{stepName}</span>
+                  </h4>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
                     <FormField
                       control={form.control}
-                      name={`Byggekontrakt.date`}
-                      render={({ field, fieldState }: any) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Forventet oppstart
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Forventet oppstart"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="date"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Byggekontrakt.day`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Antatt antall dager til å fullføre
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Antatt antall dager til å fullføre"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="number"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Byggekontrakt.pris`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Utbetaling ihht. faktureringsplan
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                                inputMode="numeric"
-                                type="text"
-                                onChange={({ target: { value } }: any) =>
-                                  field.onChange({
-                                    target: {
-                                      name: `pris`,
-                                      value: value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(value.replace(/\D/g, ""))
-                                          )
-                                        : "",
-                                    },
-                                  })
-                                }
-                                value={field.value === null ? "-" : field.value}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 md:gap-4">
-                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
-                  Step 2: <span className="font-bold">Grunnarbeider</span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Grunnarbeider.date`}
+                      name={`${stepName}.date`}
                       render={({ field, fieldState }) => (
                         <FormItem>
                           <p
@@ -383,30 +322,26 @@ export const FremdriftsplanOg: React.FC<{
                             Forventet oppstart
                           </p>
                           <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Forventet oppstart"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
+                            <Input
+                              placeholder="Skriv inn Forventet oppstart"
+                              {...field}
+                              className={`bg-white rounded-[8px] border text-black
                                           ${
                                             fieldState?.error
                                               ? "border-red"
                                               : "border-gray1"
                                           } `}
-                                type="date"
-                                disable
-                              />
-                            </div>
+                              type="date"
+                              disable
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                  </div>
-                  <div>
                     <FormField
                       control={form.control}
-                      name={`Grunnarbeider.day`}
+                      name={`${stepName}.day`}
                       render={({ field, fieldState }) => (
                         <FormItem>
                           <p
@@ -417,29 +352,25 @@ export const FremdriftsplanOg: React.FC<{
                             Antatt antall dager til å fullføre
                           </p>
                           <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Antatt antall dager til å fullføre"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
+                            <Input
+                              placeholder="Skriv inn Antatt antall dager til å fullføre"
+                              {...field}
+                              className={`bg-white rounded-[8px] border text-black
                                           ${
                                             fieldState?.error
                                               ? "border-red"
                                               : "border-gray1"
                                           } `}
-                                type="number"
-                              />
-                            </div>
+                              type="number"
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                  </div>
-                  <div>
                     <FormField
                       control={form.control}
-                      name={`Grunnarbeider.pris`}
+                      name={`${stepName}.pris`}
                       render={({ field, fieldState }) => (
                         <FormItem>
                           <p
@@ -450,33 +381,31 @@ export const FremdriftsplanOg: React.FC<{
                             Utbetaling ihht. faktureringsplan
                           </p>
                           <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
+                            <Input
+                              placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
+                              {...field}
+                              className={`bg-white rounded-[8px] border text-black
                                   ${
                                     fieldState?.error
                                       ? "border-red"
                                       : "border-gray1"
                                   } `}
-                                inputMode="numeric"
-                                type="text"
-                                onChange={({ target: { value } }: any) =>
-                                  field.onChange({
-                                    target: {
-                                      name: `pris`,
-                                      value: value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(value.replace(/\D/g, ""))
-                                          )
-                                        : "",
-                                    },
-                                  })
-                                }
-                                value={field.value === null ? "-" : field.value}
-                              />
-                            </div>
+                              inputMode="numeric"
+                              type="text"
+                              onChange={({ target: { value } }: any) =>
+                                field.onChange({
+                                  target: {
+                                    name: `pris`,
+                                    value: value.replace(/\D/g, "")
+                                      ? new Intl.NumberFormat("no-NO").format(
+                                          Number(value.replace(/\D/g, ""))
+                                        )
+                                      : "",
+                                  },
+                                })
+                              }
+                              value={field.value === null ? "-" : field.value}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -484,854 +413,7 @@ export const FremdriftsplanOg: React.FC<{
                     />
                   </div>
                 </div>
-              </div>
-              <div className="flex flex-col gap-3 md:gap-4">
-                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
-                  Step 3: <span className="font-bold">Betongarbeid</span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Betongarbeid.date`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Forventet oppstart
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Forventet oppstart"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="date"
-                                disable
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Betongarbeid.day`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Antatt antall dager til å fullføre
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Antatt antall dager til å fullføre"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="number"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Betongarbeid.pris`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Utbetaling ihht. faktureringsplan
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                                inputMode="numeric"
-                                type="text"
-                                onChange={({ target: { value } }: any) =>
-                                  field.onChange({
-                                    target: {
-                                      name: `pris`,
-                                      value: value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(value.replace(/\D/g, ""))
-                                          )
-                                        : "",
-                                    },
-                                  })
-                                }
-                                value={field.value === null ? "-" : field.value}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 md:gap-4">
-                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
-                  Step 4: <span className="font-bold">Levering byggesett</span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`LeveringByggesett.date`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Forventet oppstart
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Forventet oppstart"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="date"
-                                disable
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`LeveringByggesett.day`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Antatt antall dager til å fullføre
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Antatt antall dager til å fullføre"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="number"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`LeveringByggesett.pris`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Utbetaling ihht. faktureringsplan
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                                inputMode="numeric"
-                                type="text"
-                                onChange={({ target: { value } }: any) =>
-                                  field.onChange({
-                                    target: {
-                                      name: `pris`,
-                                      value: value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(value.replace(/\D/g, ""))
-                                          )
-                                        : "",
-                                    },
-                                  })
-                                }
-                                value={field.value === null ? "-" : field.value}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 md:gap-4">
-                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
-                  Step 5: <span className="font-bold">Tett bygg</span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`TettBygg.date`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Forventet oppstart
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Forventet oppstart"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="date"
-                                disable
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`TettBygg.day`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Antatt antall dager til å fullføre
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Antatt antall dager til å fullføre"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="number"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`TettBygg.pris`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Utbetaling ihht. faktureringsplan
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                                inputMode="numeric"
-                                type="text"
-                                onChange={({ target: { value } }: any) =>
-                                  field.onChange({
-                                    target: {
-                                      name: `pris`,
-                                      value: value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(value.replace(/\D/g, ""))
-                                          )
-                                        : "",
-                                    },
-                                  })
-                                }
-                                value={field.value === null ? "-" : field.value}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 md:gap-4">
-                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
-                  Step 6: <span className="font-bold">Ferdig ute</span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`FerdigUte.date`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Forventet oppstart
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Forventet oppstart"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="date"
-                                disable
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`FerdigUte.day`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Antatt antall dager til å fullføre
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Antatt antall dager til å fullføre"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="number"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`FerdigUte.pris`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Utbetaling ihht. faktureringsplan
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                                inputMode="numeric"
-                                type="text"
-                                onChange={({ target: { value } }: any) =>
-                                  field.onChange({
-                                    target: {
-                                      name: `pris`,
-                                      value: value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(value.replace(/\D/g, ""))
-                                          )
-                                        : "",
-                                    },
-                                  })
-                                }
-                                value={field.value === null ? "-" : field.value}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 md:gap-4">
-                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
-                  Step 7: <span className="font-bold">Ferdig inne</span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`FerdigInne.date`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Forventet oppstart
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Forventet oppstart"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="date"
-                                disable
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`FerdigInne.day`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Antatt antall dager til å fullføre
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Antatt antall dager til å fullføre"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="number"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`FerdigInne.pris`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Utbetaling ihht. faktureringsplan
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                                inputMode="numeric"
-                                type="text"
-                                onChange={({ target: { value } }: any) =>
-                                  field.onChange({
-                                    target: {
-                                      name: `pris`,
-                                      value: value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(value.replace(/\D/g, ""))
-                                          )
-                                        : "",
-                                    },
-                                  })
-                                }
-                                value={field.value === null ? "-" : field.value}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 md:gap-4">
-                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
-                  Step 8: <span className="font-bold">Forhåndsbefaring</span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Forhåndsbefaring.date`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Forventet oppstart
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Forventet oppstart"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="date"
-                                disable
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Forhåndsbefaring.day`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Antatt antall dager til å fullføre
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Antatt antall dager til å fullføre"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="number"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Forhåndsbefaring.pris`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Utbetaling ihht. faktureringsplan
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                                inputMode="numeric"
-                                type="text"
-                                onChange={({ target: { value } }: any) =>
-                                  field.onChange({
-                                    target: {
-                                      name: `pris`,
-                                      value: value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(value.replace(/\D/g, ""))
-                                          )
-                                        : "",
-                                    },
-                                  })
-                                }
-                                value={field.value === null ? "-" : field.value}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 md:gap-4">
-                <h4 className="font-medium text-sm md:text-base desktop:text-lg text-black">
-                  Step 9: <span className="font-bold">Overtakelse</span>
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 desktop:grid-cols-4 gap-3 md:gap-4 lg:gap-5">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Overtakelse.date`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Forventet oppstart
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Forventet oppstart"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="date"
-                                disable
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Overtakelse.day`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Antatt antall dager til å fullføre
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Antatt antall dager til å fullføre"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
-                                type="number"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name={`Overtakelse.pris`}
-                      render={({ field, fieldState }) => (
-                        <FormItem>
-                          <p
-                            className={`${
-                              fieldState.error ? "text-red" : ""
-                            } mb-[6px] text-sm`}
-                          >
-                            Utbetaling ihht. faktureringsplan
-                          </p>
-                          <FormControl>
-                            <div className="relative">
-                              <Input
-                                placeholder="Skriv inn Utbetaling ihht. faktureringsplan"
-                                {...field}
-                                className={`bg-white rounded-[8px] border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } `}
-                                inputMode="numeric"
-                                type="text"
-                                onChange={({ target: { value } }: any) =>
-                                  field.onChange({
-                                    target: {
-                                      name: `pris`,
-                                      value: value.replace(/\D/g, "")
-                                        ? new Intl.NumberFormat("no-NO").format(
-                                            Number(value.replace(/\D/g, ""))
-                                          )
-                                        : "",
-                                    },
-                                  })
-                                }
-                                value={field.value === null ? "-" : field.value}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -1345,7 +427,7 @@ export const FremdriftsplanOg: React.FC<{
             <div id="submit">
               <Button
                 text="Neste"
-                className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                 type="submit"
               />
             </div>

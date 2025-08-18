@@ -119,37 +119,6 @@ export const Oppsummering: React.FC<{
     }
   };
 
-  // const sendWelcomeEmail = async () => {
-  //   try {
-  //     const officeId = bankData?.Kunden?.Kundeinformasjon[0]?.office;
-
-  //     let officeName = "";
-  //     if (officeId) {
-  //       const officeRef = doc(db, "office", officeId);
-  //       const officeSnap = await getDoc(officeRef);
-  //       if (officeSnap.exists()) {
-  //         officeName = officeSnap.data()?.data?.name || officeName;
-  //       }
-  //     }
-  //     const fields = {
-  //       FNAME: bankData?.Kunden?.Kundeinformasjon[0]?.f_name,
-  //       LNAME: bankData?.Kunden?.Kundeinformasjon[0]?.l_name,
-  //       phone: bankData?.Kunden?.Kundeinformasjon[0]?.mobileNummer,
-  //       email: bankData?.Kunden?.Kundeinformasjon[0]?.EPost,
-  //       dealer: "BoligPartner",
-  //       office: officeName,
-  //       projectAddress: bankData?.plotHusmodell?.plot?.address,
-  //       landCost: `kr ${plotData?.tomtekostnader}`,
-  //       buildingCost: `kr ${houseData?.byggekostnader}`,
-  //       totalCost: `kr ${numberToNorwegian(sum)}`,
-  //       link: `https://admin.mintomt.no/bank-leads-detail/${id}`,
-  //     };
-
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
-
   const [isPopup, setIsPopup] = useState(false);
   const handleConfirmPopup = () => {
     if (isPopup) {
@@ -422,7 +391,7 @@ export const Oppsummering: React.FC<{
         </div>
         <Button
           text="Send til bank"
-          className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+          className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
           onClick={handleConfirmPopup}
         />
       </div>
@@ -455,7 +424,7 @@ export const Oppsummering: React.FC<{
                 >
                   <Button
                     text="Bekrefte"
-                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                    className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   />
                 </div>
               </div>

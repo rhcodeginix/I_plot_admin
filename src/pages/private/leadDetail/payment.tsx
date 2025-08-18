@@ -12,7 +12,7 @@ import {
 } from "../../../components/ui/form";
 import Button from "../../../components/common/button";
 import Ic_upload_photo from "../../../assets/images/Ic_upload_photo.svg";
-import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
+import Ic_delete_green from "../../../assets/images/Ic_delete_green.svg";
 import Img_pdf from "../../../assets/images/Img_pdf.png";
 import { TextArea } from "../../../components/ui/textarea";
 import { useLocation } from "react-router-dom";
@@ -373,7 +373,7 @@ export const Payment: React.FC<{
                               form.setValue("pdf", updatedFiles);
                             }}
                           >
-                            <img src={Ic_delete_purple} alt="delete" />
+                            <img src={Ic_delete_green} alt="delete" />
                           </div>
                         </div>
                       ))}

@@ -41,7 +41,7 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
               "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
           }}
         >
-          <div className="text-center p-3 md:p-4 text-black font-medium text-base desktop:text-lg bg-lightPurple mb-3 md:mb-5">
+          <div className="text-center p-3 md:p-4 text-black font-medium text-base desktop:text-lg bg-lightGreen mb-3 md:mb-5">
             Byggekostnader
           </div>
           {husmodellData?.Byggekostnader?.length > 0 && (
@@ -99,7 +99,7 @@ export const Prisliste: React.FC<{ husmodellData: any }> = ({
               "0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814",
           }}
         >
-          <div className="text-center p-3 md:p-4 text-black font-medium text-base desktop:text-lg bg-lightPurple mb-3 md:mb-5">
+          <div className="text-center p-3 md:p-4 text-black font-medium text-base desktop:text-lg bg-lightGreen mb-3 md:mb-5">
             Tomkostnader
           </div>
           <div className="flex flex-col gap-3 md:gap-5">

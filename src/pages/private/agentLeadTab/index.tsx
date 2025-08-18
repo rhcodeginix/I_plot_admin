@@ -110,7 +110,7 @@ export const AgentleadsTabs = () => {
     <>
       <div>
         {activeTab === 0 && (
-          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-lightGreen">
             <div>
               <h3 className="text-[#111322] font-bold text-lg md:text-xl desktop:text-2xl mb-2">
                 Registrer lead til bank
@@ -125,10 +125,10 @@ export const AgentleadsTabs = () => {
           </div>
         )}
         {activeTab === 1 && (
-          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-lightGreen">
             <div className="flex items-center gap-1 flex-wrap">
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(0)}
               >
                 Kunderegistrering
@@ -159,17 +159,17 @@ export const AgentleadsTabs = () => {
           </div>
         )}
         {activeTab === 2 && (
-          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-lightGreen">
             <div className="flex items-center gap-1 flex-wrap">
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(0)}
               >
                 Kunderegistrering
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(1)}
               >
                 Tomt og husmodell
@@ -200,24 +200,24 @@ export const AgentleadsTabs = () => {
           </div>
         )}
         {activeTab === 3 && (
-          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-lightGreen">
             <div className="flex items-center gap-1 flex-wrap">
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(0)}
               >
                 Kunderegistrering
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(1)}
               >
                 Tomt og husmodell
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(2)}
               >
                 Prosjektregnskap
@@ -248,31 +248,31 @@ export const AgentleadsTabs = () => {
           </div>
         )}
         {activeTab === 4 && (
-          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-[#F5F3FF]">
+          <div className="px-4 md:px-8 pt-4 pb-8 flex flex-col gap-6 bg-lightGreen">
             <div className="flex items-center gap-1 flex-wrap">
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(0)}
               >
                 Kunderegistrering
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(1)}
               >
                 Tomt og husmodell
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(2)}
               >
                 Prosjektregnskap
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
               <span
-                className="text-[#7839EE] text-xs md:text-sm font-medium cursor-pointer"
+                className="text-primary text-xs md:text-sm font-medium cursor-pointer"
                 onClick={() => setActiveTab(3)}
               >
                 Forhåndstakst
@@ -318,7 +318,7 @@ export const AgentleadsTabs = () => {
                     id ? "cursor-pointer" : "cursor-auto"
                   } flex items-center gap-2 text-darkBlack py-2 px-2 md:px-3 rounded-lg ${
                     activeTab === index
-                      ? "font-semibold bg-[#7839EE] text-white"
+                      ? "font-semibold bg-primary text-white"
                       : "text-[#4D4D4D]"
                   }`}
                   onClick={() => {

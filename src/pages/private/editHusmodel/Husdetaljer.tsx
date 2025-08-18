@@ -13,7 +13,7 @@ import {
 import Button from "../../../components/common/button";
 import Ic_upload_photo from "../../../assets/images/Ic_upload_photo.svg";
 import Ic_build_housing from "../../../assets/images/Ic_build_housing.svg";
-import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
+import Ic_delete_green from "../../../assets/images/Ic_delete_green.svg";
 import Ic_garaje from "../../../assets/images/Ic_garaje.svg";
 import Ic_file from "../../../assets/images/Ic_file.svg";
 import { Input } from "../../../components/ui/input";
@@ -817,7 +817,7 @@ export const Husdetaljer: React.FC<{
                           }}
                           className={`border-2 rounded-lg p-2 cursor-pointer ${
                             selectedHouseType === item.value
-                              ? "border-purple"
+                              ? "border-primary"
                               : "border-gray1"
                           }`}
                         >
@@ -1179,7 +1179,7 @@ export const Husdetaljer: React.FC<{
                                 form.setValue("photo3D", updatedFiles);
                               }}
                             >
-                              <img src={Ic_delete_purple} alt="delete" />
+                              <img src={Ic_delete_green} alt="delete" />
                             </div>
                           </div>
                         ))}
@@ -1763,8 +1763,8 @@ export const Husdetaljer: React.FC<{
                                 key={index}
                               >
                                 <div className="flex items-start gap-4 truncate">
-                                  <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                                    <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                                  <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                                    <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                                       <img src={Ic_file} alt="file" />
                                     </div>
                                   </div>
@@ -1775,7 +1775,7 @@ export const Husdetaljer: React.FC<{
                                     className="bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer w-8 h-8"
                                     onClick={() => handleDeleteClick(index)}
                                   >
-                                    <img src={Ic_delete_purple} alt="delete" />
+                                    <img src={Ic_delete_green} alt="delete" />
                                   </div>
                                 </div>
                               </div>
@@ -2420,7 +2420,7 @@ export const Husdetaljer: React.FC<{
                                   );
                                 }}
                               >
-                                <img src={Ic_delete_purple} alt="delete" />
+                                <img src={Ic_delete_green} alt="delete" />
                               </div>
                             </div>
                           )
@@ -2507,7 +2507,7 @@ export const Husdetaljer: React.FC<{
             </Link>
             <Button
               text="Lagre"
-              className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+              className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
               type="submit"
             />
           </div>
@@ -2528,7 +2528,7 @@ export const Husdetaljer: React.FC<{
                 </div>
                 <Button
                   text="Bekrefte"
-                  className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   onClick={handleConfirmDelete}
                 />
               </div>

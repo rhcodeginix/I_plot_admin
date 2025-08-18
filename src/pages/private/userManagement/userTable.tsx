@@ -152,7 +152,7 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
               </div>
             ) : (
               <>
-                <div className="w-10 h-10 rounded-full flex items-center justify-center border border-primary bg-lightPurple">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center border border-primary bg-lightGreen">
                   {!row.original.f_name
                     ? row.original.name[0]
                     : `${row.original.f_name[0]}`}
@@ -278,7 +278,7 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2 justify-between bg-lightPurple rounded-[12px] py-3 px-3 md:px-4">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 justify-between bg-lightGreen rounded-[12px] py-3 px-3 md:px-4">
         <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
           <img src={Ic_search} alt="search" />
           <input
@@ -385,7 +385,7 @@ export const UserTable: React.FC<{ role: any }> = ({ role }) => {
                 <div onClick={() => handleDelete(selectedId)}>
                   <Button
                     text="Bekrefte"
-                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                    className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   />
                 </div>
               </div>

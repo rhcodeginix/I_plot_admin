@@ -285,7 +285,7 @@ export const Dashboard = () => {
               {data.map((item, index) => {
                 return (
                   <div
-                    className={`shadow-shadow2 border border-gray2 bg-lightPurple rounded-[8px] p-3.5 sm:p-4 lg:p-6 flex flex-col gap-2 ${
+                    className={`shadow-shadow2 border border-gray2 bg-lightGreen rounded-[8px] p-3.5 sm:p-4 lg:p-6 flex flex-col gap-2 ${
                       item?.path && "cursor-pointer"
                     }`}
                     key={index}

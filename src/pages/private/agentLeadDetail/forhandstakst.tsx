@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import Ic_file from "../../../assets/images/Ic_file.svg";
 import Ic_upload_blue_img from "../../../assets/images/Ic_upload_blue_img.svg";
 import { getDownloadURL, ref as reff, uploadBytes } from "firebase/storage";
-import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
+import Ic_delete_green from "../../../assets/images/Ic_delete_green.svg";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
 import { Input } from "../../../components/ui/input";
@@ -609,7 +609,7 @@ export const Forhandstakst: React.FC<{
                                       alt="upload"
                                     />
                                     <div className="flex items-center gap-2 md:gap-3">
-                                      <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-2 px-3 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
+                                      <span className="text-primary border-2 border-primary rounded-[40px] py-2 px-3 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
                                         Last opp
                                       </span>
                                       <p className="text-[#111322] text-xs md:text-sm text-center truncate w-full">
@@ -650,8 +650,8 @@ export const Forhandstakst: React.FC<{
                                 key={index}
                               >
                                 <div className="flex items-start gap-3 md:gap-4 truncate">
-                                  <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                                    <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                                  <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                                    <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                                       <img src={Ic_file} alt="file" />
                                     </div>
                                   </div>
@@ -662,7 +662,7 @@ export const Forhandstakst: React.FC<{
                                     className="bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer w-8 h-8"
                                     onClick={() => handleDeleteClick(index)}
                                   >
-                                    <img src={Ic_delete_purple} alt="delete" />
+                                    <img src={Ic_delete_green} alt="delete" />
                                   </div>
                                 </div>
                               </div>
@@ -737,7 +737,7 @@ export const Forhandstakst: React.FC<{
             </div>
             <Button
               text="Neste"
-              className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+              className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
               type="submit"
             />
           </div>
@@ -758,7 +758,7 @@ export const Forhandstakst: React.FC<{
                 </div>
                 <Button
                   text="Bekrefte"
-                  className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   onClick={handleConfirmDelete}
                 />
               </div>

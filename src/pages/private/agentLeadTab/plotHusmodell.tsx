@@ -317,7 +317,7 @@ export const PlotHusmodell = forwardRef<
                                     {addressData?.map(
                                       (address: any, index: number) => (
                                         <div
-                                          className="p-2 desktop:p-3 flex items-center gap-2.5 desktop:gap-4 hover:bg-lightPurple cursor-pointer"
+                                          className="p-2 desktop:p-3 flex items-center gap-2.5 desktop:gap-4 hover:bg-lightGreen cursor-pointer"
                                           key={index}
                                           onClick={() => {
                                             const formatted = `${address.adressetekst} ${address.postnummer} ${address.poststed}`;
@@ -560,7 +560,7 @@ export const PlotHusmodell = forwardRef<
                           }}
                           className={`border-2 rounded-lg p-[10px] w-[80px] md:w-[106px] cursor-pointer ${
                             selectedPlotType === item.value
-                              ? "border-[#002776]"
+                              ? "border-primary"
                               : "border-transparent"
                           }`}
                           style={{
@@ -845,7 +845,7 @@ export const PlotHusmodell = forwardRef<
             <div id="submit">
               <Button
                 text="Neste"
-                className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                 type="submit"
               />
             </div>

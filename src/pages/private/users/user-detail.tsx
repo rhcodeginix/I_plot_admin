@@ -64,7 +64,7 @@ export const UserDetail = () => {
 
   return (
     <>
-      <div className="bg-lightPurple py-4 md:py-5 relative px-4 md:px-6">
+      <div className="bg-lightGreen py-4 md:py-5 relative px-4 md:px-6">
         <img
           src={Img_line_bg}
           alt="images"

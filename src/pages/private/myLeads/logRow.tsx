@@ -65,7 +65,7 @@ export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
           />
           <button
             onClick={handleSave}
-            className="bg-purple text-white px-3 md:px-6 py-2 rounded"
+            className="bg-primary text-white px-3 md:px-6 py-2 rounded"
           >
             Save
           </button>
@@ -77,7 +77,7 @@ export const LogRow = ({ log, leadId, fetchLogs }: LogItemProps) => {
             onClick={() => setIsEditing(true)}
             className="ml-2 rounded-lg"
           >
-            <Pencil className="h-5 md:h-6 w-5 md:w-6 text-purple" />
+            <Pencil className="h-5 md:h-6 w-5 md:w-6 text-primary" />
           </button>
         </>
       )}

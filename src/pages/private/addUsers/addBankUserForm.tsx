@@ -447,7 +447,7 @@ export const AddBankUserForm = () => {
                   </div>
                   <Button
                     text="Lagre"
-                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                    className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                     type="submit"
                   />
                 </div>
@@ -488,7 +488,7 @@ export const AddBankUserForm = () => {
                 <div onClick={() => navigate(`/Brukeradministrasjon`)}>
                   <Button
                     text="Bekrefte"
-                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                    className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   />
                 </div>
               </div>

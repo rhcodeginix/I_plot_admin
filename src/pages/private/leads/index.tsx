@@ -42,7 +42,7 @@ export const AllLeads = () => {
               Supplier === "9f523136-72ca-4bde-88e5-de175bc2fc71" && (
                 <Button
                   text="Gå til romkonfiguratoren"
-                  className="border-2 border-purple text-purple text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  className="border-2 border-primary text-primary text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   onClick={() => {
                     const url = `https://boligkonfigurator.mintomt.no?email=${encodeURIComponent(
                       Email
@@ -54,7 +54,7 @@ export const AllLeads = () => {
             {Role && Role !== "Bankansvarlig" && (
               <Button
                 text="Registrer nytt tips"
-                className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-3 md:px-4 py-[10px] flex items-center gap-2"
+                className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-3 md:px-4 py-[10px] flex items-center gap-2"
                 icon={<Plus className="text-white w-5 h-5" />}
                 path="/add-bank-leads"
               />

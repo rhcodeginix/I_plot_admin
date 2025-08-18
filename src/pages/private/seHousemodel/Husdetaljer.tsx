@@ -115,8 +115,8 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                       key={index}
                     >
                       <div className="flex items-start gap-3 truncate">
-                        <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                          <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                        <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                          <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                             <File className="text-primary w-4 h-4" />
                           </div>
                         </div>
@@ -225,7 +225,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
             </div>
           </div>
           <div className="w-full flex flex-col sm:flex-row gap-4 md:flex-col lg:flex-row lg:gap-8 mb-8 md:mb-[60px]">
-            <div className="w-full lg:w-1/2 border-t-2 border-b-0 border-l-0 border-r-0 border-purple pt-3 md:pt-4">
+            <div className="w-full lg:w-1/2 border-t-2 border-b-0 border-l-0 border-r-0 border-primary pt-3 md:pt-4">
               <table className="table-auto border-0 w-full text-left property_detail_tbl">
                 <tbody>
                   <tr>
@@ -336,7 +336,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                 </tbody>
               </table>
             </div>
-            <div className="w-full lg:w-1/2 border-t-2 border-b-0 border-l-0 border-r-0 border-purple pt-3 md:pt-4">
+            <div className="w-full lg:w-1/2 border-t-2 border-b-0 border-l-0 border-r-0 border-primary pt-3 md:pt-4">
               <table className="table-auto border-0 w-full text-left property_detail_tbl">
                 <tbody>
                   <tr>

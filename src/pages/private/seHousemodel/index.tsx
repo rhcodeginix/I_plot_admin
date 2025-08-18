@@ -36,7 +36,7 @@ export const SeHouseModel = () => {
 
   return (
     <>
-      <div className="bg-lightPurple py-4 px-4 md:px-6">
+      <div className="bg-lightGreen py-4 px-4 md:px-6">
         <div className="flex items-center gap-1.5 md:gap-3 mb-6">
           <Link
             to={"/Husmodeller"}
@@ -139,7 +139,7 @@ export const SeHouseModel = () => {
           />
           <Button
             text="Endre husmodell"
-            className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+            className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
             path={`/edit-husmodell/${id}`}
           />
         </div>

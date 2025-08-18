@@ -13,7 +13,7 @@ import {
 import Button from "../../../components/common/button";
 import Ic_upload_photo from "../../../assets/images/Ic_upload_photo.svg";
 import { Input } from "../../../components/ui/input";
-import Ic_delete_purple from "../../../assets/images/Ic_delete_purple.svg";
+import Ic_delete_green from "../../../assets/images/Ic_delete_green.svg";
 import Ic_x_circle from "../../../assets/images/Ic_x_circle.svg";
 import { Pencil, Plus, X } from "lucide-react";
 import Modal from "../../../components/common/modal";
@@ -343,7 +343,7 @@ export const Eksterior: React.FC<{
                 {labelName}
               </h4>
               <h5
-                className="text-purple font-semibold text-sm md:text-base cursor-pointer"
+                className="text-primary font-semibold text-sm md:text-base cursor-pointer"
                 onClick={() => setActiveTab(2)}
               >
                 Hopp over steget
@@ -500,7 +500,7 @@ export const Eksterior: React.FC<{
               )}
 
               <div
-                className="text-purple font-semibold text-xs md:text-sm flex items-center gap-1 cursor-pointer h-full whitespace-nowrap"
+                className="text-primary font-semibold text-xs md:text-sm flex items-center gap-1 cursor-pointer h-full whitespace-nowrap"
                 onClick={() => setAddSubCategory(true)}
               >
                 <Plus className="w-4 h-5 md:w-6 md:h-6" />
@@ -540,7 +540,7 @@ export const Eksterior: React.FC<{
                             className={`flex text-sm md:text-base items-center gap-1 font-medium ${
                               produkter.length === 1
                                 ? "text-gray cursor-not-allowed text-opacity-55"
-                                : "text-purple cursor-pointer"
+                                : "text-primary cursor-pointer"
                             }`}
                             onClick={() => {
                               if (produkter.length > 1) {
@@ -880,7 +880,7 @@ export const Eksterior: React.FC<{
                                       }}
                                     >
                                       <img
-                                        src={Ic_delete_purple}
+                                        src={Ic_delete_green}
                                         alt="delete"
                                       />
                                     </div>
@@ -936,7 +936,7 @@ export const Eksterior: React.FC<{
                   );
                 })}
                 <div
-                  className="text-purple font-semibold text-base flex items-center gap-1 cursor-pointer h-full"
+                  className="text-primary font-semibold text-base flex items-center gap-1 cursor-pointer h-full"
                   onClick={() => addProductAtIndex(fields.length - 1)}
                 >
                   <Plus />
@@ -954,7 +954,7 @@ export const Eksterior: React.FC<{
                 <h3 className="mb-[2px] text-darkBlack font-semibold text-lg md:text-xl desktop:text-2xl">
                   kr {totalPris}
                 </h3>
-                <h6 className="text-purple text-xs md:text-sm font-semibold">
+                <h6 className="text-primary text-xs md:text-sm font-semibold">
                   Se oppstilling
                 </h6>
               </div>
@@ -967,12 +967,12 @@ export const Eksterior: React.FC<{
               >
                 <Button
                   text="Avbryt"
-                  className="border border-lightPurple bg-lightPurple text-purple text-sm rounded-[8px] h-[40px] font-medium relative px-10 py-2 flex items-center gap-2"
+                  className="border border-lightGreen bg-lightGreen text-primary text-sm rounded-[8px] h-[40px] font-medium relative px-10 py-2 flex items-center gap-2"
                 />
               </div>
               <Button
                 text="Lagre"
-                className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-10 py-2 flex items-center gap-2"
+                className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-10 py-2 flex items-center gap-2"
                 type="submit"
               />
             </div>

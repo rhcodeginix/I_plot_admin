@@ -87,7 +87,7 @@ export const Suppliers = () => {
             {(email === "andre.finger@gmail.com" || role === "Admin") && (
               <Button
                 text="Legg til"
-                className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                 icon={<Plus className="text-white w-5 h-5" />}
                 path="/legg-til-leverandor"
               />

@@ -379,7 +379,7 @@ export const Documenters: React.FC<{
                               >
                                 <img src={Ic_upload_blue_img} alt="upload" />
                                 <div className="flex items-center gap-2 md:gap-3">
-                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
+                                  <span className="text-primary border-2 border-primary rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
                                     Last opp
                                   </span>
                                   <p className="text-[#111322] text-xs md:text-sm text-center truncate w-full">
@@ -418,8 +418,8 @@ export const Documenters: React.FC<{
                             key={index}
                           >
                             <div className="flex items-start gap-2.5 md:gap-4 truncate">
-                              <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                                <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                              <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                                <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                                   <img src={Ic_file} alt="file" />
                                 </div>
                               </div>
@@ -479,7 +479,7 @@ export const Documenters: React.FC<{
                               >
                                 <img src={Ic_upload_blue_img} alt="upload" />
                                 <div className="flex items-center gap-2 md:gap-3">
-                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
+                                  <span className="text-primary border-2 border-primary rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
                                     Last opp
                                   </span>
                                   <p className="text-[#111322] text-xs md:text-sm text-center truncate w-full">
@@ -518,8 +518,8 @@ export const Documenters: React.FC<{
                             key={index}
                           >
                             <div className="flex items-start gap-2.5 md:gap-4 truncate">
-                              <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                                <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                              <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                                <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                                   <img src={Ic_file} alt="file" />
                                 </div>
                               </div>
@@ -580,7 +580,7 @@ export const Documenters: React.FC<{
                               >
                                 <img src={Ic_upload_blue_img} alt="upload" />
                                 <div className="flex items-center gap-2 md:gap-3">
-                                  <span className="text-[#7839EE] border-2 border-[#7839EE] rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
+                                  <span className="text-primary border-2 border-primary rounded-[40px] py-1 md:py-2 px-2 md:px-4 font-medium whitespace-nowrap text-sm md:text-base">
                                     Last opp
                                   </span>
                                   <p className="text-[#111322] text-xs md:text-sm text-center truncate w-full">
@@ -619,8 +619,8 @@ export const Documenters: React.FC<{
                             key={index}
                           >
                             <div className="flex items-start gap-2.5 md:gap-4 truncate">
-                              <div className="border-[4px] border-lightPurple rounded-full flex items-center justify-center">
-                                <div className="bg-darkPurple w-7 h-7 rounded-full flex justify-center items-center">
+                              <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                                <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
                                   <img src={Ic_file} alt="file" />
                                 </div>
                               </div>
@@ -663,7 +663,7 @@ export const Documenters: React.FC<{
             </div>
             <Button
               text="Neste"
-              className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+              className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
               type="submit"
             />
           </div>
@@ -684,7 +684,7 @@ export const Documenters: React.FC<{
                 </div>
                 <Button
                   text="Bekrefte"
-                  className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                  className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   onClick={handleConfirmDelete}
                 />
               </div>

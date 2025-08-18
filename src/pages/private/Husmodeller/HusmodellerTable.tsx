@@ -242,7 +242,7 @@ export const HusmodellerTable = () => {
               alt="Husmodell"
               className="w-8 h-8 rounded-full"
             />
-            <p className="font-medium text-sm text-purple">
+            <p className="font-medium text-sm text-primary">
               {row.original.Husdetaljer.husmodell_name}
             </p>
           </div>
@@ -397,7 +397,7 @@ export const HusmodellerTable = () => {
 
   return (
     <>
-      <div className="flex sm:items-center justify-between bg-lightPurple rounded-[12px] py-3 px-3 md:px-4 flex-col sm:flex-row gap-2">
+      <div className="flex sm:items-center justify-between bg-lightGreen rounded-[12px] py-3 px-3 md:px-4 flex-col sm:flex-row gap-2">
         <div className="flex items-center border border-gray1 shadow-shadow1 bg-[#fff] gap-2 rounded-lg py-[10px] px-[14px]">
           <img src={Ic_search} alt="search" />
           <input
@@ -503,7 +503,7 @@ export const HusmodellerTable = () => {
                 <div onClick={() => handleDelete(selectedId)}>
                   <Button
                     text="Bekrefte"
-                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                    className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   />
                 </div>
               </div>
@@ -529,7 +529,7 @@ export const HusmodellerTable = () => {
                 <div onClick={() => handleCopy(selectedId)}>
                   <Button
                     text="Bekrefte"
-                    className="border border-purple bg-purple text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
+                    className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
                   />
                 </div>
               </div>

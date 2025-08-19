@@ -307,7 +307,7 @@ export const BankTable = () => {
               {row.original.status === "Sent" ||
               row.original.status === "Ikke sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  Sendt
+                  {row.original.status}
                 </p>
               ) : row.original.status === "Rejected" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
@@ -315,7 +315,7 @@ export const BankTable = () => {
                 </p>
               ) : row.original.status === "Approved" ? (
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  Kunde
+                  Kunde fått svar
                 </p>
               ) : row.original.status === "In Process" ? (
                 <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
@@ -324,7 +324,7 @@ export const BankTable = () => {
               ) : (
                 row.original.status === "Tilbud" && (
                   <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
-                    Tilbud
+                    Kunde kontaktet
                   </p>
                 )
               )}

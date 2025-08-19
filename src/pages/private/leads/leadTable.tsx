@@ -246,6 +246,9 @@ export const LeadTable = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  const [bankData, setBankData] = useState<any>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedOption && selectedId) {
@@ -258,6 +261,54 @@ export const LeadTable = () => {
         setSelectedId(null);
         toast.success("Status updated");
         fetchBankLeadData();
+
+        if (selectedOption === "Tilbud" || selectedOption === "Approved") {
+          const userId = bankData?.created_by;
+
+          let userName = "";
+          let userEmail = "";
+          if (userId) {
+            const data = await fetchAdminData(userId);
+
+            if (data) {
+              userName = data?.f_name
+                ? `${data?.f_name} ${data?.l_name}`
+                : data?.name || userName;
+              userEmail = data?.email || userEmail;
+            }
+          }
+
+          const response = await fetch(
+            "https://nh989m12uk.execute-api.eu-north-1.amazonaws.com/prod/banklead",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                action:
+                  selectedOption === "Tilbud"
+                    ? "customer-contacted"
+                    : selectedOption === "Approved"
+                    ? "customer-answer"
+                    : undefined,
+                clientFirstName: bankData?.Kunden?.Kundeinformasjon[0]?.f_name,
+                clientLasttName: bankData?.Kunden?.Kundeinformasjon[0]?.l_name,
+                email: userEmail,
+                agentName: userName,
+                projectAddress: bankData?.Kunden?.Kundeinformasjon[0]?.Adresse,
+                link: `https://admin.mintomt.no/bank-leads-detail/${bankData?.id}`,
+                subject: `MinTomt.no – Statusoppdatering: ${bankData?.Kunden?.Kundeinformasjon[0]?.Adresse}`,
+              }),
+            }
+          );
+
+          const result = await response.json();
+          toast.success(result.message, {
+            position: "top-right",
+          });
+        }
+        setBankData(null);
       } catch (error) {
         console.error("Error updating status", error);
       }
@@ -379,7 +430,7 @@ export const LeadTable = () => {
               {row.original.status === "Sent" ||
               row.original.status === "Ikke sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  Sendt
+                  {row.original.status}
                 </p>
               ) : row.original.status === "Rejected" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
@@ -387,16 +438,16 @@ export const LeadTable = () => {
                 </p>
               ) : row.original.status === "Approved" ? (
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  Kunde
+                  Kunde fått svar
                 </p>
               ) : row.original.status === "In Process" ? (
                 <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                  Under behandling
+                  Aktiv kunde
                 </p>
               ) : (
                 row.original.status === "Tilbud" && (
                   <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
-                    Tilbud
+                    Kunde kontaktet
                   </p>
                 )
               )}
@@ -407,6 +458,7 @@ export const LeadTable = () => {
                     setShowModal(true);
                     setSelectedId(row.original.id);
                     setSelectedOption(row.original.status);
+                    setBankData(row.original);
                   }}
                 />
               )}

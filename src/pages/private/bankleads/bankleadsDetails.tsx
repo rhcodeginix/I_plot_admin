@@ -48,6 +48,7 @@ export const BankleadsDetails = () => {
       fetchProperty();
     }
   }, [id]);
+  console.log(data);
 
   const lamdaDataFromApi = data?.finalData?.plot?.lamdaDataFromApi;
   const CadastreDataFromApi = data?.finalData?.plot?.CadastreDataFromApi;

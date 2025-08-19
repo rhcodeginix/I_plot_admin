@@ -194,7 +194,6 @@ export const Kunden = forwardRef<
 
     const getData = async () => {
       const data = await fetchBankLeadData(id);
-      console.log(data);
 
       if (data && data?.Kunden) {
         if (data?.Kunden?.phoneCallApiData) {

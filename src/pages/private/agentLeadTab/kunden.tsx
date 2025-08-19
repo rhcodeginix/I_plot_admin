@@ -194,6 +194,7 @@ export const Kunden = forwardRef<
 
     const getData = async () => {
       const data = await fetchBankLeadData(id);
+      console.log(data);
 
       if (data && data?.Kunden) {
         if (data?.Kunden?.phoneCallApiData) {
@@ -283,6 +284,7 @@ export const Kunden = forwardRef<
               : createData?.name,
           },
           supplierId: permission ?? null,
+          created_by: createData?.id,
           // status: "Sent",
           status: "Ikke sendt",
         });

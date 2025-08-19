@@ -614,6 +614,8 @@ export const Husdetaljer: React.FC<{
           Husdetaljer: husdetaljerData,
           updatedAt: formatDate(new Date()),
           createdAt: formatDate(new Date()),
+          created_by: createData?.id,
+          updated_by: createData?.id,
           createDataBy: {
             email: createData?.email,
             photo: createData?.photo,

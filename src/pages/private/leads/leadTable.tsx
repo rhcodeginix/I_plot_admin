@@ -32,7 +32,11 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Button from "../../../components/common/button";
 import Modal from "../../../components/common/modal";
-import { fetchAdminDataByEmail } from "../../../lib/utils";
+import {
+  fetchAdminData,
+  fetchAdminDataByEmail,
+  fetchSupplierData,
+} from "../../../lib/utils";
 
 export const LeadTable = () => {
   const [page, setPage] = useState(1);
@@ -44,7 +48,8 @@ export const LeadTable = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState<string>("");
-
+  const [supplierMap, setSupplierMap] = useState<Record<string, any>>({});
+  const [adminMap, setAdminMap] = useState<Record<string, any>>({});
   const [permission, setPermission] = useState<any>(null);
   const [Role, setRole] = useState<any>(null);
   const [Office, setOffice] = useState<any>(null);
@@ -191,6 +196,28 @@ export const LeadTable = () => {
       });
 
       setBankLead(sortedData);
+
+      const supplierIds = sortedData
+        .map((b: any) => b.Kunden?.Kundeinformasjon[0]?.supplier)
+        .filter(Boolean);
+      const supplierDataMap: Record<string, any> = {};
+      await Promise.all(
+        supplierIds.map(async (id: any) => {
+          const data = await fetchSupplierData(id);
+          if (data) supplierDataMap[id] = data;
+        })
+      );
+      setSupplierMap(supplierDataMap);
+
+      const adminIds = sortedData.map((b: any) => b.created_by).filter(Boolean);
+      const adminDataMap: Record<string, any> = {};
+      await Promise.all(
+        adminIds.map(async (id: any) => {
+          const data = await fetchAdminData(id);
+          if (data) adminDataMap[id] = data;
+        })
+      );
+      setAdminMap(adminDataMap);
     } catch (error) {
       console.error("Error fetching bank lead data:", error);
     } finally {
@@ -281,20 +308,32 @@ export const LeadTable = () => {
         {
           accessorKey: "Forhandler",
           header: "Forhandler",
-          cell: ({ row }: any) => (
-            <div className="flex items-center text-sm text-darkBlack w-max">
-              BoligPartner
-            </div>
-          ),
+          cell: ({ row }: any) => {
+            const supplierId =
+              row.original?.Kunden?.Kundeinformasjon[0]?.supplier;
+            const supplierData = supplierMap[supplierId];
+            return (
+              <div className="flex items-center text-sm text-darkBlack w-max">
+                {supplierData?.company_name ?? "-"}
+              </div>
+            );
+          },
         },
         {
           accessorKey: "Konsulent",
           header: "Konsulent",
-          cell: ({ row }: any) => (
-            <div className="flex items-center text-sm text-darkBlack w-max">
-              {row.original?.createDataBy?.name}
-            </div>
-          ),
+          cell: ({ row }: any) => {
+            const adminData = adminMap[row.original?.created_by];
+            return (
+              <div className="flex items-center text-sm text-darkBlack w-max">
+                {adminData
+                  ? `${adminData?.f_name ?? adminData.name} ${
+                      adminData?.l_name ?? ""
+                    }`
+                  : row.original?.createDataBy?.name}
+              </div>
+            );
+          },
         },
         {
           accessorKey: "Lead sent",
@@ -404,7 +443,7 @@ export const LeadTable = () => {
           ),
         },
       ].filter(Boolean) as ColumnDef<any>[],
-    [email, navigate, permission, status]
+    [supplierMap, adminMap, email, navigate, permission, status]
   );
 
   const pageSize = 10;

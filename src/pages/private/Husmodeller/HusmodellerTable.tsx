@@ -32,6 +32,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import {
+  fetchAdminData,
   fetchAdminDataByEmail,
   fetchSupplierData,
   formatDateTime,
@@ -51,11 +52,13 @@ export const HusmodellerTable = () => {
   const [selectedId, setSelectedId] = useState<any>(null);
   const [suppliersId, setSuppliersId] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [supplierMap, setSupplierMap] = useState<Record<string, any>>({});
 
   const [permission, setPermission] = useState<any>(null);
   const [supp, setSupp] = useState<any>(null);
   const [role, setRole] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
+  const [adminMap, setAdminMap] = useState<Record<string, any>>({});
 
   useEffect(() => {
     const getData = async () => {
@@ -199,6 +202,28 @@ export const HusmodellerTable = () => {
         });
 
       setHouseModels(data);
+
+      const supplierIds = data
+        .map((b: any) => b.Husdetaljer.Leverandører)
+        .filter(Boolean);
+      const supplierDataMap: Record<string, any> = {};
+      await Promise.all(
+        supplierIds.map(async (id: any) => {
+          const data = await fetchSupplierData(id);
+          if (data) supplierDataMap[id] = data;
+        })
+      );
+      setSupplierMap(supplierDataMap);
+
+      const adminIds = data.map((b: any) => b.updated_by).filter(Boolean);
+      const adminDataMap: Record<string, any> = {};
+      await Promise.all(
+        adminIds.map(async (id: any) => {
+          const data = await fetchAdminData(id);
+          if (data) adminDataMap[id] = data;
+        })
+      );
+      setAdminMap(adminDataMap);
     } catch (error) {
       console.error("Error fetching husmodell data:", error);
     } finally {
@@ -252,20 +277,13 @@ export const HusmodellerTable = () => {
         accessorKey: "leverandor",
         header: "Leverandør",
         cell: ({ row }) => {
-          const [leverandorData, setLeverandorData] = useState<any>(null);
-
-          useEffect(() => {
-            const fetchData = async () => {
-              const data = await getData(row.original.Husdetaljer.Leverandører);
-              setLeverandorData(data);
-            };
-            fetchData();
-          }, [row.original.Husdetaljer.Leverandører]);
+          const supplierId = row.original?.Husdetaljer.Leverandører;
+          const supplierData = supplierMap[supplierId];
 
           return (
             <div className="w-[140px]">
               <img
-                src={leverandorData?.photo}
+                src={supplierData?.photo}
                 alt="leverandor"
                 className="w-full"
               />
@@ -294,23 +312,34 @@ export const HusmodellerTable = () => {
       {
         accessorKey: "sisteoppdatertav",
         header: "Sist oppdatert",
-        cell: ({ row }) => (
-          <div className="flex items-start gap-3 w-max">
-            <img
-              src={row.original?.updateDataBy?.photo}
-              alt="avatar"
-              className="w-8 h-8 rounded-full"
-            />
-            <div>
-              <p className="font-medium text-black text-sm mb-[2px]">
-                {row.original?.updateDataBy?.name}
-              </p>
-              <p className="text-xs text-gray">
-                {formatDateTime(row.original.updatedAt)}
-              </p>
+        cell: ({ row }: any) => {
+          const adminData = adminMap[row.original?.updated_by];
+          return (
+            <div className="flex items-start gap-3 w-max">
+              <img
+                src={
+                  adminData
+                    ? adminData?.photo
+                    : row.original?.updateDataBy?.photo
+                }
+                alt="avatar"
+                className="w-8 h-8 rounded-full"
+              />
+              <div>
+                <p className="font-medium text-black text-sm mb-[2px]">
+                  {adminData
+                    ? `${adminData?.f_name ?? adminData.name} ${
+                        adminData?.l_name ?? ""
+                      }`
+                    : row.original?.createDataBy?.name}
+                </p>
+                <p className="text-xs text-gray">
+                  {formatDateTime(row.original.updatedAt)}
+                </p>
+              </div>
             </div>
-          </div>
-        ),
+          );
+        },
       },
       {
         id: "action",
@@ -361,7 +390,7 @@ export const HusmodellerTable = () => {
         ),
       },
     ],
-    [email, navigate, permission]
+    [email, navigate, permission, adminMap, supplierMap]
   );
 
   const pageSize = 10;

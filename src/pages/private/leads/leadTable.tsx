@@ -616,7 +616,7 @@ export const LeadTable = () => {
             <div className="bg-white p-6 rounded-xl w-[300px] shadow-lg relative">
               <form onSubmit={handleSubmit}>
                 <h2 className="text-sm md:text-base desktop:text-lg font-semibold mb-4">
-                  Endre status
+                  Endre status på sak:
                 </h2>
 
                 <div className="space-y-2">
@@ -631,18 +631,44 @@ export const LeadTable = () => {
                     />
                     Sendt
                   </label>
-
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="status"
-                      value="Approved"
-                      checked={selectedOption === "Approved"}
-                      onChange={(e) => setSelectedOption(e.target.value)}
-                      className="accent-primary h-4 w-4"
-                    />
-                    Kunde
-                  </label>
+                  <div>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="status"
+                        value="Tilbud"
+                        checked={selectedOption === "Tilbud"}
+                        onChange={(e) => setSelectedOption(e.target.value)}
+                        className="accent-primary h-4 w-4"
+                      />
+                      Kunde kontaktet
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4"></div>
+                      <p className="text-xs text-gray">
+                        Boligkonsulent blir varslet via e-post
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="status"
+                        value="Approved"
+                        checked={selectedOption === "Approved"}
+                        onChange={(e) => setSelectedOption(e.target.value)}
+                        className="accent-primary h-4 w-4"
+                      />
+                      Kunde fått svar
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4"></div>
+                      <p className="text-xs text-gray">
+                        Boligkonsulent blir varslet via e-post
+                      </p>
+                    </div>
+                  </div>
                   <label className="flex items-center gap-2">
                     <input
                       type="radio"
@@ -663,18 +689,7 @@ export const LeadTable = () => {
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />
-                    Under behandling
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="status"
-                      value="Tilbud"
-                      checked={selectedOption === "Tilbud"}
-                      onChange={(e) => setSelectedOption(e.target.value)}
-                      className="accent-primary h-4 w-4"
-                    />
-                    Tilbud
+                    Aktiv kunde
                   </label>
                 </div>
 

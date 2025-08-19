@@ -117,6 +117,7 @@ export const CreateNewOffice: React.FC<{
           id: uniqueId,
           updatedAt: formatDate(new Date()),
           createdAt: formatDate(new Date()),
+          created_by: createData?.id,
           createDataBy: {
             email: createData?.email,
             photo: createData?.photo,

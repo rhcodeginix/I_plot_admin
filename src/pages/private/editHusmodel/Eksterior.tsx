@@ -157,6 +157,7 @@ export const Eksterior: React.FC<{
       await updateDoc(husmodellDocRef, {
         Huskonfigurator: husdetaljerData,
         updatedAt: formatDate(new Date()),
+        updated_by: createData?.id,
         updateDataBy: {
           email: createData?.email,
           photo: createData?.photo,
@@ -879,10 +880,7 @@ export const Eksterior: React.FC<{
                                         );
                                       }}
                                     >
-                                      <img
-                                        src={Ic_delete_green}
-                                        alt="delete"
-                                      />
+                                      <img src={Ic_delete_green} alt="delete" />
                                     </div>
                                   </div>
                                 )

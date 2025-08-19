@@ -597,6 +597,7 @@ export const Husdetaljer: React.FC<{
         await updateDoc(husmodellDocRef, {
           Husdetaljer: husdetaljerData,
           updatedAt: formatDate(new Date()),
+          updated_by: createData?.id,
           updateDataBy: {
             email: createData?.email,
             photo: createData?.photo,

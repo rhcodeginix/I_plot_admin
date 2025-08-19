@@ -192,6 +192,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
       await updateDoc(husmodellDocRef, {
         Prisliste: husdetaljerData,
         updatedAt: formatDate(new Date()),
+        updated_by: createData?.id,
         updateDataBy: {
           email: createData?.email,
           photo: createData?.photo,

@@ -131,6 +131,7 @@ export const AddLeadForm = () => {
           updatedAt: Timestamp.now(),
           createdAt: Timestamp.now(),
           supplierId: "065f9498-6cdb-469b-8601-bb31114d7c95",
+          created_by: createData?.id,
           createDataBy: {
             email: createData?.email,
             photo: createData?.photo,

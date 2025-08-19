@@ -100,6 +100,7 @@ export const CreateNewOffice: React.FC<{
               ? `${createData?.f_name} ${createData?.l_name}`
               : createData?.name,
           },
+          created_by: createData?.id,
         });
         toast.success("Added successfully", { position: "top-right" });
       }

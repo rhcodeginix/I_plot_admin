@@ -271,6 +271,7 @@ export const Kunden = forwardRef<
           Kunden: BankData,
           updatedAt: formatDate(new Date()),
           createdAt: formatDate(new Date()),
+          created_by: createData?.id,
           createDataBy: {
             email: createData?.email,
             photo: createData?.photo,

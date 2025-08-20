@@ -202,8 +202,8 @@ export const Forhandstakst = forwardRef<
     let newImages = [...(documents || [])];
 
     const uploadPromises = Array.from(files).map(async (file) => {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size must be less than 5MB.", {
+      if (file.size > 15 * 1024 * 1024) {
+        toast.error("Image size must be less than 15MB.", {
           position: "top-right",
         });
         return null;

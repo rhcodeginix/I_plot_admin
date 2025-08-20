@@ -114,12 +114,12 @@ export const LeadsDetails = () => {
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
                   Kunde fått svar
                 </p>
-              ) : bankData.status === "In Process" ? (
+              ) : bankData?.status === "In Process" ? (
                 <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
                   Aktiv kunde
                 </p>
               ) : (
-                bankData.status === "Tilbud" && (
+                bankData?.status === "Tilbud" && (
                   <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
                     Kunde kontaktet
                   </p>

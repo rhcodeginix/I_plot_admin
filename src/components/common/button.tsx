@@ -5,7 +5,7 @@ interface ButtonProps {
   text: string;
   className: string;
   type?: "button" | "submit" | "reset";
-  onClick?: () => void;
+  onClick?: any;
   path?: string;
   icon?: any;
 }

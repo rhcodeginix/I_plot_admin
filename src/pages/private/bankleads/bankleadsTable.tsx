@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Ellipsis, Loader2 } from "lucide-react";
+import { Ellipsis, Eye, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,

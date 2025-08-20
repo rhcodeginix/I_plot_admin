@@ -15,6 +15,7 @@ import Eierinformasjon from "../plot/Eierinformasjon";
 import GoogleMapNearByComponent from "../../../components/ui/map/nearbyBuiildingMap";
 import HouseDetailPage from "../../../components/ui/houseDetail";
 import { Building2, House } from "lucide-react";
+import Tilpass from "./Tilpass";
 
 export const BankleadsDetails = () => {
   const location = useLocation();
@@ -48,7 +49,6 @@ export const BankleadsDetails = () => {
       fetchProperty();
     }
   }, [id]);
-  console.log(data);
 
   const lamdaDataFromApi = data?.finalData?.plot?.lamdaDataFromApi;
   const CadastreDataFromApi = data?.finalData?.plot?.CadastreDataFromApi;
@@ -181,7 +181,7 @@ export const BankleadsDetails = () => {
       <div className="bg-lightGreen py-4 md:py-5 relative px-4 md:px-6">
         <img
           src={Img_line_bg}
-          alt="images"
+          alt="line"
           className="absolute top-0 left-0 w-full h-full"
           style={{ zIndex: 1 }}
         />
@@ -396,9 +396,9 @@ export const BankleadsDetails = () => {
         )}
       </div>
 
-      <div className="px-4 md:px-6 pt-6 pb-16 flex flex-col gap-4 md:gap-6">
+      <div className="pt-6 flex flex-col gap-4 md:gap-6">
         <div>
-          <div className="w-full sm:w-max">
+          <div className="px-4 md:px-6 w-full sm:w-max">
             <div className="flex flex-nowrap border border-gray1 rounded-lg bg-gray3 p-[6px] mb-6 md:mb-[38px] overflow-x-auto overFlowScrollHidden">
               {allTabs.map((tab: any) => (
                 <button
@@ -417,7 +417,7 @@ export const BankleadsDetails = () => {
             </div>
           </div>
           <div
-            className={`${
+            className={`px-4 md:px-6 pb-16 ${
               activeAllTab === "Eiendomsinformasjon" ? "block" : "hidden"
             }`}
           >
@@ -1016,7 +1016,7 @@ export const BankleadsDetails = () => {
                                         >
                                           <img
                                             src={Ic_check_true}
-                                            alt="images"
+                                            alt="check"
                                           />
                                           <span>{a}</span>
                                         </div>
@@ -1263,7 +1263,7 @@ export const BankleadsDetails = () => {
                                     ?.municipalityName
                                 }
                               </h2>
-                              <img src={Ic_generelt} alt="images" />
+                              <img src={Ic_generelt} alt="logo" />
                             </div>
                             <div className="flex flex-col gap-2 md:gap-3">
                               {askData &&
@@ -1273,7 +1273,7 @@ export const BankleadsDetails = () => {
                                       className="flex items-start gap-2 md:gap-3 text-gray text-sm md:text-base"
                                       key={index}
                                     >
-                                      <img src={Ic_check_true} alt="images" />
+                                      <img src={Ic_check_true} alt="check" />
                                       <div>
                                         {a.rule}{" "}
                                         <span className="text-primary font-bold">
@@ -1452,7 +1452,11 @@ export const BankleadsDetails = () => {
             </div>
           </div>
           <div className={`${activeAllTab === "house" ? "block" : "hidden"}`}>
-            <HouseDetailPage id={data?.finalData?.husmodell?.id} />
+            <div className="px-4 md:px-6">
+              <HouseDetailPage id={data?.finalData?.husmodell?.id} />
+            </div>
+
+            {data?.stored && <Tilpass data={data} />}
           </div>
         </div>
       </div>

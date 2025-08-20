@@ -397,7 +397,7 @@ export const BankTable = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between bg-lightGreen rounded-[12px] py-3 px-4">
+      <div className="flex flex-col sm:flex-row gap-2 sm:items-center justify-between bg-lightGreen rounded-[12px] py-3 px-4">
         <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
           <div
             className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-r border-gray1 cursor-pointer ${

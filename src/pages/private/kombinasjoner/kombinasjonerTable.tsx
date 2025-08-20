@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Ellipsis, Loader2 } from "lucide-react";
+import { Eye, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -27,6 +27,7 @@ import {
   fetchSupplierData,
 } from "../../../lib/utils";
 import NorkartMap from "../../../components/map";
+import { useNavigate } from "react-router-dom";
 
 export const KombinasjonerTable = () => {
   const [page, setPage] = useState(1);
@@ -34,6 +35,7 @@ export const KombinasjonerTable = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [role, setRole] = useState<any>(null);
+  const navigate = useNavigate();
 
   const email = localStorage.getItem("Iplot_admin");
   const [permission, setPermission] = useState<any>(null);
@@ -257,12 +259,15 @@ export const KombinasjonerTable = () => {
         ),
       },
       {
-        id: "handling",
-        header: "Handling",
-        cell: () => (
-          <button className="h-8 w-8 flex items-center justify-center">
-            <Ellipsis className="h-4 w-4 text-gray-500" />
-          </button>
+        id: "action",
+        header: "Action",
+        cell: ({ row }) => (
+          <div className="flex items-center justify-center">
+            <Eye
+              className="h-5 w-5 text-primary cursor-pointer"
+              onClick={() => navigate(`/se-kombinasjoner/${row.original.id}`)}
+            />
+          </div>
         ),
       },
     ],
@@ -348,7 +353,10 @@ export const KombinasjonerTable = () => {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-muted/50"
+                  className="hover:bg-muted/50 cursor-pointer"
+                  onClick={() =>
+                    navigate(`/se-kombinasjoner/${row.original.id}`)
+                  }
                 >
                   {row.getVisibleCells().map((cell: any) => (
                     <TableCell key={cell.id} className="px-3 md:px-6 py-3">

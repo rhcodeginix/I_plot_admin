@@ -199,10 +199,26 @@ export const routes = createBrowserRouter([
             ),
           },
           {
+            path: "/se-husleads/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+                <BankleadsDetails />
+              </ProtectedRoute>
+            ),
+          },
+          {
             path: "/se-kombinasjoner",
             element: (
               <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Kombinasjoner />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/se-kombinasjoner/*",
+            element: (
+              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+                <BankleadsDetails />
               </ProtectedRoute>
             ),
           },

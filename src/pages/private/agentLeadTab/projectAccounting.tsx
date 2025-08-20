@@ -9,6 +9,7 @@ import { db, storage } from "../../../config/firebaseConfig";
 import { useLocation } from "react-router-dom";
 import Button from "../../../components/common/button";
 import Ic_file from "../../../assets/images/Ic_file.svg";
+import Ic_download_primary from "../../../assets/images/Ic_download_primary.svg";
 import Ic_upload_blue_img from "../../../assets/images/Ic_upload_blue_img.svg";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,7 +22,12 @@ import {
   FormMessage,
 } from "../../../components/ui/form";
 import toast from "react-hot-toast";
-import { getDownloadURL, ref as reff, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  getStorage,
+  ref as reff,
+  uploadBytes,
+} from "firebase/storage";
 import Ic_delete_green from "../../../assets/images/Ic_delete_green.svg";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
@@ -469,6 +475,30 @@ export const ProjectAccounting = forwardRef<
 
   const okonomi = form.watch("Økonomisk");
 
+  const handleDownload = async (filePath: string) => {
+    try {
+      if (!filePath) {
+        console.error("File path is missing!");
+        return;
+      }
+
+      const storage = getStorage();
+      const fileRef = reff(storage, filePath);
+      const url = await getDownloadURL(fileRef);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.download = filePath.split("/").pop() || "download";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
   return (
     <>
       <Form {...form}>
@@ -669,12 +699,18 @@ export const ProjectAccounting = forwardRef<
                               </div>
                               <FileInfo file={file} />
                             </div>
-                            <div>
+                            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
                               <div
                                 className="bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer w-8 h-8"
                                 onClick={() => handleDeleteClick(index)}
                               >
                                 <img src={Ic_delete_green} alt="delete" />
+                              </div>
+                              <div
+                                className="bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer w-8 h-8"
+                                onClick={() => handleDownload(file)}
+                              >
+                                <img src={Ic_download_primary} alt="download" />
                               </div>
                             </div>
                           </div>

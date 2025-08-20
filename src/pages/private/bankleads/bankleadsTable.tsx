@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Ellipsis, Eye, Loader2 } from "lucide-react";
+import { Eye, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -246,26 +246,14 @@ export const BankleadsTable = () => {
         ),
       },
       {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => (
-          <span className="px-3 py-1 rounded-full bg-[#F1F2FF] text-[#02107A] text-xs font-semibold whitespace-nowrap w-max">
-            Lead sendt
-          </span>
-        ),
-      },
-      {
-        id: "handling",
-        header: "Handling",
+        id: "action",
+        header: "Action",
         cell: ({ row }) => (
           <div className="flex items-center justify-center">
-            {/* <Eye
+            <Eye
               className="h-5 w-5 text-primary cursor-pointer"
               onClick={() => navigate(`/se-bankleads/${row.original.id}`)}
-            /> */}
-            <button className="h-8 w-8 flex items-center justify-center">
-              <Ellipsis className="h-4 w-4 text-gray-500" />
-            </button>
+            />
           </div>
         ),
       },
@@ -353,7 +341,7 @@ export const BankleadsTable = () => {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:bg-muted/50 cursor-pointer"
-                  // onClick={() => navigate(`/se-bankleads/${row.original.id}`)}
+                  onClick={() => navigate(`/se-bankleads/${row.original.id}`)}
                 >
                   {row.getVisibleCells().map((cell: any) => (
                     <TableCell key={cell.id} className="px-3 md:px-6 py-3">

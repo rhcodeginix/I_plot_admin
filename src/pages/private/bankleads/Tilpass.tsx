@@ -30,7 +30,6 @@ const Tilpass: React.FC<{
   useEffect(() => {
     setCustHouse(JSON.parse(data?.stored));
   }, [data]);
-  console.log(custHouse);
 
   const openDrawer = (product: any) => {
     setSelectedDrawerProduct(product);

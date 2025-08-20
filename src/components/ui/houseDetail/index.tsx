@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-// import Illustrasjoner from "../RegulationHusmodell/Illustrasjoner";
 import { doc, getDoc } from "firebase/firestore";
 import Ic_close_darkgreen from "../../../assets/images/Ic_close.svg";
 import { db } from "../../../config/firebaseConfig";
 import Modal from "../../common/modal";
+import Illustrasjoner from "./Illustrasjoner";
 
 const HouseDetailPage: React.FC<{ id: any }> = ({ id }) => {
-  // const router = useRouter();
-
   const getEmbedUrl = (url: string) => {
     const videoId = url?.split("v=")[1]?.split("&")[0];
     return videoId
@@ -320,7 +318,9 @@ const HouseDetailPage: React.FC<{ id: any }> = ({ id }) => {
               </p>
             )}
           </div>
-          <div className="mb-5 md:mb-[60px]">{/* <Illustrasjoner /> */}</div>
+          <div className="mb-5 md:mb-[60px]">
+            <Illustrasjoner id={id} />
+          </div>
 
           {loading ? (
             <div

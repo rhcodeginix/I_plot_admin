@@ -3,6 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { useLocation } from "react-router-dom";
 import Ic_check_green_icon from "../../../assets/images/Ic_check_green_icon.svg";
+import Ic_Step_icon from "../../../assets/images/Ic_Step_icon.svg";
 import { useEffect, useRef, useState } from "react";
 import Ic_x_close from "../../../assets/images/Ic_x_close.svg";
 import Ic_check from "../../../assets/images/Ic_check.svg";
@@ -25,6 +26,8 @@ export const BankleadsDetails = () => {
   const [imgLoading, setImgLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const [askData, setAskData] = useState<any | null>(null);
+  const HouseModelData = data?.finalData?.husmodell;
+  const plotData = data?.finalData?.plot;
 
   useEffect(() => {
     if (id) {
@@ -50,12 +53,12 @@ export const BankleadsDetails = () => {
     }
   }, [id]);
 
-  const lamdaDataFromApi = data?.finalData?.plot?.lamdaDataFromApi;
-  const CadastreDataFromApi = data?.finalData?.plot?.CadastreDataFromApi;
+  const lamdaDataFromApi = plotData?.lamdaDataFromApi;
+  const CadastreDataFromApi = plotData?.CadastreDataFromApi;
   useEffect(() => {
-    if (data?.finalData?.plot?.additionalData?.answer) {
+    if (plotData?.additionalData?.answer) {
       try {
-        const cleanAnswer = data?.finalData?.plot?.additionalData?.answer;
+        const cleanAnswer = plotData?.additionalData?.answer;
 
         setAskData(cleanAnswer);
       } catch (error) {
@@ -63,7 +66,7 @@ export const BankleadsDetails = () => {
         setAskData(null);
       }
     }
-  }, [data?.finalData?.plot?.additionalData]);
+  }, [plotData?.additionalData]);
   const tabs: any = [
     { id: "Regulering", label: "Regulering" },
     ...(lamdaDataFromApi?.latestOwnership
@@ -72,7 +75,7 @@ export const BankleadsDetails = () => {
     { id: "Bygninger", label: "Bygninger" },
     { id: "Dokument", label: "Dokument" },
   ];
-  const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
+  const [activeTab, setActiveTab] = useState<string>(tabs[0]?.id);
 
   const BBOXData =
     CadastreDataFromApi?.cadastreApi?.response?.item?.geojson?.bbox;
@@ -154,7 +157,7 @@ export const BankleadsDetails = () => {
     }
   }, [images, selectedImage]);
   const handleImageClick = (image: any) => {
-    if (selectedImage?.id === image.id) {
+    if (selectedImage?.id === image?.id) {
       setImgLoading(false);
     } else {
       setImgLoading(true);
@@ -163,238 +166,447 @@ export const BankleadsDetails = () => {
   };
 
   const allTabs: any = [
-    {
-      id: "Eiendomsinformasjon",
-      label: "Eiendomsinformasjon",
-      icon: <Building2 className="w-4 h-4 lg:w-6 lg:h-6" />,
-    },
-    {
-      id: `house`,
-      label: `${data?.finalData?.husmodell?.Husdetaljer?.husmodell_name}`,
-      icon: <House className="w-4 h-4 lg:w-6 lg:h-6" />,
-    },
+    ...(plotData && plotData?.CadastreDataFromApi
+      ? [
+          {
+            id: "Eiendomsinformasjon",
+            label: "Eiendomsinformasjon",
+            icon: <Building2 className="w-4 h-4 lg:w-6 lg:h-6" />,
+          },
+        ]
+      : []),
+    ...(HouseModelData
+      ? [
+          {
+            id: `house`,
+            label: `${HouseModelData?.Husdetaljer?.husmodell_name}`,
+            icon: <House className="w-4 h-4 lg:w-6 lg:h-6" />,
+          },
+        ]
+      : []),
   ];
-  const [activeAllTab, setActiveAllTab] = useState<string>(allTabs[0].id);
+  const [activeAllTab, setActiveAllTab] = useState<string>(allTabs[0]?.id);
+  useEffect(() => {
+    setActiveAllTab(allTabs[0]?.id);
+  }, [data]);
 
   return (
     <>
-      <div className="bg-lightGreen py-4 md:py-5 relative px-4 md:px-6">
-        <img
-          src={Img_line_bg}
-          alt="line"
-          className="absolute top-0 left-0 w-full h-full"
-          style={{ zIndex: 1 }}
-        />
-        <div
-          className="flex flex-col sm:flex-row sm:items-center justify-between relative gap-2"
-          style={{ zIndex: 9 }}
-        >
-          <div>
-            {loading ? (
-              <div
-                className="w-[300px] h-[30px] rounded-md custom-shimmer mb-2"
-                style={{ borderRadius: "8px" }}
-              ></div>
-            ) : (
-              <h2 className="text-black text-2xl md:text-[28px] desktop:text-[32px] font-semibold mb-2">
-                {CadastreDataFromApi?.presentationAddressApi?.response?.item
-                  ?.formatted?.line1 ||
-                  data?.finalData?.plot?.getAddress?.adressetekst}
-              </h2>
-            )}
-            {loading ? (
-              <div
-                className="w-[300px] h-[30px] rounded-md custom-shimmer"
-                style={{ borderRadius: "8px" }}
-              ></div>
-            ) : (
-              <p className="text-gray text-base md:text-lg desktop:text-xl">
-                {CadastreDataFromApi?.presentationAddressApi?.response?.item
-                  ?.formatted?.line2 ||
-                  `${data?.finalData?.plot?.getAddress?.kommunenummer} ${data?.finalData?.plot?.getAddress?.kommunenavn}`}
-              </p>
-            )}
-          </div>
-          <div className="flex items-center gap-3 md:gap-6">
-            <div className="flex items-center gap-4">
+      {plotData && plotData?.CadastreDataFromApi && (
+        <div className="bg-lightGreen py-4 md:py-5 relative px-4 md:px-6">
+          <img
+            src={Img_line_bg}
+            alt="line"
+            className="absolute top-0 left-0 w-full h-full"
+            style={{ zIndex: 1 }}
+          />
+          <div
+            className="flex flex-col sm:flex-row sm:items-center justify-between relative gap-2"
+            style={{ zIndex: 9 }}
+          >
+            <div>
               {loading ? (
                 <div
-                  className="w-[100px] h-[20px] rounded-md custom-shimmer"
+                  className="w-[300px] h-[30px] rounded-md custom-shimmer mb-2"
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <div className="text-gray text-sm md:text-base">
-                  Gnr:{" "}
-                  <span className="text-black font-semibold">
-                    {lamdaDataFromApi?.searchParameters?.gardsnummer}
-                  </span>
-                </div>
+                <h2 className="text-black text-2xl md:text-[28px] desktop:text-[32px] font-semibold mb-2">
+                  {CadastreDataFromApi?.presentationAddressApi?.response?.item
+                    ?.formatted?.line1 || plotData?.getAddress?.adressetekst}
+                </h2>
               )}
               {loading ? (
                 <div
-                  className="w-[100px] h-[20px] rounded-md custom-shimmer"
+                  className="w-[300px] h-[30px] rounded-md custom-shimmer"
                   style={{ borderRadius: "8px" }}
                 ></div>
               ) : (
-                <div className="text-gray text-sm md:text-base">
-                  Bnr:{" "}
-                  <span className="text-black font-semibold">
-                    {lamdaDataFromApi?.searchParameters?.bruksnummer}
-                  </span>
-                </div>
+                <p className="text-gray text-base md:text-lg desktop:text-xl">
+                  {CadastreDataFromApi?.presentationAddressApi?.response?.item
+                    ?.formatted?.line2 ||
+                    `${plotData?.getAddress?.kommunenummer} ${plotData?.getAddress?.kommunenavn}`}
+                </p>
               )}
+            </div>
+            <div className="flex items-center gap-3 md:gap-6">
+              <div className="flex items-center gap-4">
+                {loading ? (
+                  <div
+                    className="w-[100px] h-[20px] rounded-md custom-shimmer"
+                    style={{ borderRadius: "8px" }}
+                  ></div>
+                ) : (
+                  <div className="text-gray text-sm md:text-base">
+                    Gnr:{" "}
+                    <span className="text-black font-semibold">
+                      {lamdaDataFromApi?.searchParameters?.gardsnummer}
+                    </span>
+                  </div>
+                )}
+                {loading ? (
+                  <div
+                    className="w-[100px] h-[20px] rounded-md custom-shimmer"
+                    style={{ borderRadius: "8px" }}
+                  ></div>
+                ) : (
+                  <div className="text-gray text-sm md:text-base">
+                    Bnr:{" "}
+                    <span className="text-black font-semibold">
+                      {lamdaDataFromApi?.searchParameters?.bruksnummer}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="bg-[#125D56] py-5 relative px-4 md:px-6">
-        {loading ? (
-          <div
-            className="w-full h-[30px] rounded-md custom-shimmer mb-2"
-            style={{ borderRadius: "8px" }}
-          ></div>
-        ) : (
-          <div className="flex flex-col sm:flex-row flex-wrap md:flex-nowrap gap-4 lg:gap-8 desktop:gap-[70px] justify-between">
-            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
-              <img src={Ic_check_green_icon} alt="check" />
-              <div className="flex flex-col gap-1">
-                <p className="text-white text-xs md:text-sm">Eiendommen er</p>
-                <p className="text-white text-sm md:text-base font-semibold">
-                  ferdig regulert til boligformål
-                </p>
-              </div>
-            </div>
-            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
-              <img src={Ic_check_green_icon} alt="check" />
-              <div className="flex flex-col gap-1">
-                <p className="text-white text-xs md:text-sm">
-                  Eiendommen har en
-                </p>
-                <p className="text-white text-sm md:text-base font-semibold">
-                  Utnyttelsesgrad på{" "}
-                  {askData?.bya_calculations?.input?.bya_percentage}%
-                </p>
-              </div>
-            </div>
-            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
-              <img src={Ic_check_green_icon} alt="check" />
-              <div className="flex flex-col gap-1">
-                <p className="text-white text-xs md:text-sm">Ekisterende BYA</p>
-                <p className="text-white text-sm md:text-base font-semibold">
-                  Utnyttelsesgrad på{" "}
-                  {(() => {
-                    const data =
-                      CadastreDataFromApi?.buildingsApi?.response?.items?.map(
-                        (item: any) => item?.builtUpArea
-                      ) ?? [];
-
-                    if (
-                      lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
-                        ?.areal_beregnet
-                    ) {
-                      const totalData = data
-                        ? data.reduce(
-                            (acc: number, currentValue: number) =>
-                              acc + currentValue,
-                            0
-                          )
-                        : 0;
-
-                      const result =
-                        (totalData /
-                          lamdaDataFromApi?.eiendomsInformasjon
-                            ?.basisInformasjon?.areal_beregnet) *
-                        100;
-                      const formattedResult = result.toFixed(2);
-
-                      return `${formattedResult}  %`;
-                    } else {
-                      return "0";
-                    }
-                  })()}
-                </p>
-                <p className="text-white text-xs md:text-sm">
-                  Tilgjengelig BYA{" "}
-                  {(() => {
-                    const data =
-                      CadastreDataFromApi?.buildingsApi?.response?.items?.map(
-                        (item: any) => item?.builtUpArea
-                      ) ?? [];
-
-                    if (askData?.bya_calculations?.results?.total_allowed_bya) {
-                      const totalData = data
-                        ? data.reduce(
-                            (acc: number, currentValue: number) =>
-                              acc + currentValue,
-                            0
-                          )
-                        : 0;
-
-                      const result =
-                        (totalData /
-                          lamdaDataFromApi?.eiendomsInformasjon
-                            ?.basisInformasjon?.areal_beregnet) *
-                        100;
-                      const formattedResult: any = result.toFixed(2);
-
-                      return `${(
-                        askData?.bya_calculations?.input?.bya_percentage -
-                        formattedResult
-                      ).toFixed(2)} %`;
-                    } else {
-                      return "0";
-                    }
-                  })()}
-                </p>
-              </div>
-            </div>
-            <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
-              <img src={Ic_check_green_icon} alt="check" />
-              <div className="flex flex-col gap-1">
-                <p className="text-white text-xs md:text-sm">
-                  Boligen kan ha en
-                </p>
-                <p className="text-white text-sm md:text-base font-semibold">
-                  Grunnflate på{" "}
-                  {askData?.bya_calculations?.results?.available_building_area}{" "}
-                  m<sup>2</sup>
-                </p>
-                <p className="text-white text-xs md:text-sm">
-                  Tilgjengelig{" "}
-                  {(() => {
-                    const data =
-                      CadastreDataFromApi?.buildingsApi?.response?.items?.map(
-                        (item: any) => item?.builtUpArea
-                      ) ?? [];
-
-                    if (askData?.bya_calculations?.results?.total_allowed_bya) {
-                      const totalData = data
-                        ? data.reduce(
-                            (acc: number, currentValue: number) =>
-                              acc + currentValue,
-                            0
-                          )
-                        : 0;
-
-                      return (
-                        <>
-                          {(
-                            askData?.bya_calculations?.results
-                              ?.total_allowed_bya - totalData
-                          ).toFixed(2)}
-                          m<sup>2</sup>
-                        </>
-                      );
-                    } else {
-                      return "0";
-                    }
-                  })()}
-                </p>
+      )}
+      {HouseModelData &&
+        (!plotData || (plotData && !plotData?.CadastreDataFromApi)) && (
+          <div className="py-4 flex flex-col laptop:flex-row laptop:items-center gap-4 laptop:justify-between bg-lightGreen px-4 md:px-6">
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+              {loading ? (
+                <div
+                  className="w-full sm:w-[190px] h-[100px] rounded-lg custom-shimmer"
+                  style={{ borderRadius: "8px" }}
+                ></div>
+              ) : (
+                <div className="relative">
+                  <img
+                    src={HouseModelData?.Husdetaljer?.photo}
+                    alt="house"
+                    className="w-full sm:w-[190px] object-cover rounded-lg"
+                  />
+                </div>
+              )}
+              <div className="flex flex-col items-start">
+                {loading ? (
+                  <div
+                    className="w-full sm:w-[300px] h-[20px] rounded-lg custom-shimmer mb-2"
+                    style={{ borderRadius: "8px" }}
+                  ></div>
+                ) : (
+                  <h4 className="text-darkBlack font-medium text-base md:text-xl lg:text-2xl lg:leading-[30px] mb-2 one_line_elipse">
+                    <span className="font-bold">
+                      {HouseModelData?.Husdetaljer?.husmodell_name}
+                    </span>
+                  </h4>
+                )}
+                {loading ? (
+                  <div
+                    className="w-full sm:w-[300px] h-[20px] rounded-lg custom-shimmer mb-2"
+                    style={{ borderRadius: "8px" }}
+                  ></div>
+                ) : (
+                  <div className="hidden md:flex items-center gap-1 sm:gap-2 rounded-[50px] bg-[#cdfcdcca] py-2 px-3 whitespace-normal">
+                    <img
+                      src={Ic_Step_icon}
+                      alt="icon"
+                      className="w-4 sm:w-auto"
+                    />
+                    <div className="text-black text-xs md:text-sm lg:text-base whitespace-normal">
+                      <span className="font-bold">
+                        {HouseModelData?.Husdetaljer?.husmodell_name ||
+                          "Modellen"}
+                      </span>{" "}
+                      er i samsvar med alle reguleringsbestemmelser.
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         )}
-      </div>
+      {HouseModelData &&
+        (!plotData || (plotData && !plotData?.CadastreDataFromApi)) && (
+          <div
+            className="py-3 md:py-5 px-4 md:px-6"
+            style={{
+              boxShadow: "0px 1px 2px 0px #1018280F,0px 1px 3px 0px #1018281A",
+            }}
+          >
+            <div className="flex flex-col sm:flex-row flex-wrap lg:flex-nowrap gap-2 md:gap-4 lg:justify-between">
+              <div className="w-full sm:w-[31%] lg:w-[20%] flex items-start gap-2 sm:gap-3">
+                <img src={Ic_check_green_icon} alt="check" />
+                <div className="flex flex-col gap-1">
+                  {loading ? (
+                    <div
+                      className="w-[180px] h-[20px] rounded-lg custom-shimmer"
+                      style={{ borderRadius: "8px" }}
+                    ></div>
+                  ) : (
+                    <p className="text-gray text-xs md:text-sm">
+                      <span className="font-bold">
+                        {HouseModelData?.Husdetaljer?.husmodell_name}
+                      </span>{" "}
+                      passer for
+                    </p>
+                  )}
+                  {loading ? (
+                    <div
+                      className="w-[180px] h-[20px] rounded-lg custom-shimmer"
+                      style={{ borderRadius: "8px" }}
+                    ></div>
+                  ) : (
+                    <p className="text-black text-sm md:text-base font-medium">
+                      {Array.isArray(HouseModelData?.Husdetaljer?.Tomtetype)
+                        ? HouseModelData?.Husdetaljer?.Tomtetype.join(", ")
+                        : HouseModelData?.Husdetaljer?.Tomtetype}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="w-full sm:w-[31%] lg:w-[20%] flex items-start gap-2 sm:gap-3">
+                <img src={Ic_check_green_icon} alt="check" />
+                <div className="flex flex-col gap-1">
+                  {loading ? (
+                    <div
+                      className="w-[180px] h-[20px] rounded-lg custom-shimmer"
+                      style={{ borderRadius: "8px" }}
+                    ></div>
+                  ) : (
+                    <p className="text-gray text-xs md:text-sm">
+                      <span className="font-bold">
+                        {HouseModelData?.Husdetaljer?.husmodell_name}
+                      </span>{" "}
+                      har
+                    </p>
+                  )}
+                  {loading ? (
+                    <div
+                      className="w-[180px] h-[20px] rounded-lg custom-shimmer"
+                      style={{ borderRadius: "8px" }}
+                    ></div>
+                  ) : (
+                    <p className="text-black text-sm md:text-base font-medium">
+                      Mønehøyde på {HouseModelData?.Husdetaljer?.Mønehøyde}{" "}
+                      meter
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="w-full sm:w-[31%] lg:w-[20%] flex items-start gap-2 sm:gap-3">
+                <img src={Ic_check_green_icon} alt="check" />
+                <div className="flex flex-col gap-1">
+                  {loading ? (
+                    <div
+                      className="w-[180px] h-[20px] rounded-lg custom-shimmer"
+                      style={{ borderRadius: "8px" }}
+                    ></div>
+                  ) : (
+                    <p className="text-gray text-xs md:text-sm">
+                      <span className="font-bold">
+                        {HouseModelData?.Husdetaljer?.husmodell_name}
+                      </span>{" "}
+                      har
+                    </p>
+                  )}
+                  {loading ? (
+                    <div
+                      className="w-[180px] h-[20px] rounded-lg custom-shimmer"
+                      style={{ borderRadius: "8px" }}
+                    ></div>
+                  ) : (
+                    <p className="text-black text-sm md:text-base font-medium">
+                      Gesimshøyde på {HouseModelData?.Husdetaljer?.Gesimshøyde}{" "}
+                      meter
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="w-full sm:w-[31%] lg:w-[20%] flex items-start gap-2 sm:gap-3">
+                <img src={Ic_check_green_icon} alt="check" />
+                <div className="flex flex-col gap-1">
+                  {loading ? (
+                    <div
+                      className="w-[180px] h-[20px] rounded-lg custom-shimmer"
+                      style={{ borderRadius: "8px" }}
+                    ></div>
+                  ) : (
+                    <p className="text-gray text-xs md:text-sm">
+                      <span className="font-bold">
+                        {HouseModelData?.Husdetaljer?.husmodell_name}
+                      </span>{" "}
+                      har en
+                    </p>
+                  )}
+                  {loading ? (
+                    <div
+                      className="w-[180px] h-[20px] rounded-lg custom-shimmer"
+                      style={{ borderRadius: "8px" }}
+                    ></div>
+                  ) : (
+                    <p className="text-black text-sm md:text-base font-medium">
+                      Grunnflate på {HouseModelData?.Husdetaljer?.BebygdAreal} m
+                      <sup>2</sup>
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+      {plotData && plotData?.CadastreDataFromApi && (
+        <div className="bg-[#125D56] py-5 relative px-4 md:px-6">
+          {loading ? (
+            <div
+              className="w-full h-[30px] rounded-md custom-shimmer mb-2"
+              style={{ borderRadius: "8px" }}
+            ></div>
+          ) : (
+            <div className="flex flex-col sm:flex-row flex-wrap md:flex-nowrap gap-4 lg:gap-8 desktop:gap-[70px] justify-between">
+              <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
+                <img src={Ic_check_green_icon} alt="check" />
+                <div className="flex flex-col gap-1">
+                  <p className="text-white text-xs md:text-sm">Eiendommen er</p>
+                  <p className="text-white text-sm md:text-base font-semibold">
+                    ferdig regulert til boligformål
+                  </p>
+                </div>
+              </div>
+              <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
+                <img src={Ic_check_green_icon} alt="check" />
+                <div className="flex flex-col gap-1">
+                  <p className="text-white text-xs md:text-sm">
+                    Eiendommen har en
+                  </p>
+                  <p className="text-white text-sm md:text-base font-semibold">
+                    Utnyttelsesgrad på{" "}
+                    {askData?.bya_calculations?.input?.bya_percentage}%
+                  </p>
+                </div>
+              </div>
+              <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
+                <img src={Ic_check_green_icon} alt="check" />
+                <div className="flex flex-col gap-1">
+                  <p className="text-white text-xs md:text-sm">
+                    Ekisterende BYA
+                  </p>
+                  <p className="text-white text-sm md:text-base font-semibold">
+                    Utnyttelsesgrad på{" "}
+                    {(() => {
+                      const data =
+                        CadastreDataFromApi?.buildingsApi?.response?.items?.map(
+                          (item: any) => item?.builtUpArea
+                        ) ?? [];
+
+                      if (
+                        lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
+                          ?.areal_beregnet
+                      ) {
+                        const totalData = data
+                          ? data.reduce(
+                              (acc: number, currentValue: number) =>
+                                acc + currentValue,
+                              0
+                            )
+                          : 0;
+
+                        const result =
+                          (totalData /
+                            lamdaDataFromApi?.eiendomsInformasjon
+                              ?.basisInformasjon?.areal_beregnet) *
+                          100;
+                        const formattedResult = result.toFixed(2);
+
+                        return `${formattedResult}  %`;
+                      } else {
+                        return "0";
+                      }
+                    })()}
+                  </p>
+                  <p className="text-white text-xs md:text-sm">
+                    Tilgjengelig BYA{" "}
+                    {(() => {
+                      const data =
+                        CadastreDataFromApi?.buildingsApi?.response?.items?.map(
+                          (item: any) => item?.builtUpArea
+                        ) ?? [];
+
+                      if (
+                        askData?.bya_calculations?.results?.total_allowed_bya
+                      ) {
+                        const totalData = data
+                          ? data.reduce(
+                              (acc: number, currentValue: number) =>
+                                acc + currentValue,
+                              0
+                            )
+                          : 0;
+
+                        const result =
+                          (totalData /
+                            lamdaDataFromApi?.eiendomsInformasjon
+                              ?.basisInformasjon?.areal_beregnet) *
+                          100;
+                        const formattedResult: any = result.toFixed(2);
+
+                        return `${(
+                          askData?.bya_calculations?.input?.bya_percentage -
+                          formattedResult
+                        ).toFixed(2)} %`;
+                      } else {
+                        return "0";
+                      }
+                    })()}
+                  </p>
+                </div>
+              </div>
+              <div className="w-full sm:w-[48%] md:w-1/4 flex items-start gap-3">
+                <img src={Ic_check_green_icon} alt="check" />
+                <div className="flex flex-col gap-1">
+                  <p className="text-white text-xs md:text-sm">
+                    Boligen kan ha en
+                  </p>
+                  <p className="text-white text-sm md:text-base font-semibold">
+                    Grunnflate på{" "}
+                    {
+                      askData?.bya_calculations?.results
+                        ?.available_building_area
+                    }{" "}
+                    m<sup>2</sup>
+                  </p>
+                  <p className="text-white text-xs md:text-sm">
+                    Tilgjengelig{" "}
+                    {(() => {
+                      const data =
+                        CadastreDataFromApi?.buildingsApi?.response?.items?.map(
+                          (item: any) => item?.builtUpArea
+                        ) ?? [];
+
+                      if (
+                        askData?.bya_calculations?.results?.total_allowed_bya
+                      ) {
+                        const totalData = data
+                          ? data.reduce(
+                              (acc: number, currentValue: number) =>
+                                acc + currentValue,
+                              0
+                            )
+                          : 0;
+
+                        return (
+                          <>
+                            {(
+                              askData?.bya_calculations?.results
+                                ?.total_allowed_bya - totalData
+                            ).toFixed(2)}
+                            m<sup>2</sup>
+                          </>
+                        );
+                      } else {
+                        return "0";
+                      }
+                    })()}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="pt-6 flex flex-col gap-4 md:gap-6">
         <div>
@@ -402,16 +614,16 @@ export const BankleadsDetails = () => {
             <div className="flex flex-nowrap border border-gray1 rounded-lg bg-gray3 p-[6px] mb-6 md:mb-[38px] overflow-x-auto overFlowScrollHidden">
               {allTabs.map((tab: any) => (
                 <button
-                  key={tab.id}
-                  onClick={() => setActiveAllTab(tab.id)}
+                  key={tab?.id}
+                  onClick={() => setActiveAllTab(tab?.id)}
                   className={`min-w-max whitespace-nowrap px-2 lg:px-4 py-2 rounded-lg text-sm lg:text-base transition-colors duration-300 flex items-center gap-2 ${
-                    activeAllTab === tab.id
+                    activeAllTab === tab?.id
                       ? "bg-white font-medium text-primary shadow-shadow2"
                       : "text-black"
                   }`}
                 >
-                  {tab.icon}
-                  {tab.label}
+                  {tab?.icon}
+                  {tab?.label}
                 </button>
               ))}
             </div>
@@ -974,15 +1186,15 @@ export const BankleadsDetails = () => {
               <div className="flex border-b border-[#DDDDDD]">
                 {tabs.map((tab: any) => (
                   <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
+                    key={tab?.id}
+                    onClick={() => setActiveTab(tab?.id)}
                     className={`px-3 md:px-4 py-2 text-black border-b-[3px] text-sm md:text-base desktop:text-lg transition-colors duration-300 ${
-                      activeTab === tab.id
+                      activeTab === tab?.id
                         ? "border-primary font-semibold"
                         : "border-transparent"
                     }`}
                   >
-                    {tab.label}
+                    {tab?.label}
                   </button>
                 ))}
               </div>
@@ -1453,7 +1665,7 @@ export const BankleadsDetails = () => {
           </div>
           <div className={`${activeAllTab === "house" ? "block" : "hidden"}`}>
             <div className="px-4 md:px-6">
-              <HouseDetailPage id={data?.finalData?.husmodell?.id} />
+              <HouseDetailPage id={HouseModelData?.id} />
             </div>
 
             {data?.stored && <Tilpass data={data} />}

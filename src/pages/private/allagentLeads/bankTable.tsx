@@ -319,7 +319,7 @@ export const BankTable = () => {
                 </p>
               ) : row.original.status === "In Process" ? (
                 <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                  Under behandling
+                  Aktiv kunde
                 </p>
               ) : (
                 row.original.status === "Tilbud" && (

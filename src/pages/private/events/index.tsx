@@ -72,10 +72,10 @@ export const Events = () => {
         ]);
 
       const houseModels = formatDocData(allProjectsSnap.docs).filter((item) =>
-        filterByDate(item?.updatedAt)
+        filterByDate(item?.createdAt)
       );
       const roomModels = formatDocData(placedOrdersSnap.docs).filter((item) =>
-        filterByDate(item?.updatedAt)
+        filterByDate(item?.createdAt)
       );
       const typeCounts = typeSnaps.map(
         (snap) =>

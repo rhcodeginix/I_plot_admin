@@ -20,6 +20,7 @@ export const Documenters: React.FC<{
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const [Entreprenørgaranti, setEntreprenørgaranti] = useState([]);
   const [documents, setDocuments] = useState([]);
+  const [documentsForhandstakst, setDocumentsForhandstakst] = useState([]);
   const [Forsikringsbevis, setForsikringsbevis] = useState([]);
   const [Kontrakt, setKontrakt] = useState([]);
 
@@ -33,6 +34,9 @@ export const Documenters: React.FC<{
 
       if (data && data?.ProjectAccount && data?.ProjectAccount?.documents) {
         setDocuments(data?.ProjectAccount?.documents);
+      }
+      if (data && data?.Forhandstakst && data?.Forhandstakst?.documents) {
+        setDocumentsForhandstakst(data?.Forhandstakst?.documents);
       }
 
       if (data && data.Documenter) {
@@ -92,6 +96,10 @@ export const Documenters: React.FC<{
           finalField = documents;
           setterFunction = setDocuments;
           firestorePath = `ProjectAccount.documents`;
+        } else if (deleteField === "Forhandstakst.documents") {
+          finalField = documentsForhandstakst;
+          setterFunction = setDocumentsForhandstakst;
+          firestorePath = `Forhandstakst.documents`;
         }
 
         if (finalField && Array.isArray(finalField) && finalField.length > 0) {
@@ -154,7 +162,7 @@ export const Documenters: React.FC<{
         <div className="flex flex-col gap-4 md:gap-5">
           <div className="rounded-lg border-[#DCDFEA] border">
             <h4 className="text-darkBlack text-base md:text-lg lg:text-xl font-semibold p-3 md:p-5 border-b border-[#DCDFEA]">
-            Økonomisk plan
+              Økonomisk plan
             </h4>
             <div className="p-3 md:p-5">
               {documents && documents.length > 0 ? (
@@ -194,6 +202,53 @@ export const Documenters: React.FC<{
                 </div>
               ) : (
                 <p className="text-gray">No Økonomisk plan found!</p>
+              )}
+            </div>
+          </div>
+          <div className="rounded-lg border-[#DCDFEA] border">
+            <h4 className="text-darkBlack text-base md:text-lg lg:text-xl font-semibold p-3 md:p-5 border-b border-[#DCDFEA]">
+              Dokumenter for forhåndsrente
+            </h4>
+            <div className="p-3 md:p-5">
+              {documentsForhandstakst && documentsForhandstakst.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 lg:gap-6">
+                  {documentsForhandstakst?.map((file: any, index: number) => (
+                    <div
+                      className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full"
+                      key={index}
+                    >
+                      <div className="flex items-start gap-2.5 md:gap-4 truncate w-[calc(100%-60px)] md:w-[calc(100%-65px)]">
+                        <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+                          <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
+                            <img src={Ic_file} alt="file" />
+                          </div>
+                        </div>
+                        <FileInfo file={file} />
+                      </div>
+                      <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 w-[52px] sm:w-[56px] md:w-auto">
+                        <img
+                          src={Ic_trash}
+                          alt="delete"
+                          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
+                          onClick={() => {
+                            handleDeleteClick(index);
+                            setDeleteField("Forhandstakst.documents");
+                          }}
+                        />
+                        <img
+                          src={Ic_download_primary}
+                          alt="download"
+                          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
+                          onClick={() => handleDownload(file)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray">
+                  No Dokumenter for forhåndsrente found!
+                </p>
               )}
             </div>
           </div>

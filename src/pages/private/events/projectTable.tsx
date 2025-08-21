@@ -47,7 +47,11 @@ export const ProjectTable = () => {
   const fetchHusmodellData = async () => {
     setIsLoading(true);
     try {
-      let q = query(collection(db, "projects"), orderBy("updatedAt", "desc"));
+      let q = query(
+        collection(db, "projects"),
+        orderBy("updatedAt", "desc"),
+        where("is_deleted", "==", false)
+      );
       const querySnapshot = await getDocs(q);
 
       const data: any = querySnapshot.docs.map((doc) => ({

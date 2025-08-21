@@ -51,9 +51,15 @@ export const Events = () => {
 
       const [allProjectsSnap, placedOrdersSnap, ...typeSnaps] =
         await Promise.all([
-          getDocs(collection(db, "projects")),
           getDocs(
-            query(collection(db, "projects"), where("placeOrder", "==", true))
+            query(collection(db, "projects"), where("is_deleted", "==", false))
+          ),
+          getDocs(
+            query(
+              collection(db, "projects"),
+              where("placeOrder", "==", true),
+              where("is_deleted", "==", false)
+            )
           ),
           ...["AI", "PDF", "PPT"].map((type) =>
             getDocs(

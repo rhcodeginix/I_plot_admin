@@ -43,7 +43,8 @@ export const LeadTable = () => {
     try {
       let q = query(
         collection(db, "projects"),
-        where("placeOrder", "==", true)
+        where("placeOrder", "==", true),
+        where("is_deleted", "==", false)
       );
       const querySnapshot = await getDocs(q);
 

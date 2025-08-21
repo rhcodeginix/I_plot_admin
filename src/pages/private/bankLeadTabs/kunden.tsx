@@ -282,6 +282,7 @@ export const Kunden = forwardRef<
           supplierId: permission ?? null,
           // status: "Sent",
           status: "Ikke sendt",
+          is_deleted: false,
         });
         toast.success("Added successfully", { position: "top-right" });
         navigate(`/edit-bank-leads/${uniqueId}`);

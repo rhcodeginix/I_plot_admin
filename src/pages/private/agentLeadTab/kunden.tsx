@@ -286,6 +286,7 @@ export const Kunden = forwardRef<
           created_by: createData?.id,
           // status: "Sent",
           status: "Ikke sendt",
+          is_deleted: false,
         });
         toast.success("Added successfully", { position: "top-right" });
         navigate(`/edit-agent-leads/${uniqueId}`);

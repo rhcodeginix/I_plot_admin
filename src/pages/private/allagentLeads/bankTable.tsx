@@ -21,10 +21,10 @@ import { useEffect, useMemo, useState } from "react";
 import DateRangePicker from "../../../components/ui/daterangepicker";
 import {
   collection,
-  deleteDoc,
   doc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
@@ -93,7 +93,15 @@ export const BankTable = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteDoc(doc(db, "bank_leads", id));
+      const formatDate = (date: Date) =>
+        date.toLocaleString("sv-SE", { timeZone: "UTC" }).replace(",", "");
+      const now = new Date();
+
+      const ref = doc(db, "bank_leads", id);
+      await updateDoc(ref, {
+        is_deleted: true,
+        deleted_at: formatDate(now),
+      });
       fetchBankLeadData();
       setShowConfirm(false);
       toast.success("Slettet", { position: "top-right" });
@@ -111,10 +119,14 @@ export const BankTable = () => {
       if (status === "Active") {
         q = query(
           collection(db, "bank_leads"),
-          where("status", "==", "Approved")
+          where("status", "==", "Approved"),
+          where("is_deleted", "==", false)
         );
       } else {
-        q = query(collection(db, "bank_leads"));
+        q = query(
+          collection(db, "bank_leads"),
+          where("is_deleted", "==", false)
+        );
       }
 
       const querySnapshot = await getDocs(q);

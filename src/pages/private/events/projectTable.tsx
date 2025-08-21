@@ -229,7 +229,7 @@ export const ProjectTable = () => {
     };
 
     getData();
-  }, [houseModels, searchTerm, selectedFilter, activeTab]);
+  }, [houseModels, searchTerm, selectedFilter, activeTab, officeFilter]);
 
   const columns = useMemo<ColumnDef<any>[]>(() => {
     const baseColumns: ColumnDef<any>[] = [

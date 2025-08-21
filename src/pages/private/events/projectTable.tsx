@@ -19,7 +19,7 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
 import Ic_search from "../../../assets/images/Ic_search.svg";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { fetchAdminData, formatDateTime } from "../../../lib/utils";
 import { useNavigate } from "react-router-dom";
@@ -49,7 +49,7 @@ export const ProjectTable = () => {
     try {
       let q = query(
         collection(db, "projects"),
-        orderBy("updatedAt", "desc"),
+        // orderBy("updatedAt", "desc"),
         where("is_deleted", "==", false)
       );
       const querySnapshot = await getDocs(q);
@@ -62,7 +62,7 @@ export const ProjectTable = () => {
     } catch (error) {
       console.error("Error fetching husmodell data:", error);
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 

@@ -49,7 +49,7 @@ export const ProjectTable = () => {
     try {
       let q = query(
         collection(db, "projects"),
-        // orderBy("updatedAt", "desc"),
+        // orderBy("createdAt", "desc"),
         where("is_deleted", "==", false)
       );
       const querySnapshot = await getDocs(q);
@@ -189,7 +189,7 @@ export const ProjectTable = () => {
               item?.Plantegninger?.length > 0
                 ? item.Plantegninger.some((room: any) => !room.configurator)
                 : true,
-            updatedAt: item?.updatedAt || item?.createdAt || null,
+            createdAt: item?.createdAt || null,
             kundeId: item?.uniqueId,
             id: item?.uniqueId,
             self_id: item?.self_id,
@@ -215,8 +215,8 @@ export const ProjectTable = () => {
         });
 
         const sorted = filtered.sort((a, b) => {
-          const dateA = new Date(a.updatedAt || 0).getTime();
-          const dateB = new Date(b.updatedAt || 0).getTime();
+          const dateA = new Date(a.createdAt || 0).getTime();
+          const dateB = new Date(b.createdAt || 0).getTime();
           return dateB - dateA;
         });
 
@@ -306,7 +306,7 @@ export const ProjectTable = () => {
         header: "Sist oppdatert",
         cell: ({ row }) => (
           <p className="text-sm font-medium text-black w-max">
-            {formatDateTime(row.original?.updatedAt)}
+            {formatDateTime(row.original?.createdAt)}
           </p>
         ),
       },

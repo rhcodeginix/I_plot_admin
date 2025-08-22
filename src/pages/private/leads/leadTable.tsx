@@ -438,10 +438,13 @@ export const LeadTable = () => {
           header: "Status",
           cell: ({ row }: any) => (
             <div className="flex items-center gap-2">
-              {row.original.status === "Sent" ||
-              row.original.status === "Ikke sendt" ? (
+              {row.original.status === "Ikke sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
                   {row.original.status}
+                </p>
+              ) : row.original.status === "Sent" ? (
+                <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
+                  Sendt
                 </p>
               ) : row.original.status === "Rejected" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">

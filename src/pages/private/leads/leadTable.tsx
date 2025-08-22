@@ -143,7 +143,7 @@ export const LeadTable = () => {
       if (status === "Active") {
         q = query(
           collection(db, "bank_leads"),
-          where("status", "==", "Kunde fått svar"),
+          where("status", "==", "Aktiv kunde"),
           where("is_deleted", "==", false)
         );
       } else {
@@ -454,11 +454,11 @@ export const LeadTable = () => {
                   {row.original.status}
                 </p>
               ) : row.original.status === "Kunde fått svar" ? (
-                <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
+                <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
                   {row.original.status}
                 </p>
               ) : row.original.status === "Aktiv kunde" ? (
-                <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
+                <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
                   {row.original.status}
                 </p>
               ) : (

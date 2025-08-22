@@ -21,11 +21,11 @@ import Ic_search from "../../../assets/images/Ic_search.svg";
 import DateRangePicker from "../../../components/ui/daterangepicker";
 import {
   collection,
-  deleteDoc,
   doc,
   getDocs,
-  orderBy,
   query,
+  updateDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { useNavigate } from "react-router-dom";
@@ -72,7 +72,15 @@ export const SupplierTable = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteDoc(doc(db, "suppliers", id));
+      const formatDate = (date: Date) =>
+        date.toLocaleString("sv-SE", { timeZone: "UTC" }).replace(",", "");
+      const now = new Date();
+
+      const ref = doc(db, "suppliers", id);
+      await updateDoc(ref, {
+        is_deleted: true,
+        deleted_at: formatDate(now),
+      });
       fetchSuppliersData();
       setShowConfirm(false);
       toast.success("Slettet", { position: "top-right" });
@@ -85,14 +93,27 @@ export const SupplierTable = () => {
     setIsLoading(true);
 
     try {
-      let q = query(collection(db, "suppliers"), orderBy("updatedAt", "desc"));
+      let q = query(
+        collection(db, "suppliers"),
+        where("is_deleted", "==", false)
+      );
 
       const querySnapshot = await getDocs(q);
 
-      const data: any = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const data: any = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .sort((a: any, b: any) => {
+          const dateA = a.updatedAt?.toDate
+            ? a.updatedAt.toDate()
+            : new Date(a.updatedAt);
+          const dateB = b.updatedAt?.toDate
+            ? b.updatedAt.toDate()
+            : new Date(b.updatedAt);
+          return dateB - dateA;
+        });
       const filterData: any = [];
       const findSupData: any = await fetchSupplierData(permission);
       if (findSupData) {

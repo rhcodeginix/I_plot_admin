@@ -241,6 +241,7 @@ export const AddSuppliersForm = () => {
               : createData?.name,
           },
           created_by: createData?.id,
+          is_deleted: false,
         });
         toast.success("Added successfully", { position: "top-right" });
       }

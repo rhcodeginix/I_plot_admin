@@ -119,7 +119,7 @@ export const BankTable = () => {
       if (status === "Active") {
         q = query(
           collection(db, "bank_leads"),
-          where("status", "==", "Approved"),
+          where("status", "==", "Kunde fått svar"),
           where("is_deleted", "==", false)
         );
       } else {
@@ -320,26 +320,26 @@ export const BankTable = () => {
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
                   {row.original.status}
                 </p>
-              ) : row.original.status === "Sent" ? (
+              ) : row.original.status === "Sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  Sendt
+                  {row.original.status}
                 </p>
-              ) : row.original.status === "Rejected" ? (
+              ) : row.original.status === "Avsluttet" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
-                  Avsluttet
+                  {row.original.status}
                 </p>
-              ) : row.original.status === "Approved" ? (
+              ) : row.original.status === "Kunde fått svar" ? (
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  Kunde fått svar
+                  {row.original.status}
                 </p>
-              ) : row.original.status === "In Process" ? (
+              ) : row.original.status === "Aktiv kunde" ? (
                 <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                  Aktiv kunde
+                  {row.original.status}
                 </p>
               ) : (
-                row.original.status === "Tilbud" && (
+                row.original.status === "Kunde kontaktet" && (
                   <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
-                    Kunde kontaktet
+                    {row.original.status}
                   </p>
                 )
               )}

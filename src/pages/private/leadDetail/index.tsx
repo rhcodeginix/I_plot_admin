@@ -105,26 +105,26 @@ export const LeadsDetails = () => {
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
                   {bankData?.status}
                 </p>
-              ) : bankData?.status === "Sent" ? (
+              ) : bankData?.status === "Sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  Sendt
+                  {bankData?.status}
                 </p>
-              ) : bankData?.status === "Rejected" ? (
+              ) : bankData?.status === "Avsluttet" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
-                  Avsluttet
+                  {bankData?.status}
                 </p>
-              ) : bankData?.status === "Approved" ? (
+              ) : bankData?.status === "Kunde fått svar" ? (
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  Kunde fått svar
+                  {bankData?.status}
                 </p>
-              ) : bankData?.status === "In Process" ? (
+              ) : bankData?.status === "Aktiv kunde" ? (
                 <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                  Aktiv kunde
+                  {bankData?.status}
                 </p>
               ) : (
-                bankData?.status === "Tilbud" && (
+                bankData?.status === "Kunde kontaktet" && (
                   <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
-                    Kunde kontaktet
+                    {bankData?.status}
                   </p>
                 )
               )}

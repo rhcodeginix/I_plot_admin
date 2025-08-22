@@ -162,7 +162,7 @@ export const AddComment: React.FC<{
           updatedAt: formatDate(new Date()),
         };
 
-        updatePayload[`Fremdriftsplan.${SelectIndex}.status`] = "Sent";
+        updatePayload[`Fremdriftsplan.${SelectIndex}.status`] = "Sendt";
 
         await updateDoc(bankDocRef, updatePayload);
 

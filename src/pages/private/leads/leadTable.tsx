@@ -143,7 +143,7 @@ export const LeadTable = () => {
       if (status === "Active") {
         q = query(
           collection(db, "bank_leads"),
-          where("status", "==", "Approved"),
+          where("status", "==", "Kunde fått svar"),
           where("is_deleted", "==", false)
         );
       } else {
@@ -273,7 +273,10 @@ export const LeadTable = () => {
         toast.success("Status updated");
         fetchBankLeadData();
 
-        if (selectedOption === "Tilbud" || selectedOption === "Approved") {
+        if (
+          selectedOption === "Kunde kontaktet" ||
+          selectedOption === "Kunde fått svar"
+        ) {
           const userId = bankData?.created_by;
 
           let userName = "";
@@ -298,9 +301,9 @@ export const LeadTable = () => {
               },
               body: JSON.stringify({
                 action:
-                  selectedOption === "Tilbud"
+                  selectedOption === "Kunde kontaktet"
                     ? "customer-contacted"
-                    : selectedOption === "Approved"
+                    : selectedOption === "Kunde fått svar"
                     ? "customer-answer"
                     : undefined,
                 clientFirstName: bankData?.Kunden?.Kundeinformasjon[0]?.f_name,
@@ -437,46 +440,35 @@ export const LeadTable = () => {
           accessorKey: "status",
           header: "Status",
           cell: ({ row }: any) => (
-            <div className="flex items-center gap-2">
+            <>
               {row.original.status === "Ikke sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
                   {row.original.status}
                 </p>
-              ) : row.original.status === "Sent" ? (
+              ) : row.original.status === "Sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  Sendt
+                  {row.original.status}
                 </p>
-              ) : row.original.status === "Rejected" ? (
+              ) : row.original.status === "Avsluttet" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
-                  Avsluttet
+                  {row.original.status}
                 </p>
-              ) : row.original.status === "Approved" ? (
+              ) : row.original.status === "Kunde fått svar" ? (
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  Kunde fått svar
+                  {row.original.status}
                 </p>
-              ) : row.original.status === "In Process" ? (
+              ) : row.original.status === "Aktiv kunde" ? (
                 <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                  Aktiv kunde
+                  {row.original.status}
                 </p>
               ) : (
-                row.original.status === "Tilbud" && (
+                row.original.status === "Kunde kontaktet" && (
                   <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
-                    Kunde kontaktet
+                    {row.original.status}
                   </p>
                 )
               )}
-              {Role === "Bankansvarlig" && (
-                <Pencil
-                  className="h-[18px] w-[18px] text-primary cursor-pointer"
-                  onClick={() => {
-                    setShowModal(true);
-                    setSelectedId(row.original.id);
-                    setSelectedOption(row.original.status);
-                    setBankData(row.original);
-                  }}
-                />
-              )}
-            </div>
+            </>
           ),
         },
         {
@@ -690,8 +682,8 @@ export const LeadTable = () => {
                     <input
                       type="radio"
                       name="status"
-                      value="Sent"
-                      checked={selectedOption === "Sent"}
+                      value="Sendt"
+                      checked={selectedOption === "Sendt"}
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />
@@ -702,8 +694,8 @@ export const LeadTable = () => {
                       <input
                         type="radio"
                         name="status"
-                        value="Tilbud"
-                        checked={selectedOption === "Tilbud"}
+                        value="Kunde kontaktet"
+                        checked={selectedOption === "Kunde kontaktet"}
                         onChange={(e) => setSelectedOption(e.target.value)}
                         className="accent-primary h-4 w-4"
                       />
@@ -721,8 +713,8 @@ export const LeadTable = () => {
                       <input
                         type="radio"
                         name="status"
-                        value="Approved"
-                        checked={selectedOption === "Approved"}
+                        value="Kunde fått svar"
+                        checked={selectedOption === "Kunde fått svar"}
                         onChange={(e) => setSelectedOption(e.target.value)}
                         className="accent-primary h-4 w-4"
                       />
@@ -739,8 +731,8 @@ export const LeadTable = () => {
                     <input
                       type="radio"
                       name="status"
-                      value="Rejected"
-                      checked={selectedOption === "Rejected"}
+                      value="Avsluttet"
+                      checked={selectedOption === "Avsluttet"}
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />
@@ -750,8 +742,8 @@ export const LeadTable = () => {
                     <input
                       type="radio"
                       name="status"
-                      value="In Process"
-                      checked={selectedOption === "In Process"}
+                      value="Aktiv kunde"
+                      checked={selectedOption === "Aktiv kunde"}
                       onChange={(e) => setSelectedOption(e.target.value)}
                       className="accent-primary h-4 w-4"
                     />

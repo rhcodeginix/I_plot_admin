@@ -139,7 +139,7 @@ export const Oppsummering: React.FC<{
       
           if (data.status === "Ikke sendt") {
             await updateDoc(docRef, {
-              status: "Sent",
+              status: "Sendt",
               updatedAt: formatDate(new Date()),
             });
           }

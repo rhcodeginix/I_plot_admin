@@ -125,11 +125,11 @@ export const Fremdriftsplan: React.FC<{
                 <div
                   key={index}
                   className={`py-3 px-4 bg-[#FFFFFF14] rounded-lg border flex flex-col gap-4 ${
-                    step.status === "Approve"
+                    step.status === "Kunde fått svar"
                       ? "border-[#61C4A4]"
-                      : step.status === "Unpaid" || step.status === "Reject"
+                      : step.status === "Unpaid" || step.status === "Avsluttet"
                       ? "border-[#FFAFAF]"
-                      : (step.status === "Sent" ||
+                      : (step.status === "Sendt" ||
                           step.status === "Ikke sendt") &&
                         "border-[#FFB795]"
                   }`}
@@ -148,17 +148,17 @@ export const Fremdriftsplan: React.FC<{
                     </h4>
                     {currIndex > index ? (
                       <div className="flex items-center gap-2 md:gap-4 justify-end">
-                        {step.status === "Approve" ? (
+                        {step.status === "Kunde fått svar" ? (
                           <div className="bg-[#E0FFF5] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#00857A]">
                             Betalt {formatPrice(step.pris)} (
                             {step.date.split("-").reverse().join(".")})
                           </div>
-                        ) : step.status === "Reject" ? (
+                        ) : step.status === "Avsluttet" ? (
                           <div className="bg-[#FFE0E0] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#A20000]">
                             Avvis
                           </div>
                         ) : (
-                          step.status === "Sent" && (
+                          step.status === "Sendt" && (
                             <div className="bg-[#FFEAE0] rounded-[16px] py-0.5 px-1 sm:px-2 text-[10px] sm:text-xs text-[#C84D00]">
                               Send Information
                             </div>
@@ -244,7 +244,7 @@ export const Fremdriftsplan: React.FC<{
                         <h3 className="text-darkBlack font-semibold text-sm md:text-base">
                           Grunnarbeider: Kommentar fra utbygger
                         </h3>
-                        {step.status !== "Approve" && (
+                        {step.status !== "Kunde fått svar" && (
                           <Pencil
                             className="text-primary cursor-pointer w-5 h-5 md:w-6 md:h-6"
                             onClick={() => {

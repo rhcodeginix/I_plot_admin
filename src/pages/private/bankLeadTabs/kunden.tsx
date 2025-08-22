@@ -280,7 +280,6 @@ export const Kunden = forwardRef<
               : createData?.name,
           },
           supplierId: permission ?? null,
-          // status: "Sent",
           status: "Ikke sendt",
           is_deleted: false,
         });

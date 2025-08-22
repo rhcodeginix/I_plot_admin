@@ -284,7 +284,6 @@ export const Kunden = forwardRef<
           },
           supplierId: permission ?? null,
           created_by: createData?.id,
-          // status: "Sent",
           status: "Ikke sendt",
           is_deleted: false,
         });

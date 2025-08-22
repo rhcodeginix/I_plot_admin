@@ -394,7 +394,7 @@ export const Payment: React.FC<{
               className="border border-[#A20000] bg-[#A20000] text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
               type="submit"
               onClick={() => {
-                setStatus("Reject");
+                setStatus("Avsluttet");
               }}
             />
             <Button
@@ -402,7 +402,7 @@ export const Payment: React.FC<{
               className="border border-[#099250] bg-[#099250] text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
               type="submit"
               onClick={() => {
-                setStatus("Approve");
+                setStatus("Kunde fått svar");
               }}
             />
           </div>

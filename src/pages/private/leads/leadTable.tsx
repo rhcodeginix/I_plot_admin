@@ -307,8 +307,9 @@ export const LeadTable = () => {
                     ? "customer-answer"
                     : undefined,
                 clientFirstName: bankData?.Kunden?.Kundeinformasjon[0]?.f_name,
-                clientLasttName: bankData?.Kunden?.Kundeinformasjon[0]?.l_name,
+                clientLastName: bankData?.Kunden?.Kundeinformasjon[0]?.l_name,
                 email: userEmail,
+                // email:"drashti.doubledotts@gmail.com",
                 agentName: userName,
                 projectAddress: bankData?.Kunden?.Kundeinformasjon[0]?.Adresse,
                 link: `https://admin.mintomt.no/bank-leads-detail/${bankData?.id}`,

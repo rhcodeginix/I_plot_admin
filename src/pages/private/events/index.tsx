@@ -39,11 +39,30 @@ export const Events = () => {
       }
 
       const filterByDate = (date: any) => {
-        const formattedItemDate = new Date(date).toISOString().split("T")[0];
-        if (formattedSelectedDate)
+        if (!date) return false;
+
+        const itemDate = new Date(date);
+
+        if (formattedSelectedDate) {
+          const formattedItemDate = itemDate.toISOString().split("T")[0];
           return formattedItemDate === formattedSelectedDate;
-        if (startDate && endDate)
-          return formattedItemDate >= startDate && formattedItemDate <= endDate;
+        }
+
+        if (startDate && endDate) {
+          if (selectedDateRange === "24 timer") {
+            const now = new Date();
+
+            const twentyFourHoursAgo = new Date();
+            twentyFourHoursAgo.setHours(now.getHours() - 24);
+            return itemDate >= twentyFourHoursAgo && itemDate <= now;
+          } else {
+            const formattedItemDate = itemDate.toISOString().split("T")[0];
+            return (
+              formattedItemDate >= startDate && formattedItemDate <= endDate
+            );
+          }
+        }
+
         return true;
       };
 

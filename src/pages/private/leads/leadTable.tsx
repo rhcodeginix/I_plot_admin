@@ -440,7 +440,7 @@ export const LeadTable = () => {
           accessorKey: "status",
           header: "Status",
           cell: ({ row }: any) => (
-            <>
+            <div className="flex items-center gap-2">
               {row.original.status === "Ikke sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
                   {row.original.status}
@@ -468,7 +468,18 @@ export const LeadTable = () => {
                   </p>
                 )
               )}
-            </>
+              {Role === "Bankansvarlig" && (
+                <Pencil
+                  className="h-[18px] w-[18px] text-primary cursor-pointer"
+                  onClick={() => {
+                    setShowModal(true);
+                    setSelectedId(row.original.id);
+                    setSelectedOption(row.original.status);
+                    setBankData(row.original);
+                  }}
+                />
+              )}
+            </div>
           ),
         },
         {

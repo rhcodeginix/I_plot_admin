@@ -270,7 +270,7 @@ export const LeadTable = () => {
         });
         setShowModal(false);
         setSelectedId(null);
-        toast.success("Status updated");
+        toast.success("Status oppdatert", { position: "top-right" });
         fetchBankLeadData();
 
         if (

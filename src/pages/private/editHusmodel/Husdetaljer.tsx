@@ -618,7 +618,7 @@ export const Husdetaljer: React.FC<{
           updatedAt: formatDate(new Date()),
           createdAt: formatDate(new Date()),
           created_by: createData?.id,
-          is_live: false,
+          // is_live: false,
           updated_by: createData?.id,
           createDataBy: {
             email: createData?.email,

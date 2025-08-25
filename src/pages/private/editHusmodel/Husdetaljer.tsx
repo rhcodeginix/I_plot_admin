@@ -669,6 +669,7 @@ export const Husdetaljer: React.FC<{
     "Herskapelig",
     "Tradisjonelt",
     "Tomannsbolig",
+    "Nostalgi",
   ];
 
   const boligOptions = [

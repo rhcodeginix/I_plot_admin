@@ -100,7 +100,7 @@ const formSchema = z.object({
     })
     .optional(),
   pris: z.string().min(1, {
-    message: "Pris må bestå av minst 1 tegn.",
+    message: "Pris må være 0 eller høyere.",
   }),
   BRATotal: z.string().min(1, {
     message: "BRA total (bruksareal) må bestå av minst 2 tegn.",
@@ -108,11 +108,11 @@ const formSchema = z.object({
   PRom: z.string().min(1, {
     message: "GUA (Gulvareal) må bestå av minst 2 tegn.",
   }),
-  Mønehøyde: z.number().min(1, {
-    message: "Mønehøyde areal må bestå av minst 2 tegn.",
+  Mønehøyde: z.number().min(0, {
+    message: "Mønehøyde areal må være 0 eller høyere.",
   }),
-  Gesimshøyde: z.number().min(1, {
-    message: "Gesimshøyde areal må bestå av minst 2 tegn.",
+  Gesimshøyde: z.number().min(0, {
+    message: "Gesimshøyde areal må være 0 eller høyere.",
   }),
   Lengde: z.string().min(1, {
     message: "Lengde areal må bestå av minst 2 tegn.",
@@ -120,19 +120,19 @@ const formSchema = z.object({
   Bredde: z.string().min(1, {
     message: "Bredde areal må bestå av minst 2 tegn.",
   }),
-  Takvinkel: z.number().min(1, {
-    message: "Takvinkel areal må bestå av minst 2 tegn.",
+  Takvinkel: z.number().min(0, {
+    message: "Takvinkel areal må være 0 eller høyere.",
   }),
-  BebygdAreal: z.number().min(1, {
+  BebygdAreal: z.number().min(0, {
     message: "Bebygd areal (BYA) må bestå av minst 2 tegn.",
   }),
-  Soverom: z.number().min(1, {
+  Soverom: z.number().min(0, {
     message: "Soverom må bestå av minst 2 tegn.",
   }),
-  InnvendigBod: z.number().min(1, {
+  InnvendigBod: z.number().min(0, {
     message: "InnvendigBod må bestå av minst 2 tegn.",
   }),
-  Bad: z.number().min(1, {
+  Bad: z.number().min(0, {
     message: "Bad må bestå av minst 2 tegn.",
   }),
   Energimerking: z
@@ -168,41 +168,41 @@ const formSchema = z.object({
         message: "Please enter a valid YouTube URL.",
       }
     ),
-  signConractConstructionDrawing: z.number().min(1, {
+  signConractConstructionDrawing: z.number().min(0, {
     message:
-      "Antall dager for å signere kontrakt og byggtegninger må bestå av minst 1 tegn.",
+      "Antall dager for å signere kontrakt og byggtegninger må være 0 eller høyere.",
   }),
-  neighborNotification: z.number().min(1, {
-    message: "Antall dager for nabovarsel må bestå av minst 1 tegn.",
+  neighborNotification: z.number().min(0, {
+    message: "Antall dager for nabovarsel må være 0 eller høyere.",
   }),
-  appSubmitApprove: z.number().min(1, {
+  appSubmitApprove: z.number().min(0, {
     message:
-      "Antall dager fra søknad sendt til søknad godkjent må bestå av minst 1 tegn.",
+      "Antall dager fra søknad sendt til søknad godkjent må være 0 eller høyere.",
   }),
-  constuctionDayStart: z.number().min(1, {
+  constuctionDayStart: z.number().min(0, {
     message:
-      "Antall dager før oppstart av byggearbeider må bestå av minst 1 tegn.",
+      "Antall dager før oppstart av byggearbeider må være 0 eller høyere.",
   }),
-  foundationWork: z.number().min(1, {
-    message: "Antall dager for grunnarbeider må bestå av minst 1 tegn.",
+  foundationWork: z.number().min(0, {
+    message: "Antall dager for grunnarbeider må være 0 eller høyere.",
   }),
-  concreteWork: z.number().min(1, {
-    message: "Antall dager for betongarbeid må bestå av minst 1 tegn.",
+  concreteWork: z.number().min(0, {
+    message: "Antall dager for betongarbeid må være 0 eller høyere.",
   }),
-  deliveryconstuctionKit: z.number().min(1, {
-    message: "Antall dager for levering byggesett må bestå av minst 1 tegn.",
+  deliveryconstuctionKit: z.number().min(0, {
+    message: "Antall dager for levering byggesett må være 0 eller høyere.",
   }),
-  denseConstuction: z.number().min(1, {
-    message: "Antall dager for tett bygg må bestå av minst 1 tegn.",
+  denseConstuction: z.number().min(0, {
+    message: "Antall dager for tett bygg må være 0 eller høyere.",
   }),
-  completeInside: z.number().min(1, {
-    message: "Antall dager for ferdig inne må bestå av minst 1 tegn.",
+  completeInside: z.number().min(0, {
+    message: "Antall dager for ferdig inne må være 0 eller høyere.",
   }),
-  preliminaryInspection: z.number().min(1, {
-    message: "Antall dager for forhåndsbefaring må bestå av minst 1 tegn.",
+  preliminaryInspection: z.number().min(0, {
+    message: "Antall dager for forhåndsbefaring må være 0 eller høyere.",
   }),
-  takeOver: z.number().min(1, {
-    message: "Antall dager for overtakelse må bestå av minst 1 tegn.",
+  takeOver: z.number().min(0, {
+    message: "Antall dager for overtakelse må være 0 eller høyere.",
   }),
   documents: z
     .array(
@@ -591,6 +591,8 @@ export const Husdetaljer: React.FC<{
         ...data,
         link_3D_image: data.link_3D_image || null,
         id: uniqueId,
+        TittelVideo: data.TittelVideo || null,
+        documents: data.documents || null,
       };
 
       if (id) {
@@ -615,6 +617,7 @@ export const Husdetaljer: React.FC<{
           updatedAt: formatDate(new Date()),
           createdAt: formatDate(new Date()),
           created_by: createData?.id,
+          is_live: false,
           updated_by: createData?.id,
           createDataBy: {
             email: createData?.email,
@@ -1068,7 +1071,7 @@ export const Husdetaljer: React.FC<{
                                     type="file"
                                     ref={fileInputRef}
                                     className="hidden"
-                                    accept=".svg, .png, .jpg, .jpeg, .gif"
+                                    accept=".svg, .png, .jpg, .jpeg, .gif, .avif"
                                     onChange={handleFileChange}
                                     name="photo"
                                   />
@@ -1121,7 +1124,7 @@ export const Husdetaljer: React.FC<{
                       </div>
                       <FormField
                         control={form.control}
-                        name="photo"
+                        name="photo3D"
                         render={() => (
                           <FormItem className="w-full">
                             <FormControl>
@@ -1147,7 +1150,7 @@ export const Husdetaljer: React.FC<{
                                       type="file"
                                       ref={file3DInputRef}
                                       className="hidden"
-                                      accept=".svg, .png, .jpg, .jpeg, .gif"
+                                      accept=".svg, .png, .jpg, .jpeg, .gif, .avif"
                                       onChange={handle3DFileChange}
                                       name="photo3D"
                                       multiple
@@ -1281,7 +1284,7 @@ export const Husdetaljer: React.FC<{
                                           } `}
                                 type="number"
                                 onChange={(e: any) =>
-                                  field.onChange(Number(e.target.value) || "")
+                                  field.onChange(Number(e.target.value) || 0)
                                 }
                               />
                             </div>
@@ -1317,7 +1320,7 @@ export const Husdetaljer: React.FC<{
                                           } `}
                                 type="number"
                                 onChange={(e: any) =>
-                                  field.onChange(Number(e.target.value) || "")
+                                  field.onChange(Number(e.target.value) || 0)
                                 }
                               />
                             </div>
@@ -1353,7 +1356,7 @@ export const Husdetaljer: React.FC<{
                                           } `}
                                 type="number"
                                 onChange={(e: any) =>
-                                  field.onChange(Number(e.target.value) || "")
+                                  field.onChange(Number(e.target.value) || 0)
                                 }
                               />
                             </div>
@@ -1389,7 +1392,7 @@ export const Husdetaljer: React.FC<{
                                           } `}
                                 type="number"
                                 onChange={(e: any) =>
-                                  field.onChange(Number(e.target.value) || "")
+                                  field.onChange(Number(e.target.value) || 0)
                                 }
                               />
                             </div>
@@ -1491,7 +1494,7 @@ export const Husdetaljer: React.FC<{
                                           } `}
                                 type="number"
                                 onChange={(e: any) =>
-                                  field.onChange(Number(e.target.value) || "")
+                                  field.onChange(Number(e.target.value) || 0)
                                 }
                               />
                             </div>
@@ -1527,7 +1530,7 @@ export const Husdetaljer: React.FC<{
                                           } `}
                                 type="number"
                                 onChange={(e: any) =>
-                                  field.onChange(Number(e.target.value) || "")
+                                  field.onChange(Number(e.target.value) || 0)
                                 }
                               />
                             </div>
@@ -1563,7 +1566,7 @@ export const Husdetaljer: React.FC<{
                                           } `}
                                 type="number"
                                 onChange={(e: any) =>
-                                  field.onChange(Number(e.target.value) || "")
+                                  field.onChange(Number(e.target.value) || 0)
                                 }
                               />
                             </div>
@@ -1835,7 +1838,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -1874,7 +1877,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -1915,7 +1918,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -1956,7 +1959,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -2002,7 +2005,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -2041,7 +2044,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -2082,7 +2085,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -2121,7 +2124,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -2160,7 +2163,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -2201,7 +2204,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -2240,7 +2243,7 @@ export const Husdetaljer: React.FC<{
                                     type="number"
                                     onChange={(e: any) =>
                                       field.onChange(
-                                        Number(e.target.value) || ""
+                                        Number(e.target.value) || 0
                                       )
                                     }
                                   />
@@ -2380,7 +2383,7 @@ export const Husdetaljer: React.FC<{
                                     type="file"
                                     ref={filePlantegningerFasaderPhotoInputRef}
                                     className="hidden"
-                                    accept=".svg, .png, .jpg, .jpeg, .gif"
+                                    accept=".svg, .png, .jpg, .jpeg, .gif, .avif"
                                     onChange={
                                       handlePlantegningerFasaderFileChange
                                     }

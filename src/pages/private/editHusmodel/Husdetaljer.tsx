@@ -593,6 +593,7 @@ export const Husdetaljer: React.FC<{
         id: uniqueId,
         TittelVideo: data.TittelVideo || null,
         documents: data.documents || null,
+        VelgEgenskaperBoligtype: data.VelgEgenskaperBoligtype || null,
       };
 
       if (id) {

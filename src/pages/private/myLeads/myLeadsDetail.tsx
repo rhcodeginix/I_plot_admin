@@ -966,9 +966,10 @@ export const MyLeadsDetail = () => {
                     return (
                       <tr className="border-b border-gray2" key={index}>
                         <td className="px-3 md:px-4 py-3 md:py-6 text-xs md:text-sm text-black font-medium w-max whitespace-nowrap">
-                          {(log?.createdAt &&
-                            convertFullStringTo24Hour(log?.createdAt)) ||
-                            formatTimestamp(log?.date)}
+                          {log?.createdAt && log?.createdAt?.seconds
+                            ? formatTimestamp(log?.createdAt)
+                            : convertFullStringTo24Hour(log?.createdAt) ||
+                              formatTimestamp(log?.date)}
                         </td>
                         <td className="px-3 md:px-4 py-3 md:py-6 text-xs md:text-sm text-black font-medium w-max whitespace-nowrap">
                           <div className="flex items-center gap-2">

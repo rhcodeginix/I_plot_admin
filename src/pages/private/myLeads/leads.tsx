@@ -112,7 +112,24 @@ export const MyLeadsTable = () => {
         ...doc.data(),
       }));
 
-      setLeads(data);
+      const excludedEmails = [
+        "drashti.doubledotts@gmail.com",
+        "abc@gmail.com",
+        "keren@arnhoff.no",
+        "simen@askerhaandverk.no",
+        "ole@nestegg.no",
+        "fenger@iplot.no",
+        "drashtisavani22@gmail.com",
+        "rudraksh.shukla98@gmail.com",
+        "tanmaymundra01@gmail.com",
+      ];
+      const finalData = data.filter((a: any) => {
+        return (
+          a?.leadData?.epost && !excludedEmails.includes(a?.leadData?.epost)
+        );
+      });
+
+      setLeads(finalData);
     } catch (error) {
       console.error("Error fetching leads data:", error);
     } finally {

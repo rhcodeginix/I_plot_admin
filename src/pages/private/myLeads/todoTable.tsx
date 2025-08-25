@@ -664,7 +664,7 @@ export const TODOTable = () => {
     baseColumns.splice(1, 0, updatedColumn);
 
     return baseColumns;
-  }, [email, navigate, page, selectedFilter]);
+  }, [email, navigate, page, selectedFilter, sortedData]);
 
   const pageSize = 10;
   const paginatedData = useMemo(() => {

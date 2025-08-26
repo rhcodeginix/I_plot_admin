@@ -190,6 +190,39 @@ export const BankleadsDetails = () => {
     setActiveAllTab(allTabs[0]?.id);
   }, [data]);
 
+  const [BoxData, setBoxData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchPlotData = async () => {
+      try {
+        const response = await fetch(
+          "https://d8t0z35n2l.execute-api.eu-north-1.amazonaws.com/prod/bya",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              url: `https://wms.geonorge.no/skwms1/wms.reguleringsplaner?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&QUERY_LAYERS=Planomrade_02,Arealformal_02&LAYERS=Planomrade_02,Arealformal_02&INFO_FORMAT=text/html&CRS=EPSG:25833&BBOX=${BBOXData[0]},${BBOXData[1]},${BBOXData[2]},${BBOXData[3]}&WIDTH=800&HEIGHT=600&I=400&J=300`,
+              plot_size_m2:
+                lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
+                  ?.areal_beregnet ?? 0,
+            }),
+          }
+        );
+
+        const json = await response.json();
+        setBoxData(json);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (CadastreDataFromApi) {
+      fetchPlotData();
+    }
+  }, [CadastreDataFromApi]);
+
   return (
     <>
       {plotData && plotData?.CadastreDataFromApi && (
@@ -474,7 +507,9 @@ export const BankleadsDetails = () => {
                   </p>
                   <p className="text-white text-sm md:text-base font-semibold">
                     Utnyttelsesgrad på{" "}
-                    {askData?.bya_calculations?.input?.bya_percentage}%
+                    {BoxData?.bya_percentage ??
+                      askData?.bya_calculations?.input?.bya_percentage}
+                    %
                   </p>
                 </div>
               </div>
@@ -544,7 +579,8 @@ export const BankleadsDetails = () => {
                         const formattedResult: any = result.toFixed(2);
 
                         return `${(
-                          askData?.bya_calculations?.input?.bya_percentage -
+                          (BoxData?.bya_percentage ??
+                            askData?.bya_calculations?.input?.bya_percentage) -
                           formattedResult
                         ).toFixed(2)} %`;
                       } else {
@@ -570,36 +606,37 @@ export const BankleadsDetails = () => {
                   </p>
                   <p className="text-white text-xs md:text-sm">
                     Tilgjengelig{" "}
-                    {(() => {
-                      const data =
-                        CadastreDataFromApi?.buildingsApi?.response?.items?.map(
-                          (item: any) => item?.builtUpArea
-                        ) ?? [];
+                    {BoxData?.bya_area_m2 ??
+                      (() => {
+                        const data =
+                          CadastreDataFromApi?.buildingsApi?.response?.items?.map(
+                            (item: any) => item?.builtUpArea
+                          ) ?? [];
 
-                      if (
-                        askData?.bya_calculations?.results?.total_allowed_bya
-                      ) {
-                        const totalData = data
-                          ? data.reduce(
-                              (acc: number, currentValue: number) =>
-                                acc + currentValue,
-                              0
-                            )
-                          : 0;
+                        if (
+                          askData?.bya_calculations?.results?.total_allowed_bya
+                        ) {
+                          const totalData = data
+                            ? data.reduce(
+                                (acc: number, currentValue: number) =>
+                                  acc + currentValue,
+                                0
+                              )
+                            : 0;
 
-                        return (
-                          <>
-                            {(
-                              askData?.bya_calculations?.results
-                                ?.total_allowed_bya - totalData
-                            ).toFixed(2)}
-                            m<sup>2</sup>
-                          </>
-                        );
-                      } else {
-                        return "0";
-                      }
-                    })()}
+                          return (
+                            <>
+                              {(
+                                askData?.bya_calculations?.results
+                                  ?.total_allowed_bya - totalData
+                              ).toFixed(2)}
+                              m<sup>2</sup>
+                            </>
+                          );
+                        } else {
+                          return "0";
+                        }
+                      })()}
                   </p>
                 </div>
               </div>

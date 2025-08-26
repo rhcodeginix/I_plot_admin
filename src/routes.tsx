@@ -257,7 +257,14 @@ export const routes = createBrowserRouter([
           {
             path: "/my-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  "Admin",
+                  "super-admin",
+                  "Bankansvarlig",
+                  "Agent",
+                ]}
+              >
                 <MyLeads />
               </ProtectedRoute>
             ),
@@ -265,7 +272,14 @@ export const routes = createBrowserRouter([
           {
             path: "/my-leads-details/*",
             element: (
-              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  "Admin",
+                  "super-admin",
+                  "Bankansvarlig",
+                  "Agent",
+                ]}
+              >
                 <MyLeadsDetail />
               </ProtectedRoute>
             ),

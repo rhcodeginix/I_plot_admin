@@ -99,7 +99,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
           }`}
           onClick={() => !disabled && setIsOpen(!isOpen)}
         >
-          <p
+          <div
             className="text-gray flex items-center gap-2 whitespace-nowrap overflow-x-auto overFlowXScroll py-1"
             ref={scrollRef}
           >
@@ -125,7 +125,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
               </div>
             )}
             {placeholder}
-          </p>
+          </div>
           <img
             src={Ic_down_arrow}
             alt="arrow"

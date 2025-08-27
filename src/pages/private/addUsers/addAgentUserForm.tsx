@@ -756,7 +756,7 @@ export const AddAgentUserForm = () => {
                                   : "border-gray1"
                               } `}
                                   >
-                                    <SelectValue placeholder="Select Leverandører" />
+                                    <SelectValue placeholder="Velg ansatt" />
                                   </SelectTrigger>
                                   <SelectContent className="bg-white">
                                     <SelectGroup>

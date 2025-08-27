@@ -676,7 +676,7 @@ export const AgentProfileForm = () => {
                                   : "border-gray1"
                               } `}
                                   >
-                                    <SelectValue placeholder="Select Leverandører" />
+                                    <SelectValue placeholder="Velg ansatt" />
                                   </SelectTrigger>
                                   <SelectContent className="bg-white">
                                     <SelectGroup>

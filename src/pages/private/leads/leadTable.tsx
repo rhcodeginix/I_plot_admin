@@ -162,7 +162,12 @@ export const LeadTable = () => {
       const filteredData = await Promise.all(
         docsData.map(async (item: any) => {
           if (IsAdmin === true) {
-            return item;
+            const email = item?.createDataBy?.email;
+            if (!email) return null;
+
+            const userData = await getData(email);
+
+            return userData?.supplier === permission ? item : null;
           } else if (IsAdmin === false) {
             const email = item?.createDataBy?.email;
             if (!email) return null;

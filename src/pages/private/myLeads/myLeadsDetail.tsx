@@ -562,11 +562,23 @@ export const MyLeadsDetail = () => {
           </span>
         </div>
         {finalData && (
-          <div className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-medium mt-2 md:mt-4">
-            Lead for{" "}
-            <span className="font-bold">
-              {finalData?.Husdetaljer?.husmodell_name}
-            </span>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center justify-between">
+            <div className="text-darkBlack text-lg md:text-xl desktop:text-2xl font-medium mt-2 md:mt-4">
+              Lead for{" "}
+              <span className="font-bold">
+                {finalData?.Husdetaljer?.husmodell_name}
+              </span>
+            </div>
+            {leadData?.leadId && (
+              <Button
+                text="Se detaljer"
+                className="border border-green2 bg-green2 text-white text-sm md:text-base rounded-[8px] h-[40px] md:h-[48px] font-medium relative px-4 md:px-[30px] py-[10px] flex items-center gap-2"
+                type="button"
+                onClick={() => {
+                  navigate(`/se-bankleads/${leadData?.leadId}`);
+                }}
+              />
+            )}
           </div>
         )}
       </div>

@@ -17,6 +17,8 @@ import GoogleMapNearByComponent from "../../../components/ui/map/nearbyBuiilding
 import HouseDetailPage from "../../../components/ui/houseDetail";
 import { Building2, House } from "lucide-react";
 import Tilpass from "./Tilpass";
+import Ic_file from "../../../assets/images/Ic_file.svg";
+import Ic_download_primary from "../../../assets/images/Ic_download_primary.svg";
 
 export const BankleadsDetails = () => {
   const location = useLocation();
@@ -73,7 +75,8 @@ export const BankleadsDetails = () => {
       ? [{ id: "Eierinformasjon", label: "Eierinformasjon" }]
       : []),
     { id: "Bygninger", label: "Bygninger" },
-    { id: "Dokument", label: "Dokument" },
+    { id: "Plandokumenter", label: "Plandokumenter" },
+    { id: "Dokumenter", label: "Dokumenter" },
   ];
   const [activeTab, setActiveTab] = useState<string>(tabs[0]?.id);
 
@@ -191,6 +194,7 @@ export const BankleadsDetails = () => {
   }, [data]);
 
   const [BoxData, setBoxData] = useState<any>(null);
+  const [Documents, setDocuments] = useState<any>(null);
 
   useEffect(() => {
     const fetchPlotData = async () => {
@@ -213,6 +217,26 @@ export const BankleadsDetails = () => {
 
         const json = await response.json();
         setBoxData(json);
+        if (json && json?.plan_link) {
+          const res = await fetch(
+            "https://iplotnor-areaplanner.hf.space/resolve",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                step1_url: json?.plan_link,
+                api_token: "D7D7FFB4-1A4A-44EA-BD15-BCDB6CEF8CA5",
+              }),
+            }
+          );
+
+          if (!res.ok) throw new Error("Request failed");
+
+          const data = await res.json();
+          setDocuments(data);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -222,6 +246,54 @@ export const BankleadsDetails = () => {
       fetchPlotData();
     }
   }, [CadastreDataFromApi]);
+
+  const handleDownload = async (filePath: any) => {
+    try {
+      if (!filePath) {
+        console.error("File path is missing!");
+        return;
+      }
+
+      const link = document.createElement("a");
+      link.href = filePath?.link;
+      link.download = filePath?.name;
+      link.target = "_blank";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
+  const DocumentCard = ({
+    doc,
+    handleDownload,
+  }: {
+    doc: any;
+    handleDownload: (doc: any) => void;
+  }) => (
+    <div className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full">
+      <div className="flex items-center gap-2.5 md:gap-4 truncate w-[calc(100%-60px)] md:w-[calc(100%-65px)]">
+        <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
+          <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
+            <img src={Ic_file} alt="file" />
+          </div>
+        </div>
+        <h5 className="text-darkBlack text-xs md:text-sm font-medium truncate">
+          {doc?.name || "Loading..."}
+        </h5>
+      </div>
+      <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 w-[52px] sm:w-[56px] md:w-auto">
+        <img
+          src={Ic_download_primary}
+          alt="download"
+          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
+          onClick={() => handleDownload(doc)}
+        />
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -1673,7 +1745,7 @@ export const BankleadsDetails = () => {
                     )}
                   </>
                 )}
-                {activeTab === "Dokument" && (
+                {activeTab === "Plandokumenter" && (
                   <>
                     {loading ? (
                       <div
@@ -1694,6 +1766,26 @@ export const BankleadsDetails = () => {
                           </div>
                         )}
                       </>
+                    )}
+                  </>
+                )}
+                {activeTab === "Dokumenter" && (
+                  <>
+                    {Documents ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {[
+                          Documents?.rule_book,
+                          ...(Documents?.planning_documents || []),
+                        ].map((doc, index) => (
+                          <DocumentCard
+                            key={index}
+                            doc={doc}
+                            handleDownload={handleDownload}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div>Ingen dokumenter funnet!</div>
                     )}
                   </>
                 )}

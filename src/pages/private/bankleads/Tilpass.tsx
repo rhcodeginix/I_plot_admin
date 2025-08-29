@@ -409,7 +409,7 @@ const Tilpass: React.FC<{
                     <img
                       src={img}
                       alt="product"
-                      className="h-[181px] w-full object-cover"
+                      className="h-full w-full object-cover"
                       key={index}
                     />
                   )

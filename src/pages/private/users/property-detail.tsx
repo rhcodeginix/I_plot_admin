@@ -180,6 +180,7 @@ export const PropertyDetail = () => {
 
   const [BoxData, setBoxData] = useState<any>(null);
   const [Documents, setDocuments] = useState<any>(null);
+  const [results, setResult] = useState<any>(null);
 
   useEffect(() => {
     const fetchPlotData = async () => {
@@ -221,6 +222,31 @@ export const PropertyDetail = () => {
 
           const data = await res.json();
           setDocuments(data);
+          if (data && data?.rule_book) {
+            const responseData = await fetch(
+              "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  pdf_url: data?.rule_book?.link,
+                  plot_size_m2: `${
+                    lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
+                      ?.areal_beregnet ?? 0
+                  }`,
+                }),
+              }
+            );
+
+            if (!responseData.ok) {
+              throw new Error("Network response was not ok");
+            }
+
+            const responseResult = await responseData.json();
+            setResult(responseResult);
+          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -279,6 +305,16 @@ export const PropertyDetail = () => {
       </div>
     </div>
   );
+
+  const allQuotes = [
+    ...(results?.zones?.[0]?.rules?.bya?.breakdown || []),
+    ...(results?.zones?.[0]?.rules?.areas?.rules || []),
+    ...(results?.zones?.[0]?.rules?.parking?.rules || []),
+    ...(results?.zones?.[0]?.rules?.heights?.rules || []),
+    ...(results?.zones?.[0]?.rules?.setbacks?.rules || []),
+  ]
+    .map((item) => item?.quote)
+    .filter(Boolean);
 
   return (
     <>
@@ -376,7 +412,9 @@ export const PropertyDetail = () => {
                 <p className="text-white text-sm md:text-base font-semibold">
                   Utnyttelsesgrad på{" "}
                   {BoxData?.bya_percentage ??
-                    askData?.bya_calculations?.input?.bya_percentage}
+                    askData?.bya_calculations?.input?.bya_percentage ??
+                    results?.zones[0]?.derived
+                      ?.plot_utilization_percent_gross}
                   %
                 </p>
               </div>
@@ -444,7 +482,9 @@ export const PropertyDetail = () => {
 
                       return `${(
                         (BoxData?.bya_percentage ??
-                          askData?.bya_calculations?.input?.bya_percentage) -
+                          askData?.bya_calculations?.input?.bya_percentage ??
+                          results?.zones[0]?.derived
+                            ?.plot_utilization_percent_gross) -
                         formattedResult
                       ).toFixed(2)} %`;
                     } else {
@@ -497,7 +537,8 @@ export const PropertyDetail = () => {
                       } else {
                         return "0";
                       }
-                    })()}
+                    })() ??
+                    results?.zones[0]?.rules?.bya?.total_value}
                 </p>
               </div>
             </div>
@@ -1086,18 +1127,22 @@ export const PropertyDetail = () => {
                           </div>
                           <div className="flex flex-col gap-2 md:gap-3">
                             <>
-                              {askData &&
-                                askData?.conclusion?.map(
-                                  (a: any, index: number) => (
-                                    <div
-                                      className="flex items-start gap-2 md:gap-3 text-gray text-sm md:text-base"
-                                      key={index}
-                                    >
-                                      <img src={Ic_check_true} alt="images" />
-                                      <span>{a}</span>
-                                    </div>
-                                  )
-                                )}
+                              {(
+                                (askData && askData?.conclusion) ||
+                                allQuotes
+                              )?.map((a: any, index: number) => (
+                                <div
+                                  className="flex items-start gap-2 md:gap-3 text-secondary text-sm lg:text-base"
+                                  key={index}
+                                >
+                                  <img
+                                    fetchPriority="auto"
+                                    src={Ic_check_true}
+                                    alt="image"
+                                  />
+                                  <span>{a?.quote ? a?.quote : a}</span>
+                                </div>
+                              ))}
                             </>
                           </div>
                         </div>

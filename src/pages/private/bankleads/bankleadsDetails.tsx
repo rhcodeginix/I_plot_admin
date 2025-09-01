@@ -237,21 +237,37 @@ export const BankleadsDetails = () => {
 
           const data = await res.json();
           setDocuments(data);
+
+          if (data?.inputs?.internal_plan_id) {
+            const uniqueId = String(data?.inputs?.internal_plan_id);
+
+            if (!uniqueId) {
+              console.warn("No uniqueId found, skipping Firestore setDoc");
+              return;
+            }
+
+            const plansDocRef = doc(db, "mintomt_plans", uniqueId);
+
+            const existingDoc = await getDoc(plansDocRef);
+
+            if (existingDoc.exists()) {
+              setResult(existingDoc?.data()?.rule);
+              return;
+            }
+          }
+          
           if (data && data?.rule_book) {
+            const pdfResponse = await fetch(data?.rule_book?.link);
+            const pdfBlob = await pdfResponse.blob();
+
+            const formData = new FormData();
+            formData.append("file", pdfBlob, "rule_book.pdf");
+
             const responseData = await fetch(
-              "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
+              "https://iplotnor-norwaypropertyagent.hf.space/extract_file",
               {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  pdf_url: data?.rule_book?.link,
-                  plot_size_m2: `${
-                    lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
-                      ?.areal_beregnet ?? 0
-                  }`,
-                }),
+                body: formData,
               }
             );
 
@@ -260,7 +276,7 @@ export const BankleadsDetails = () => {
             }
 
             const responseResult = await responseData.json();
-            setResult(responseResult);
+            setResult(responseResult?.data);
           }
         }
       } catch (error) {

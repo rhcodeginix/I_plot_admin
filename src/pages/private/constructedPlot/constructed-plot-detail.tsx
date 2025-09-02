@@ -250,17 +250,20 @@ export const ConstructedPlotDetail = () => {
             }
           }
           if (data && data?.rule_book) {
-            const pdfResponse = await fetch(data?.rule_book?.link);
-            const pdfBlob = await pdfResponse.blob();
-
-            const formData = new FormData();
-            formData.append("file", pdfBlob, "rule_book.pdf");
-
             const responseData = await fetch(
-              "https://iplotnor-norwaypropertyagent.hf.space/extract_file",
+              "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
               {
                 method: "POST",
-                body: formData,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  pdf_url: data?.rule_book?.link,
+                  plot_size_m2: `${
+                    lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
+                      ?.areal_beregnet ?? 0
+                  }`,
+                }),
               }
             );
 

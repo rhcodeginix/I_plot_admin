@@ -1172,12 +1172,12 @@ export const PropertyDetail = () => {
                           .map((item: any, index: number) => {
                             return (
                               <div key={index}>
-                                <img
-                                  fetchPriority="auto"
-                                  src={Ic_generelt}
-                                  alt="image"
-                                />
-                                <div className="flex justify-between items-center mb-4 lg:mb-6">
+                                <div className="flex gap-2 items-center mb-4 lg:mb-6">
+                                  <img
+                                    fetchPriority="auto"
+                                    src={Ic_generelt}
+                                    alt="image"
+                                  />
                                   <h2 className="text-black text-base md:text-lg lg:text-xl desktop:text-2xl font-semibold">
                                     {item[0]}
                                   </h2>

@@ -1366,7 +1366,7 @@ export const BankleadsDetails = () => {
                               .map((item: any, index: number) => {
                                 return (
                                   <div key={index}>
-                                    <div className="flex justify-between items-center mb-4 lg:mb-6">
+                                    <div className="flex gap-2 items-center mb-4 lg:mb-6">
                                       <img
                                         fetchPriority="auto"
                                         src={Ic_generelt}

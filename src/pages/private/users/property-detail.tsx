@@ -224,7 +224,7 @@ export const PropertyDetail = () => {
                 knr: `${lamdaDataFromApi?.searchParameters?.kommunenummer}`,
                 gnr: `${lamdaDataFromApi?.searchParameters?.gardsnummer}`,
                 bnr: `${lamdaDataFromApi?.searchParameters?.bruksnummer}`,
-                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
+                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
                 debug_mode: true,
               }),
             }
@@ -244,7 +244,7 @@ export const PropertyDetail = () => {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 step1_url: json?.plan_link,
-                api_token: "D7D7FFB4-1A4A-44EA-BD15-BCDB6CEF8CA5",
+                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
               }),
             }),
             fetch("https://iplotnor-areaplanner.hf.space/other-documents", {
@@ -252,7 +252,7 @@ export const PropertyDetail = () => {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 step1_url: json?.plan_link,
-                api_token: "D7D7FFB4-1A4A-44EA-BD15-BCDB6CEF8CA5",
+                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
               }),
             }),
           ]);

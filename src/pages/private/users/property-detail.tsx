@@ -1195,7 +1195,7 @@ export const PropertyDetail = () => {
           </div>
         </div>
         <div className="w-full mt-8 md:mt-[44px]">
-          <div className="flex border-b border-[#DDDDDD]">
+          <div className="flex border-b border-[#DDDDDD] overflow-x-auto overflowXAuto">
             {tabs.map((tab: any) => (
               <button
                 key={tab.id}

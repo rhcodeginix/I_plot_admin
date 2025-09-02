@@ -1389,7 +1389,7 @@ export const BankleadsDetails = () => {
               </div>
             </div>
             <div className="w-full mt-8 md:mt-[44px]">
-              <div className="flex border-b border-[#DDDDDD]">
+              <div className="flex border-b border-[#DDDDDD] overflow-x-auto overflowXAuto">
                 {tabs.map((tab: any) => (
                   <button
                     key={tab?.id}
@@ -1973,7 +1973,7 @@ export const BankleadsDetails = () => {
                       </>
                     ) : (
                       <>
-                        {PlanDocuments&& PlanDocuments?.length > 0 ? (
+                        {PlanDocuments && PlanDocuments?.length > 0 ? (
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {PlanDocuments.map((doc: any, index: number) => (
                               <DocumentCard
@@ -2009,7 +2009,7 @@ export const BankleadsDetails = () => {
                       </>
                     ) : (
                       <>
-                        {exemptions&& exemptions?.length > 0 ? (
+                        {exemptions && exemptions?.length > 0 ? (
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {exemptions.map((doc: any, index: number) => (
                               <DocumentCard

@@ -190,6 +190,9 @@ export const ConstructedPlotDetail = () => {
   const [BoxData, setBoxData] = useState<any>(null);
   const [Documents, setDocuments] = useState<any>(null);
   const [results, setResult] = useState<any>(null);
+  const [PlanDocuments, setPlanDocuments] = useState<any>(null);
+  const [exemptions, setExemptions] = useState<any>(null);
+  const [documentLoading, setDocumentLoading] = useState(true);
 
   useEffect(() => {
     const fetchPlotData = async () => {
@@ -213,24 +216,40 @@ export const ConstructedPlotDetail = () => {
         const json = await response.json();
         setBoxData(json);
         if (json && json?.plan_link) {
-          const res = await fetch(
-            "https://iplotnor-areaplanner.hf.space/resolve",
-            {
+          const [res, resPlan] = await Promise.all([
+            fetch("https://iplotnor-areaplanner.hf.space/resolve", {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 step1_url: json?.plan_link,
                 api_token: "D7D7FFB4-1A4A-44EA-BD15-BCDB6CEF8CA5",
               }),
-            }
-          );
+            }),
+            fetch("https://iplotnor-areaplanner.hf.space/other-documents", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                step1_url: json?.plan_link,
+                api_token: "D7D7FFB4-1A4A-44EA-BD15-BCDB6CEF8CA5",
+              }),
+            }),
+          ]);
 
-          if (!res.ok) throw new Error("Request failed");
+          if (!res.ok || !resPlan.ok) {
+            throw new Error("Request failed");
+          }
 
-          const data = await res.json();
+          const [data, dataPlan] = await Promise.all([
+            res.json(),
+            resPlan.json(),
+          ]);
+
+          setPlanDocuments(dataPlan?.planning_treatments);
+          setExemptions(dataPlan?.exemptions);
           setDocuments(data);
+          if (dataPlan) {
+            setDocumentLoading(false);
+          }
 
           if (data?.inputs?.internal_plan_id) {
             const uniqueId = String(data?.inputs?.internal_plan_id);
@@ -325,7 +344,9 @@ export const ConstructedPlotDetail = () => {
           </div>
         </div>
         <h5 className="text-darkBlack text-xs md:text-sm font-medium truncate">
-          {doc?.name || "Loading..."}
+          {doc?.name?.toLowerCase().includes("unknown")
+            ? doc?.link?.split("/").pop()?.split("?")[0]
+            : doc?.name || "Loading..."}
         </h5>
       </div>
       <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 w-[52px] sm:w-[56px] md:w-auto">
@@ -1702,6 +1723,78 @@ export const ConstructedPlotDetail = () => {
                   </div>
                 ) : (
                   <div>Ingen dokumenter funnet!</div>
+                )}
+              </>
+            )}
+            {activeTab === "Planleggingsdokumenter" && (
+              <>
+                {documentLoading ? (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {Array.from({ length: 6 }).map(
+                        (_: any, index: number) => (
+                          <div
+                            key={index}
+                            className="border flex items-center gap-2 border-[#ECE9FE] bg-white rounded-[50px] text-xs md:text-sm cursor-pointer"
+                          >
+                            <div className="w-full h-[50px] rounded-lg custom-shimmer"></div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {PlanDocuments ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {PlanDocuments.map((doc: any, index: number) => (
+                          <DocumentCard
+                            key={index}
+                            doc={doc}
+                            handleDownload={handleDownload}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div>Ingen dokumenter funnet!</div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+            {activeTab === "Unntak" && (
+              <>
+                {documentLoading ? (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {Array.from({ length: 6 }).map(
+                        (_: any, index: number) => (
+                          <div
+                            key={index}
+                            className="border flex items-center gap-2 border-[#ECE9FE] bg-white rounded-[50px] text-xs md:text-sm cursor-pointer"
+                          >
+                            <div className="w-full h-[50px] rounded-lg custom-shimmer"></div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {exemptions ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {exemptions.map((doc: any, index: number) => (
+                          <DocumentCard
+                            key={index}
+                            doc={doc}
+                            handleDownload={handleDownload}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div>Ingen dokumenter funnet!</div>
+                    )}
+                  </>
                 )}
               </>
             )}

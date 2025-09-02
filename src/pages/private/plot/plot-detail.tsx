@@ -93,6 +93,8 @@ export const PlotDetail = () => {
       : []),
     { id: "Plandokumenter", label: "Plandokumenter" },
     { id: "Dokumenter", label: "Dokumenter" },
+    { id: "Planleggingsdokumenter", label: "Planleggingsdokumenter" },
+    { id: "Unntak", label: "Unntak" },
   ];
   const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
 

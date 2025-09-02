@@ -1359,7 +1359,10 @@ export const BankleadsDetails = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-9">
                           {results ? (
                             Object.entries(results)
-                              .filter(([_, value]: any) => value?.rules)
+                              .filter(
+                                ([_, value]: any) =>
+                                  value?.rules && value.rules.length > 0
+                              )
                               .map((item: any, index: number) => {
                                 return (
                                   <div key={index}>

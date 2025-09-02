@@ -424,18 +424,23 @@ export const PropertyDetail = () => {
                 <p className="text-white text-xs md:text-sm">
                   Eiendommen har en
                 </p>
-                <p className="text-white text-sm md:text-base font-semibold">
-                  Utnyttelsesgrad på{" "}
-                  {BoxData?.bya_percentage
-                    ? BoxData?.bya_percentage
-                    : results?.BYA?.rules?.[0]?.unit === "%"
-                    ? results?.BYA?.rules?.[0]?.value
-                    : (
-                        (results?.BYA?.rules?.[0]?.value ?? 0) /
-                          lamdaDataFromApi?.eiendomsInformasjon
-                            ?.basisInformasjon?.areal_beregnet ?? 0 * 100
-                      ).toFixed(2)}{" "}
-                  %
+                <p className="text-white text-sm lg:text-base font-semibold">
+                  {(() => {
+                    const value = BoxData?.bya_percentage
+                      ? BoxData?.bya_percentage
+                      : results?.BYA?.rules?.[0]?.unit === "%"
+                      ? results?.BYA?.rules?.[0]?.value
+                      : (
+                          ((results?.BYA?.rules?.[0]?.value ?? 0) /
+                            (lamdaDataFromApi?.eiendomsInformasjon
+                              ?.basisInformasjon?.areal_beregnet ?? 0)) *
+                          100
+                        ).toFixed(2);
+
+                    return value && Number(value) !== 0
+                      ? `Utnyttelsesgrad på ${value}%`
+                      : "-";
+                  })()}
                 </p>
               </div>
             </div>
@@ -443,8 +448,7 @@ export const PropertyDetail = () => {
               <img src={Ic_check_green_icon} alt="check" />
               <div className="flex flex-col gap-1">
                 <p className="text-white text-xs md:text-sm">Ekisterende BYA</p>
-                <p className="text-white text-sm md:text-base font-semibold">
-                  Utnyttelsesgrad på{" "}
+                <p className="text-white text-sm lg:text-base font-semibold">
                   {(() => {
                     const data =
                       CadastreDataFromApi?.buildingsApi?.response?.items?.map(
@@ -455,7 +459,7 @@ export const PropertyDetail = () => {
                       lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
                         ?.areal_beregnet
                     ) {
-                      const totalData = data
+                      const totalData = data?.length
                         ? data.reduce(
                             (acc: number, currentValue: number) =>
                               acc + currentValue,
@@ -468,24 +472,30 @@ export const PropertyDetail = () => {
                           lamdaDataFromApi?.eiendomsInformasjon
                             ?.basisInformasjon?.areal_beregnet) *
                         100;
-                      const formattedResult = result.toFixed(2);
 
-                      return `${formattedResult}  %`;
+                      const formattedResult = Number(result.toFixed(2));
+
+                      return formattedResult !== 0
+                        ? `Utnyttelsesgrad på ${formattedResult} %`
+                        : "-";
                     } else {
-                      return "0";
+                      return "-";
                     }
                   })()}
                 </p>
-                <p className="text-white text-xs md:text-sm">
-                  Tilgjengelig BYA{" "}
+                <p className="text-white text-xs lg:text-sm">
                   {(() => {
                     const data =
                       CadastreDataFromApi?.buildingsApi?.response?.items?.map(
                         (item: any) => item?.builtUpArea
                       ) ?? [];
 
-                    if (askData?.bya_calculations?.results?.total_allowed_bya) {
-                      const totalData = data
+                    if (
+                      BoxData &&
+                      lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
+                        ?.areal_beregnet
+                    ) {
+                      const totalData = data?.length
                         ? data.reduce(
                             (acc: number, currentValue: number) =>
                               acc + currentValue,
@@ -498,21 +508,31 @@ export const PropertyDetail = () => {
                           lamdaDataFromApi?.eiendomsInformasjon
                             ?.basisInformasjon?.areal_beregnet) *
                         100;
-                      const formattedResult: any = result.toFixed(2);
 
-                      return `${(
-                        (BoxData?.bya_percentage
-                          ? BoxData?.bya_percentage
-                          : results?.BYA?.rules?.[0]?.unit === "%"
-                          ? results?.BYA?.rules?.[0]?.value
-                          : (
-                              (results?.BYA?.rules?.[0]?.value ?? 0) /
-                                lamdaDataFromApi?.eiendomsInformasjon
-                                  ?.basisInformasjon?.areal_beregnet ?? 0 * 100
-                            ).toFixed(2)) - formattedResult
-                      ).toFixed(2)} %`;
+                      const formattedResult = Number(result.toFixed(2));
+
+                      const byaValue = BoxData?.bya_percentage
+                        ? Number(BoxData?.bya_percentage)
+                        : results?.BYA?.rules?.[0]?.unit === "%"
+                        ? Number(results?.BYA?.rules?.[0]?.value)
+                        : Number(
+                            (
+                              ((results?.BYA?.rules?.[0]?.value ?? 0) /
+                                (lamdaDataFromApi?.eiendomsInformasjon
+                                  ?.basisInformasjon?.areal_beregnet ?? 1)) *
+                              100
+                            ).toFixed(2)
+                          );
+
+                      const available = Number(
+                        (byaValue - formattedResult).toFixed(2)
+                      );
+
+                      return available !== 0
+                        ? `Tilgjengelig BYA ${available} %`
+                        : "";
                     } else {
-                      return "0";
+                      return "";
                     }
                   })()}
                 </p>
@@ -529,18 +549,46 @@ export const PropertyDetail = () => {
                   {askData?.bya_calculations?.results?.available_building_area}{" "}
                   m<sup>2</sup>
                 </p>
-                <p className="text-white text-xs md:text-sm">
-                  Tilgjengelig{" "}
-                  {BoxData?.bya_area_m2
-                    ? BoxData?.bya_area_m2
-                    : results?.BYA?.rules?.[0]?.unit === "%"
-                    ? (
-                        ((lamdaDataFromApi?.eiendomsInformasjon
-                          ?.basisInformasjon?.areal_beregnet ?? 0) *
-                          (results?.BYA?.rules?.[0]?.value ?? 0)) /
-                        100
-                      ).toFixed(2)
-                    : results?.BYA?.rules?.[0]?.value}
+                <p className="text-white text-xs lg:text-sm">
+                  {(() => {
+                    const data =
+                      CadastreDataFromApi?.buildingsApi?.response?.items?.map(
+                        (item: any) => item?.builtUpArea
+                      ) ?? [];
+
+                    const totalData = data?.length
+                      ? data.reduce(
+                          (acc: number, currentValue: number) =>
+                            acc + currentValue,
+                          0
+                        )
+                      : 0;
+
+                    const byaArea = BoxData?.bya_area_m2
+                      ? Number(BoxData?.bya_area_m2)
+                      : results?.BYA?.rules?.[0]?.unit === "%"
+                      ? Number(
+                          (
+                            ((lamdaDataFromApi?.eiendomsInformasjon
+                              ?.basisInformasjon?.areal_beregnet ?? 0) *
+                              (results?.BYA?.rules?.[0]?.value ?? 0)) /
+                            100
+                          ).toFixed(2)
+                        )
+                      : Number(results?.BYA?.rules?.[0]?.value ?? 0);
+
+                    if (!byaArea) return "";
+
+                    const available = Number((byaArea - totalData).toFixed(2));
+
+                    return available !== 0 ? (
+                      <>
+                        Tilgjengelig {available} m<sup>2</sup>
+                      </>
+                    ) : (
+                      ""
+                    );
+                  })()}
                 </p>
               </div>
             </div>
@@ -1117,7 +1165,10 @@ export const PropertyDetail = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-9">
                       {results ? (
                         Object.entries(results)
-                          .filter(([_, value]: any) => value?.rules)
+                          .filter(
+                            ([_, value]: any) =>
+                              value?.rules && value.rules.length > 0
+                          )
                           .map((item: any, index: number) => {
                             return (
                               <div key={index}>

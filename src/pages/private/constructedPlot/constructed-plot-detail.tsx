@@ -1737,24 +1737,28 @@ export const ConstructedPlotDetail = () => {
             )}
             {activeTab === "Dokumenter" && (
               <>
-                {Documents ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {[
-                      Documents?.rule_book,
-                      ...(Documents?.planning_documents || []),
-                    ]
-                      .filter((doc: any) => doc && doc.link)
-                      .map((doc, index) => (
+                {(() => {
+                  const allDocs = [
+                    Documents?.rule_book,
+                    ...(Documents?.planning_documents || []),
+                  ];
+
+                  const filteredDocs = allDocs.filter((doc) => doc && doc.link);
+
+                  return filteredDocs.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {filteredDocs.map((doc, index) => (
                         <DocumentCard
                           key={index}
                           doc={doc}
                           handleDownload={handleDownload}
                         />
                       ))}
-                  </div>
-                ) : (
-                  <div>Ingen dokumenter funnet!</div>
-                )}
+                    </div>
+                  ) : (
+                    <div>Ingen dokumenter funnet!</div>
+                  );
+                })()}
               </>
             )}
             {activeTab === "Planleggingsdokumenter" && (
@@ -1776,21 +1780,25 @@ export const ConstructedPlotDetail = () => {
                   </>
                 ) : (
                   <>
-                    {PlanDocuments && PlanDocuments?.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {PlanDocuments.filter(
-                          (doc: any) => doc && doc.link
-                        ).map((doc: any, index: number) => (
-                          <DocumentCard
-                            key={index}
-                            doc={doc}
-                            handleDownload={handleDownload}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <div>Ingen dokumenter funnet!</div>
-                    )}
+                    {(() => {
+                      const filteredPlanDocs =
+                        PlanDocuments?.filter((doc: any) => doc && doc.link) ||
+                        [];
+
+                      return filteredPlanDocs.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {filteredPlanDocs.map((doc: any, index: number) => (
+                            <DocumentCard
+                              key={index}
+                              doc={doc}
+                              handleDownload={handleDownload}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div>Ingen dokumenter funnet!</div>
+                      );
+                    })()}
                   </>
                 )}
               </>
@@ -1814,21 +1822,24 @@ export const ConstructedPlotDetail = () => {
                   </>
                 ) : (
                   <>
-                    {exemptions && exemptions?.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {exemptions
-                          .filter((doc: any) => doc && doc.link)
-                          .map((doc: any, index: number) => (
+                    {(() => {
+                      const filteredExemptions =
+                        exemptions?.filter((doc: any) => doc && doc.link) || [];
+
+                      return filteredExemptions.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {filteredExemptions.map((doc: any, index: number) => (
                             <DocumentCard
                               key={index}
                               doc={doc}
                               handleDownload={handleDownload}
                             />
                           ))}
-                      </div>
-                    ) : (
-                      <div>Ingen dokumenter funnet!</div>
-                    )}
+                        </div>
+                      ) : (
+                        <div>Ingen dokumenter funnet!</div>
+                      );
+                    })()}
                   </>
                 )}
               </>
@@ -1852,22 +1863,26 @@ export const ConstructedPlotDetail = () => {
                   </>
                 ) : (
                   <>
-                    {KommunePlan?.planning_documents &&
-                    KommunePlan.planning_documents.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {KommunePlan.planning_documents
-                          .filter((doc: any) => doc && doc.link)
-                          .map((doc: any, index: number) => (
+                    {(() => {
+                      const filteredDocs =
+                        KommunePlan?.planning_documents?.filter(
+                          (doc: any) => doc && doc.link
+                        ) || [];
+
+                      return filteredDocs.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {filteredDocs.map((doc: any, index: number) => (
                             <DocumentCard
                               key={index}
                               doc={doc}
                               handleDownload={handleDownload}
                             />
                           ))}
-                      </div>
-                    ) : (
-                      <div>Ingen dokumenter funnet!</div>
-                    )}
+                        </div>
+                      ) : (
+                        <div>Ingen dokumenter funnet!</div>
+                      );
+                    })()}
                   </>
                 )}
               </>

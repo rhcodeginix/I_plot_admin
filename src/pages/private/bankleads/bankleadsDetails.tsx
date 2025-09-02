@@ -325,7 +325,9 @@ export const BankleadsDetails = () => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = filePath.name || "download.pdf";
+      link.download = filePath?.name?.toLowerCase().includes("unknown")
+        ? filePath?.link?.split("/").pop()?.split("?")[0]
+        : filePath?.name || "download.pdf";
 
       document.body.appendChild(link);
       link.click();

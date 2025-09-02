@@ -1367,15 +1367,14 @@ export const BankleadsDetails = () => {
                                 return (
                                   <div key={index}>
                                     <div className="flex justify-between items-center mb-4 lg:mb-6">
-                                      <h2 className="text-black text-base md:text-lg lg:text-xl desktop:text-2xl font-semibold">
-                                        {item[0]}
-                                      </h2>
-
                                       <img
                                         fetchPriority="auto"
                                         src={Ic_generelt}
                                         alt="image"
                                       />
+                                      <h2 className="text-black text-base md:text-lg lg:text-xl desktop:text-2xl font-semibold">
+                                        {item[0]}
+                                      </h2>
                                     </div>
 
                                     <div className="flex flex-col gap-2 md:gap-3">

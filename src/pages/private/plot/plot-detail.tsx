@@ -95,6 +95,7 @@ export const PlotDetail = () => {
     { id: "Dokumenter", label: "Dokumenter" },
     { id: "Planleggingsdokumenter", label: "Planleggingsdokumenter" },
     { id: "Unntak", label: "Unntak" },
+    { id: "Kommuneplaner", label: "Kommuneplaner" },
   ];
   const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
 
@@ -193,7 +194,9 @@ export const PlotDetail = () => {
   const [results, setResult] = useState<any>(null);
   const [PlanDocuments, setPlanDocuments] = useState<any>(null);
   const [exemptions, setExemptions] = useState<any>(null);
+  const [KommunePlan, setKommunePlan] = useState<any>(null);
   const [documentLoading, setDocumentLoading] = useState(true);
+  const [KommuneLoading, setKommuneLoading] = useState(true);
 
   useEffect(() => {
     const fetchPlotData = async () => {
@@ -217,6 +220,32 @@ export const PlotDetail = () => {
         const json = await response.json();
         setBoxData(json);
         if (json && json?.plan_link) {
+          const KommuneData = await fetch(
+            "https://iplotnor-areaplanner.hf.space/kommuneplanens",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                coordinates_url: json?.plan_link,
+                knr: `${lamdaDataFromApi?.searchParameters?.kommunenummer}`,
+                gnr: `${lamdaDataFromApi?.searchParameters?.gardsnummer}`,
+                bnr: `${lamdaDataFromApi?.searchParameters?.bruksnummer}`,
+                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
+                debug_mode: true,
+              }),
+            }
+          );
+
+          if (!KommuneData.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const KommunePlanJson = await KommuneData.json();
+          setKommunePlan(KommunePlanJson);
+          setKommuneLoading(false);
+
           const [res, resPlan] = await Promise.all([
             fetch("https://iplotnor-areaplanner.hf.space/resolve", {
               method: "POST",
@@ -1668,6 +1697,45 @@ export const PlotDetail = () => {
                             handleDownload={handleDownload}
                           />
                         ))}
+                      </div>
+                    ) : (
+                      <div>Ingen dokumenter funnet!</div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+            {activeTab === "Kommuneplaner" && (
+              <>
+                {KommuneLoading ? (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {Array.from({ length: 6 }).map(
+                        (_: any, index: number) => (
+                          <div
+                            key={index}
+                            className="border flex items-center gap-2 border-[#ECE9FE] bg-white rounded-[50px] text-xs md:text-sm cursor-pointer"
+                          >
+                            <div className="w-full h-[50px] rounded-lg custom-shimmer"></div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {KommunePlan?.planning_documents &&
+                    KommunePlan.planning_documents.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {KommunePlan.planning_documents.map(
+                          (doc: any, index: number) => (
+                            <DocumentCard
+                              key={index}
+                              doc={doc}
+                              handleDownload={handleDownload}
+                            />
+                          )
+                        )}
                       </div>
                     ) : (
                       <div>Ingen dokumenter funnet!</div>

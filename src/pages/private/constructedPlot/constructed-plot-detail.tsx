@@ -263,24 +263,23 @@ export const ConstructedPlotDetail = () => {
           resolveResult.data?.rule_book &&
           resolveResult.data?.rule_book?.link
         ) {
-          const responseJson = await fetch(
-            "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                pdf_url: resolveResult.data?.rule_book?.link,
-                plot_size_m2:
-                  lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
-                    ?.areal_beregnet ?? 0,
-              }),
-            }
-          );
+          const extractResult = await makeApiCall({
+            name: "extract_json",
+            url: "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
+            body: {
+              pdf_url: resolveResult.data?.rule_book?.link,
+              plot_size_m2:
+                lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
+                  ?.areal_beregnet ?? 0,
+            },
+          });
 
-          if (!responseJson.ok) throw new Error("PDF extraction failed");
+          if (!extractResult.success) {
+            throw new Error("PDF extraction failed");
+          }
 
-          const result = await responseJson.json();
-          setResult(result?.data);
+          setResult(extractResult.data?.data);
+
           const apiCalls = [
             {
               name: "kommuneplanens",
@@ -336,7 +335,7 @@ export const ConstructedPlotDetail = () => {
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
               documents: { ...resolveResult.data },
-              rule: { ...result?.data },
+              rule: { ...extractResult.data?.data },
               ...firebaseData,
             });
           }

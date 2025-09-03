@@ -201,14 +201,14 @@ export const ConstructedPlotDetail = () => {
 
   useEffect(() => {
     const fetchPlotData = async () => {
+      if (!CadastreDataFromApi) return;
+
       try {
         const response = await fetch(
           "https://d8t0z35n2l.execute-api.eu-north-1.amazonaws.com/prod/bya",
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               url: `https://wms.geonorge.no/skwms1/wms.reguleringsplaner?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&QUERY_LAYERS=Planomrade_02,Arealformal_02&LAYERS=Planomrade_02,Arealformal_02&INFO_FORMAT=text/html&CRS=EPSG:25833&BBOX=${BBOXData[0]},${BBOXData[1]},${BBOXData[2]},${BBOXData[3]}&WIDTH=800&HEIGHT=600&I=400&J=300`,
               plot_size_m2:
@@ -221,157 +221,72 @@ export const ConstructedPlotDetail = () => {
         const json = await response.json();
         setBoxData(json);
 
-        if (json && json?.plan_link) {
-          const successfulResponses: any = [];
+        if (!json?.plan_link) {
+          return;
+        }
 
-          const makeApiCall = async (apiCall: any, timeout = 150000) => {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), timeout);
+        const resolveApiCall = {
+          name: "resolve",
+          url: "https://iplotnor-areaplanner.hf.space/resolve",
+          body: {
+            step1_url: json.plan_link,
+            api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
+          },
+        };
 
-            try {
-              const response = await fetch(apiCall.url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(apiCall.body),
-                signal: controller.signal,
-              });
+        const resolveResult = await makeApiCall(resolveApiCall);
+        if (!resolveResult.success) {
+          return;
+        }
+        setDocuments(resolveResult.data);
 
-              clearTimeout(timeoutId);
+        const internalPlanId = resolveResult.data?.inputs?.internal_plan_id;
+        if (!internalPlanId) {
+          return;
+        }
 
-              if (!response.ok) {
-                throw new Error(
-                  `${apiCall.name} request failed with status ${response.status}`
-                );
-              }
+        const plansDocRef = doc(db, "mintomt_plans", String(internalPlanId));
+        const existingDoc = await getDoc(plansDocRef);
 
-              const data = await response.json();
+        if (existingDoc.exists()) {
+          const data = existingDoc.data();
+          setDocuments(data.resolve ?? {});
+          setKommunePlan(data.kommuneplanens ?? {});
+          setPlanDocuments(data["other-documents"]?.planning_treatments ?? {});
+          setExemptions(data["other-documents"]?.exemptions ?? {});
+          setResult(data.rule ?? {});
 
-              switch (apiCall.name) {
-                case "kommuneplanens":
-                  setKommunePlan(data);
-                  setKommuneLoading(false);
-                  break;
-
-                case "resolve":
-                  setDocuments(data);
-                  await handleResolveData(data);
-                  break;
-
-                case "other-documents":
-                  setPlanDocuments(data?.planning_treatments);
-                  setExemptions(data?.exemptions);
-                  break;
-              }
-
-              successfulResponses.push({
-                name: apiCall.name,
-                success: true,
-                data: data,
-                error: null,
-              });
-
-              return {
-                name: apiCall.name,
-                success: true,
-                data: data,
-                error: null,
-              };
-            } catch (error: any) {
-              if (error.name === "AbortError") {
-                console.error(
-                  `${apiCall.name} API timed out after ${timeout}ms`
-                );
-              } else {
-                console.error(`${apiCall.name} API failed:`, error);
-              }
-              return {
-                name: apiCall.name,
-                success: false,
-                data: null,
-                error: error.message || error,
-              };
+          setKommuneLoading(false);
+          return;
+        }
+        if (
+          resolveResult.data?.rule_book &&
+          resolveResult.data?.rule_book?.link
+        ) {
+          const responseJson = await fetch(
+            "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                pdf_url: resolveResult.data?.rule_book?.link,
+                plot_size_m2:
+                  lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
+                    ?.areal_beregnet ?? 0,
+              }),
             }
-          };
+          );
 
-          const handleResolveData = async (data: any) => {
-            if (!data) return;
+          if (!responseJson.ok) throw new Error("PDF extraction failed");
 
-            if (data?.inputs?.internal_plan_id) {
-              const uniqueId = String(data?.inputs?.internal_plan_id);
-
-              if (!uniqueId) {
-                console.warn("No uniqueId found, skipping Firestore setDoc");
-                return;
-              }
-
-              const plansDocRef = doc(db, "mintomt_plans", uniqueId);
-              const existingDoc = await getDoc(plansDocRef);
-
-              if (existingDoc.exists()) {
-                setResult(existingDoc?.data()?.rule);
-                return;
-              }
-            }
-
-            if (data?.rule_book) {
-              try {
-                const responseData = await fetch(
-                  "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      pdf_url: data?.rule_book?.link,
-                      plot_size_m2: `${
-                        lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
-                          ?.areal_beregnet ?? 0
-                      }`,
-                    }),
-                  }
-                );
-
-                if (!responseData.ok) {
-                  throw new Error("PDF extraction request failed");
-                }
-
-                const responseResult = await responseData.json();
-                setResult(responseResult?.data);
-
-                if (responseResult?.data && data?.inputs?.internal_plan_id) {
-                  const uniqueId = String(data?.inputs?.internal_plan_id);
-                  const plansDocRef = doc(db, "mintomt_plans", uniqueId);
-
-                  const formatDate = (date: any) =>
-                    date
-                      .toLocaleString("sv-SE", { timeZone: "UTC" })
-                      .replace(",", "");
-
-                  const existingDoc = await getDoc(plansDocRef);
-
-                  if (!existingDoc.exists()) {
-                    await setDoc(plansDocRef, {
-                      id: uniqueId,
-                      updatedAt: formatDate(new Date()),
-                      createdAt: formatDate(new Date()),
-                      documents: { ...data },
-                      rule: { ...responseResult?.data },
-                    });
-                  }
-                }
-              } catch (pdfError) {
-                console.error("PDF processing failed:", pdfError);
-              }
-            }
-          };
-
+          const result = await responseJson.json();
+          setResult(result?.data);
           const apiCalls = [
             {
               name: "kommuneplanens",
               url: "https://iplotnor-areaplanner.hf.space/kommuneplanens",
               body: {
-                coordinates_url: json?.plan_link,
+                coordinates_url: json.plan_link,
                 knr: `${lamdaDataFromApi?.searchParameters?.kommunenummer}`,
                 gnr: `${lamdaDataFromApi?.searchParameters?.gardsnummer}`,
                 bnr: `${lamdaDataFromApi?.searchParameters?.bruksnummer}`,
@@ -380,34 +295,114 @@ export const ConstructedPlotDetail = () => {
               },
             },
             {
-              name: "resolve",
-              url: "https://iplotnor-areaplanner.hf.space/resolve",
-              body: {
-                step1_url: json?.plan_link,
-                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
-              },
-            },
-            {
               name: "other-documents",
               url: "https://iplotnor-areaplanner.hf.space/other-documents",
               body: {
-                step1_url: json?.plan_link,
+                step1_url: json.plan_link,
                 api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
               },
             },
           ];
 
-          apiCalls.map((apiCall) => makeApiCall(apiCall));
+          const otherResults = await Promise.all(
+            apiCalls.map((c) => makeApiCall(c))
+          );
+
+          const firebaseData: any = {
+            resolve: resolveResult.data,
+          };
+          otherResults.forEach((r) => {
+            if (r.success) firebaseData[r.name] = r.data;
+          });
+
+          otherResults.forEach((r) => {
+            if (r.success) {
+              if (r.name === "kommuneplanens") {
+                setKommunePlan(r.data);
+                setKommuneLoading(false);
+              }
+              if (r.name === "other-documents") {
+                setPlanDocuments(r.data?.planning_treatments ?? {});
+                setExemptions(r.data?.exemptions ?? {});
+              }
+            }
+          });
+
+          const uniqueId = String(internalPlanId);
+
+          if (!existingDoc.exists()) {
+            await setDoc(plansDocRef, {
+              id: uniqueId,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              documents: { ...resolveResult.data },
+              rule: { ...result?.data },
+              ...firebaseData,
+            });
+          }
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching plot data:", error);
       }
     };
 
-    if (CadastreDataFromApi) {
-      fetchPlotData();
-    }
+    fetchPlotData();
   }, [CadastreDataFromApi]);
+
+  const makeApiCall = async (apiCall: any, timeout = 150000) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const response = await fetch(apiCall.url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(apiCall.body),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(
+          `${apiCall.name} request failed with status ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+
+      switch (apiCall.name) {
+        case "kommuneplanens":
+          setKommunePlan(data);
+          setKommuneLoading(false);
+          break;
+
+        case "other-documents":
+          setPlanDocuments(data?.planning_treatments);
+          setExemptions(data?.exemptions);
+          break;
+      }
+
+      return {
+        name: apiCall.name,
+        success: true,
+        data: data,
+        error: null,
+      };
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        console.error(`${apiCall.name} API timed out after ${timeout}ms`);
+      } else {
+        console.error(`${apiCall.name} API failed:`, error);
+      }
+      return {
+        name: apiCall.name,
+        success: false,
+        data: null,
+        error: error.message || error,
+      };
+    }
+  };
 
   useEffect(() => {
     if (PlanDocuments) {

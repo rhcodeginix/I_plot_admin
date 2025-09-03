@@ -364,7 +364,7 @@ export const BankleadsDetails = () => {
                 knr: `${lamdaDataFromApi?.searchParameters?.kommunenummer}`,
                 gnr: `${lamdaDataFromApi?.searchParameters?.gardsnummer}`,
                 bnr: `${lamdaDataFromApi?.searchParameters?.bruksnummer}`,
-                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
+                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
                 debug_mode: true,
               },
             },
@@ -373,7 +373,7 @@ export const BankleadsDetails = () => {
               url: "https://iplotnor-areaplanner.hf.space/resolve",
               body: {
                 step1_url: json?.plan_link,
-                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
+                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
               },
             },
             {
@@ -381,7 +381,7 @@ export const BankleadsDetails = () => {
               url: "https://iplotnor-areaplanner.hf.space/other-documents",
               body: {
                 step1_url: json?.plan_link,
-                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
+                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
               },
             },
           ];

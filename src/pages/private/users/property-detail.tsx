@@ -349,7 +349,7 @@ export const PropertyDetail = () => {
                 knr: `${lamdaDataFromApi?.searchParameters?.kommunenummer}`,
                 gnr: `${lamdaDataFromApi?.searchParameters?.gardsnummer}`,
                 bnr: `${lamdaDataFromApi?.searchParameters?.bruksnummer}`,
-                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
+                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
                 debug_mode: true,
               },
             },
@@ -358,7 +358,7 @@ export const PropertyDetail = () => {
               url: "https://iplotnor-areaplanner.hf.space/resolve",
               body: {
                 step1_url: json?.plan_link,
-                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
+                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
               },
             },
             {
@@ -366,7 +366,7 @@ export const PropertyDetail = () => {
               url: "https://iplotnor-areaplanner.hf.space/other-documents",
               body: {
                 step1_url: json?.plan_link,
-                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
+                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
               },
             },
           ];
@@ -389,28 +389,25 @@ export const PropertyDetail = () => {
     }
   }, [PlanDocuments]);
 
-  const handleDownload = async (filePath: any) => {
+  const handleDownload = (filePath: any) => {
     try {
-      if (!filePath) {
+      if (!filePath?.link) {
         console.error("File path is missing!");
         return;
       }
 
-      const response = await fetch(filePath.link);
-      const blob = await response.blob();
-
-      const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.href = url;
-      link.download = filePath?.name?.toLowerCase().includes("unknown")
-        ? filePath?.link?.split("/").pop()?.split("?")[0]
-        : filePath?.name || "download.pdf";
+      link.href = filePath.link;
+      link.setAttribute(
+        "download",
+        filePath?.name?.toLowerCase().includes("unknown")
+          ? filePath?.link?.split("/").pop()?.split("?")[0] || "download.pdf"
+          : filePath?.name || "download.pdf"
+      );
 
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
-      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading file:", error);
     }

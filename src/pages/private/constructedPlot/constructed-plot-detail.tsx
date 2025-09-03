@@ -252,8 +252,8 @@ export const ConstructedPlotDetail = () => {
           const data = existingDoc.data();
           setDocuments(data.resolve ?? {});
           setKommunePlan(data.kommuneplanens ?? {});
-          setPlanDocuments(data["other-documents"]?.planning_treatments ?? {});
-          setExemptions(data["other-documents"]?.exemptions ?? {});
+          setPlanDocuments(data["other-documents"]?.planning_treatments ?? []);
+          setExemptions(data["other-documents"]?.exemptions ?? []);
           setResult(data.rule ?? {});
 
           setKommuneLoading(false);
@@ -321,8 +321,8 @@ export const ConstructedPlotDetail = () => {
                 setKommuneLoading(false);
               }
               if (r.name === "other-documents") {
-                setPlanDocuments(r.data?.planning_treatments ?? {});
-                setExemptions(r.data?.exemptions ?? {});
+                setPlanDocuments(r.data?.planning_treatments ?? []);
+                setExemptions(r.data?.exemptions ?? []);
               }
             }
           });

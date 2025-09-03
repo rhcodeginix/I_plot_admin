@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import Ic_chevron_up from "../../../assets/images/Ic_chevron_up.svg";
 import Ic_x_close from "../../../assets/images/Ic_x_close.svg";
@@ -219,117 +219,171 @@ export const PlotDetail = () => {
 
         const json = await response.json();
         setBoxData(json);
+
         if (json && json?.plan_link) {
-          const KommuneData = await fetch(
-            "https://iplotnor-areaplanner.hf.space/kommuneplanens",
+          const successfulResponses: any = [];
+
+          const makeApiCall = async (apiCall: any) => {
+            try {
+              const response = await fetch(apiCall.url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(apiCall.body),
+              });
+
+              if (!response.ok) {
+                throw new Error(
+                  `${apiCall.name} request failed with status ${response.status}`
+                );
+              }
+
+              const data = await response.json();
+
+              switch (apiCall.name) {
+                case "kommuneplanens":
+                  setKommunePlan(data);
+                  setKommuneLoading(false);
+                  break;
+
+                case "resolve":
+                  setDocuments(data);
+                  await handleResolveData(data);
+                  break;
+
+                case "other-documents":
+                  setPlanDocuments(data?.planning_treatments);
+                  setExemptions(data?.exemptions);
+                  if (data) setDocumentLoading(false);
+                  break;
+              }
+
+              successfulResponses.push({
+                name: apiCall.name,
+                success: true,
+                data: data,
+                error: null,
+              });
+
+              return {
+                name: apiCall.name,
+                success: true,
+                data: data,
+                error: null,
+              };
+            } catch (error: any) {
+              console.error(`${apiCall.name} API failed:`, error);
+              return;
+            }
+          };
+
+          const handleResolveData = async (data: any) => {
+            if (!data) return;
+
+            if (data?.inputs?.internal_plan_id) {
+              const uniqueId = String(data?.inputs?.internal_plan_id);
+
+              if (!uniqueId) {
+                console.warn("No uniqueId found, skipping Firestore setDoc");
+                return;
+              }
+
+              const plansDocRef = doc(db, "mintomt_plans", uniqueId);
+              const existingDoc = await getDoc(plansDocRef);
+
+              if (existingDoc.exists()) {
+                setResult(existingDoc?.data()?.rule);
+                return;
+              }
+            }
+
+            if (data?.rule_book) {
+              try {
+                const responseData = await fetch(
+                  "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      pdf_url: data?.rule_book?.link,
+                      plot_size_m2: `${
+                        lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
+                          ?.areal_beregnet ?? 0
+                      }`,
+                    }),
+                  }
+                );
+
+                if (!responseData.ok) {
+                  throw new Error("PDF extraction request failed");
+                }
+
+                const responseResult = await responseData.json();
+                setResult(responseResult?.data);
+
+                if (responseResult?.data && data?.inputs?.internal_plan_id) {
+                  const uniqueId = String(data?.inputs?.internal_plan_id);
+                  const plansDocRef = doc(db, "mintomt_plans", uniqueId);
+
+                  const formatDate = (date: any) =>
+                    date
+                      .toLocaleString("sv-SE", { timeZone: "UTC" })
+                      .replace(",", "");
+
+                  const existingDoc = await getDoc(plansDocRef);
+
+                  if (!existingDoc.exists()) {
+                    await setDoc(plansDocRef, {
+                      id: uniqueId,
+                      updatedAt: formatDate(new Date()),
+                      createdAt: formatDate(new Date()),
+                      documents: { ...data },
+                      rule: { ...responseResult?.data },
+                    });
+                  }
+                }
+              } catch (pdfError) {
+                console.error("PDF processing failed:", pdfError);
+              }
+            }
+          };
+
+          const apiCalls = [
             {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
+              name: "kommuneplanens",
+              url: "https://iplotnor-areaplanner.hf.space/kommuneplanens",
+              body: {
                 coordinates_url: json?.plan_link,
                 knr: `${lamdaDataFromApi?.searchParameters?.kommunenummer}`,
                 gnr: `${lamdaDataFromApi?.searchParameters?.gardsnummer}`,
                 bnr: `${lamdaDataFromApi?.searchParameters?.bruksnummer}`,
-                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
+                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
                 debug_mode: true,
-              }),
-            }
-          );
-
-          if (!KommuneData.ok) {
-            throw new Error("Network response was not ok");
-          }
-
-          const KommunePlanJson = await KommuneData.json();
-          setKommunePlan(KommunePlanJson);
-          setKommuneLoading(false);
-
-          const res = await fetch(
-            "https://iplotnor-areaplanner.hf.space/resolve",
+              },
+            },
             {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
+              name: "resolve",
+              url: "https://iplotnor-areaplanner.hf.space/resolve",
+              body: {
                 step1_url: json?.plan_link,
                 api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
-              }),
-            }
-          );
+              },
+            },
+            {
+              name: "other-documents",
+              url: "https://iplotnor-areaplanner.hf.space/other-documents",
+              body: {
+                step1_url: json?.plan_link,
+                api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
+              },
+            },
+          ];
 
-          if (!res.ok) {
-            throw new Error("Resolve request failed");
-          }
+          apiCalls.map((apiCall) => makeApiCall(apiCall));
 
-          const data = await res.json();
-          setDocuments(data);
-
-          fetch("https://iplotnor-areaplanner.hf.space/other-documents", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              step1_url: json?.plan_link,
-              api_token: `${process.env.NEXT_PUBLIC_DOCUMENT_TOKEN}`,
-            }),
-          })
-            .then((resPlan) => {
-              if (!resPlan.ok)
-                throw new Error("Other-documents request failed");
-              return resPlan.json();
-            })
-            .then((dataPlan) => {
-              setPlanDocuments(dataPlan?.planning_treatments);
-              setExemptions(dataPlan?.exemptions);
-              if (dataPlan) setDocumentLoading(false);
-            })
-            .catch((err) => {
-              console.error("Other-documents API failed:", err);
-              setDocumentLoading(false);
-            });
-
-          if (data?.inputs?.internal_plan_id) {
-            const uniqueId = String(data?.inputs?.internal_plan_id);
-
-            if (!uniqueId) {
-              console.warn("No uniqueId found, skipping Firestore setDoc");
-              return;
-            }
-
-            const plansDocRef = doc(db, "mintomt_plans", uniqueId);
-
-            const existingDoc = await getDoc(plansDocRef);
-
-            if (existingDoc.exists()) {
-              setResult(existingDoc?.data()?.rule);
-              return;
-            }
-          }
-
-          if (data && data?.rule_book) {
-            const responseData = await fetch(
-              "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  pdf_url: data?.rule_book?.link,
-                  plot_size_m2: `${
-                    lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
-                      ?.areal_beregnet ?? 0
-                  }`,
-                }),
-              }
-            );
-
-            if (!responseData.ok) {
-              throw new Error("Network response was not ok");
-            }
-
-            const responseResult = await responseData.json();
-            setResult(responseResult?.data);
+          if (successfulResponses.length === 0) {
+            setDocumentLoading(false);
           }
         }
       } catch (error) {

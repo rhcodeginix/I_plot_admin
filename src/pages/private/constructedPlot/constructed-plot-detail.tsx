@@ -409,7 +409,9 @@ export const ConstructedPlotDetail = () => {
     }
   }, [PlanDocuments]);
 
-  const handleDownload = (filePath: any) => {
+  const handleDownload = async (filePath: any) => {
+    if (!filePath?.link) return;
+
     try {
       if (!filePath?.link) {
         console.error("File path is missing!");
@@ -428,8 +430,9 @@ export const ConstructedPlotDetail = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (error) {
-      console.error("Error downloading file:", error);
+    } catch (err) {
+      console.warn("CORS blocked, opening in new tab instead.");
+      window.open(filePath.link, "_blank");
     }
   };
 

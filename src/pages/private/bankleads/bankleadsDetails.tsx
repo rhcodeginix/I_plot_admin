@@ -404,28 +404,25 @@ export const BankleadsDetails = () => {
     }
   }, [PlanDocuments]);
 
-  const handleDownload = async (filePath: any) => {
+  const handleDownload = (filePath: any) => {
     try {
-      if (!filePath) {
+      if (!filePath?.link) {
         console.error("File path is missing!");
         return;
       }
-
-      const response = await fetch(filePath.link);
-      const blob = await response.blob();
-
-      const url = window.URL.createObjectURL(blob);
+  
       const link = document.createElement("a");
-      link.href = url;
-      link.download = filePath?.name?.toLowerCase().includes("unknown")
-        ? filePath?.link?.split("/").pop()?.split("?")[0]
-        : filePath?.name || "download.pdf";
-
+      link.href = filePath.link;
+      link.setAttribute(
+        "download",
+        filePath?.name?.toLowerCase().includes("unknown")
+          ? filePath?.link?.split("/").pop()?.split("?")[0] || "download.pdf"
+          : filePath?.name || "download.pdf"
+      );
+  
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
-      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading file:", error);
     }

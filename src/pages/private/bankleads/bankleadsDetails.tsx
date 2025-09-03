@@ -260,7 +260,6 @@ export const BankleadsDetails = () => {
                 case "other-documents":
                   setPlanDocuments(data?.planning_treatments);
                   setExemptions(data?.exemptions);
-                  if (data) setDocumentLoading(false);
                   break;
               }
 
@@ -388,10 +387,6 @@ export const BankleadsDetails = () => {
           ];
 
           apiCalls.map((apiCall) => makeApiCall(apiCall));
-
-          if (successfulResponses.length === 0) {
-            setDocumentLoading(false);
-          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -402,6 +397,12 @@ export const BankleadsDetails = () => {
       fetchPlotData();
     }
   }, [CadastreDataFromApi]);
+
+  useEffect(() => {
+    if (PlanDocuments) {
+      setDocumentLoading(false);
+    }
+  }, [PlanDocuments]);
 
   const handleDownload = async (filePath: any) => {
     try {

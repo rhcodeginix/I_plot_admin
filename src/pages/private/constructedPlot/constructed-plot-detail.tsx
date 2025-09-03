@@ -254,7 +254,6 @@ export const ConstructedPlotDetail = () => {
                 case "other-documents":
                   setPlanDocuments(data?.planning_treatments);
                   setExemptions(data?.exemptions);
-                  if (data) setDocumentLoading(false);
                   break;
               }
 
@@ -382,10 +381,6 @@ export const ConstructedPlotDetail = () => {
           ];
 
           apiCalls.map((apiCall) => makeApiCall(apiCall));
-
-          if (successfulResponses.length === 0) {
-            setDocumentLoading(false);
-          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -396,6 +391,12 @@ export const ConstructedPlotDetail = () => {
       fetchPlotData();
     }
   }, [CadastreDataFromApi]);
+
+  useEffect(() => {
+    if (PlanDocuments) {
+      setDocumentLoading(false);
+    }
+  }, [PlanDocuments]);
 
   const handleDownload = async (filePath: any) => {
     try {

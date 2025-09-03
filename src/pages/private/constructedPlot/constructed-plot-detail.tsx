@@ -1320,7 +1320,7 @@ export const ConstructedPlotDetail = () => {
                                   {item?.[1]?.rules?.map(
                                     (rule: any, idx: number) => (
                                       <div
-                                        className="flex items-start gap-2 md:gap-3 text-secondary text-sm lg:text-base"
+                                        className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base"
                                         key={idx}
                                       >
                                         <img
@@ -1383,7 +1383,7 @@ export const ConstructedPlotDetail = () => {
                                 allQuotes
                               )?.map((a: any, index: number) => (
                                 <div
-                                  className="flex items-start gap-2 md:gap-3 text-secondary text-sm lg:text-base"
+                                  className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base"
                                   key={index}
                                 >
                                   <img

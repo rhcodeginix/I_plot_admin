@@ -26,8 +26,9 @@ import {
   fetchAdminDataByEmail,
   fetchSupplierData,
 } from "../../../lib/utils";
-import NorkartMap from "../../../components/map";
+// import NorkartMap from "../../../components/map";
 import { useNavigate } from "react-router-dom";
+import GoogleMapComponent from "../../../components/ui/map";
 
 export const HusleadsTable = () => {
   const [page, setPage] = useState(1);
@@ -202,7 +203,13 @@ export const HusleadsTable = () => {
                 <div className="w-8 h-8 rounded-full overflow-hidden">
                   {row.original.finalData?.plot?.lamdaDataFromApi?.coordinates
                     ?.convertedCoordinates && (
-                    <NorkartMap
+                    // <NorkartMap
+                    //   coordinates={
+                    //     row.original.finalData?.plot?.lamdaDataFromApi
+                    //       ?.coordinates?.convertedCoordinates
+                    //   }
+                    // />
+                    <GoogleMapComponent
                       coordinates={
                         row.original.finalData?.plot?.lamdaDataFromApi
                           ?.coordinates?.convertedCoordinates

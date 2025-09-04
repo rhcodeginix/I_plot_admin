@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { db } from "../../../config/firebaseConfig";
 import Img_line_bg from "../../../assets/images/Img_line_bg.png";
-import NorkartMap from "../../../components/map";
+// import NorkartMap from "../../../components/map";
+import GoogleMapComponent from "../../../components/ui/map";
 
 export const UserDetail = () => {
   const location = useLocation();
@@ -151,7 +152,13 @@ export const UserDetail = () => {
                         <div className="h-[300px] md:h-[350px] cursor-pointer rounded-lg overflow-hidden">
                           {property?.lamdaDataFromApi?.coordinates
                             ?.convertedCoordinates && (
-                            <NorkartMap
+                            // <NorkartMap
+                            //   coordinates={
+                            //     property?.lamdaDataFromApi?.coordinates
+                            //       ?.convertedCoordinates
+                            //   }
+                            // />
+                            <GoogleMapComponent
                               coordinates={
                                 property?.lamdaDataFromApi?.coordinates
                                   ?.convertedCoordinates

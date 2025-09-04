@@ -11,7 +11,7 @@ import Ic_generelt from "../../../assets/images/Ic_generelt.svg";
 import Ic_check_true from "../../../assets/images/Ic_check_true.svg";
 import Ic_chevron_right from "../../../assets/images/Ic_chevron_right.svg";
 import { formatDateToDDMMYYYY } from "../../../lib/utils";
-import NorkartMap from "../../../components/map";
+// import NorkartMap from "../../../components/map";
 import Eierinformasjon from "../plot/Eierinformasjon";
 import GoogleMapNearByComponent from "../../../components/ui/map/nearbyBuiildingMap";
 import HouseDetailPage from "../../../components/ui/houseDetail";
@@ -19,6 +19,7 @@ import { Building2, House } from "lucide-react";
 import Tilpass from "./Tilpass";
 import Ic_file from "../../../assets/images/Ic_file.svg";
 import Ic_download_primary from "../../../assets/images/Ic_download_primary.svg";
+import GoogleMapComponent from "../../../components/ui/map";
 
 export const BankleadsDetails = () => {
   const location = useLocation();
@@ -1469,7 +1470,13 @@ export const BankleadsDetails = () => {
                       <>
                         {lamdaDataFromApi?.coordinates
                           ?.convertedCoordinates && (
-                          <NorkartMap
+                          // <NorkartMap
+                          //   coordinates={
+                          //     lamdaDataFromApi?.coordinates
+                          //       ?.convertedCoordinates
+                          //   }
+                          // />
+                          <GoogleMapComponent
                             coordinates={
                               lamdaDataFromApi?.coordinates
                                 ?.convertedCoordinates

@@ -13,9 +13,10 @@ import Img_line_bg from "../../../assets/images/Img_line_bg.png";
 import { formatDateToDDMMYYYY } from "../../../lib/utils";
 import Eierinformasjon from "./Eierinformasjon";
 import GoogleMapNearByComponent from "../../../components/ui/map/nearbyBuiildingMap";
-import NorkartMap from "../../../components/map";
+// import NorkartMap from "../../../components/map";
 import Ic_file from "../../../assets/images/Ic_file.svg";
 import Ic_download_primary from "../../../assets/images/Ic_download_primary.svg";
+import GoogleMapComponent from "../../../components/ui/map";
 
 export const ConstructedPlotDetail = () => {
   const location = useLocation();
@@ -1278,7 +1279,12 @@ export const ConstructedPlotDetail = () => {
                 ) : (
                   <>
                     {lamdaDataFromApi?.coordinates?.convertedCoordinates && (
-                      <NorkartMap
+                      // <NorkartMap
+                      //   coordinates={
+                      //     lamdaDataFromApi?.coordinates?.convertedCoordinates
+                      //   }
+                      // />
+                      <GoogleMapComponent
                         coordinates={
                           lamdaDataFromApi?.coordinates?.convertedCoordinates
                         }

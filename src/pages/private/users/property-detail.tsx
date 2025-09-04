@@ -12,9 +12,10 @@ import Ic_check_green_icon from "../../../assets/images/Ic_check_green_icon.svg"
 import Img_line_bg from "../../../assets/images/Img_line_bg.png";
 import { formatDateToDDMMYYYY } from "../../../lib/utils";
 import Eierinformasjon from "../plot/Eierinformasjon";
-import NorkartMap from "../../../components/map";
+// import NorkartMap from "../../../components/map";
 import Ic_file from "../../../assets/images/Ic_file.svg";
 import Ic_download_primary from "../../../assets/images/Ic_download_primary.svg";
+import GoogleMapComponent from "../../../components/ui/map";
 
 export const PropertyDetail = () => {
   const location = useLocation();
@@ -1275,7 +1276,12 @@ export const PropertyDetail = () => {
                 ) : (
                   <>
                     {lamdaDataFromApi?.coordinates?.convertedCoordinates && (
-                      <NorkartMap
+                      // <NorkartMap
+                      //   coordinates={
+                      //     lamdaDataFromApi?.coordinates?.convertedCoordinates
+                      //   }
+                      // />
+                      <GoogleMapComponent
                         coordinates={
                           lamdaDataFromApi?.coordinates?.convertedCoordinates
                         }

@@ -263,8 +263,8 @@ export const PlotDetail = () => {
           resolveResult.data?.rule_book?.link
         ) {
           const extractResult = await makeApiCall({
-            name: "extract_json",
-            url: "https://iplotnor-norwaypropertyagent.hf.space/extract_json",
+            name: "extract_json_direct_gpt",
+            url: "https://iplotnor-norwaypropertyagent.hf.space/extract_json_direct_gpt",
             body: {
               pdf_url: resolveResult.data?.rule_book?.link,
               plot_size_m2:

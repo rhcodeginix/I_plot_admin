@@ -2178,10 +2178,13 @@ export const BankleadsDetails = () => {
                     ) : (
                       <>
                         {(() => {
+                          const allDocs = [
+                            KommunePlan?.rule_book,
+                            ...(KommunePlan?.planning_documents || []),
+                          ];
                           const filteredDocs =
-                            KommunePlan?.planning_documents?.filter(
-                              (doc: any) => doc && doc.link
-                            ) || [];
+                            allDocs?.filter((doc: any) => doc && doc.link) ||
+                            [];
 
                           return filteredDocs.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

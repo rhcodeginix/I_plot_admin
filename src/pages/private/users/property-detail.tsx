@@ -227,6 +227,12 @@ export const PropertyDetail = () => {
 
         const resolveResult = await makeApiCall(resolveApiCall);
         if (!resolveResult.success) {
+          setDocuments({});
+          setKommunePlan({});
+          setPlanDocuments([]);
+          setExemptions([]);
+          setResult({});
+          setKommuneLoading(false);
           return;
         }
         setDocuments(resolveResult.data);
@@ -1305,49 +1311,57 @@ export const PropertyDetail = () => {
                   <div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-9">
                       {results ? (
-                        Object.entries(results)
-                          .filter(
-                            ([_, value]: any) =>
-                              value?.rules && value.rules.length > 0
-                          )
-                          .map((item: any, index: number) => {
-                            return (
-                              <div key={index}>
-                                <div className="flex gap-2 items-center mb-4 lg:mb-6">
-                                  <img
-                                    fetchPriority="auto"
-                                    src={Ic_generelt}
-                                    alt="image"
-                                  />
-                                  <h2 className="text-black text-base md:text-lg lg:text-xl desktop:text-2xl font-semibold">
-                                    {item[0]}
-                                  </h2>
-                                </div>
-
-                                <div className="flex flex-col gap-2 md:gap-3">
-                                  {item?.[1]?.rules?.map(
-                                    (rule: any, idx: number) => (
-                                      <div
-                                        className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base"
-                                        key={idx}
-                                      >
+                        <>
+                          {Object.keys(results).length > 0 ? (
+                            <>
+                              {Object.entries(results)
+                                .filter(
+                                  ([_, value]: any) =>
+                                    value?.rules && value.rules.length > 0
+                                )
+                                .map((item: any, index: number) => {
+                                  return (
+                                    <div key={index}>
+                                      <div className="flex gap-2 items-center mb-4 lg:mb-6">
                                         <img
                                           fetchPriority="auto"
-                                          src={Ic_check_true}
+                                          src={Ic_generelt}
                                           alt="image"
                                         />
-                                        <span>
-                                          {rule?.norwegian_text
-                                            ? rule.norwegian_text
-                                            : rule.rule_name}
-                                        </span>
+                                        <h2 className="text-black text-base md:text-lg lg:text-xl desktop:text-2xl font-semibold">
+                                          {item[0]}
+                                        </h2>
                                       </div>
-                                    )
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })
+
+                                      <div className="flex flex-col gap-2 md:gap-3">
+                                        {item?.[1]?.rules?.map(
+                                          (rule: any, idx: number) => (
+                                            <div
+                                              className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base"
+                                              key={idx}
+                                            >
+                                              <img
+                                                fetchPriority="auto"
+                                                src={Ic_check_true}
+                                                alt="image"
+                                              />
+                                              <span>
+                                                {rule?.norwegian_text
+                                                  ? rule.norwegian_text
+                                                  : rule.rule_name}
+                                              </span>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                            </>
+                          ) : (
+                            <div>Ingen regel funnet!</div>
+                          )}
+                        </>
                       ) : (
                         <>
                           {Array.from({ length: 4 }).map(

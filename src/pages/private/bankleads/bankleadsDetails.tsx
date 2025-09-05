@@ -1,5 +1,5 @@
 import Img_line_bg from "../../../assets/images/Img_line_bg.png";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
 import { useLocation } from "react-router-dom";
 import Ic_check_green_icon from "../../../assets/images/Ic_check_green_icon.svg";
@@ -205,6 +205,8 @@ export const BankleadsDetails = () => {
   const [KommunePlan, setKommunePlan] = useState<any>(null);
   const [documentLoading, setDocumentLoading] = useState(true);
   const [KommuneLoading, setKommuneLoading] = useState(true);
+  const [KommuneRule, setKommuneRule] = useState<any>(null);
+  const [KommuneRuleLoading, setKommuneRuleLoading] = useState<any>(false);
 
   useEffect(() => {
     const fetchPlotData = async () => {
@@ -263,14 +265,43 @@ export const BankleadsDetails = () => {
 
         if (existingDoc.exists()) {
           const data = existingDoc.data();
-          setDocuments(data.resolve ?? {});
-          setKommunePlan(data.kommuneplanens ?? {});
+          setDocuments(data?.resolve ?? {});
+          setKommunePlan(data?.kommuneplanens ?? {});
           setPlanDocuments(data["other-documents"]?.planning_treatments ?? []);
           setExemptions(data["other-documents"]?.exemptions ?? []);
           setResult(data?.extract_json_direct_gpt?.data ?? {});
           setKommuneLoading(false);
+
+          if (data?.kommuneplanens?.rule_book?.link && !data?.kommune_rules) {
+            const kommuneRuleRes = await fetch(
+              "https://iplotnor-norwaypropertyagent.hf.space/extract_rules",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  url: data.kommuneplanens.rule_book.link,
+                }),
+              }
+            );
+
+            const kommuneRuleJson = await kommuneRuleRes.json();
+
+            await updateDoc(plansDocRef, {
+              kommune_rules: kommuneRuleJson,
+              updatedAt: new Date().toISOString(),
+            });
+
+            setKommuneRule(kommuneRuleJson ?? {});
+          } else {
+            setKommuneRule(data?.kommune_rules ?? {});
+          }
+
+          setKommuneRuleLoading(false);
           return;
         }
+
         if (
           resolveResult.data?.rule_book &&
           resolveResult.data?.rule_book?.link
@@ -335,6 +366,28 @@ export const BankleadsDetails = () => {
             }
           });
 
+          let kommuneRulesArr: any;
+          if (firebaseData?.kommuneplanens?.rule_book?.link) {
+            const kommuneRule = await fetch(
+              "https://iplotnor-norwaypropertyagent.hf.space/extract_rules",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  url: firebaseData.kommuneplanens.rule_book.link,
+                }),
+              }
+            );
+
+            const kommuneRuleJson = await kommuneRule.json();
+
+            kommuneRulesArr = kommuneRuleJson;
+            setKommuneRule(kommuneRuleJson ?? {});
+            setKommuneRuleLoading(false);
+          }
+
           const kommunePlanId =
             firebaseData?.kommuneplanens?.kommuneplan_info?.id;
           const kommunePlansDocRef = doc(
@@ -363,6 +416,7 @@ export const BankleadsDetails = () => {
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
               documents: { ...resolveResult.data },
+              kommune_rules: kommuneRulesArr,
               ...firebaseData,
             });
           }
@@ -375,7 +429,7 @@ export const BankleadsDetails = () => {
     fetchPlotData();
   }, [CadastreDataFromApi]);
 
-  const makeApiCall = async (apiCall: any, timeout = 150000) => {
+  const makeApiCall = async (apiCall: any, timeout = 500000) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
@@ -398,14 +452,18 @@ export const BankleadsDetails = () => {
       const data = await response.json();
 
       switch (apiCall.name) {
+        case "extract_json_direct_gpt":
+          setResult(data?.data?.data ?? {});
+          break;
+
         case "kommuneplanens":
-          setKommunePlan(data);
+          setKommunePlan(data ?? {});
           setKommuneLoading(false);
           break;
 
         case "other-documents":
-          setPlanDocuments(data?.planning_treatments);
-          setExemptions(data?.exemptions);
+          setPlanDocuments(data?.planning_treatments ?? []);
+          setExemptions(data?.exemptions ?? []);
           break;
       }
 
@@ -416,11 +474,30 @@ export const BankleadsDetails = () => {
         error: null,
       };
     } catch (error: any) {
+      clearTimeout(timeoutId);
+
       if (error.name === "AbortError") {
         console.error(`${apiCall.name} API timed out after ${timeout}ms`);
       } else {
         console.error(`${apiCall.name} API failed:`, error);
       }
+
+      switch (apiCall.name) {
+        case "extract_json_direct_gpt":
+          setResult({});
+          break;
+
+        case "kommuneplanens":
+          setKommunePlan({});
+          setKommuneLoading(false);
+          break;
+
+        case "other-documents":
+          setPlanDocuments([]);
+          setExemptions([]);
+          break;
+      }
+
       return {
         name: apiCall.name,
         success: false,
@@ -1508,10 +1585,12 @@ export const BankleadsDetails = () => {
               <div className="pt-5 md:pt-8">
                 {activeTab === "Regulering" && (
                   <>
-                    <div className="relative">
-                      {/* <div className="flex flex-col md:flex-row gap-6 md:gap-[44px] desktop:gap-[60px]"> */}
-                      <div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-9">
+                    <div className="flex flex-col md:flex-row gap-5 lg:gap-9 desktop:gap-[60px]">
+                      <div className="relative w-full md:w-1/2">
+                        <div className="flex flex-col gap-5 lg:gap-9">
+                          <h2 className="text-black text-lg md:text-xl lg:text-2xl desktop:text-[28px] font-semibold">
+                            Reguleringsplan
+                          </h2>
                           {results ? (
                             <>
                               {Object.keys(results).length > 0 ? (
@@ -1528,7 +1607,7 @@ export const BankleadsDetails = () => {
                                             <img
                                               fetchPriority="auto"
                                               src={Ic_generelt}
-                                              alt="image"
+                                              alt="logo"
                                             />
                                             <h2 className="text-black text-base md:text-lg lg:text-xl desktop:text-2xl font-semibold">
                                               {item[0]}
@@ -1545,12 +1624,13 @@ export const BankleadsDetails = () => {
                                                   <img
                                                     fetchPriority="auto"
                                                     src={Ic_check_true}
-                                                    alt="image"
+                                                    alt="logo"
                                                   />
                                                   <span>
                                                     {rule?.norwegian_text
                                                       ? rule.norwegian_text
-                                                      : rule.rule_name}
+                                                      : rule.rule_name}{" "}
+                                                    (Regulation plan)
                                                   </span>
                                                 </div>
                                               )
@@ -1843,44 +1923,58 @@ export const BankleadsDetails = () => {
                             </div>
                           </div>
                         )}
-                        {/* {loading ? (
-                      <div
-                        className="w-1/2 h-[300px] rounded-md custom-shimmer"
-                        style={{ borderRadius: "8px" }}
-                      ></div>
-                    ) : (
-                      <div className="relative w-full md:w-1/2">
-                        <div className="flex justify-between items-center mb-4 md:mb-6">
-                          <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
-                            Kommuneplan for{" "}
-                            {
-                              CadastreDataFromApi?.presentationAddressApi
-                                ?.response?.item?.municipality?.municipalityName
-                            }
-                          </h2>
-                          <img src={Ic_generelt} alt="images" />
-                        </div>
-                        <div className="flex flex-col gap-2 md:gap-3">
-                          {askData &&
-                            askData?.applicable_rules?.map(
-                              (a: any, index: number) => (
-                                <div
-                                  className="flex items-start gap-2 md:gap-3 text-gray text-sm md:text-base"
-                                  key={index}
-                                >
-                                  <img src={Ic_check_true} alt="images" />
-                                  <div>
-                                    {a.rule}{" "}
-                                    <span className="text-primary font-bold">
-                                      {a.section}
-                                    </span>
-                                  </div>
-                                </div>
-                              )
-                            )}
-                        </div>
                       </div>
-                    )} */}
+                      <div className="relative w-full md:w-1/2">
+                        <div className="flex flex-col gap-5 lg:gap-9">
+                          <h2 className="text-black text-lg md:text-xl lg:text-2xl desktop:text-[28px] font-semibold">
+                            Kommuneplan
+                          </h2>
+                          {KommuneRule && !KommuneRuleLoading ? (
+                            <>
+                              {KommuneRule?.rules?.length > 0 ? (
+                                <div className="flex flex-col gap-3">
+                                  {KommuneRule?.rules.map(
+                                    (item: any, index: number) => {
+                                      return (
+                                        <div key={index}>
+                                          <div className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base">
+                                            <img
+                                              fetchPriority="auto"
+                                              src={Ic_check_true}
+                                              alt="logo"
+                                            />
+                                            <span>{item?.rule}</span>
+                                          </div>
+                                        </div>
+                                      );
+                                    }
+                                  )}
+                                </div>
+                              ) : (
+                                <div>Ingen regel funnet!</div>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {Array.from({ length: 4 }).map(
+                                (_: any, index: number) => (
+                                  <div key={index}>
+                                    <div className="flex gap-2 items-center mb-4 lg:mb-6">
+                                      <div className="w-[100px] h-[20px] rounded-lg custom-shimmer"></div>
+                                      <div className="w-[100px] h-[20px] rounded-lg custom-shimmer"></div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2 md:gap-3">
+                                      <div className="w-full h-[25px] rounded-lg custom-shimmer"></div>
+                                      <div className="w-full h-[25px] rounded-lg custom-shimmer"></div>
+                                      <div className="w-full h-[25px] rounded-lg custom-shimmer"></div>
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </>

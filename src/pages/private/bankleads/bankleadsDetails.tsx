@@ -232,6 +232,12 @@ export const BankleadsDetails = () => {
         setBoxData(json);
 
         if (!json?.plan_link) {
+          setDocuments({});
+          setKommunePlan({});
+          setPlanDocuments([]);
+          setExemptions([]);
+          setResult({});
+          setKommuneLoading(false);
           return;
         }
 

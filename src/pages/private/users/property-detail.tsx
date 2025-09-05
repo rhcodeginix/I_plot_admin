@@ -88,7 +88,7 @@ export const PropertyDetail = () => {
     { id: "Plandokumenter", label: "Plandokumenter" },
     { id: "Dokumenter", label: "Dokumenter" },
     { id: "Planleggingsdokumenter", label: "Planleggingsdokumenter" },
-    { id: "Unntak", label: "Unntak" },
+    { id: "Dispensasjoner", label: "Dispensasjoner" },
     { id: "Kommuneplaner", label: "Kommuneplaner" },
   ];
   const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
@@ -522,6 +522,8 @@ export const PropertyDetail = () => {
           ? filePath?.link?.split("/").pop()?.split("?")[0] || "download.pdf"
           : filePath?.name || "download.pdf"
       );
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
 
       document.body.appendChild(link);
       link.click();
@@ -1939,7 +1941,7 @@ export const PropertyDetail = () => {
                 )}
               </>
             )}
-            {activeTab === "Unntak" && (
+            {activeTab === "Dispensasjoner" && (
               <>
                 {documentLoading ? (
                   <>

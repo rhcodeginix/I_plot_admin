@@ -1772,7 +1772,7 @@ export const ConstructedPlotDetail = () => {
                                       className="relative"
                                       ref={dropdownRuleRef}
                                     >
-                                      <div className="flex items-start gap-2 md:gap-3 text-secondary text-sm lg:text-base">
+                                      <div className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base">
                                         <img src={Ic_check_true} alt="image" />
                                         <span>{item?.rule}</span>
                                         <img
@@ -1785,7 +1785,7 @@ export const ConstructedPlotDetail = () => {
                                         />
                                       </div>
                                       {openIndex === index && (
-                                        <div className="top-3 z-100 bg-white shadow-shadow1 p-3 bg-gray-100 rounded-lg text-sm text-secondary absolute right-0 w-auto max-w-64">
+                                        <div className="top-3 z-100 bg-white shadow-shadow1 p-3 rounded-lg text-sm text-gray absolute right-0 w-auto max-w-64">
                                           {item.description}
                                         </div>
                                       )}

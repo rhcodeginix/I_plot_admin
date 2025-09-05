@@ -19,6 +19,7 @@ import { Building2, House } from "lucide-react";
 import Tilpass from "./Tilpass";
 import Ic_file from "../../../assets/images/Ic_file.svg";
 import Ic_download_primary from "../../../assets/images/Ic_download_primary.svg";
+import Ic_info_circle from "../../../assets/images/Ic_info_circle.svg";
 import GoogleMapComponent from "../../../components/ui/map";
 
 export const BankleadsDetails = () => {
@@ -570,6 +571,29 @@ export const BankleadsDetails = () => {
       </div>
     </div>
   );
+
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggleRuleDropdown = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+  const dropdownRuleRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRuleRef.current &&
+        !dropdownRuleRef.current.contains(event.target as Node)
+      ) {
+        setOpenIndex(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -1604,11 +1628,7 @@ export const BankleadsDetails = () => {
                                       return (
                                         <div key={index}>
                                           <div className="flex gap-2 items-center mb-4 lg:mb-6">
-                                            <img
-                                              fetchPriority="auto"
-                                              src={Ic_generelt}
-                                              alt="logo"
-                                            />
+                                            <img src={Ic_generelt} alt="logo" />
                                             <h2 className="text-black text-base md:text-lg lg:text-xl desktop:text-2xl font-semibold">
                                               {item[0]}
                                             </h2>
@@ -1622,7 +1642,6 @@ export const BankleadsDetails = () => {
                                                   key={idx}
                                                 >
                                                   <img
-                                                    fetchPriority="auto"
                                                     src={Ic_check_true}
                                                     alt="logo"
                                                   />
@@ -1691,7 +1710,7 @@ export const BankleadsDetails = () => {
                                   key={index}
                                 >
                                   <img
-                                    fetchPriority="auto"
+                                    
                                     src={Ic_check_true}
                                     alt="image"
                                   />
@@ -1936,15 +1955,31 @@ export const BankleadsDetails = () => {
                                   {KommuneRule?.rules.map(
                                     (item: any, index: number) => {
                                       return (
-                                        <div key={index}>
-                                          <div className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base">
+                                        <div
+                                          key={index}
+                                          className="relative"
+                                          ref={dropdownRuleRef}
+                                        >
+                                          <div className="flex items-start gap-2 md:gap-3 text-secondary text-sm lg:text-base">
                                             <img
-                                              fetchPriority="auto"
                                               src={Ic_check_true}
-                                              alt="logo"
+                                              alt="image"
                                             />
                                             <span>{item?.rule}</span>
+                                            <img
+                                              src={Ic_info_circle}
+                                              alt="info"
+                                              className="cursor-pointer"
+                                              onClick={() =>
+                                                toggleRuleDropdown(index)
+                                              }
+                                            />
                                           </div>
+                                          {openIndex === index && (
+                                            <div className="top-3 z-100 bg-white shadow-shadow1 p-3 bg-gray-100 rounded-lg text-sm text-secondary absolute right-0 w-auto max-w-64">
+                                              {item.description}
+                                            </div>
+                                          )}
                                         </div>
                                       );
                                     }

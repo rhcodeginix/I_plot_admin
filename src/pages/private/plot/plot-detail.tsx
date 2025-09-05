@@ -16,6 +16,7 @@ import Ic_generelt from "../../../assets/images/Ic_generelt.svg";
 import Ic_check_true from "../../../assets/images/Ic_check_true.svg";
 import Ic_chevron_right from "../../../assets/images/Ic_chevron_right.svg";
 import Ic_check_green_icon from "../../../assets/images/Ic_check_green_icon.svg";
+import Ic_info_circle from "../../../assets/images/Ic_info_circle.svg";
 import Img_line_bg from "../../../assets/images/Img_line_bg.png";
 import { formatDateToDDMMYYYY } from "../../../lib/utils";
 import Eierinformasjon from "./Eierinformasjon";
@@ -569,6 +570,28 @@ export const PlotDetail = () => {
       </div>
     </div>
   );
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggleRuleDropdown = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+  const dropdownRuleRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRuleRef.current &&
+        !dropdownRuleRef.current.contains(event.target as Node)
+      ) {
+        setOpenIndex(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -1746,15 +1769,28 @@ export const PlotDetail = () => {
                               {KommuneRule?.rules.map(
                                 (item: any, index: number) => {
                                   return (
-                                    <div key={index}>
-                                      <div className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base">
-                                        <img
-                                          fetchPriority="auto"
-                                          src={Ic_check_true}
-                                          alt="logo"
-                                        />
+                                    <div
+                                      key={index}
+                                      className="relative"
+                                      ref={dropdownRuleRef}
+                                    >
+                                      <div className="flex items-start gap-2 md:gap-3 text-secondary text-sm lg:text-base">
+                                        <img src={Ic_check_true} alt="image" />
                                         <span>{item?.rule}</span>
+                                        <img
+                                          src={Ic_info_circle}
+                                          alt="info"
+                                          className="cursor-pointer"
+                                          onClick={() =>
+                                            toggleRuleDropdown(index)
+                                          }
+                                        />
                                       </div>
+                                      {openIndex === index && (
+                                        <div className="top-3 z-100 bg-white shadow-shadow1 p-3 bg-gray-100 rounded-lg text-sm text-secondary absolute right-0 w-auto max-w-64">
+                                          {item.description}
+                                        </div>
+                                      )}
                                     </div>
                                   );
                                 }

@@ -154,8 +154,8 @@ export const AddSuppliersForm = () => {
   const uploadFile = async (file: File, fieldName: any) => {
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error("Image size must be less than 2MB.", {
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image size must be less than 5MB.", {
         position: "top-right",
       });
       return;

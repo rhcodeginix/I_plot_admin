@@ -324,7 +324,7 @@ export const Husdetaljer: React.FC<{
   const uploadFile = async (file: File, fieldName: any) => {
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
+    if (file.size > 5 * 1024 * 1024) {
       toast.error("Image size must be less than 2MB.", {
         position: "top-right",
       });
@@ -374,7 +374,7 @@ export const Husdetaljer: React.FC<{
     ];
 
     const uploadPromises = Array.from(files).map(async (file) => {
-      if (file.size > 2 * 1024 * 1024) {
+      if (file.size > 5 * 1024 * 1024) {
         toast.error("Image size must be less than 2MB.", {
           position: "top-right",
         });
@@ -433,7 +433,7 @@ export const Husdetaljer: React.FC<{
     let newImages = [...(documents || [])];
 
     const uploadPromises = Array.from(files).map(async (file) => {
-      if (file.size > 2 * 1024 * 1024) {
+      if (file.size > 5 * 1024 * 1024) {
         toast.error("Image size must be less than 2MB.", {
           position: "top-right",
         });

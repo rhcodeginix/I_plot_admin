@@ -616,7 +616,7 @@ export const Eksterior: React.FC<{
                                     for (let i = 0; i < files.length; i++) {
                                       const file: any = files[i];
 
-                                      if (file.size > 2 * 1024 * 1024) {
+                                      if (file.size > 5 * 1024 * 1024) {
                                         toast.error(
                                           "Image size must be less than 2MB.",
                                           {

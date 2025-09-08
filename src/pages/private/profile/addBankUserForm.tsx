@@ -78,7 +78,7 @@ export const BankProfileForm = () => {
   const uploadFile = async (file: File, fieldName: any) => {
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
+    if (file.size > 5 * 1024 * 1024) {
       toast.error("Image size must be less than 2MB.", {
         position: "top-right",
       });

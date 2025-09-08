@@ -194,6 +194,7 @@ export const PropertyDetail = () => {
   const [KommuneLoading, setKommuneLoading] = useState(true);
   const [KommuneRule, setKommuneRule] = useState<any>(null);
   const [KommuneRuleLoading, setKommuneRuleLoading] = useState<any>(false);
+  const [otherDocumentInput, setOtherDocumentInput] = useState<any>(null);
 
   useEffect(() => {
     const fetchPlotData = async () => {
@@ -224,29 +225,52 @@ export const PropertyDetail = () => {
           setExemptions([]);
           setResult({});
           setKommuneLoading(false);
+          setOtherDocumentInput({});
           return;
         }
 
-        const resolveApiCall = {
-          name: "resolve",
-          url: "https://iplotnor-areaplanner.hf.space/resolve",
-          body: {
-            step1_url: json.plan_link,
-            api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
+        const apis = [
+          {
+            name: "resolve",
+            url: "https://iplotnor-areaplanner.hf.space/resolve",
+            body: {
+              step1_url: json.plan_link,
+              api_token: process.env.REACT_APP_DOCUMENT_TOKEN,
+            },
           },
-        };
+          {
+            name: "other-documents",
+            url: "https://iplotnor-areaplanner.hf.space/other-documents",
+            body: {
+              step1_url: json.plan_link,
+              api_token: process.env.REACT_APP_DOCUMENT_TOKEN,
+            },
+          },
+        ];
 
-        const resolveResult = await makeApiCall(resolveApiCall);
-        if (!resolveResult.success) {
+        const apisResults = await Promise.all(apis.map((c) => makeApiCall(c)));
+
+        const resolveResult: any = apisResults.find(
+          (r) => r.name === "resolve"
+        );
+        const otherDocsResult = apisResults.find(
+          (r) => r.name === "other-documents"
+        );
+
+        if (!resolveResult.success || !otherDocsResult?.success) {
           setDocuments({});
           setKommunePlan({});
           setPlanDocuments([]);
           setExemptions([]);
+          setOtherDocumentInput({});
           setResult({});
           setKommuneLoading(false);
           return;
         }
         setDocuments(resolveResult.data);
+        setPlanDocuments(otherDocsResult?.data?.planning_treatments ?? []);
+        setExemptions(otherDocsResult?.data?.exemptions ?? []);
+        setOtherDocumentInput(otherDocsResult?.data?.inputs ?? {});
 
         const internalPlanId = resolveResult.data?.inputs?.internal_plan_id;
         if (!internalPlanId) {
@@ -260,9 +284,11 @@ export const PropertyDetail = () => {
           const data = existingDoc.data();
           setDocuments(data?.resolve ?? {});
           setKommunePlan(data?.kommuneplanens ?? {});
-          setPlanDocuments(data["other-documents"]?.planning_treatments ?? []);
-          setExemptions(data["other-documents"]?.exemptions ?? []);
+          // setPlanDocuments(data["other-documents"]?.planning_treatments ?? []);
+          // setExemptions(data["other-documents"]?.exemptions ?? []);
+          // setOtherDocumentInput(data["other-documents"]?.inputs ?? {});
           setResult(data?.extract_json_direct_gpt?.data ?? {});
+
           setKommuneLoading(false);
 
           if (data?.kommuneplanens?.rule_book?.link && !data?.kommune_rules) {
@@ -322,14 +348,14 @@ export const PropertyDetail = () => {
                 debug_mode: true,
               },
             },
-            {
-              name: "other-documents",
-              url: "https://iplotnor-areaplanner.hf.space/other-documents",
-              body: {
-                step1_url: json.plan_link,
-                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
-              },
-            },
+            // {
+            //   name: "other-documents",
+            //   url: "https://iplotnor-areaplanner.hf.space/other-documents",
+            //   body: {
+            //     step1_url: json.plan_link,
+            //     api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
+            //   },
+            // },
           ];
 
           const otherResults = await Promise.all(
@@ -352,10 +378,11 @@ export const PropertyDetail = () => {
                 setKommunePlan(r.data);
                 setKommuneLoading(false);
               }
-              if (r.name === "other-documents") {
-                setPlanDocuments(r.data?.planning_treatments ?? []);
-                setExemptions(r.data?.exemptions ?? []);
-              }
+              // if (r.name === "other-documents") {
+              //   setPlanDocuments(r.data?.planning_treatments ?? []);
+              //   setExemptions(r.data?.exemptions ?? []);
+              //   setOtherDocumentInput(r.data?.inputs ?? {});
+              // }
             }
           });
 
@@ -416,6 +443,7 @@ export const PropertyDetail = () => {
         }
       } catch (error) {
         console.error("Error fetching plot data:", error);
+      } finally {
       }
     };
 
@@ -454,10 +482,11 @@ export const PropertyDetail = () => {
           setKommuneLoading(false);
           break;
 
-        case "other-documents":
-          setPlanDocuments(data?.planning_treatments ?? []);
-          setExemptions(data?.exemptions ?? []);
-          break;
+        // case "other-documents":
+        //   setPlanDocuments(data?.planning_treatments ?? []);
+        //   setOtherDocumentInput(data?.inputs ?? {});
+        //   setExemptions(data?.exemptions ?? []);
+        //   break;
       }
 
       return {
@@ -485,10 +514,11 @@ export const PropertyDetail = () => {
           setKommuneLoading(false);
           break;
 
-        case "other-documents":
-          setPlanDocuments([]);
-          setExemptions([]);
-          break;
+        // case "other-documents":
+        //   setPlanDocuments([]);
+        //   setOtherDocumentInput({});
+        //   setExemptions([]);
+        //   break;
       }
 
       return {
@@ -535,6 +565,61 @@ export const PropertyDetail = () => {
     }
   };
 
+  const handleDownloads = async (filePath: any) => {
+    if (!filePath?.id) {
+      console.error("File ID is missing!");
+      return;
+    }
+    let finalData: any;
+    try {
+      const response = await fetch(
+        `https://api.arealplaner.no/api/kunder/${otherDocumentInput?.tenant}/dokumenter/${filePath.id}`,
+        {
+          headers: {
+            "x-waapi-token": process.env.REACT_APP_DOCUMENT_TOKEN || "",
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to fetch document info");
+
+      const data = await response.json();
+
+      if (!data?.direkteUrl) {
+        console.error("Direct URL for file is missing!");
+        return;
+      }
+      finalData = data;
+
+      const fileResponse = await fetch(data.direkteUrl, {
+        headers: {
+          "x-waapi-token": process.env.REACT_APP_DOCUMENT_TOKEN || "",
+        },
+      });
+
+      if (!fileResponse.ok) throw new Error("Failed to fetch file");
+
+      const blob = await fileResponse.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        filePath?.name?.toLowerCase().includes("unknown")
+          ? data.direkteUrl.split("/").pop()?.split("?")[0] || "download.pdf"
+          : filePath?.name || "download.pdf"
+      );
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      window.open(finalData.direkteUrl, "_blank");
+    }
+  };
+
   const DocumentCard = ({
     doc,
     handleDownload,
@@ -560,7 +645,16 @@ export const PropertyDetail = () => {
           src={Ic_download_primary}
           alt="download"
           className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
-          onClick={() => handleDownload(doc)}
+          onClick={() => {
+            if (
+              activeTab === "Planleggingsdokumenter" ||
+              activeTab === "Dispensasjoner"
+            ) {
+              handleDownloads(doc);
+            } else {
+              handleDownload(doc);
+            }
+          }}
         />
       </div>
     </div>

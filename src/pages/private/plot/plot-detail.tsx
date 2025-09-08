@@ -1472,8 +1472,7 @@ export const PlotDetail = () => {
                                               <span>
                                                 {rule?.norwegian_text
                                                   ? rule.norwegian_text
-                                                  : rule.rule_name}{" "}
-                                                (Regulation plan)
+                                                  : rule.rule_name}
                                               </span>
                                             </div>
                                           )

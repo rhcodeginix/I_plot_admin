@@ -332,7 +332,7 @@ export const FremdriftsplanOg: React.FC<{
                                               : "border-gray1"
                                           } `}
                               type="date"
-                              disable
+                              disable={index === 0 ? false : true}
                             />
                           </FormControl>
                           <FormMessage />

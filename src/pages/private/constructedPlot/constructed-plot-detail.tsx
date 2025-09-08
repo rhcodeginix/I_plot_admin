@@ -804,7 +804,7 @@ export const ConstructedPlotDetail = () => {
       <div className="bg-lightGreen py-4 md:py-5 relative px-4 md:px-6">
         <img
           src={Img_line_bg}
-          alt="images"
+          alt="line"
           className="absolute top-0 left-0 w-full h-full"
           style={{ zIndex: 1 }}
         />
@@ -1774,34 +1774,6 @@ export const ConstructedPlotDetail = () => {
                       ></div>
                     ) : (
                       <div className="relative w-full md:w-1/2">
-                        {/* <div>
-                   <div className="flex justify-between items-center mb-4 md:mb-6">
-                     <h2 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
-                       Reguleringsplan
-                     </h2>
-                     <img src={Ic_generelt} alt="images" />
-                   </div>
-                   <div className="flex flex-col gap-2 md:gap-3">
-                     <>
-                       {(
-                         (askData && askData?.conclusion) ||
-                         allQuotes
-                       )?.map((a: any, index: number) => (
-                         <div
-                           className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base"
-                           key={index}
-                         >
-                           <img
-                             
-                             src={Ic_check_true}
-                             alt="image"
-                           />
-                           <span>{a?.quote ? a?.quote : a}</span>
-                         </div>
-                       ))}
-                     </>
-                   </div>
-                 </div> */}
                         {/* <div className="w-full flex flex-col gap-4 md:gap-8 items-center mt-7 md:mt-[55px]">
                           <div className="rounded-[12px] overflow-hidden w-full relative border border-[#7D89B0] h-[450px] md:h-[590px]">
                             {imgLoading && (
@@ -2041,7 +2013,7 @@ export const ConstructedPlotDetail = () => {
                                       ref={dropdownRuleRef}
                                     >
                                       <div className="flex items-start gap-2 md:gap-3 text-gray text-sm lg:text-base">
-                                        <img src={Ic_check_true} alt="image" />
+                                        <img src={Ic_check_true} alt="check" />
                                         <span>{item?.rule}</span>
                                         <img
                                           src={Ic_info_circle}

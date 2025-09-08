@@ -68,7 +68,7 @@ export const UserDetail = () => {
       <div className="bg-lightGreen py-4 md:py-5 relative px-4 md:px-6">
         <img
           src={Img_line_bg}
-          alt="images"
+          alt="line"
           className="absolute top-0 left-0 w-full h-full"
           style={{ zIndex: 1 }}
         />

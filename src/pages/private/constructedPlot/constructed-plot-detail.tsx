@@ -14,7 +14,7 @@ import Ic_x_close from "../../../assets/images/Ic_x_close.svg";
 import Ic_check from "../../../assets/images/Ic_check.svg";
 import Ic_generelt from "../../../assets/images/Ic_generelt.svg";
 import Ic_check_true from "../../../assets/images/Ic_check_true.svg";
-import Ic_chevron_right from "../../../assets/images/Ic_chevron_right.svg";
+// import Ic_chevron_right from "../../../assets/images/Ic_chevron_right.svg";
 import Ic_check_green_icon from "../../../assets/images/Ic_check_green_icon.svg";
 import Img_line_bg from "../../../assets/images/Img_line_bg.png";
 import { formatDateToDDMMYYYY } from "../../../lib/utils";
@@ -25,13 +25,14 @@ import Ic_file from "../../../assets/images/Ic_file.svg";
 import Ic_download_primary from "../../../assets/images/Ic_download_primary.svg";
 import GoogleMapComponent from "../../../components/ui/map";
 import Ic_info_circle from "../../../assets/images/Ic_info_circle.svg";
+import Modal from "../../../components/common/modal";
 
 export const ConstructedPlotDetail = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
   const [loading, setLoading] = useState(false);
-  const [imgLoading, setImgLoading] = useState(false);
+  // const [imgLoading, setImgLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const [viewerData, setViewerData] = useState<any>(null);
   const [askData, setAskData] = useState<any | null>(null);
@@ -88,10 +89,10 @@ export const ConstructedPlotDetail = () => {
     }
   }, [id]);
 
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<any>("Eiendomsinformasjon");
 
-  const toggleAccordion = () => {
-    setIsOpen(!isOpen);
+  const toggleAccordion = (key: string) => {
+    setIsOpen((prev: any) => (prev === key ? "" : key));
   };
 
   const lamdaDataFromApi = data?.lamdaDataFromApi;
@@ -115,27 +116,27 @@ export const ConstructedPlotDetail = () => {
     CadastreDataFromApi?.cadastreApi?.response?.item?.geojson?.bbox;
 
   const isValidBBOX = Array.isArray(BBOXData) && BBOXData.length === 4;
-  const scrollContainerRef: any = useRef(null);
+  // const scrollContainerRef: any = useRef(null);
 
-  const scrollByAmount = 90;
+  // const scrollByAmount = 90;
 
-  const handleScrollUp = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
-        left: -scrollByAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+  // const handleScrollUp = () => {
+  //   if (scrollContainerRef.current) {
+  //     scrollContainerRef.current.scrollBy({
+  //       left: -scrollByAmount,
+  //       behavior: "smooth",
+  //     });
+  //   }
+  // };
 
-  const handleScrollDown = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
-        left: scrollByAmount,
-        behavior: "smooth",
-      });
-    }
-  };
+  // const handleScrollDown = () => {
+  //   if (scrollContainerRef.current) {
+  //     scrollContainerRef.current.scrollBy({
+  //       left: scrollByAmount,
+  //       behavior: "smooth",
+  //     });
+  //   }
+  // };
   const adjustedBBOX: any = isValidBBOX && [
     BBOXData[0] - 30,
     BBOXData[1] - 30,
@@ -183,21 +184,21 @@ export const ConstructedPlotDetail = () => {
       ]
     : [];
 
-  const [selectedImage, setSelectedImage] = useState<any>(null);
+  // const [selectedImage, setSelectedImage] = useState<any>(null);
 
-  useEffect(() => {
-    if (!selectedImage && images.length > 0) {
-      setSelectedImage(images[0]);
-    }
-  }, [images, selectedImage]);
-  const handleImageClick = (image: any) => {
-    if (selectedImage?.id === image.id) {
-      setImgLoading(false);
-    } else {
-      setImgLoading(true);
-    }
-    setSelectedImage(image);
-  };
+  // useEffect(() => {
+  //   if (!selectedImage && images.length > 0) {
+  //     setSelectedImage(images[0]);
+  //   }
+  // }, [images, selectedImage]);
+  // const handleImageClick = (image: any) => {
+  //   if (selectedImage?.id === image.id) {
+  //     setImgLoading(false);
+  //   } else {
+  //     setImgLoading(true);
+  //   }
+  //   setSelectedImage(image);
+  // };
 
   const [BoxData, setBoxData] = useState<any>(null);
   const [Documents, setDocuments] = useState<any>(null);
@@ -604,6 +605,106 @@ export const ConstructedPlotDetail = () => {
     };
   }, []);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+
+  const maxVisible = 4;
+  const extraImages = images.length - maxVisible;
+
+  const [isSingleModalOpen, setIsSingleModalOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [zoom, setZoom] = useState(1);
+
+  const handleSingleModal = (index: number) => {
+    setSelectedIndex(index);
+    setZoom(1);
+    setIsSingleModalOpen(true);
+  };
+
+  const handleSingleCloseModal = () => {
+    setIsSingleModalOpen(false);
+    setSelectedIndex(null);
+    setZoom(1);
+  };
+
+  const [baseScale, setBaseScale] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
+  const [translateX, setTranslateX] = useState(0);
+  const [translateY, setTranslateY] = useState(0);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (!isSingleModalOpen || selectedIndex === null) return;
+
+    const container = containerRef.current;
+    const img = imgRef.current;
+
+    if (container && img) {
+      const cRect = container.getBoundingClientRect();
+      const imgW = img.naturalWidth;
+      const imgH = img.naturalHeight;
+
+      if (imgW && imgH) {
+        const cover = Math.max(cRect.width / imgW, cRect.height / imgH);
+        setBaseScale(cover);
+        setZoom(cover);
+        setTranslateX(0);
+        setTranslateY(0);
+      }
+    }
+  }, [isSingleModalOpen, selectedIndex]);
+
+  const clampPosition = (x: number, y: number) => {
+    if (!containerRef.current || !imgRef.current) return { x, y };
+
+    const container = containerRef.current.getBoundingClientRect();
+    const imgW = imgRef.current.naturalWidth * zoom;
+    const imgH = imgRef.current.naturalHeight * zoom;
+
+    const maxX = Math.max(0, (imgW - container.width) / 2);
+    const maxY = Math.max(0, (imgH - container.height) / 2);
+
+    return {
+      x: Math.min(maxX, Math.max(-maxX, x)),
+      y: Math.min(maxY, Math.max(-maxY, y)),
+    };
+  };
+
+  const handleZoomIn = () => setZoom((z) => z + 0.25);
+  const handleZoomOut = () =>
+    setZoom((z) => {
+      const newZoom = Math.max(baseScale, z - 0.25);
+      if (newZoom === baseScale) {
+        setTranslateX(0);
+        setTranslateY(0);
+      }
+      return newZoom;
+    });
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (zoom > baseScale) {
+      setIsDragging(true);
+      setStartX(e.clientX - translateX);
+      setStartY(e.clientY - translateY);
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const newX = e.clientX - startX;
+    const newY = e.clientY - startY;
+    const { x, y } = clampPosition(newX, newY);
+    setTranslateX(x);
+    setTranslateY(y);
+  };
+
+  const handleMouseUp = () => setIsDragging(false);
+
   return (
     <>
       <div className="bg-lightGreen py-4 md:py-5 relative px-4 md:px-6">
@@ -871,18 +972,22 @@ export const ConstructedPlotDetail = () => {
         >
           <div
             className="flex items-center justify-between gap-2 cursor-pointer"
-            onClick={toggleAccordion}
+            onClick={() => toggleAccordion("Eiendomsinformasjon")}
           >
             <h3 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
               Eiendomsinformasjon
             </h3>
-            {isOpen ? (
+            {isOpen === "Eiendomsinformasjon" ? (
               <img src={Ic_chevron_up} alt="arrow" />
             ) : (
               <img src={Ic_chevron_up} alt="arrow" className="rotate-180" />
             )}
           </div>
-          <div className={`mt-6 ${isOpen ? "block" : "hidden"}`}>
+          <div
+            className={`mt-6 ${
+              isOpen === "Eiendomsinformasjon" ? "block" : "hidden"
+            }`}
+          >
             <div className="flex flex-col desktop:flex-row gap-4 md:gap-6 desktop:gap-4 big:gap-6 justify-between">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 desktop:gap-4 big:gap-6">
                 <div className="bg-gray3 rounded-[8px] p-3 md:p-5 flex flex-col gap-3 md:gap-4">
@@ -1412,6 +1517,68 @@ export const ConstructedPlotDetail = () => {
             </div>
           </div>
         </div>
+
+        <div
+          className="p-4 md:p-6 rounded-lg mt-[44px]"
+          style={{
+            boxShadow: "0px 2px 4px -2px #1018280F, 0px 4px 8px -2px #1018281A",
+          }}
+        >
+          <div
+            className="flex items-center justify-between gap-2 cursor-pointer"
+            onClick={() => toggleAccordion("Arkitekturplan")}
+          >
+            {loading ? (
+              <div className="w-[100px] h-[20px] rounded-lg custom-shimmer"></div>
+            ) : (
+              <h3 className="text-black text-lg md:text-xl desktop:text-2xl font-semibold">
+                Arkitekturplan
+              </h3>
+            )}
+            {isOpen === "Arkitekturplan" ? (
+              <img src={Ic_chevron_up} alt="arrow" />
+            ) : (
+              <img src={Ic_chevron_up} alt="arrow" className="rotate-180" />
+            )}
+          </div>
+          <div
+            className={`mt-6 ${
+              isOpen === "Arkitekturplan" ? "block" : "hidden"
+            }`}
+          >
+            <div className="relative w-full">
+              <div className="gap-4 md:gap-6 lg:gap-8 grid grid-cols-2 md:grid-cols-4">
+                {images
+                  .slice(0, maxVisible)
+                  .map((image: any, index: number) => {
+                    const isLast =
+                      index === maxVisible - 1 && images.length > maxVisible;
+                    return (
+                      <div
+                        key={index}
+                        className="relative cursor-pointer rounded-[12px] overflow-hidden"
+                        onClick={() => handleSingleModal(index)}
+                      >
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          className="w-full h-full object-cover border border-[#7D89B033]"
+                        />
+                        {isLast && (
+                          <div
+                            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-xl font-bold"
+                            onClick={isLast ? handleOpenModal : undefined}
+                          >
+                            +{extraImages}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="w-full mt-8 md:mt-[44px]">
           <div className="flex border-b border-[#DDDDDD] overflow-x-auto overflowXAuto">
             {tabs.map((tab: any) => (
@@ -1541,7 +1708,7 @@ export const ConstructedPlotDetail = () => {
                      </>
                    </div>
                  </div> */}
-                        <div className="w-full flex flex-col gap-4 md:gap-8 items-center mt-7 md:mt-[55px]">
+                        {/* <div className="w-full flex flex-col gap-4 md:gap-8 items-center mt-7 md:mt-[55px]">
                           <div className="rounded-[12px] overflow-hidden w-full relative border border-[#7D89B0] h-[450px] md:h-[590px]">
                             {imgLoading && (
                               <div className="absolute inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10">
@@ -1758,7 +1925,7 @@ export const ConstructedPlotDetail = () => {
                               </div>
                             )}
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     )}
                   </div>
@@ -2161,6 +2328,88 @@ export const ConstructedPlotDetail = () => {
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <Modal isOpen={false} onClose={() => setIsModalOpen(false)}>
+          <div className="bg-white p-4 md:p-7 rounded-lg max-w-[85vw] md:max-w-4xl w-full relative h-[80vh] overflow-y-auto">
+            <button
+              className="absolute top-2 md:top-3 right-0 md:right-3"
+              onClick={() => setIsModalOpen(false)}
+            >
+              <img src={Ic_x_close} alt="close" />
+            </button>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {images.map((image: any, index: number) => (
+                <img
+                  key={index}
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-auto rounded-[12px]"
+                />
+              ))}
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {isSingleModalOpen && selectedIndex !== null && (
+        <Modal onClose={() => setIsSingleModalOpen(false)} isOpen={false}>
+          <div className="bg-white p-4 md:p-7 rounded-lg max-w-[85vw] md:max-w-5xl w-full relative">
+            <button
+              className="absolute top-2 md:top-3 right-0 md:right-3"
+              onClick={() => handleSingleCloseModal()}
+            >
+              <img src={Ic_x_close} alt="close" />
+            </button>
+
+            <div className="flex gap-4 mb-4">
+              <button
+                onClick={handleZoomOut}
+                className="px-3 py-1 bg-darkGreen text-white rounded"
+              >
+                -
+              </button>
+              <button
+                onClick={handleZoomIn}
+                className="px-3 py-1 bg-darkGreen text-white rounded"
+              >
+                +
+              </button>
+            </div>
+
+            <div
+              ref={containerRef}
+              className="relative overflow-hidden max-h-[80vh] max-w-[90vw] border border-gray rounded-lg touch-none flex items-center justify-center"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+            >
+              <img
+                ref={imgRef}
+                src={images[selectedIndex].src}
+                alt={images[selectedIndex].alt}
+                draggable={false}
+                className="select-none"
+                style={{
+                  cursor:
+                    zoom > baseScale
+                      ? isDragging
+                        ? "grabbing"
+                        : "grab"
+                      : "default",
+                  transform: `translate(${translateX}px, ${translateY}px) scale(${zoom})`,
+                  transformOrigin: "center center",
+                  transition: isDragging ? "none" : "transform 0.2s ease",
+                  maxWidth: "none",
+                  maxHeight: "none",
+                }}
+              />
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

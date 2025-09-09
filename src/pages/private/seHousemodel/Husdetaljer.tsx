@@ -165,7 +165,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
                 {displayedImages.map((image: any, index: number) => (
                   <div
                     key={index}
-                    className="relative overflow-hidden h-full w-full"
+                    className="relative overflow-hidden h-[100px] md:h-[130px] lg:h-full w-full"
                   >
                     <img
                       src={image}

@@ -6,6 +6,7 @@ import { formatCurrency } from "../../../lib/utils";
 import Modal from "../../../components/common/modal";
 import FileInfo from "../../../components/FileInfo";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
+import Plantegninger from "./Plantegninger";
 
 const handleDownload = async (filePath: string) => {
   try {
@@ -528,11 +529,7 @@ export const Husdetaljer: React.FC<{ husmodellData: any; loading: any }> = ({
               style={{ borderRadius: "8px" }}
             ></div>
           ) : (
-            <img
-              src={husmodellData?.PlantegningerFasader[0]}
-              alt="map"
-              className="w-full"
-            />
+            <Plantegninger loading={loading} husmodellData={husmodellData} />
           )}
         </div>
         <div className="w-full md:w-[57%]">

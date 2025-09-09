@@ -260,7 +260,7 @@ export const InventoryForm: React.FC = () => {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6 mb-16">
+          <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6 mb-16 items-center">
             <div>
               <FormField
                 control={form.control}

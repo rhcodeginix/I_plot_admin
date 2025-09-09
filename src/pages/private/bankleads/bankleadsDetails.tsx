@@ -10,7 +10,6 @@ import Ic_chevron_up from "../../../assets/images/Ic_chevron_up.svg";
 import Ic_check from "../../../assets/images/Ic_check.svg";
 import Ic_generelt from "../../../assets/images/Ic_generelt.svg";
 import Ic_check_true from "../../../assets/images/Ic_check_true.svg";
-// import Ic_chevron_right from "../../../assets/images/Ic_chevron_right.svg";
 import { formatDateToDDMMYYYY } from "../../../lib/utils";
 // import NorkartMap from "../../../components/map";
 import Eierinformasjon from "../plot/Eierinformasjon";

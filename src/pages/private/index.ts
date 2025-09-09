@@ -35,3 +35,5 @@ export { PDFTable } from "./events/pdfTable";
 export { PPTTable } from "./events/pptTable";
 export { Profile } from "./profile";
 export { BankleadsDetails } from "./bankleads/bankleadsDetails";
+export { Inventory } from "./Inventory";
+export { AddInventory } from "./addInventory";

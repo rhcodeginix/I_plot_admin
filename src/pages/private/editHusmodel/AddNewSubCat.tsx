@@ -148,13 +148,8 @@ export const AddNewSubCat: React.FC<{
                                       ? "border-red"
                                       : "border-gray1"
                                   } h-4 w-4`}
-                        type="radio"
-                        onChange={(e) => {
-                          const isChecked = e.target.checked;
-                          if (isChecked) {
-                            form.setValue("isSelected", isChecked);
-                          }
-                        }}
+                        type="checkbox"
+                        onChange={(e) => field.onChange(e.target.checked)}
                         checked={field.value}
                       />
                       <p

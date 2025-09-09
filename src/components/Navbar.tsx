@@ -172,6 +172,20 @@ export const Navbar: React.FC = () => {
                 Husmodeller
               </Link>
             )}
+          {(loginUser === "andre.finger@gmail.com" ||
+            (loginUser !== "andre.finger@gmail.com" &&
+              Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95")) && (
+            <Link
+              to={"/inventory"}
+              className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                currentPath === "/inventory"
+                  ? "bg-lightGreen text-primary"
+                  : "text-black"
+              }`}
+            >
+              Inventory
+            </Link>
+          )}
           {/* {((loginUser && loginUser === "andre.finger@gmail.com") ||
             (Role && Role === "Agent")) && (
             <Link
@@ -372,6 +386,20 @@ export const Navbar: React.FC = () => {
                   Husmodeller
                 </Link>
               )}
+            {(loginUser === "andre.finger@gmail.com" ||
+              (loginUser !== "andre.finger@gmail.com" &&
+                Supplier === "065f9498-6cdb-469b-8601-bb31114d7c95")) && (
+              <Link
+                to={"/inventory"}
+                className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
+                  currentPath === "/inventory"
+                    ? "bg-lightGreen text-primary"
+                    : "text-black"
+                }`}
+              >
+                Inventory
+              </Link>
+            )}
             {/* {((loginUser && loginUser === "andre.finger@gmail.com") ||
             (Role && Role === "Agent")) && (
             <Link

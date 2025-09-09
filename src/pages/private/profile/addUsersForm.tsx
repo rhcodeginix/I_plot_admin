@@ -85,7 +85,7 @@ export const AdminProfileForm = () => {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image size must be less than 2MB.", {
+      toast.error("Image size must be less than 5MB.", {
         position: "top-right",
       });
       return;

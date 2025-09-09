@@ -29,6 +29,21 @@ export const fetchHusmodellData = async (id: string) => {
   }
 };
 
+export const fetchInventoryData = async (id: string) => {
+  try {
+    if (id) {
+      const inventoryDocRef = doc(db, "inventory", id);
+      const docSnap = await getDoc(inventoryDocRef);
+
+      if (docSnap.exists()) {
+        return docSnap.data();
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching inventory data:", error);
+  }
+};
+
 export const fetchBankLeadData = async (id: string) => {
   try {
     if (id) {

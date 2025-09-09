@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Copy, Eye, Loader2, Pencil, Trash } from "lucide-react";
+import { Loader2, Pencil, Trash } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -20,132 +20,76 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import Ic_search from "../../../assets/images/Ic_search.svg";
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   query,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import { db } from "../../../config/firebaseConfig";
-import {
-  fetchAdminData,
-  fetchAdminDataByEmail,
-  fetchSupplierData,
-  formatDateTime,
-} from "../../../lib/utils";
+import { fetchAdminData, formatDateTime } from "../../../lib/utils";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Modal from "../../../components/common/modal";
 import Button from "../../../components/common/button";
 
-export const HusmodellerTable = () => {
+export const InventoryTable = () => {
   const [page, setPage] = useState(1);
-  const [houseModels, setHouseModels] = useState([]);
+  const [inventory, setInventory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
-  const [showConfirmCopy, setShowConfirmCopy] = useState(false);
   const [selectedId, setSelectedId] = useState<any>(null);
-  const [suppliersId, setSuppliersId] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [supplierMap, setSupplierMap] = useState<Record<string, any>>({});
 
-  const [permission, setPermission] = useState<any>(null);
-  const [supp, setSupp] = useState<any>(null);
-  const [role, setRole] = useState<any>(null);
-  const email = localStorage.getItem("Iplot_admin");
   const [adminMap, setAdminMap] = useState<Record<string, any>>({});
 
-  useEffect(() => {
-    const getData = async () => {
-      const data = await fetchAdminDataByEmail();
-      if (data) {
-        if (data?.role) {
-          setRole(data?.role);
-        }
-        if (data?.supplier) {
-          setSupp(data?.supplier);
-        }
+  const removeCategoryFromHouseModels = async (categoryId: string) => {
+    const houseModelsSnap = await getDocs(collection(db, "house_model"));
 
-        const finalData = data?.modulePermissions?.find(
-          (item: any) => item.name === "Husmodell"
-        );
-        setPermission(finalData?.permissions);
+    for (const houseDoc of houseModelsSnap.docs) {
+      const husData = houseDoc.data();
+
+      if (!husData.Huskonfigurator) continue;
+
+      let updated = false;
+
+      const hovedkategorinavn = husData.Huskonfigurator.hovedkategorinavn.map(
+        (mainCat: any) => {
+          const updatedKategorinavn = mainCat.Kategorinavn.filter(
+            (subCat: any) => {
+              if (subCat.id === categoryId) {
+                updated = true;
+                return false;
+              }
+              return true;
+            }
+          );
+
+          return { ...mainCat, Kategorinavn: updatedKategorinavn };
+        }
+      );
+
+      if (updated) {
+        await updateDoc(doc(db, "house_model", houseDoc.id), {
+          "Huskonfigurator.hovedkategorinavn": hovedkategorinavn,
+        });
       }
-    };
-
-    getData();
-  }, []);
-
-  const handleDelete = async (id: string) => {
-    try {
-      const oldSupplierDocRef = doc(db, "suppliers", suppliersId);
-      const oldSupplierData = await fetchSupplierData(suppliersId);
-      const formatter = new Intl.DateTimeFormat("nb-NO", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
-      await updateDoc(oldSupplierDocRef, {
-        ...oldSupplierData,
-        id: suppliersId,
-        updatedAt: formatter.format(new Date()),
-        Produkter: Math.max(
-          oldSupplierData?.Produkter === 0 ? 0 : oldSupplierData?.Produkter - 1
-        ),
-      });
-      await deleteDoc(doc(db, "house_model", id));
-      toast.success("Slettet", { position: "top-right" });
-      fetchHusmodellData();
-      setShowConfirm(false);
-    } catch (error) {
-      console.error("Error deleting document:", error);
     }
   };
-  const handleCopy = async (id: string) => {
+
+  const handleDelete = async (inventoryId: string) => {
     try {
-      const oldSupplierDocRef = doc(db, "suppliers", suppliersId);
-      const oldSupplierData = await fetchSupplierData(suppliersId);
-      const formatter = new Intl.DateTimeFormat("nb-NO", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
-      await updateDoc(oldSupplierDocRef, {
-        ...oldSupplierData,
-        id: suppliersId,
-        updatedAt: formatter.format(new Date()),
-        Produkter: Math.max(oldSupplierData?.Produkter + 1),
-      });
+      await removeCategoryFromHouseModels(inventoryId);
 
-      const oldHouseModelRef = doc(db, "house_model", id);
-      const oldHouseModelSnap = await getDoc(oldHouseModelRef);
-
-      if (!oldHouseModelSnap.exists()) {
-        throw new Error("Document does not exist.");
-      }
-
-      const oldHouseModelData = oldHouseModelSnap.data();
-      const formatDate = (date: Date) => {
-        return date
-          .toLocaleString("sv-SE", { timeZone: "UTC" })
-          .replace(",", "");
-      };
-      const newHouseModelRef = collection(db, "house_model");
-      await addDoc(newHouseModelRef, {
-        ...oldHouseModelData,
-        createdAt: formatDate(new Date()),
-      });
-
-      toast.success("Copied successfully", { position: "top-right" });
-      fetchHusmodellData();
-      setShowConfirmCopy(false);
+      await deleteDoc(doc(db, "inventory", inventoryId));
+      toast.success("Slettet", { position: "top-right" });
+      fetchInventoryData();
+      setShowConfirm(false);
     } catch (error) {
-      console.error("Error deleting document:", error);
+      console.error("Error deleting inventory:", error);
+      toast.error("Failed to delete inventory", { position: "top-right" });
     }
   };
 
@@ -157,26 +101,10 @@ export const HusmodellerTable = () => {
     }
   };
 
-  const handleConfirmCopyPopup = () => {
-    if (showConfirmCopy) {
-      setShowConfirmCopy(false);
-    } else {
-      setShowConfirmCopy(true);
-    }
-  };
-
-  const fetchHusmodellData = async () => {
+  const fetchInventoryData = async () => {
     setIsLoading(true);
     try {
-      let q;
-      if (role === "Agent") {
-        q = query(
-          collection(db, "house_model"),
-          where("Husdetaljer.Leverandører", "==", supp)
-        );
-      } else {
-        q = query(collection(db, "house_model"));
-      }
+      let q = query(collection(db, "inventory"));
       const querySnapshot = await getDocs(q);
 
       const data: any = querySnapshot.docs
@@ -194,19 +122,7 @@ export const HusmodellerTable = () => {
           return dateB - dateA;
         });
 
-      setHouseModels(data);
-
-      const supplierIds = data
-        .map((b: any) => b.Husdetaljer.Leverandører)
-        .filter(Boolean);
-      const supplierDataMap: Record<string, any> = {};
-      await Promise.all(
-        supplierIds.map(async (id: any) => {
-          const data = await fetchSupplierData(id);
-          if (data) supplierDataMap[id] = data;
-        })
-      );
-      setSupplierMap(supplierDataMap);
+      setInventory(data);
 
       const adminIds = data.map((b: any) => b.updated_by).filter(Boolean);
       const adminDataMap: Record<string, any> = {};
@@ -218,88 +134,38 @@ export const HusmodellerTable = () => {
       );
       setAdminMap(adminDataMap);
     } catch (error) {
-      console.error("Error fetching husmodell data:", error);
+      console.error("Error fetching inventory data:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchHusmodellData();
-  }, [role, supp]);
+    fetchInventoryData();
+  }, []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const confirmDelete = (id: string, supplierId: string) => {
+  const confirmDelete = (id: string) => {
     setSelectedId(id);
-    setSuppliersId(supplierId);
     setShowConfirm(true);
   };
 
-  const confirmCopy = (id: string, supplierId: string) => {
-    setSelectedId(id);
-    setSuppliersId(supplierId);
-    setShowConfirmCopy(true);
-  };
-
   const filteredData = useMemo(() => {
-    return houseModels.filter((model: any) =>
-      model.Husdetaljer?.husmodell_name
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase())
+    return inventory.filter((model: any) =>
+      model?.data?.navn?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [houseModels, searchTerm]);
+  }, [inventory, searchTerm]);
 
   const columns = useMemo<ColumnDef<any>[]>(
     () => [
       {
-        accessorKey: "husmodell",
-        header: "Husmodell",
+        accessorKey: "Kategorinavn",
+        header: "Kategorinavn",
         cell: ({ row }) => (
           <div className="flex items-center gap-3 w-max">
-            <img
-              src={row.original.Husdetaljer.photo}
-              alt="Husmodell"
-              className="w-8 h-8 rounded-full"
-            />
-            <p className="font-medium text-sm text-primary">
-              {row.original.Husdetaljer.husmodell_name}
+            <p className="font-medium text-sm text-black">
+              {row.original?.data?.navn}
             </p>
           </div>
-        ),
-      },
-      {
-        accessorKey: "leverandor",
-        header: "Leverandør",
-        cell: ({ row }) => {
-          const supplierId = row.original?.Husdetaljer.Leverandører;
-          const supplierData = supplierMap[supplierId];
-
-          return (
-            <div className="w-[140px]">
-              <img
-                src={supplierData?.photo}
-                alt="leverandor"
-                className="w-full"
-              />
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "husdetaljer",
-        header: "Husdetaljer",
-        cell: ({ row }) => (
-          <p className="text-sm text-gray w-max">
-            <span className="font-bold">
-              {row.original.Husdetaljer.BRATotal}
-            </span>{" "}
-            m<sup>2</sup>.{" "}
-            <span className="font-bold">
-              {row.original.Husdetaljer.Soverom}
-            </span>{" "}
-            soverom,{" "}
-            <span className="font-bold">{row.original.Husdetaljer.Bad}</span>{" "}
-            bad
-          </p>
         ),
       },
       {
@@ -340,50 +206,20 @@ export const HusmodellerTable = () => {
         cell: ({ row }) => (
           <>
             <div className="flex items-center gap-3">
-              {((permission && permission?.edit) ||
-                email === "andre.finger@gmail.com" ||
-                role === "Admin") && (
-                <Pencil
-                  className="h-5 w-5 text-primary cursor-pointer"
-                  onClick={() => navigate(`/edit-husmodell/${row.original.id}`)}
-                />
-              )}
-              {((permission && permission?.delete) ||
-                email === "andre.finger@gmail.com" ||
-                role === "Admin") && (
-                <Trash
-                  className="h-5 w-5 text-primary cursor-pointer"
-                  onClick={() =>
-                    confirmDelete(
-                      row.original.id,
-                      row.original.Husdetaljer.Leverandører
-                    )
-                  }
-                />
-              )}
-              <Eye
+              <Pencil
                 className="h-5 w-5 text-primary cursor-pointer"
-                onClick={() => navigate(`/se-husmodell/${row.original.id}`)}
+                onClick={() => navigate(`/edit-inventory/${row.original.id}`)}
               />
-              {((permission && permission?.duplicate) ||
-                email === "andre.finger@gmail.com" ||
-                role === "Admin") && (
-                <Copy
-                  className="h-5 w-5 text-primary cursor-pointer"
-                  onClick={() =>
-                    confirmCopy(
-                      row.original.id,
-                      row.original.Husdetaljer.Leverandører
-                    )
-                  }
-                />
-              )}
+              <Trash
+                className="h-5 w-5 text-primary cursor-pointer"
+                onClick={() => confirmDelete(row.original.id)}
+              />
             </div>
           </>
         ),
       },
     ],
-    [email, navigate, permission, adminMap, supplierMap]
+    [navigate, adminMap]
   );
 
   const pageSize = 10;
@@ -523,32 +359,6 @@ export const HusmodellerTable = () => {
                   />
                 </div>
                 <div onClick={() => handleDelete(selectedId)}>
-                  <Button
-                    text="Bekrefte"
-                    className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </Modal>
-      )}
-
-      {showConfirmCopy && (
-        <Modal onClose={handleConfirmCopyPopup} isOpen={true}>
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <p className="text-sm md:text-base desktop:text-lg font-bold">
-                Er du sikker på at du vil kopiere?
-              </p>
-              <div className="flex justify-center mt-5 w-full gap-5 items-center">
-                <div onClick={() => setShowConfirmCopy(false)}>
-                  <Button
-                    text="Avbryt"
-                    className="border border-gray2 text-black text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"
-                  />
-                </div>
-                <div onClick={() => handleCopy(selectedId)}>
                   <Button
                     text="Bekrefte"
                     className="border border-primary bg-primary text-white text-sm rounded-[8px] h-[40px] font-medium relative px-4 py-[10px] flex items-center gap-2"

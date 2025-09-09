@@ -23,8 +23,9 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../../../config/firebaseConfig";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import { doc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, updateDoc } from "firebase/firestore";
 import { fetchAdminDataByEmail } from "../../../lib/utils";
+import { InventoryPopup } from "./inventoryPopup";
 
 const fileSchema = z.union([
   z
@@ -49,6 +50,7 @@ const categorySchema = z.object({
   navn: z.string().min(1, "Kategorinavn må bestå av minst 1 tegn."),
   produkter: z.array(productSchema).min(1, "Minst ett produkt er påkrevd."),
   isSelected: z.boolean().optional(),
+  id: z.string().optional(),
 });
 
 const mainCategorySchema = z.object({
@@ -334,6 +336,49 @@ export const Eksterior: React.FC<{
     null
   );
 
+  const [popupStep, setPopupStep] = useState<boolean>(false);
+
+  const handleOpenCategoryPopup = () => {
+    setPopupStep(true);
+  };
+
+  const handleClosePopup = () => {
+    setPopupStep(false);
+  };
+
+  const [InventoryStep, setInventoryStep] = useState<boolean>(false);
+
+  const [inventory, setInventory] = useState([]);
+  const fetchInventoryData = async () => {
+    try {
+      let q = query(collection(db, "inventory"));
+      const querySnapshot = await getDocs(q);
+
+      const data: any = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .sort((a: any, b: any) => {
+          const dateA = a.updatedAt?.toDate
+            ? a.updatedAt.toDate()
+            : new Date(a.updatedAt);
+          const dateB = b.updatedAt?.toDate
+            ? b.updatedAt.toDate()
+            : new Date(b.updatedAt);
+          return dateB - dateA;
+        });
+
+      setInventory(data);
+    } catch (error) {
+      console.error("Error fetching inventory data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInventoryData();
+  }, []);
+
   return (
     <>
       <Form {...form}>
@@ -459,16 +504,19 @@ export const Eksterior: React.FC<{
                       onClick={() => setActiveSubTabData(index)}
                     >
                       <span className="text-xs md:text-sm">{cat.navn}</span>
-                      <div
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setEditSubCatIndex(index);
-                          setAddSubCategory(true);
-                        }}
-                      >
-                        <Pencil className="w-4 md:w-5 h-4 md:h-5 text-primary" />
-                      </div>
+
+                      {!cat?.id && (
+                        <div
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setEditSubCatIndex(index);
+                            setAddSubCategory(true);
+                          }}
+                        >
+                          <Pencil className="w-4 md:w-5 h-4 md:h-5 text-primary" />
+                        </div>
+                      )}
                       <img
                         src={Ic_x_circle}
                         alt="close"
@@ -493,6 +541,7 @@ export const Eksterior: React.FC<{
                             updatedCategories,
                             { shouldValidate: true }
                           );
+                          setActiveSubTabData(index - 1 || 0);
                         }}
                       />
                     </div>
@@ -502,7 +551,8 @@ export const Eksterior: React.FC<{
 
               <div
                 className="text-primary font-semibold text-xs md:text-sm flex items-center gap-1 cursor-pointer h-full whitespace-nowrap"
-                onClick={() => setAddSubCategory(true)}
+                // onClick={() => setAddSubCategory(true)}
+                onClick={handleOpenCategoryPopup}
               >
                 <Plus className="w-4 h-5 md:w-6 md:h-6" />
                 Legg til kategori
@@ -514,44 +564,54 @@ export const Eksterior: React.FC<{
                   const upload3DPhoto = form.watch(
                     `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.Hovedbilde`
                   );
+                  const IsDisable = form.watch(
+                    `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.id`
+                  );
                   return (
                     <div
-                      className="flex flex-col gap-4 md:gap-8 cursor-move"
+                      className={`flex flex-col gap-4 md:gap-8 ${
+                        IsDisable ? "" : "cursor-move"
+                      }`}
                       key={index}
-                      draggable
-                      onDragStart={() => setDraggingProductIndex(index)}
+                      draggable={!IsDisable}
+                      onDragStart={() =>
+                        !IsDisable && setDraggingProductIndex(index)
+                      }
                       onDragOver={(e) => {
-                        e.preventDefault();
-                        setDragOverProductIndex(index);
+                        if (!IsDisable) {
+                          e.preventDefault();
+                          setDragOverProductIndex(index);
+                        }
                       }}
-                      onDrop={() => handleDrop()}
+                      onDrop={() => !IsDisable && handleDrop()}
                     >
                       <div
                         className="flex flex-col gap-4 md:gap-[18px] p-3 md:p-4 rounded-lg bg-white"
                         style={{
-                          boxShadow:
-                            "0px 2px 4px -2px #1018280F, 0px 4px 8px -2px #1018281A",
+                          boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                         }}
                       >
                         <div className="flex items-center gap-2 md:gap-3 justify-between">
                           <h4 className="text-darkBlack text-sm md:text-base font-semibold">
                             Produktdetaljer
                           </h4>
-                          <div
-                            className={`flex text-sm md:text-base items-center gap-1 font-medium ${
-                              produkter.length === 1
-                                ? "text-gray cursor-not-allowed text-opacity-55"
-                                : "text-primary cursor-pointer"
-                            }`}
-                            onClick={() => {
-                              if (produkter.length > 1) {
-                                removeProduct(index);
-                              }
-                            }}
-                          >
-                            <X className="h-4 w-4 md:h-6 md:w-6" /> Slett
-                            produkt
-                          </div>
+                          {!IsDisable && (
+                            <div
+                              className={`flex text-sm md:text-base items-center gap-1 font-medium ${
+                                produkter.length === 1
+                                  ? "text-gray cursor-not-allowed text-opacity-55"
+                                  : "text-primary cursor-pointer"
+                              }`}
+                              onClick={() => {
+                                if (produkter.length > 1) {
+                                  removeProduct(index);
+                                }
+                              }}
+                            >
+                              <X className="h-4 w-4 md:h-6 md:w-6" /> Slett
+                              produkt
+                            </div>
+                          )}
                         </div>
                         <div className="flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6">
                           <div>
@@ -587,6 +647,7 @@ export const Eksterior: React.FC<{
                                           } `}
                                           type="text"
                                           value={initialValue ?? ""}
+                                          disable={IsDisable ? true : false}
                                         />
                                       </div>
                                     </FormControl>
@@ -618,7 +679,7 @@ export const Eksterior: React.FC<{
 
                                       if (file.size > 5 * 1024 * 1024) {
                                         toast.error(
-                                          "Image size must be less than 2MB.",
+                                          "Image size must be less than 5MB.",
                                           {
                                             position: "top-right",
                                           }
@@ -657,10 +718,21 @@ export const Eksterior: React.FC<{
                                       <div className="flex items-center gap-5 w-full">
                                         <div className="relative w-full">
                                           <div
-                                            className="border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 cursor-pointer w-full"
-                                            onDragOver={handle3DDragOver}
-                                            onClick={handle3DClick}
+                                            className={`border border-gray2 rounded-[8px] px-3 laptop:px-6 py-4 flex justify-center items-center flex-col gap-3 w-full ${
+                                              IsDisable
+                                                ? "cursor-not-allowed"
+                                                : "cursor-pointer"
+                                            }`}
+                                            onClick={
+                                              !IsDisable
+                                                ? handle3DClick
+                                                : undefined
+                                            }
+                                            onDragOver={(e) =>
+                                              !IsDisable && handle3DDragOver(e)
+                                            }
                                             onDrop={(event) => {
+                                              if (IsDisable) return;
                                               event.preventDefault();
                                               handleFileChange(
                                                 event.dataTransfer.files
@@ -688,6 +760,7 @@ export const Eksterior: React.FC<{
                                               multiple
                                               accept="image/png, image/jpeg, image/svg+xml, image/gif"
                                               onChange={(event) =>
+                                                !IsDisable &&
                                                 handleFileChange(
                                                   event.target.files
                                                 )
@@ -736,6 +809,7 @@ export const Eksterior: React.FC<{
                                               ) || false
                                             }
                                             name={`hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.IncludingOffer`}
+                                            disabled={IsDisable ? true : false}
                                             onChange={(e: any) => {
                                               const checkedValue =
                                                 e.target.checked;
@@ -775,9 +849,11 @@ export const Eksterior: React.FC<{
                                               : "border-gray1"
                                           } `}
                                           inputMode="numeric"
-                                          disabled={form.watch(
-                                            `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.IncludingOffer`
-                                          )}
+                                          disable={
+                                            form.watch(
+                                              `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.IncludingOffer`
+                                            ) || IsDisable
+                                          }
                                           type="text"
                                           onChange={({
                                             target: { value },
@@ -867,21 +943,26 @@ export const Eksterior: React.FC<{
                                       alt="logo"
                                       className="object-cover h-full w-full rounded-lg"
                                     />
-                                    <div
-                                      className="absolute top-2 right-2 bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer"
-                                      onClick={() => {
-                                        const updatedFiles =
-                                          upload3DPhoto.filter(
-                                            (_, i) => i !== imgIndex
+                                    {!IsDisable && (
+                                      <div
+                                        className="absolute top-2 right-2 bg-[#FFFFFFCC] rounded-[12px] p-[6px] cursor-pointer"
+                                        onClick={() => {
+                                          const updatedFiles =
+                                            upload3DPhoto.filter(
+                                              (_, i) => i !== imgIndex
+                                            );
+                                          form.setValue(
+                                            `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.Hovedbilde`,
+                                            updatedFiles
                                           );
-                                        form.setValue(
-                                          `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.Hovedbilde`,
-                                          updatedFiles
-                                        );
-                                      }}
-                                    >
-                                      <img src={Ic_delete_green} alt="delete" />
-                                    </div>
+                                        }}
+                                      >
+                                        <img
+                                          src={Ic_delete_green}
+                                          alt="delete"
+                                        />
+                                      </div>
+                                    )}
                                   </div>
                                 )
                               )}
@@ -920,6 +1001,7 @@ export const Eksterior: React.FC<{
                                       : "border-gray1"
                                   } `}
                                         value={initialValue}
+                                        disabled={IsDisable ? true : false}
                                       />
                                     </div>
                                   </FormControl>
@@ -997,6 +1079,65 @@ export const Eksterior: React.FC<{
               editData={
                 editSubCatIndex !== null && hovedkategorinavn[editSubCatIndex]
               }
+            />
+          </div>
+        </Modal>
+      )}
+
+      {popupStep && (
+        <Modal onClose={handleClosePopup} isOpen={true}>
+          <div className="bg-white rounded-[12px] p-4 w-[90vw] sm:max-w-[400px] sm:w-auto">
+            <h4 className="mb-4 text-darkBlack font-medium text-lg">
+              Velg hvordan du vil legge til
+            </h4>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              <Button
+                text="+ Legg til ny kategori"
+                className="bg-primary text-white text-sm rounded-lg"
+                onClick={() => {
+                  setAddSubCategory(true);
+                  handleClosePopup();
+                }}
+              />
+              <Button
+                text="Velg fra inventory"
+                className="border border-primary text-primary text-sm rounded-lg"
+                onClick={() => {
+                  setInventoryStep(true);
+                  handleClosePopup();
+                }}
+              />
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {InventoryStep && (
+        <Modal onClose={() => setInventoryStep(false)} isOpen={false}>
+          <div className="bg-white rounded-[12px] p-6 sm:w-[518px]">
+            <InventoryPopup
+              inventory={inventory}
+              onSubmitCategories={(categories: any) => {
+                const existing = form.getValues(
+                  `hovedkategorinavn.${activeTabData}.Kategorinavn`
+                );
+                const newValue = [...existing, ...categories];
+                form.setValue(
+                  `hovedkategorinavn.${activeTabData}.Kategorinavn`,
+                  newValue,
+                  { shouldValidate: true }
+                );
+
+                setCategory((prev: any[]) => {
+                  const updated = [...prev];
+                  if (updated[activeTabData]) {
+                    updated[activeTabData].Kategorinavn = newValue;
+                  }
+                  return updated;
+                });
+
+                setInventoryStep(false);
+              }}
             />
           </div>
         </Modal>

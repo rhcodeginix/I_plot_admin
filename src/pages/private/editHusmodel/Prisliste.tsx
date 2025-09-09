@@ -574,7 +574,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                             : "border-gray1"
                                         } `}
                                               inputMode="numeric"
-                                              disabled={form.watch(
+                                              disable={form.watch(
                                                 `Byggekostnader.${index}.IncludingOffer`
                                               )}
                                               type="text"
@@ -867,7 +867,7 @@ export const Prisliste: React.FC<{ setActiveTab: any }> = ({
                                             : "border-gray1"
                                         } `}
                                               inputMode="numeric"
-                                              disabled={form.watch(
+                                              disable={form.watch(
                                                 `Tomtekost.${index}.IncludingOffer`
                                               )}
                                               type="text"

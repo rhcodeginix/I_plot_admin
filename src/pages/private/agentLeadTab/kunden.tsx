@@ -104,9 +104,6 @@ export const Kunden = forwardRef<
             supplier: z.string().min(1, {
               message: "Leverandør må velges",
             }),
-            // office: z.string().min(1, {
-            //   message: "Kontor må velges",
-            // }),
             office: z.string().optional(),
             Kundetype: z
               .string()

@@ -39,6 +39,8 @@ import {
   BankleadsTabs,
   Profile,
   BankleadsDetails,
+  Inventory,
+  AddInventory,
 } from "./pages";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { StartupHandler } from "./layouts/StartupHandler";
@@ -75,6 +77,51 @@ export const routes = createBrowserRouter([
             element: (
               <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
                 <Suppliers />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/inventory",
+            element: (
+              <ProtectedRoute
+                allowedRoles={[
+                  "Admin",
+                  "super-admin",
+                  "Bankansvarlig",
+                  "Agent",
+                ]}
+              >
+                <Inventory />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/add-inventory",
+            element: (
+              <ProtectedRoute
+                allowedRoles={[
+                  "Admin",
+                  "super-admin",
+                  "Bankansvarlig",
+                  "Agent",
+                ]}
+              >
+                <AddInventory />
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: "/edit-inventory/*",
+            element: (
+              <ProtectedRoute
+                allowedRoles={[
+                  "Admin",
+                  "super-admin",
+                  "Bankansvarlig",
+                  "Agent",
+                ]}
+              >
+                <AddInventory />
               </ProtectedRoute>
             ),
           },

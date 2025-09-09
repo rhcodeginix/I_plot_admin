@@ -73,25 +73,12 @@ export const FremdriftsplanOg: React.FC<{
     try {
       const docRef = doc(db, "bank_leads", String(id));
 
-      // const addStatus = (section: any) => ({
       const addStatus = (section: any, index: number) => ({
         ...section,
         status: "Unpaid",
         order: index,
       });
 
-      // const BankData = {
-      //   Byggekontrakt: addStatus(data.Byggekontrakt),
-      //   Grunnarbeider: addStatus(data.Grunnarbeider),
-      //   Betongarbeid: addStatus(data.Betongarbeid),
-      //   LeveringByggesett: addStatus(data.LeveringByggesett),
-      //   TettBygg: addStatus(data.TettBygg),
-      //   FerdigUte: addStatus(data.FerdigUte),
-      //   FerdigInne: addStatus(data.FerdigInne),
-      //   Forhåndsbefaring: addStatus(data.Forhåndsbefaring),
-      //   Overtakelse: addStatus(data.Overtakelse),
-      //   id,
-      // };
       const BankData: any = { id };
 
       stepOrder.forEach((stepName, index) => {
@@ -244,16 +231,6 @@ export const FremdriftsplanOg: React.FC<{
     e.dataTransfer.setData("dragIndex", index.toString());
   };
 
-  // const handleDrop = (e: React.DragEvent, dropIndex: number) => {
-  //   e.preventDefault();
-  //   const dragIndex = Number(e.dataTransfer.getData("dragIndex"));
-  //   if (dragIndex === dropIndex) return;
-
-  //   const newOrder = [...stepOrder];
-  //   const [moved] = newOrder.splice(dragIndex, 1);
-  //   newOrder.splice(dropIndex, 0, moved);
-  //   setStepOrder(newOrder);
-  // };
   const handleDrop = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
     const dragIndex = Number(e.dataTransfer.getData("dragIndex"));

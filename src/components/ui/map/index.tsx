@@ -150,7 +150,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-// import "mapbox-gl/dist/mapbox-gl.css";
 import Ic_close from "../../../assets/images/Ic_close.svg";
 import Ic_logo from "../../../assets/images/Ic_logo.svg";
 import Modal from "../../common/modal";

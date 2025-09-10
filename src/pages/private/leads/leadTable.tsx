@@ -794,7 +794,7 @@ export const LeadTable = () => {
                 <Eye
                   className="h-5 w-5 text-primary cursor-pointer"
                   onClick={() =>
-                    navigate(`/agent-leads-detail/${row.original?.id}?step=2`)
+                    navigate(`/bank-leads-detail/${row.original?.id}?step=2`)
                   }
                 />
               ) : (
@@ -802,7 +802,7 @@ export const LeadTable = () => {
                   <Pencil
                     className="h-5 w-5 text-primary cursor-pointer"
                     onClick={() =>
-                      navigate(`/edit-agent-leads/${row.original.id}`)
+                      navigate(`/edit-bank-leads/${row.original.id}`)
                     }
                   />
                   <Trash

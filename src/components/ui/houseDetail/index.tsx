@@ -4,6 +4,7 @@ import Ic_close_darkgreen from "../../../assets/images/Ic_close.svg";
 import { db } from "../../../config/firebaseConfig";
 import Modal from "../../common/modal";
 import Illustrasjoner from "./Illustrasjoner";
+import Plantegninger from "../../../pages/private/seHousemodel/Plantegninger";
 
 const HouseDetailPage: React.FC<{ id: any }> = ({ id }) => {
   const getEmbedUrl = (url: string) => {
@@ -256,9 +257,9 @@ const HouseDetailPage: React.FC<{ id: any }> = ({ id }) => {
           <h2 className="text-black mb-4 md:mb-6 font-semibold text-lg md:text-xl desktop:text-2xl">
             Plantegninger og fasader
           </h2>
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
+          <div>
             {loading ? (
-              <>
+              <div className="grid grid-cols-2 gap-3 md:gap-4">
                 <div
                   className="w-full h-[100px] rounded-lg custom-shimmer mb-2"
                   style={{ borderRadius: "8px" }}
@@ -271,27 +272,14 @@ const HouseDetailPage: React.FC<{ id: any }> = ({ id }) => {
                   className="w-full h-[100px] rounded-lg custom-shimmer mb-2"
                   style={{ borderRadius: "8px" }}
                 ></div>
-              </>
+              </div>
             ) : (
-              <>
-                {husmodellData?.PlantegningerFasader &&
-                  husmodellData?.PlantegningerFasader?.map(
-                    (item: string, index: number) => {
-                      return (
-                        <img
-                          src={item}
-                          alt="map"
-                          className="w-full cursor-pointer"
-                          key={index}
-                          onClick={() => {
-                            setSelectedImage(item);
-                            setIsOpen(true);
-                          }}
-                        />
-                      );
-                    }
-                  )}
-              </>
+              <div>
+                <Plantegninger
+                  loading={loading}
+                  husmodellData={husmodellData}
+                />
+              </div>
             )}
           </div>
         </div>

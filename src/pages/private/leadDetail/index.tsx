@@ -2,7 +2,11 @@
 import { BookText, ChartPie, ChevronRight, FileText } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
+import {
+  fetchAdminData,
+  fetchAdminDataByEmail,
+  fetchBankLeadData,
+} from "../../../lib/utils";
 import { Oppsummering } from "./oppsummering";
 import { Fremdriftsplan } from "./Fremdriftsplan";
 import { Documenters } from "./document";
@@ -68,6 +72,20 @@ export const LeadsDetails = () => {
     return () => clearTimeout(timeout);
   }, [activeTab]);
 
+  const [assignUser, setAssignUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data: any = await fetchAdminData(bankData?.assignedTo);
+      if (data) {
+        setAssignUser(data);
+      }
+    };
+    if (bankData && bankData?.assignedTo) {
+      getData();
+    }
+  }, [bankData]);
+
   return (
     <>
       <div className="px-4 md:px-6 lg:px-8 pt-4 pb-8 flex flex-col gap-4 md:gap-6 bg-lightGreen">
@@ -97,39 +115,52 @@ export const LeadsDetails = () => {
               </span>
             </div>
             <div>
-              {bankData?.status === "Ikke sendt" ? (
-                <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  {bankData?.status}
-                </p>
-              ) : bankData?.status === "Sendt" ? (
-                <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  {bankData?.status}
-                </p>
-              ) : bankData?.status === "Avsluttet" ? (
-                <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
-                  {bankData?.status}
-                </p>
-              ) : bankData?.status === "Kunde fått svar" ? (
-                <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  {bankData?.status}
-                </p>
-              ) : bankData?.status === "Aktiv kunde" ? (
-                <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                  {bankData?.status}
-                </p>
-              ) : (
-                bankData?.status === "Kunde kontaktet" && (
-                  <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
+              <div>
+                {bankData?.status === "Ikke sendt" ? (
+                  <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
                     {bankData?.status}
                   </p>
-                )
-              )}
+                ) : bankData?.status === "Sendt" ? (
+                  <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
+                    {bankData?.status}
+                  </p>
+                ) : bankData?.status === "Avsluttet" ? (
+                  <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
+                    {bankData?.status}
+                  </p>
+                ) : bankData?.status === "Kunde fått svar" ? (
+                  <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
+                    {bankData?.status}
+                  </p>
+                ) : bankData?.status === "Aktiv kunde" ? (
+                  <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
+                    {bankData?.status}
+                  </p>
+                ) : (
+                  bankData?.status === "Kunde kontaktet" && (
+                    <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
+                      {bankData?.status}
+                    </p>
+                  )
+                )}
+              </div>
             </div>
           </div>
           <p className="text-[#5D6B98] text-sm md:text-base desktop:text-lg font-medium">
             {bankData?.plotHusmodell?.plot?.address}
           </p>
         </div>
+        {assignUser && (
+          <div>
+            <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+              Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+              {assignUser?.l_name ?? ""}
+            </span>{" "}
+            <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+              ({assignUser?.email})
+            </span>
+          </div>
+        )}
       </div>
       <div className="relative">
         <div className="flex items-center justify-between gap-2 mb-6 px-4 md:px-6 lg:px-10 mt-4">

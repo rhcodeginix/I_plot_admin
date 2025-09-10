@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { fetchBankLeadData } from "../../../lib/utils";
+import { fetchAdminData, fetchBankLeadData } from "../../../lib/utils";
 import { Oppsummering } from "./oppsummering";
 import { Forhandstakst } from "./forhandstakst";
 import { Fremdriftsplan } from "./Fremdriftsplan";
@@ -89,6 +89,21 @@ export const BankLeadsDetails = () => {
       });
     }
   }, []);
+
+  const [assignUser, setAssignUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data: any = await fetchAdminData(bankData?.assignedTo);
+      if (data) {
+        setAssignUser(data);
+      }
+    };
+    if (bankData && bankData?.assignedTo) {
+      getData();
+    }
+  }, [bankData]);
+
   return (
     <>
       <div className="px-4 md:px-6 lg:px-8 pt-4 pb-8 flex flex-col gap-4 md:gap-6 bg-lightGreen">
@@ -147,6 +162,17 @@ export const BankLeadsDetails = () => {
             {bankData?.plotHusmodell?.plot?.address}
           </p>
         </div>
+        {assignUser && (
+          <div>
+            <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+              Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+              {assignUser?.l_name ?? ""}
+            </span>{" "}
+            <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+              ({assignUser?.email})
+            </span>
+          </div>
+        )}
       </div>
       <div className="relative">
         <div className="flex items-center justify-between gap-2 mb-6 px-4 md:px-6 lg:px-10 mt-4">

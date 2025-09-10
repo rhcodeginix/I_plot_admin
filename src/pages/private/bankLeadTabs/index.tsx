@@ -11,7 +11,11 @@ import { PlotHusmodell } from "./plotHusmodell";
 import { ProjectAccounting } from "./projectAccounting";
 import { Oppsummering } from "./oppsummering";
 import { useLocation } from "react-router-dom";
-import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
+import {
+  fetchAdminData,
+  fetchAdminDataByEmail,
+  fetchBankLeadData,
+} from "../../../lib/utils";
 import { Forhandstakst } from "./forhandstakst";
 import {
   Select,
@@ -162,6 +166,20 @@ export const BankleadsTabs = () => {
     getData();
   }, []);
 
+  const [assignUser, setAssignUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data: any = await fetchAdminData(bankData?.assignedTo);
+      if (data) {
+        setAssignUser(data);
+      }
+    };
+    if (bankData && bankData?.assignedTo) {
+      getData();
+    }
+  }, [bankData]);
+
   return (
     <>
       <div>
@@ -178,6 +196,17 @@ export const BankleadsTabs = () => {
                 kunden.
               </p>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 1 && (
@@ -214,6 +243,17 @@ export const BankleadsTabs = () => {
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 2 && (
@@ -257,6 +297,17 @@ export const BankleadsTabs = () => {
                 <p className="text-xs md:text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 3 && (
@@ -309,6 +360,17 @@ export const BankleadsTabs = () => {
                 <p className="text-xs md:text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 4 && (
@@ -368,6 +430,17 @@ export const BankleadsTabs = () => {
                 <p className="text-xs md:text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         <div className="relative">

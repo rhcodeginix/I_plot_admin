@@ -64,6 +64,8 @@ export const BankTable = () => {
   const [Role, setRole] = useState<any>(null);
   const [Office, setOffice] = useState<any>(null);
   const [IsAdmin, setIsAdmin] = useState<any>(null);
+  const [adminAssignMap, setAdminAssignMap] = useState<Record<string, any>>({});
+  const [loginUserId, setLoginUserId] = useState<any>(null);
 
   const [permission, setPermission] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
@@ -81,6 +83,7 @@ export const BankTable = () => {
           setOffice(data?.office);
         }
         setIsAdmin(data?.is_admin);
+        setLoginUserId(data?.id);
       }
     };
 
@@ -251,6 +254,18 @@ export const BankTable = () => {
         })
       );
       setAdminMap(adminDataMap);
+
+      const adminAssignIds = sortedData
+        .map((b: any) => b?.assignedTo)
+        .filter(Boolean);
+      const adminAssignDataMap: Record<string, any> = {};
+      await Promise.all(
+        adminAssignIds.map(async (id: any) => {
+          const data = await fetchAdminData(id);
+          if (data) adminAssignDataMap[id] = data;
+        })
+      );
+      setAdminAssignMap(adminAssignDataMap);
     } catch (error) {
       console.error("Error fetching bank lead data:", error);
     } finally {
@@ -496,6 +511,35 @@ export const BankTable = () => {
               rowB.original?.Kunden?.Kundeinformasjon[0]?.l_name || ""
             }`.trim();
             return nameA.localeCompare(nameB);
+          },
+        },
+        {
+          accessorKey: "TildelTil",
+          header: "Tildel til",
+          cell: ({ row }: any) => {
+            const adminData = adminAssignMap[row.original?.assignedTo];
+            return (
+              <div className="flex items-center text-sm text-darkBlack w-max">
+                {loginUserId === adminData?.id
+                  ? "Tildel til meg"
+                  : adminData
+                  ? `${adminData?.f_name ?? adminData.name} ${
+                      adminData?.l_name ?? ""
+                    }`
+                  : "-"}
+              </div>
+            );
+          },
+          sortingFn: (rowA: any, rowB: any) => {
+            const getName = (r: any) => {
+              const a = adminAssignMap[r.original?.assignedTo];
+              return a
+                ? a.id === loginUserId
+                  ? "Tildel til meg"
+                  : `${a.f_name ?? a.name} ${a.l_name ?? ""}`
+                : "";
+            };
+            return getName(rowA).localeCompare(getName(rowB), "no");
           },
         },
         {
@@ -753,7 +797,7 @@ export const BankTable = () => {
           enableSorting: false, // Actions column shouldn't be sortable
         },
       ].filter(Boolean) as ColumnDef<any>[],
-    [supplierMap, adminMap, email, navigate, permission, status]
+    [supplierMap, adminMap, email, navigate, permission, status, adminAssignMap]
   );
 
   const pageSize = 10;

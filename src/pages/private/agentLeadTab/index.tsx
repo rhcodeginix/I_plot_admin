@@ -11,7 +11,7 @@ import { PlotHusmodell } from "./plotHusmodell";
 import { ProjectAccounting } from "./projectAccounting";
 import { Oppsummering } from "./oppsummering";
 import { useLocation } from "react-router-dom";
-import { fetchBankLeadData } from "../../../lib/utils";
+import { fetchAdminData, fetchBankLeadData } from "../../../lib/utils";
 import { Forhandstakst } from "./forhandstakst";
 
 export const AgentleadsTabs = () => {
@@ -106,6 +106,20 @@ export const AgentleadsTabs = () => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
 
+  const [assignUser, setAssignUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data: any = await fetchAdminData(bankData?.assignedTo);
+      if (data) {
+        setAssignUser(data);
+      }
+    };
+    if (bankData && bankData?.assignedTo) {
+      getData();
+    }
+  }, [bankData]);
+
   return (
     <>
       <div>
@@ -122,6 +136,17 @@ export const AgentleadsTabs = () => {
                 kunden.
               </p>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 1 && (
@@ -134,7 +159,9 @@ export const AgentleadsTabs = () => {
                 Kunderegistrering
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-xs md:text-sm">Tomt og husmodell</span>
+              <span className="text-[#5D6B98] text-xs md:text-sm">
+                Tomt og husmodell
+              </span>
             </div>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
@@ -156,6 +183,17 @@ export const AgentleadsTabs = () => {
                 <p className="text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 2 && (
@@ -175,7 +213,9 @@ export const AgentleadsTabs = () => {
                 Tomt og husmodell
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-xs md:text-sm">Prosjektregnskap</span>
+              <span className="text-[#5D6B98] text-xs md:text-sm">
+                Prosjektregnskap
+              </span>
             </div>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
@@ -197,6 +237,17 @@ export const AgentleadsTabs = () => {
                 <p className="text-xs md:text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 3 && (
@@ -223,7 +274,9 @@ export const AgentleadsTabs = () => {
                 Prosjektregnskap
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-xs md:text-sm">Forhåndstakst</span>
+              <span className="text-[#5D6B98] text-xs md:text-sm">
+                Forhåndstakst
+              </span>
             </div>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
@@ -238,13 +291,26 @@ export const AgentleadsTabs = () => {
                 </p>
               </div>
               <div>
-                <p className="text-[#5D6B98] mb-2 text-xs md:text-sm">Tilbudspris</p>
+                <p className="text-[#5D6B98] mb-2 text-xs md:text-sm">
+                  Tilbudspris
+                </p>
                 <h3 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl whitespace-nowrap">
                   kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-xs md:text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         {activeTab === 4 && (
@@ -278,7 +344,9 @@ export const AgentleadsTabs = () => {
                 Forhåndstakst
               </span>
               <ChevronRight className="h-4 w-4 text-[#5D6B98]" />
-              <span className="text-[#5D6B98] text-xs md:text-sm">Oppsummering</span>
+              <span className="text-[#5D6B98] text-xs md:text-sm">
+                Oppsummering
+              </span>
             </div>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
               <div>
@@ -293,13 +361,26 @@ export const AgentleadsTabs = () => {
                 </p>
               </div>
               <div>
-                <p className="text-[#5D6B98] mb-2 text-xs md:text-sm">Tilbudspris</p>
+                <p className="text-[#5D6B98] mb-2 text-xs md:text-sm">
+                  Tilbudspris
+                </p>
                 <h3 className="text-darkBlack font-semibold text-base md:text-lg desktop:text-xl whitespace-nowrap">
                   kr {sum ? numberToNorwegian(sum) : 0}
                 </h3>
                 <p className="text-xs md:text-sm text-gray">inkl. tomtepris</p>
               </div>
             </div>
+            {assignUser && (
+              <div>
+                <span className="text-darkBlack text-sm md:text-base desktop:text-lg font-medium">
+                  Bank Agent: {assignUser?.f_name ?? assignUser?.name}{" "}
+                  {assignUser?.l_name ?? ""}
+                </span>{" "}
+                <span className="text-[#5D6B98] text-xs md:text-sm lg:text-base">
+                  ({assignUser?.email})
+                </span>
+              </div>
+            )}
           </div>
         )}
         <div className="relative">

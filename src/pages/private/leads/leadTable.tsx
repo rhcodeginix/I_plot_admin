@@ -592,7 +592,6 @@ export const LeadTable = () => {
             const adminData = adminAssignMap[row.original?.assignedTo];
             return (
               <div className="flex items-center text-sm text-darkBlack w-max">
-                {/* {row.original?.plotHusmodell?.plot?.address} */}
                 {loginUserId === adminData?.id
                   ? "Tildel til meg"
                   : adminData
@@ -604,9 +603,15 @@ export const LeadTable = () => {
             );
           },
           sortingFn: (rowA: any, rowB: any) => {
-            const addressA = rowA.original?.plotHusmodell?.plot?.address || "";
-            const addressB = rowB.original?.plotHusmodell?.plot?.address || "";
-            return addressA.localeCompare(addressB);
+            const getName = (r: any) => {
+              const a = adminAssignMap[r.original?.assignedTo];
+              return a
+                ? a.id === loginUserId
+                  ? "Tildel til meg"
+                  : `${a.f_name ?? a.name} ${a.l_name ?? ""}`
+                : "";
+            };
+            return getName(rowA).localeCompare(getName(rowB), "no");
           },
         },
         {
@@ -902,7 +907,7 @@ export const LeadTable = () => {
 
   return (
     <>
-      <div className="mb-2 flex flex-col sm:flex-row gap-2 sm:items-center justify-between bg-lightGreen rounded-[12px] py-3 px-4">
+      <div className="mb-2 flex flex-col sm:flex-row gap-2 items-start md:items-center justify-between bg-lightGreen rounded-[12px] py-3 px-4">
         <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
           <div
             className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-r border-gray1 cursor-pointer ${
@@ -921,7 +926,7 @@ export const LeadTable = () => {
             Aktive kunder
           </div>
         </div>
-        <div className="flex gap-3 items-center">
+        <div className="flex flex-col md:flex-row gap-3 md:items-center">
           <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
             <div
               className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-r border-gray1 cursor-pointer ${

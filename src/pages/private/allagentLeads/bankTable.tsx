@@ -1,6 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Eye, Loader2, Pencil, Trash } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Eye,
+  Loader2,
+  Pencil,
+  Trash,
+} from "lucide-react";
 import {
   Table,
   TableBody,
@@ -11,6 +19,7 @@ import {
 } from "../../../components/ui/table";
 import {
   ColumnDef,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -36,6 +45,7 @@ import {
   fetchAdminData,
   fetchAdminDataByEmail,
   fetchSupplierData,
+  formatDateTime,
 } from "../../../lib/utils";
 
 export const BankTable = () => {
@@ -50,6 +60,10 @@ export const BankTable = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [supplierMap, setSupplierMap] = useState<Record<string, any>>({});
   const [adminMap, setAdminMap] = useState<Record<string, any>>({});
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [Role, setRole] = useState<any>(null);
+  const [Office, setOffice] = useState<any>(null);
+  const [IsAdmin, setIsAdmin] = useState<any>(null);
 
   const [permission, setPermission] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
@@ -60,6 +74,13 @@ export const BankTable = () => {
       if (data) {
         const finalSupData = data?.supplier;
         setPermission(finalSupData);
+        if (data?.role) {
+          setRole(data?.role);
+        }
+        if (data?.office) {
+          setOffice(data?.office);
+        }
+        setIsAdmin(data?.is_admin);
       }
     };
 
@@ -68,7 +89,7 @@ export const BankTable = () => {
 
   const filteredData = useMemo(() => {
     return bankLead.filter((model: any) => {
-      const modelDate = new Date(model.createdAt);
+      const modelDate = new Date(model?.createdAt);
 
       if (startDate && endDate) {
         return modelDate >= startDate && modelDate <= endDate;
@@ -107,6 +128,21 @@ export const BankTable = () => {
       toast.success("Slettet", { position: "top-right" });
     } catch (error) {
       console.error("Error deleting document:", error);
+    }
+  };
+
+  const getData = async (email: string) => {
+    try {
+      if (email) {
+        const q = query(collection(db, "admin"), where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          return querySnapshot.docs[0].data();
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching admin data:", error);
     }
   };
 
@@ -164,9 +200,35 @@ export const BankTable = () => {
         return dateB.getTime() - dateA.getTime();
       });
 
-      setBankLead(sortedData);
+      const filteredData: any = await Promise.all(
+        sortedData.map(async (item: any) => {
+          if (IsAdmin === true) {
+            const email = item?.createDataBy?.email;
+            if (!email) return null;
 
-      const supplierIds = sortedData
+            const userData = await getData(email);
+
+            return userData?.supplier === permission ? item : null;
+          } else if (IsAdmin === false) {
+            const email = item?.createDataBy?.email;
+            if (!email) return null;
+
+            const userData = await getData(email);
+
+            return userData?.office === Office ? item : null;
+          }
+          return item;
+        })
+      );
+      const finalData = filteredData.filter((item: any) => item !== null);
+
+      if (Role === "Agent") {
+        setBankLead(finalData);
+      } else {
+        setBankLead(sortedData);
+      }
+
+      const supplierIds = (Role === "Agent" ? finalData : sortedData)
         .map((b: any) => b.Kunden?.Kundeinformasjon[0]?.supplier)
         .filter(Boolean);
       const supplierDataMap: Record<string, any> = {};
@@ -178,7 +240,9 @@ export const BankTable = () => {
       );
       setSupplierMap(supplierDataMap);
 
-      const adminIds = sortedData.map((b: any) => b.created_by).filter(Boolean);
+      const adminIds = (Role === "Agent" ? finalData : sortedData)
+        .map((b: any) => b.created_by)
+        .filter(Boolean);
       const adminDataMap: Record<string, any> = {};
       await Promise.all(
         adminIds.map(async (id: any) => {
@@ -194,9 +258,14 @@ export const BankTable = () => {
     }
   };
 
+  // useEffect(() => {
+  //   fetchBankLeadData();
+  // }, [permission, status]);
   useEffect(() => {
-    fetchBankLeadData();
-  }, [permission, status]);
+    if (Role) {
+      fetchBankLeadData();
+    }
+  }, [permission, status, Role, Office, IsAdmin]);
 
   const handleConfirmPopup = () => {
     if (showConfirm) {
@@ -211,30 +280,223 @@ export const BankTable = () => {
     setShowConfirm(true);
   };
 
+  // const columns = useMemo<ColumnDef<any>[]>(
+  //   () =>
+  //     [
+  // {
+  //   accessorKey: "id",
+  //   header: "Id",
+  //   cell: ({ row }: any) => (
+  //     <Link
+  //       to={`/agent-leads-detail/${row.original?.id}`}
+  //       className="text-sm text-darkBlack"
+  //     >
+  //       #{row.original?.id?.substring(0, 4)}...
+  //     </Link>
+  //   ),
+  // },
+  //       {
+  //         accessorKey: "name",
+  //         header: "Navn",
+  //         cell: ({ row }: any) => (
+  //           <Link
+  //             to={`/agent-leads-detail/${row.original?.id}`}
+  //             className="flex items-center text-sm text-primary font-medium w-max"
+  //           >
+  //             {row.original?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
+  //             {row.original?.Kunden?.Kundeinformasjon[0]?.l_name}
+  //           </Link>
+  //         ),
+  //       },
+  //       {
+  //         accessorKey: "Anleggsadresse",
+  //         header: "Anleggsadresse",
+  //         cell: ({ row }: any) => (
+  //           <div className="flex items-center text-sm text-darkBlack w-max">
+  //             {row.original?.plotHusmodell?.plot?.address}
+  //           </div>
+  //         ),
+  //       },
+  //       {
+  //         accessorKey: "Forhandler",
+  //         header: "Forhandler",
+  //         cell: ({ row }: any) => {
+  //           const supplierId =
+  //             row.original?.Kunden?.Kundeinformasjon[0]?.supplier;
+  //           const supplierData = supplierMap[supplierId];
+  //           return (
+  //             <div className="flex items-center text-sm text-darkBlack w-max">
+  //               {supplierData?.company_name ?? "-"}
+  //             </div>
+  //           );
+  //         },
+  //       },
+  //       {
+  //         accessorKey: "Konsulent",
+  //         header: "Konsulent",
+  //         cell: ({ row }: any) => {
+  //           const adminData = adminMap[row.original?.created_by];
+  //           return (
+  //             <div className="flex items-center text-sm text-darkBlack w-max">
+  //               {adminData
+  //                 ? `${adminData?.f_name ?? adminData.name} ${
+  //                     adminData?.l_name ?? ""
+  //                   }`
+  //                 : row.original?.createDataBy?.name}
+  //             </div>
+  //           );
+  //         },
+  //       },
+  //       {
+  //         accessorKey: "Lead sent",
+  //         header: "Lead sent",
+  //         // cell: ({ row }: any) => (
+  //         //   <p className="text-sm font-semibold text-black w-max">
+  //         //     {row.original?.createdAt}
+  //         //   </p>
+  //         // ),
+  //         cell: ({ row }: any) => {
+  //           const dateOnly = row.original?.createdAt.split(" ")[0];
+  //           return (
+  //             <p className="text-sm font-semibold text-black w-max">
+  //               {dateOnly}
+  //             </p>
+  //           );
+  //         },
+  //       },
+  //       {
+  //         accessorKey: "Tilbudspris",
+  //         header: "Tilbudspris",
+  //         cell: ({ row }: any) => {
+  //           const plotData = row.original?.plotHusmodell?.plot;
+  //           const houseData = row.original?.plotHusmodell?.house;
+
+  //           function norwegianToNumber(str: any) {
+  //             if (typeof str !== "string") return 0;
+  //             return Number(str.replace(/\s/g, ""));
+  //           }
+
+  //           const sum =
+  //             norwegianToNumber(plotData?.tomtekostnader) +
+  //             norwegianToNumber(houseData?.byggekostnader);
+
+  //           function numberToNorwegian(num: any) {
+  //             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  //           }
+
+  //           return (
+  //             <p className="text-sm font-semibold text-black w-max">
+  //               kr {numberToNorwegian(sum)}
+  //             </p>
+  //           );
+  //         },
+  //       },
+  //       {
+  //         accessorKey: "status",
+  //         header: "Status",
+  //         cell: ({ row }: any) => (
+  //           <>
+  //             {row.original?.status === "Ikke sendt" ? (
+  //               <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
+  //                 {row.original?.status}
+  //               </p>
+  //             ) : row.original?.status === "Sendt" ? (
+  //               <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
+  //                 {row.original?.status}
+  //               </p>
+  //             ) : row.original?.status === "Avsluttet" ? (
+  //               <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
+  //                 {row.original?.status}
+  //               </p>
+  //             ) : row.original?.status === "Kunde fått svar" ? (
+  //               <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
+  //                 {row.original?.status}
+  //               </p>
+  //             ) : row.original?.status === "Aktiv kunde" ? (
+  //               <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
+  //                 {row.original?.status}
+  //               </p>
+  //             ) : (
+  //               row.original?.status === "Kunde kontaktet" && (
+  //                 <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
+  //                   {row.original?.status}
+  //                 </p>
+  //               )
+  //             )}
+  //           </>
+  //         ),
+  //       },
+  //       {
+  //         accessorKey: "sisteoppdatertav",
+  //         header: "Sist oppdatert",
+  //         cell: ({ row }: any) => {
+  //           return (
+  //             <div className="flex items-center text-sm text-darkBlack w-max">
+  //               {formatDateTime(row.original?.updatedAt)}
+  //             </div>
+  //           );
+  //         },
+  //       },
+  //       {
+  //         id: "action",
+  //         header: "Action",
+  //         cell: ({ row }: any) => (
+  //           <>
+  //             {status === "Active" ? (
+  //               <Eye
+  //                 className="h-5 w-5 text-primary cursor-pointer"
+  //                 onClick={() =>
+  //                   navigate(`/agent-leads-detail/${row.original?.id}?step=2`)
+  //                 }
+  //               />
+  //             ) : (
+  //               <div className="flex items-center gap-3">
+  //                 <Pencil
+  //                   className="h-5 w-5 text-primary cursor-pointer"
+  //                   onClick={() =>
+  //                     navigate(`/edit-agent-leads/${row.original?.id}`)
+  //                   }
+  //                 />
+  //                 <Trash
+  //                   className="h-5 w-5 text-primary cursor-pointer"
+  //                   onClick={() => confirmDelete(row.original?.id)}
+  //                 />
+  //               </div>
+  //             )}
+  //           </>
+  //         ),
+  //       },
+  //     ].filter(Boolean) as ColumnDef<any>[],
+  //   [supplierMap, adminMap, email, navigate, permission, status]
+  // );
   const columns = useMemo<ColumnDef<any>[]>(
     () =>
       [
         {
-          accessorKey: "id",
-          header: "Id",
-          cell: ({ row }: any) => (
-            <Link
-              to={`/agent-leads-detail/${row.original?.id}`}
-              className="text-sm text-darkBlack"
-            >
-              #{row.original?.id?.substring(0, 4)}...
-            </Link>
-          ),
-        },
-        {
           accessorKey: "name",
           header: "Navn",
           cell: ({ row }: any) => (
-            <div className="flex items-center text-sm text-darkBlack w-max">
+            <Link
+              to={`/agent-leads-detail/${row.original?.id}`}
+              className="flex items-center text-sm text-primary font-medium w-max"
+            >
               {row.original?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
               {row.original?.Kunden?.Kundeinformasjon[0]?.l_name}
-            </div>
+            </Link>
           ),
+          sortingFn: (rowA: any, rowB: any) => {
+            const nameA = `${
+              rowA.original?.Kunden?.Kundeinformasjon[0]?.f_name || ""
+            } ${
+              rowA.original?.Kunden?.Kundeinformasjon[0]?.l_name || ""
+            }`.trim();
+            const nameB = `${
+              rowB.original?.Kunden?.Kundeinformasjon[0]?.f_name || ""
+            } ${
+              rowB.original?.Kunden?.Kundeinformasjon[0]?.l_name || ""
+            }`.trim();
+            return nameA.localeCompare(nameB);
+          },
         },
         {
           accessorKey: "Anleggsadresse",
@@ -244,6 +506,11 @@ export const BankTable = () => {
               {row.original?.plotHusmodell?.plot?.address}
             </div>
           ),
+          sortingFn: (rowA: any, rowB: any) => {
+            const addressA = rowA.original?.plotHusmodell?.plot?.address || "";
+            const addressB = rowB.original?.plotHusmodell?.plot?.address || "";
+            return addressA.localeCompare(addressB);
+          },
         },
         {
           accessorKey: "Forhandler",
@@ -257,6 +524,15 @@ export const BankTable = () => {
                 {supplierData?.company_name ?? "-"}
               </div>
             );
+          },
+          sortingFn: (rowA: any, rowB: any) => {
+            const supplierIdA =
+              rowA.original?.Kunden?.Kundeinformasjon[0]?.supplier;
+            const supplierIdB =
+              rowB.original?.Kunden?.Kundeinformasjon[0]?.supplier;
+            const supplierNameA = supplierMap[supplierIdA]?.company_name || "";
+            const supplierNameB = supplierMap[supplierIdB]?.company_name || "";
+            return supplierNameA.localeCompare(supplierNameB);
           },
         },
         {
@@ -274,15 +550,38 @@ export const BankTable = () => {
               </div>
             );
           },
+          sortingFn: (rowA: any, rowB: any) => {
+            const adminDataA = adminMap[rowA.original?.created_by];
+            const adminDataB = adminMap[rowB.original?.created_by];
+            const nameA = adminDataA
+              ? `${adminDataA?.f_name ?? adminDataA.name} ${
+                  adminDataA?.l_name ?? ""
+                }`.trim()
+              : rowA.original?.createDataBy?.name || "";
+            const nameB = adminDataB
+              ? `${adminDataB?.f_name ?? adminDataB.name} ${
+                  adminDataB?.l_name ?? ""
+                }`.trim()
+              : rowB.original?.createDataBy?.name || "";
+            return nameA.localeCompare(nameB);
+          },
         },
         {
-          accessorKey: "Lead sent",
+          accessorKey: "createdAt",
           header: "Lead sent",
-          cell: ({ row }: any) => (
-            <p className="text-sm font-semibold text-black w-max">
-              {row.original.createdAt}
-            </p>
-          ),
+          cell: ({ row }: any) => {
+            const dateOnly = row.original?.createdAt.split(" ")[0];
+            return (
+              <p className="text-sm font-semibold text-black w-max">
+                {dateOnly}
+              </p>
+            );
+          },
+          sortingFn: (rowA: any, rowB: any) => {
+            const dateA = new Date(rowA.original?.createdAt);
+            const dateB = new Date(rowB.original?.createdAt);
+            return dateA.getTime() - dateB.getTime();
+          },
         },
         {
           accessorKey: "Tilbudspris",
@@ -310,41 +609,118 @@ export const BankTable = () => {
               </p>
             );
           },
+          sortingFn: (rowA: any, rowB: any) => {
+            function norwegianToNumber(str: any) {
+              if (typeof str !== "string") return 0;
+              return Number(str.replace(/\s/g, ""));
+            }
+
+            const plotDataA = rowA.original?.plotHusmodell?.plot;
+            const houseDataA = rowA.original?.plotHusmodell?.house;
+            const sumA =
+              norwegianToNumber(plotDataA?.tomtekostnader) +
+              norwegianToNumber(houseDataA?.byggekostnader);
+
+            const plotDataB = rowB.original?.plotHusmodell?.plot;
+            const houseDataB = rowB.original?.plotHusmodell?.house;
+            const sumB =
+              norwegianToNumber(plotDataB?.tomtekostnader) +
+              norwegianToNumber(houseDataB?.byggekostnader);
+
+            return sumA - sumB;
+          },
         },
         {
           accessorKey: "status",
           header: "Status",
           cell: ({ row }: any) => (
             <>
-              {row.original.status === "Ikke sendt" ? (
+              {row.original?.status === "Ikke sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  {row.original?.status}
                 </p>
-              ) : row.original.status === "Sendt" ? (
+              ) : row.original?.status === "Sendt" ? (
                 <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  {row.original?.status}
                 </p>
-              ) : row.original.status === "Avsluttet" ? (
+              ) : row.original?.status === "Avsluttet" ? (
                 <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  {row.original?.status}
                 </p>
-              ) : row.original.status === "Kunde fått svar" ? (
+              ) : row.original?.status === "Kunde fÃ¥tt svar" ? (
                 <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  {row.original?.status}
                 </p>
-              ) : row.original.status === "Aktiv kunde" ? (
+              ) : row.original?.status === "Aktiv kunde" ? (
                 <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
+                  {row.original?.status}
                 </p>
               ) : (
-                row.original.status === "Kunde kontaktet" && (
+                row.original?.status === "Kunde kontaktet" && (
                   <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
-                    {row.original.status}
+                    {row.original?.status}
                   </p>
                 )
               )}
             </>
           ),
+          sortingFn: (rowA: any, rowB: any) => {
+            const statusOrder = {
+              "Ikke sendt": 1,
+              Sendt: 2,
+              "Kunde kontaktet": 3,
+              "Kunde fÃ¥tt svar": 4,
+              "Aktiv kunde": 5,
+              Avsluttet: 6,
+            };
+            const statusA =
+              statusOrder[rowA.original.status as keyof typeof statusOrder] ||
+              0;
+            const statusB =
+              statusOrder[rowB.original.status as keyof typeof statusOrder] ||
+              0;
+            return statusA - statusB;
+          },
+        },
+        {
+          accessorKey: "updatedAt",
+          header: "Sist oppdatert",
+          cell: ({ row }: any) => {
+            return (
+              <div className="flex items-center text-sm text-darkBlack w-max">
+                {formatDateTime(row.original?.updatedAt)}
+              </div>
+            );
+          },
+          sortingFn: (rowA: any, rowB: any) => {
+            const norwegianMonths: { [key: string]: string } = {
+              januar: "January",
+              februar: "February",
+              mars: "March",
+              april: "April",
+              mai: "May",
+              juni: "June",
+              juli: "July",
+              august: "August",
+              september: "September",
+              oktober: "October",
+              november: "November",
+              desember: "December",
+            };
+
+            const parseNorwegianDate = (dateStr: string): Date => {
+              const parts = dateStr.toLowerCase().split(" ");
+              if (parts.length !== 3) return new Date(dateStr);
+              const [day, norwegianMonth, year] = parts;
+              const englishMonth =
+                norwegianMonths[norwegianMonth] || norwegianMonth;
+              return new Date(`${day} ${englishMonth} ${year}`);
+            };
+
+            const dateA = parseNorwegianDate(rowA.original.updatedAt);
+            const dateB = parseNorwegianDate(rowB.original.updatedAt);
+            return dateA.getTime() - dateB.getTime();
+          },
         },
         {
           id: "action",
@@ -363,17 +739,18 @@ export const BankTable = () => {
                   <Pencil
                     className="h-5 w-5 text-primary cursor-pointer"
                     onClick={() =>
-                      navigate(`/edit-agent-leads/${row.original.id}`)
+                      navigate(`/edit-agent-leads/${row.original?.id}`)
                     }
                   />
                   <Trash
                     className="h-5 w-5 text-primary cursor-pointer"
-                    onClick={() => confirmDelete(row.original.id)}
+                    onClick={() => confirmDelete(row.original?.id)}
                   />
                 </div>
               )}
             </>
           ),
+          enableSorting: false, // Actions column shouldn't be sortable
         },
       ].filter(Boolean) as ColumnDef<any>[],
     [supplierMap, adminMap, email, navigate, permission, status]
@@ -391,7 +768,9 @@ export const BankTable = () => {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
     state: {
+      sorting,
       pagination: {
         pageIndex: page - 1,
         pageSize,
@@ -444,12 +823,48 @@ export const BankTable = () => {
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup: any) => (
+              // <TableRow key={headerGroup.id} className="hover:bg-transparent">
+              //   {headerGroup.headers.map((header: any) => (
+              //     <TableHead key={header.id} className="h-8 text-sm">
+              //       {flexRender(
+              //         header.column.columnDef.header,
+              //         header.getContext()
+              //       )}
+              //     </TableHead>
+              //   ))}
+              // </TableRow>
+
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header: any) => (
-                  <TableHead key={header.id} className="h-8 text-sm">
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
+                  <TableHead
+                    key={header.id}
+                    className="h-8 text-sm select-none"
+                  >
+                    {header.isPlaceholder ? null : (
+                      <div
+                        className={`flex items-center gap-2 ${
+                          header.column.getCanSort()
+                            ? "cursor-pointer hover:bg-gray-50 rounded px-1 py-1"
+                            : ""
+                        }`}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {header.column.getCanSort() && (
+                          <div className="flex flex-col">
+                            {header.column.getIsSorted() === "asc" ? (
+                              <ArrowUp className="h-4 w-4 text-primary" />
+                            ) : header.column.getIsSorted() === "desc" ? (
+                              <ArrowDown className="h-4 w-4 text-primary" />
+                            ) : (
+                              <ArrowUpDown className="h-4 w-4 text-gray-400" />
+                            )}
+                          </div>
+                        )}
+                      </div>
                     )}
                   </TableHead>
                 ))}

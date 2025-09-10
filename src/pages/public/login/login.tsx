@@ -71,10 +71,14 @@ export const Login = () => {
               if (loginUserData) {
                 if (
                   loginUserData?.role &&
-                  (loginUserData?.role === "Bankansvarlig" ||
-                    loginUserData?.role === "Agent")
+                  loginUserData?.role === "Bankansvarlig"
                 ) {
                   navigate("/bank-leads");
+                } else if (
+                  loginUserData?.role &&
+                  loginUserData?.role === "Agent"
+                ) {
+                  navigate("/agent-leads");
                 } else {
                   navigate("/dashboard");
                 }
@@ -92,10 +96,14 @@ export const Login = () => {
               if (loginUserData) {
                 if (
                   loginUserData?.role &&
-                  (loginUserData?.role === "Bankansvarlig" ||
-                    loginUserData?.role === "Agent")
+                  loginUserData?.role === "Bankansvarlig"
                 ) {
                   navigate("/bank-leads");
+                } else if (
+                  loginUserData?.role &&
+                  loginUserData?.role === "Agent"
+                ) {
+                  navigate("/agent-leads");
                 } else {
                   navigate("/dashboard");
                 }

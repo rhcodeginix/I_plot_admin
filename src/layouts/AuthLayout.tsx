@@ -38,8 +38,10 @@ export const AuthLayout = () => {
     return (
       <Navigate
         to={
-          role === "Bankansvarlig" || role === "Agent"
+          role === "Bankansvarlig"
             ? "/bank-leads"
+            : role === "Agent"
+            ? "/agent-leads"
             : "/dashboard"
         }
         replace

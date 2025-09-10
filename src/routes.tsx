@@ -334,7 +334,7 @@ export const routes = createBrowserRouter([
           {
             path: "/add-agent-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
                 <AgentleadsTabs />
               </ProtectedRoute>
             ),
@@ -342,7 +342,7 @@ export const routes = createBrowserRouter([
           {
             path: "/edit-agent-leads/*",
             element: (
-              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
                 <AgentleadsTabs />
               </ProtectedRoute>
             ),
@@ -350,7 +350,7 @@ export const routes = createBrowserRouter([
           {
             path: "/agent-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
                 <AllBankLeads />
               </ProtectedRoute>
             ),
@@ -358,7 +358,7 @@ export const routes = createBrowserRouter([
           {
             path: "/active-agent-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
                 <AllBankLeads />
               </ProtectedRoute>
             ),
@@ -366,7 +366,7 @@ export const routes = createBrowserRouter([
           {
             path: "/agent-leads-detail/*",
             element: (
-              <ProtectedRoute allowedRoles={["Admin", "super-admin"]}>
+              <ProtectedRoute allowedRoles={["Agent", "Admin", "super-admin"]}>
                 <BankLeadsDetails />
               </ProtectedRoute>
             ),
@@ -464,7 +464,7 @@ export const routes = createBrowserRouter([
           {
             path: "/bank-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+              <ProtectedRoute allowedRoles={["Bankansvarlig"]}>
                 <AllLeads />
               </ProtectedRoute>
             ),
@@ -472,7 +472,7 @@ export const routes = createBrowserRouter([
           {
             path: "/active-bank-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+              <ProtectedRoute allowedRoles={["Bankansvarlig"]}>
                 <AllLeads />
               </ProtectedRoute>
             ),
@@ -481,12 +481,7 @@ export const routes = createBrowserRouter([
             path: "/bank-leads-detail/*",
             element: (
               <ProtectedRoute
-                allowedRoles={[
-                  "Agent",
-                  "Bankansvarlig",
-                  "Admin",
-                  "super-admin",
-                ]}
+                allowedRoles={["Bankansvarlig", "Admin", "super-admin"]}
               >
                 <LeadsDetails />
               </ProtectedRoute>
@@ -495,7 +490,7 @@ export const routes = createBrowserRouter([
           {
             path: "/add-bank-leads",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+              <ProtectedRoute allowedRoles={["Bankansvarlig"]}>
                 <BankleadsTabs />
               </ProtectedRoute>
             ),
@@ -503,7 +498,7 @@ export const routes = createBrowserRouter([
           {
             path: "/edit-bank-leads/*",
             element: (
-              <ProtectedRoute allowedRoles={["Agent", "Bankansvarlig"]}>
+              <ProtectedRoute allowedRoles={["Bankansvarlig"]}>
                 <BankleadsTabs />
               </ProtectedRoute>
             ),

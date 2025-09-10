@@ -154,6 +154,53 @@ export const Documenters: React.FC<{
     }
   };
 
+  const autoSave = async () => {
+    const formData = form.getValues();
+    const finalData = {
+      ...formData,
+    };
+
+    if (formData.Entreprenørgaranti !== undefined) {
+      finalData.Entreprenørgaranti = formData.Entreprenørgaranti;
+    } else {
+      delete finalData.Entreprenørgaranti;
+    }
+    if (formData.Forsikringsbevis !== undefined) {
+      finalData.Forsikringsbevis = formData.Forsikringsbevis;
+    } else {
+      delete finalData.Forsikringsbevis;
+    }
+    if (formData.Kontrakt !== undefined) {
+      finalData.Kontrakt = formData.Kontrakt;
+    } else {
+      delete finalData.Kontrakt;
+    }
+
+    try {
+      const docRef = doc(db, "bank_leads", String(id));
+      const BankData = {
+        ...finalData,
+        id: id,
+      };
+      const formatDate = (date: Date) => {
+        return date
+          .toLocaleString("sv-SE", { timeZone: "UTC" })
+          .replace(",", "");
+      };
+      await updateDoc(docRef, {
+        Documenter: BankData,
+        updatedAt: formatDate(new Date()),
+      });
+
+      getData();
+    } catch (error) {
+      console.error("Auto-save failed:", error);
+      toast.error("Auto-lagring feilet. Prøv igjen.", {
+        position: "top-right",
+      });
+    }
+  };
+
   const fileEntreprenørgarantiRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleEntreprenørgarantiClick = () => {
@@ -201,6 +248,7 @@ export const Documenters: React.FC<{
       newImages = [...newImages, ...uploadedUrls];
       form.setValue(fieldName, newImages);
       form.clearErrors(fieldName);
+      await autoSave();
     }
   };
   const handleEntreprenørgarantiDrop = async (
@@ -297,12 +345,13 @@ export const Documenters: React.FC<{
     }
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (deleteIndex !== null && deleteField) {
       const updatedFiles = form
         .watch(deleteField)
         .filter((_: any, i: number) => i !== deleteIndex);
       form.setValue(deleteField, updatedFiles);
+      await autoSave();
     }
     setShowConfirm(false);
     setDeleteIndex(null);

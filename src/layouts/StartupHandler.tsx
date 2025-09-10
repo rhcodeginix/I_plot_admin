@@ -102,8 +102,9 @@ export const StartupHandler = () => {
             const loginUserData = await fetchAdminDataByEmail();
             if (loginUserData) {
               navigate(
-                loginUserData?.role === "Bankansvarlig" ||
-                  loginUserData?.role === "Agent"
+                loginUserData?.role === "Bankansvarlig"
+                  ? "/bank-leads"
+                  : loginUserData?.role === "Agent"
                   ? "/bank-leads"
                   : "/dashboard"
               );

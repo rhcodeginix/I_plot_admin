@@ -327,38 +327,6 @@ const Illustrasjoner: React.FC<{ id: any }> = ({ id }) => {
             </button>
 
             {popupMode === "single" && selectedImage && (
-              // <div className="flex justify-center items-center w-full my-4 relative">
-              //   <button
-              //     className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 px-4 py-2 rounded-full"
-              //     onClick={() => {
-              //       const previousIndex =
-              //         (images.indexOf(selectedImage) - 1 + images.length) %
-              //         images.length;
-              //       setSelectedImage(images[previousIndex]);
-              //     }}
-              //   >
-              //     &lt;
-              //   </button>
-
-              //   <div className="my-2">
-              //     <img
-              //       src={selectedImage}
-              //       alt="Selected"
-              //       className="h-auto w-full object-fill max-h-[80vh]"
-              //     />
-              //   </div>
-
-              //   <button
-              //     className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 px-4 py-2 rounded-full"
-              //     onClick={() => {
-              //       const nextIndex =
-              //         (images.indexOf(selectedImage) + 1) % images.length;
-              //       setSelectedImage(images[nextIndex]);
-              //     }}
-              //   >
-              //     &gt;
-              //   </button>
-              // </div>
               <div className="flex flex-col justify-center sm:w-full relative mt-5">
                 <button
                   className="absolute z-50 left-0 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 p-2 md:p-3 rounded-full"

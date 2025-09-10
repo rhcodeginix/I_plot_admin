@@ -76,11 +76,7 @@ export const LeadsDetails = () => {
             className="text-primary text-xs md:text-sm font-medium cursor-pointer"
             onClick={() =>
               navigate(
-                `${
-                  role === "Agent" || role === "Bankansvarlig"
-                    ? "/bank-leads"
-                    : "/agent-leads"
-                }`
+                `${role === "Bankansvarlig" ? "/bank-leads" : "/agent-leads"}`
               )
             }
           >

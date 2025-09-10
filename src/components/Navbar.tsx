@@ -222,7 +222,7 @@ export const Navbar: React.FC = () => {
               Tilbudsforespørsler
             </Link>
           )}
-          {Role && Role !== "Bankansvarlig" && Role !== "Agent" && (
+          {Role && Role !== "Bankansvarlig" && (
             <Link
               to={"/agent-leads"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -237,7 +237,7 @@ export const Navbar: React.FC = () => {
               Finansiering
             </Link>
           )}
-          {Role && (Role === "Bankansvarlig" || Role === "Agent") && (
+          {Role && Role === "Bankansvarlig" && (
             <Link
               to={"/bank-leads"}
               className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -436,7 +436,7 @@ export const Navbar: React.FC = () => {
                 Tilbudsforespørsler
               </Link>
             )}
-            {Role && Role !== "Bankansvarlig" && Role !== "Agent" && (
+            {Role && Role !== "Bankansvarlig" && (
               <Link
                 to={"/agent-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${
@@ -451,7 +451,7 @@ export const Navbar: React.FC = () => {
                 Finansiering
               </Link>
             )}
-            {Role && (Role === "Bankansvarlig" || Role === "Agent") && (
+            {Role && Role === "Bankansvarlig" && (
               <Link
                 to={"/bank-leads"}
                 className={`text-base font-medium py-2 px-2 big:px-3 rounded-[6px] ${

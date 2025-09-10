@@ -751,33 +751,46 @@ export const LeadTable = () => {
           header: "Status",
           cell: ({ row }: any) => (
             <>
-              {row.original.status === "Ikke sendt" ? (
-                <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
-                </p>
-              ) : row.original.status === "Sendt" ? (
-                <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
-                </p>
-              ) : row.original.status === "Avsluttet" ? (
-                <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
-                </p>
-              ) : row.original.status === "Kunde fÃ¥tt svar" ? (
-                <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
-                </p>
-              ) : row.original.status === "Aktiv kunde" ? (
-                <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
-                  {row.original.status}
-                </p>
-              ) : (
-                row.original.status === "Kunde kontaktet" && (
-                  <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
+              <div className="flex items-center gap-2">
+                {row.original.status === "Ikke sendt" ? (
+                  <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
                     {row.original.status}
                   </p>
-                )
-              )}
+                ) : row.original.status === "Sendt" ? (
+                  <p className="text-xs text-[#A27200] w-max bg-[#FFF6E0] py-0.5 px-2 rounded-[16px]">
+                    {row.original.status}
+                  </p>
+                ) : row.original.status === "Avsluttet" ? (
+                  <p className="text-xs text-[#A20000] w-max bg-[#FFE0E0] py-0.5 px-2 rounded-[16px]">
+                    {row.original.status}
+                  </p>
+                ) : row.original.status === "Kunde fått svar" ? (
+                  <p className="text-xs text-[#C84D00] bg-[#FFEAE0] w-max py-0.5 px-2 rounded-[16px]">
+                    {row.original.status}
+                  </p>
+                ) : row.original.status === "Aktiv kunde" ? (
+                  <p className="text-xs text-[#00857A] bg-[#E0FFF5] w-max py-0.5 px-2 rounded-[16px]">
+                    {row.original.status}
+                  </p>
+                ) : (
+                  row.original.status === "Kunde kontaktet" && (
+                    <p className="text-xs text-[#0000FF] bg-[#C3EEFA] w-max py-0.5 px-2 rounded-[16px]">
+                      {row.original.status}
+                    </p>
+                  )
+                )}
+                {Role === "Bankansvarlig" && (
+                  <Pencil
+                    className="h-[18px] w-[18px] text-primary cursor-pointer"
+                    onClick={() => {
+                      setShowModal(true);
+                      setSelectedId(row.original.id);
+                      setSelectedOption(row.original.status);
+                      setBankData(row.original);
+                    }}
+                  />
+                )}
+              </div>
             </>
           ),
           sortingFn: (rowA: any, rowB: any) => {

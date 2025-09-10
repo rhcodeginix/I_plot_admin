@@ -31,7 +31,7 @@ import {
 import Ic_delete_green from "../../../assets/images/Ic_delete_green.svg";
 import FileInfo from "../../../components/FileInfo";
 import Modal from "../../../components/common/modal";
-import { fetchBankLeadData } from "../../../lib/utils";
+import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 
 const formSchema = z.object({
@@ -71,6 +71,21 @@ export const ProjectAccounting = forwardRef<
       Økonomisk: "Last opp en økonomisk plan",
     },
   });
+
+  const [Role, setRole] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+      }
+    };
+
+    getData();
+  }, []);
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
@@ -299,6 +314,30 @@ export const ProjectAccounting = forwardRef<
     }
   }, [husmodellData?.Byggekostnader]);
 
+  const [previousDocuments, setPreviousDocuments] = useState<any[]>([]);
+
+  const okonomi = form.watch("Økonomisk");
+
+  const [isUpload, setIsUpload] = useState(false);
+
+  useEffect(() => {
+    if (okonomi === "Last opp en økonomisk plan") {
+      const currentDocuments = documents || [];
+      const prevDocuments = previousDocuments || [];
+
+      const documentsChanged =
+        JSON.stringify(currentDocuments) !== JSON.stringify(prevDocuments);
+
+      if (documentsChanged && currentDocuments.length > 0) {
+        setIsUpload(true);
+      } else {
+        setIsUpload(false);
+      }
+    } else {
+      setIsUpload(false);
+    }
+  }, [okonomi, documents]);
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const updatedByggekostnader = (
       apiData
@@ -349,7 +388,7 @@ export const ProjectAccounting = forwardRef<
 
     try {
       const docRef = doc(db, "bank_leads", String(id));
-
+      const docSnap = await getDoc(docRef);
       const BankData = {
         ...finalData,
         id: id,
@@ -366,6 +405,32 @@ export const ProjectAccounting = forwardRef<
       });
       toast.success("Lagret", { position: "top-right" });
 
+      if (docSnap.exists() && isUpload && Role === "Agent") {
+        const bankLeadData = docSnap.data();
+
+        const response = await fetch(
+          "https://nh989m12uk.execute-api.eu-north-1.amazonaws.com/prod/banklead",
+          {
+            method: "POST",
+            headers: {
+              Accept: "/",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              action: "document-add",
+              firstName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.f_name,
+              lastName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.l_name,
+              email: bankLeadData?.Kunden?.Kundeinformasjon[0]?.EPost,
+              projectAddress:
+                bankLeadData?.Kunden?.Kundeinformasjon[0]?.Adresse,
+              link: `https://admin.mintomt.no/bank-leads-detail/${id}`,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        toast.success(data?.message, { position: "top-right" });
+      }
       getData();
       setActiveTab(3);
     } catch (error) {
@@ -403,6 +468,7 @@ export const ProjectAccounting = forwardRef<
       if (data && data.plotHusmodell) {
         setHouseId(String(data.plotHusmodell?.house?.housemodell));
       }
+      setPreviousDocuments(data?.ProjectAccount?.documents ?? []);
 
       if (data && data?.ProjectAccount) {
         if (
@@ -472,8 +538,6 @@ export const ProjectAccounting = forwardRef<
       return isValid;
     },
   }));
-
-  const okonomi = form.watch("Økonomisk");
 
   const handleDownload = async (filePath: string) => {
     try {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/common/button";
 import { useLocation } from "react-router-dom";
-import { fetchBankLeadData } from "../../../lib/utils";
+import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../config/firebaseConfig";
 import Img_opp from "../../../assets/images/Img_opp.png";
@@ -77,6 +77,21 @@ export const Forhandstakst: React.FC<{
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
+  const [previousDocuments, setPreviousDocuments] = useState<any[]>([]);
+  const [Role, setRole] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+      }
+    };
+
+    getData();
+  }, []);
 
   useEffect(() => {
     if (!id) {
@@ -86,6 +101,8 @@ export const Forhandstakst: React.FC<{
     const getData = async () => {
       const data = await fetchBankLeadData(id);
       if (data && data.Forhandstakst) {
+        setPreviousDocuments(data?.Forhandstakst?.documents ?? []);
+
         Object.entries(data.Forhandstakst).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
             form.setValue(key as any, value);
@@ -124,6 +141,29 @@ export const Forhandstakst: React.FC<{
   const plotData = bankData?.plotHusmodell?.plot;
   const houseData = bankData?.plotHusmodell?.house;
 
+  const [isUpload, setIsUpload] = useState(false);
+
+  const documents: any = form.watch("documents");
+  const advanceQuote = form.watch("advance_quote");
+
+  useEffect(() => {
+    if (advanceQuote === "Ja, jeg ønsker forhåndstakst") {
+      const currentDocuments = documents || [];
+      const prevDocuments = previousDocuments || [];
+
+      const documentsChanged =
+        JSON.stringify(currentDocuments) !== JSON.stringify(prevDocuments);
+
+      if (documentsChanged && currentDocuments.length > 0) {
+        setIsUpload(true);
+      } else {
+        setIsUpload(false);
+      }
+    } else {
+      setIsUpload(false);
+    }
+  }, [advanceQuote, documents]);
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const finalData = {
       ...data,
@@ -141,6 +181,8 @@ export const Forhandstakst: React.FC<{
 
     try {
       const docRef = doc(db, "bank_leads", String(id));
+      const docSnap = await getDoc(docRef);
+
       const BankData = {
         ...finalData,
         id: id,
@@ -155,6 +197,32 @@ export const Forhandstakst: React.FC<{
         updatedAt: formatDate(new Date()),
       });
       toast.success("Lagret", { position: "top-right" });
+      if (docSnap.exists() && isUpload && Role === "Agent") {
+        const bankLeadData = docSnap.data();
+
+        const response = await fetch(
+          "https://nh989m12uk.execute-api.eu-north-1.amazonaws.com/prod/banklead",
+          {
+            method: "POST",
+            headers: {
+              Accept: "/",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              action: "document-add",
+              firstName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.f_name,
+              lastName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.l_name,
+              email: bankLeadData?.Kunden?.Kundeinformasjon[0]?.EPost,
+              projectAddress:
+                bankLeadData?.Kunden?.Kundeinformasjon[0]?.Adresse,
+              link: `https://admin.mintomt.no/bank-leads-detail/${id}`,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        toast.success(data?.message, { position: "top-right" });
+      }
       setActiveTab(2);
       getData();
     } catch (error) {
@@ -173,7 +241,6 @@ export const Forhandstakst: React.FC<{
   const handleDocumentsDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
-  const documents: any = form.watch("documents");
 
   const handleDocumentUpload = async (files: FileList, fieldName: any) => {
     if (!files.length) return;
@@ -260,8 +327,6 @@ export const Forhandstakst: React.FC<{
     setShowConfirm(false);
     setDeleteIndex(null);
   };
-
-  const advanceQuote = form.watch("advance_quote");
 
   function norwegianToNumber(str: any) {
     if (typeof str !== "string") return 0;
@@ -474,7 +539,9 @@ export const Forhandstakst: React.FC<{
                   <div className="py-3 md:py-5">
                     <div className="flex flex-col gap-2">
                       <div className="flex gap-2 md:gap-3 items-center">
-                        <div className="w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">Adresse:</div>
+                        <div className="w-[200px] md:w-[300px] text-[#5D6B98] text-sm md:text-base">
+                          Adresse:
+                        </div>
                         <div className="w-full text-[#000000] font-semibold text-sm md:text-base">
                           {plotData?.address}
                         </div>

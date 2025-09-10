@@ -133,10 +133,10 @@ export const Oppsummering: React.FC<{
 
       if (id) {
         const snap = await getDoc(docRef);
-      
+
         if (snap.exists()) {
           const data = snap.data();
-      
+
           if (data.status === "Ikke sendt") {
             await updateDoc(docRef, {
               status: "Sendt",

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../../../components/common/button";
 import { useLocation } from "react-router-dom";
-import { fetchBankLeadData } from "../../../lib/utils";
-import { doc, updateDoc } from "firebase/firestore";
+import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../config/firebaseConfig";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -85,9 +85,33 @@ export const Documenters: React.FC<{
     resolver: zodResolver(formSchema),
   });
 
+  const [Role, setRole] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+      }
+    };
+
+    getData();
+  }, []);
+
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
+  const prevDocumentsRef = useRef({
+    Entreprenørgaranti: [],
+    Forsikringsbevis: [],
+    Kontrakt: [],
+  });
+
+  const Entreprenørgaranti: any = form.watch("Entreprenørgaranti") || [];
+  const Forsikringsbevis: any = form.watch("Forsikringsbevis") || [];
+  const Kontrakt: any = form.watch("Kontrakt") || [];
 
   useEffect(() => {
     if (!id) {
@@ -107,6 +131,30 @@ export const Documenters: React.FC<{
 
     getData();
   }, [id]);
+
+  const [isUpload, setIsUpload] = useState(false);
+
+  useEffect(() => {
+    const allDocuments = {
+      Entreprenørgaranti,
+      Forsikringsbevis,
+      Kontrakt,
+    };
+
+    const currentDocumentsString: any = JSON.stringify(allDocuments);
+    const prevDocumentsString: any = prevDocumentsRef.current;
+
+    if (currentDocumentsString !== prevDocumentsString) {
+      const hasAnyDocuments =
+        Entreprenørgaranti.length > 0 ||
+        Forsikringsbevis.length > 0 ||
+        Kontrakt.length > 0;
+
+      setIsUpload(hasAnyDocuments);
+    }
+
+    prevDocumentsRef.current = currentDocumentsString;
+  }, [Entreprenørgaranti, Forsikringsbevis, Kontrakt]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     const finalData = {
@@ -130,6 +178,8 @@ export const Documenters: React.FC<{
 
     try {
       const docRef = doc(db, "bank_leads", String(id));
+      const docSnap = await getDoc(docRef);
+
       const BankData = {
         ...finalData,
         id: id,
@@ -144,6 +194,32 @@ export const Documenters: React.FC<{
         updatedAt: formatDate(new Date()),
       });
       toast.success("Lagret", { position: "top-right" });
+      if (docSnap.exists() && isUpload && Role === "Agent") {
+        const bankLeadData = docSnap.data();
+
+        const response = await fetch(
+          "https://nh989m12uk.execute-api.eu-north-1.amazonaws.com/prod/banklead",
+          {
+            method: "POST",
+            headers: {
+              Accept: "/",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              action: "document-add",
+              firstName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.f_name,
+              lastName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.l_name,
+              email: bankLeadData?.Kunden?.Kundeinformasjon[0]?.EPost,
+              projectAddress:
+                bankLeadData?.Kunden?.Kundeinformasjon[0]?.Adresse,
+              link: `https://admin.mintomt.no/bank-leads-detail/${id}`,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        toast.success(data?.message, { position: "top-right" });
+      }
       setActiveTab(4);
       getData();
     } catch (error) {
@@ -178,6 +254,8 @@ export const Documenters: React.FC<{
 
     try {
       const docRef = doc(db, "bank_leads", String(id));
+      const docSnap = await getDoc(docRef);
+
       const BankData = {
         ...finalData,
         id: id,
@@ -191,6 +269,33 @@ export const Documenters: React.FC<{
         Documenter: BankData,
         updatedAt: formatDate(new Date()),
       });
+
+      if (docSnap.exists() && isUpload && Role === "Agent") {
+        const bankLeadData = docSnap.data();
+
+        const response = await fetch(
+          "https://nh989m12uk.execute-api.eu-north-1.amazonaws.com/prod/banklead",
+          {
+            method: "POST",
+            headers: {
+              Accept: "/",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              action: "document-add",
+              firstName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.f_name,
+              lastName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.l_name,
+              email: bankLeadData?.Kunden?.Kundeinformasjon[0]?.EPost,
+              projectAddress:
+                bankLeadData?.Kunden?.Kundeinformasjon[0]?.Adresse,
+              link: `https://admin.mintomt.no/bank-leads-detail/${id}`,
+            }),
+          }
+        );
+
+        const data = await response.json();
+        toast.success(data?.message, { position: "top-right" });
+      }
 
       getData();
     } catch (error) {
@@ -211,7 +316,6 @@ export const Documenters: React.FC<{
   ) => {
     event.preventDefault();
   };
-  const Entreprenørgaranti: any = form.watch("Entreprenørgaranti");
 
   const handleDocumentUpload = async (files: FileList, fieldName: any) => {
     if (!files.length) return;
@@ -273,7 +377,6 @@ export const Documenters: React.FC<{
   ) => {
     event.preventDefault();
   };
-  const Forsikringsbevis: any = form.watch("Forsikringsbevis");
   const handleForsikringsbevisDrop = async (
     event: React.DragEvent<HTMLDivElement>
   ) => {
@@ -298,7 +401,6 @@ export const Documenters: React.FC<{
   const handleKontraktDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
-  const Kontrakt: any = form.watch("Kontrakt");
   const handleKontraktDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     if (event.dataTransfer.files) {

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -21,6 +21,7 @@ import { db, storage } from "../../../config/firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import toast from "react-hot-toast";
 import { Input } from "../../../components/ui/input";
+import { fetchAdminDataByEmail } from "../../../lib/utils";
 
 const formSchema = z.object({
   photo: z
@@ -56,6 +57,40 @@ export const AddComment: React.FC<{
   const pathSegments = location.pathname.split("/");
   const id = pathSegments.length > 2 ? pathSegments[2] : null;
 
+  const [previousDocuments, setPreviousDocuments] = useState<any[]>([]);
+
+  const [isUpload, setIsUpload] = useState(false);
+  const uploadPhoto: any = form.watch("photo");
+
+  const [Role, setRole] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchAdminDataByEmail();
+      if (data) {
+        if (data?.role) {
+          setRole(data?.role);
+        }
+      }
+    };
+
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const currentDocuments = uploadPhoto || [];
+    const prevDocuments = previousDocuments || [];
+
+    const documentsChanged =
+      JSON.stringify(currentDocuments) !== JSON.stringify(prevDocuments);
+
+    if (documentsChanged && currentDocuments.length > 0) {
+      setIsUpload(true);
+    } else {
+      setIsUpload(false);
+    }
+  }, [uploadPhoto]);
+
   useEffect(() => {
     const fetchExistingComment = async () => {
       if (!id) return;
@@ -71,6 +106,7 @@ export const AddComment: React.FC<{
           form.setValue("text", commentData.text || "");
           form.setValue("photo", commentData.photo || []);
           form.setValue("full_fort_date", commentData.full_fort_date || "");
+          setPreviousDocuments(commentData?.photo || []);
         }
       }
     };
@@ -79,7 +115,6 @@ export const AddComment: React.FC<{
   }, [id, SelectIndex]);
 
   const filephotoPhotoInputRef = React.useRef<HTMLInputElement | null>(null);
-  const uploadPhoto: any = form.watch("photo");
 
   const handleFileUpload = async (files: FileList, fieldName: any) => {
     if (!files.length) return;
@@ -155,6 +190,7 @@ export const AddComment: React.FC<{
 
       if (id) {
         const bankDocRef = doc(db, "bank_leads", String(id));
+        const docSnap = await getDoc(bankDocRef);
 
         const updatePayload: any = {
           [`Fremdriftsplan.${SelectIndex}.comment`]: data,
@@ -164,6 +200,33 @@ export const AddComment: React.FC<{
         updatePayload[`Fremdriftsplan.${SelectIndex}.status`] = "Sendt";
 
         await updateDoc(bankDocRef, updatePayload);
+
+        if (docSnap.exists() && isUpload && Role === "Agent") {
+          const bankLeadData = docSnap.data();
+
+          const response = await fetch(
+            "https://nh989m12uk.execute-api.eu-north-1.amazonaws.com/prod/banklead",
+            {
+              method: "POST",
+              headers: {
+                Accept: "/",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                action: "document-add",
+                firstName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.f_name,
+                lastName: bankLeadData?.Kunden?.Kundeinformasjon[0]?.l_name,
+                email: bankLeadData?.Kunden?.Kundeinformasjon[0]?.EPost,
+                projectAddress:
+                  bankLeadData?.Kunden?.Kundeinformasjon[0]?.Adresse,
+                link: `https://admin.mintomt.no/bank-leads-detail/${id}`,
+              }),
+            }
+          );
+
+          const data = await response.json();
+          toast.success(data?.message, { position: "top-right" });
+        }
 
         toast.success("Lagret", {
           position: "top-right",

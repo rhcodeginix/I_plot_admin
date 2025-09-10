@@ -540,7 +540,7 @@ export const LeadTable = () => {
           header: "Navn",
           cell: ({ row }: any) => (
             <Link
-              to={`/agent-leads-detail/${row.original?.id}`}
+              to={`/bank-leads-detail/${row.original?.id}`}
               className="flex items-center text-sm text-primary font-medium w-max"
             >
               {row.original?.Kunden?.Kundeinformasjon[0]?.f_name}{" "}
@@ -794,7 +794,7 @@ export const LeadTable = () => {
                 <Eye
                   className="h-5 w-5 text-primary cursor-pointer"
                   onClick={() =>
-                    navigate(`/bank-leads-detail/${row.original?.id}?step=2`)
+                    navigate(`/bank-leads-detail/${row.original?.id}`)
                   }
                 />
               ) : (

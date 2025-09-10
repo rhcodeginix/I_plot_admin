@@ -11,8 +11,25 @@ import { PlotHusmodell } from "./plotHusmodell";
 import { ProjectAccounting } from "./projectAccounting";
 import { Oppsummering } from "./oppsummering";
 import { useLocation } from "react-router-dom";
-import { fetchBankLeadData } from "../../../lib/utils";
+import { fetchAdminDataByEmail, fetchBankLeadData } from "../../../lib/utils";
 import { Forhandstakst } from "./forhandstakst";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../../config/firebaseConfig";
 
 export const BankleadsTabs = () => {
   const [activeTab, setActiveTab] = useState<any>(0);
@@ -105,6 +122,45 @@ export const BankleadsTabs = () => {
   function numberToNorwegian(num: any) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
+
+  const [users, setUsers] = useState([]);
+
+  const fetchUsersData = async () => {
+    try {
+      const q = query(
+        collection(db, "admin"),
+        where("role", "==", "Bankansvarlig")
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      const data: any = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setUsers(data);
+    } catch (error) {
+      console.error("Error fetching husmodell data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsersData();
+  }, []);
+
+  const [loginUser, setLoginUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data: any = await fetchAdminDataByEmail();
+      if (data) {
+        setLoginUser(data);
+      }
+    };
+
+    getData();
+  }, []);
 
   return (
     <>
@@ -315,7 +371,7 @@ export const BankleadsTabs = () => {
           </div>
         )}
         <div className="relative">
-          <div className="flex items-center justify-between gap-2 mb-6 px-4 py-1 md:px-8 lg:px-10 mt-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 px-4 py-1 md:px-8 lg:px-10 mt-4">
             <div
               className="flex gap-2 md:gap-3 lg:gap-4 rounded-lg bg-white p-1 md:p-1.2 overflow-auto"
               style={{
@@ -343,6 +399,59 @@ export const BankleadsTabs = () => {
                   {tab.label}
                 </button>
               ))}
+            </div>
+            <div className="w-full md:w-[300px]">
+              <p className={`text-black mb-[6px] text-sm font-medium`}>
+                Tildel til
+              </p>
+              <Select
+                onValueChange={async (value) => {
+                  try {
+                    if (!id) return;
+
+                    const docRef = doc(db, "bank_leads", id);
+                    const formatDate = (date: Date) => {
+                      return date
+                        .toLocaleString("sv-SE", { timeZone: "UTC" })
+                        .replace(",", "");
+                    };
+                    await updateDoc(docRef, {
+                      assignedTo: value,
+                      updatedAt: formatDate(new Date()),
+                      assign: true,
+                    });
+                    setBankData((prev: any) => ({
+                      ...prev,
+                      assignedTo: value,
+                    }));
+                  } catch (error) {
+                    console.error("Error updating assignment:", error);
+                  }
+                }}
+                value={bankData?.assignedTo ?? ""}
+              >
+                <SelectTrigger
+                  className={`bg-white rounded-[8px] border text-black border-gray1`}
+                >
+                  <SelectValue placeholder="Velg tilordne til" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectGroup>
+                    <SelectItem value={loginUser?.id}>
+                      Tildel til meg
+                    </SelectItem>
+                    {users
+                      ?.filter((user: any) => user?.id !== loginUser?.id)
+                      .map((user: any, index: number) => (
+                        <SelectItem value={user?.id} key={index}>
+                          {!user?.f_name
+                            ? user?.name
+                            : `${user?.f_name} ${user?.l_name}`}
+                        </SelectItem>
+                      ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 

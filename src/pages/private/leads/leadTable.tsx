@@ -57,10 +57,13 @@ export const LeadTable = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState<string>("");
+  const [assign, setAssign] = useState<string>("");
   const [supplierMap, setSupplierMap] = useState<Record<string, any>>({});
   const [adminMap, setAdminMap] = useState<Record<string, any>>({});
+  const [adminAssignMap, setAdminAssignMap] = useState<Record<string, any>>({});
   const [permission, setPermission] = useState<any>(null);
   const [Role, setRole] = useState<any>(null);
+  const [loginUserId, setLoginUserId] = useState<any>(null);
   const [Office, setOffice] = useState<any>(null);
   const [IsAdmin, setIsAdmin] = useState<any>(null);
   const email = localStorage.getItem("Iplot_admin");
@@ -80,6 +83,7 @@ export const LeadTable = () => {
           setOffice(data?.office);
         }
         setIsAdmin(data?.is_admin);
+        setLoginUserId(data?.id);
       }
     };
 
@@ -165,10 +169,18 @@ export const LeadTable = () => {
       }
       const querySnapshot = await getDocs(q);
 
-      const docsData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const docsData = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter((item: any) => {
+          if (assign === "Tildele") {
+            return item?.assignedTo === loginUserId;
+          } else {
+            return item;
+          }
+        });
 
       const filteredData = await Promise.all(
         docsData.map(async (item: any) => {
@@ -245,6 +257,18 @@ export const LeadTable = () => {
         })
       );
       setAdminMap(adminDataMap);
+
+      const adminAssignIds = sortedData
+        .map((b: any) => b?.assignedTo)
+        .filter(Boolean);
+      const adminAssignDataMap: Record<string, any> = {};
+      await Promise.all(
+        adminAssignIds.map(async (id: any) => {
+          const data = await fetchAdminData(id);
+          if (data) adminAssignDataMap[id] = data;
+        })
+      );
+      setAdminAssignMap(adminAssignDataMap);
     } catch (error) {
       console.error("Error fetching bank lead data:", error);
     } finally {
@@ -256,7 +280,7 @@ export const LeadTable = () => {
     if (Role) {
       fetchBankLeadData();
     }
-  }, [permission, status, Role, Office, IsAdmin]);
+  }, [permission, status, Role, Office, IsAdmin, assign]);
 
   const handleConfirmPopup = () => {
     if (showConfirm) {
@@ -562,6 +586,30 @@ export const LeadTable = () => {
           },
         },
         {
+          accessorKey: "TildelTil",
+          header: "Tildel til",
+          cell: ({ row }: any) => {
+            const adminData = adminAssignMap[row.original?.assignedTo];
+            return (
+              <div className="flex items-center text-sm text-darkBlack w-max">
+                {/* {row.original?.plotHusmodell?.plot?.address} */}
+                {loginUserId === adminData?.id
+                  ? "Tildel til meg"
+                  : adminData
+                  ? `${adminData?.f_name ?? adminData.name} ${
+                      adminData?.l_name ?? ""
+                    }`
+                  : "-"}
+              </div>
+            );
+          },
+          sortingFn: (rowA: any, rowB: any) => {
+            const addressA = rowA.original?.plotHusmodell?.plot?.address || "";
+            const addressB = rowB.original?.plotHusmodell?.plot?.address || "";
+            return addressA.localeCompare(addressB);
+          },
+        },
+        {
           accessorKey: "Anleggsadresse",
           header: "Anleggsadresse",
           cell: ({ row }: any) => (
@@ -816,7 +864,7 @@ export const LeadTable = () => {
           enableSorting: false, // Actions column shouldn't be sortable
         },
       ].filter(Boolean) as ColumnDef<any>[],
-    [supplierMap, adminMap, email, navigate, permission, status]
+    [supplierMap, adminMap, email, navigate, permission, status, adminAssignMap]
   );
 
   const pageSize = 10;
@@ -874,6 +922,24 @@ export const LeadTable = () => {
           </div>
         </div>
         <div className="flex gap-3 items-center">
+          <div className="shadow-shadow1 border border-gray1 rounded-[8px] flex w-max overflow-hidden">
+            <div
+              className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm border-r border-gray1 cursor-pointer ${
+                assign === "" ? "bg-white" : ""
+              }`}
+              onClick={() => setAssign("")}
+            >
+              Alle
+            </div>
+            <div
+              className={`p-2.5 md:py-[10px] md:px-4 text-black2 font-medium text-[13px] sm:text-sm cursor-pointer ${
+                assign === "Tildele" ? "bg-white" : ""
+              }`}
+              onClick={() => setAssign("Tildele")}
+            >
+              Tildel til meg
+            </div>
+          </div>
           <DateRangePicker
             startDate={startDate}
             endDate={endDate}

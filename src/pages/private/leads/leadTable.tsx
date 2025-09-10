@@ -176,7 +176,7 @@ export const LeadTable = () => {
         }))
         .filter((item: any) => {
           if (assign === "Tildele") {
-            return item?.assignedTo === loginUserId;
+            return item?.assign;
           } else {
             return item;
           }
@@ -937,7 +937,7 @@ export const LeadTable = () => {
               }`}
               onClick={() => setAssign("Tildele")}
             >
-              Tildel til meg
+              Tildele
             </div>
           </div>
           <DateRangePicker

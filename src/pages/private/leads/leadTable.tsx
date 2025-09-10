@@ -879,7 +879,7 @@ export const LeadTable = () => {
               )}
             </>
           ),
-          enableSorting: false, // Actions column shouldn't be sortable
+          enableSorting: false,
         },
       ].filter(Boolean) as ColumnDef<any>[],
     [supplierMap, adminMap, email, navigate, permission, status, adminAssignMap]

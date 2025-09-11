@@ -314,12 +314,9 @@ export const InventoryForm: React.FC = () => {
                           <Input
                             placeholder="Skriv inn Kategorinavn"
                             {...field}
-                            className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
+                            className={`bg-white rounded-[8px] border text-black ${
+                              fieldState?.error ? "border-red" : "border-gray1"
+                            } `}
                             type="text"
                             value={field.value}
                           />
@@ -340,12 +337,9 @@ export const InventoryForm: React.FC = () => {
                     <FormControl>
                       <div className="relative flex items-center gap-2 mt-3">
                         <input
-                          className={`bg-white rounded-[8px] accent-primary border text-black
-                                  ${
-                                    fieldState?.error
-                                      ? "border-red"
-                                      : "border-gray1"
-                                  } h-4 w-4`}
+                          className={`bg-white rounded-[8px] accent-primary border text-black ${
+                            fieldState?.error ? "border-red" : "border-gray1"
+                          } h-4 w-4`}
                           type="checkbox"
                           onChange={(e) => field.onChange(e.target.checked)}
                           checked={field.value}

@@ -267,18 +267,34 @@ export const BankleadsDetails = () => {
               api_token: process.env.REACT_APP_DOCUMENT_TOKEN,
             },
           },
+          {
+            name: "kommuneplanens",
+            url: "https://iplotnor-areaplanner.hf.space/kommuneplanens",
+            body: {
+              coordinates_url: json.plan_link,
+              knr: `${lamdaDataFromApi?.searchParameters?.kommunenummer}`,
+              gnr: `${lamdaDataFromApi?.searchParameters?.gardsnummer}`,
+              bnr: `${lamdaDataFromApi?.searchParameters?.bruksnummer}`,
+              api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
+              debug_mode: true,
+            },
+          },
         ];
 
         const apisResults = await Promise.all(apis.map((c) => makeApiCall(c)));
 
-        const resolveResult: any = apisResults.find(
-          (r) => r.name === "resolve"
-        );
-        const otherDocsResult = apisResults.find(
-          (r) => r.name === "other-documents"
-        );
+        let firebaseData: any = {};
+        apisResults.forEach((r) => {
+          if (r.success) {
+            firebaseData[r.name] = r.data;
+          }
+        });
 
-        if (!resolveResult.success || !otherDocsResult?.success) {
+        const resolveResult: any = firebaseData["resolve"];
+        const otherDocsResult = firebaseData["other-documents"];
+        const kommuneplanensResult = firebaseData["kommuneplanens"];
+
+        if (!resolveResult || !otherDocsResult) {
           setDocuments({});
           setKommunePlan({});
           setPlanDocuments([]);
@@ -288,12 +304,15 @@ export const BankleadsDetails = () => {
           setKommuneLoading(false);
           return;
         }
-        setDocuments(resolveResult.data);
-        setPlanDocuments(otherDocsResult?.data?.planning_treatments ?? []);
-        setExemptions(otherDocsResult?.data?.exemptions ?? []);
-        setOtherDocumentInput(otherDocsResult?.data?.inputs ?? {});
 
-        const internalPlanId = resolveResult.data?.inputs?.internal_plan_id;
+        setDocuments(resolveResult);
+        setPlanDocuments(otherDocsResult?.planning_treatments ?? []);
+        setExemptions(otherDocsResult?.exemptions ?? []);
+        setOtherDocumentInput(otherDocsResult?.inputs ?? {});
+        setKommunePlan(kommuneplanensResult ?? {});
+        setKommuneLoading(false);
+
+        const internalPlanId = resolveResult?.inputs?.internal_plan_id;
         if (!internalPlanId) {
           return;
         }
@@ -304,24 +323,19 @@ export const BankleadsDetails = () => {
         if (existingDoc.exists()) {
           const data = existingDoc.data();
           setDocuments(data?.resolve ?? {});
-          setKommunePlan(data?.kommuneplanens ?? {});
-          // setPlanDocuments(data["other-documents"]?.planning_treatments ?? []);
-          // setExemptions(data["other-documents"]?.exemptions ?? []);
-          // setOtherDocumentInput(data["other-documents"]?.inputs ?? {});
           setResult(data?.extract_json_direct_gpt?.data ?? {});
-
-          setKommuneLoading(false);
 
           if (data?.kommuneplanens?.rule_book?.link && !data?.kommune_rules) {
             const kommuneRuleRes = await fetch(
-              "https://iplotnor-norwaypropertyagent.hf.space/extract_rules",
+              "https://pdf-extractor-629346971068.europe-west1.run.app/extract",
               {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  url: data.kommuneplanens.rule_book.link,
+                  pdf_url: data.kommuneplanens.rule_book.link,
+                  municipality:
+                    CadastreDataFromApi?.presentationAddressApi?.response?.item
+                      ?.municipality?.municipalityName,
                 }),
               }
             );
@@ -342,82 +356,46 @@ export const BankleadsDetails = () => {
           return;
         }
 
-        if (
-          resolveResult.data?.rule_book &&
-          resolveResult.data?.rule_book?.link
-        ) {
+        if (resolveResult?.rule_book?.link) {
           const apiCalls = [
             {
               name: "extract_json_direct_gpt",
               url: "https://iplotnor-norwaypropertyagent.hf.space/extract_json_direct_gpt",
               body: {
-                pdf_url: resolveResult.data?.rule_book?.link,
+                pdf_url: resolveResult?.rule_book?.link,
                 plot_size_m2:
                   lamdaDataFromApi?.eiendomsInformasjon?.basisInformasjon
                     ?.areal_beregnet ?? 0,
               },
             },
-            {
-              name: "kommuneplanens",
-              url: "https://iplotnor-areaplanner.hf.space/kommuneplanens",
-              body: {
-                coordinates_url: json.plan_link,
-                knr: `${lamdaDataFromApi?.searchParameters?.kommunenummer}`,
-                gnr: `${lamdaDataFromApi?.searchParameters?.gardsnummer}`,
-                bnr: `${lamdaDataFromApi?.searchParameters?.bruksnummer}`,
-                api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
-                debug_mode: true,
-              },
-            },
-            // {
-            //   name: "other-documents",
-            //   url: "https://iplotnor-areaplanner.hf.space/other-documents",
-            //   body: {
-            //     step1_url: json.plan_link,
-            //     api_token: `${process.env.REACT_APP_DOCUMENT_TOKEN}`,
-            //   },
-            // },
           ];
 
           const otherResults = await Promise.all(
             apiCalls.map((c) => makeApiCall(c))
           );
 
-          const firebaseData: any = {
-            resolve: resolveResult.data,
-          };
           otherResults.forEach((r) => {
             if (r.success) firebaseData[r.name] = r.data;
           });
 
           otherResults.forEach((r) => {
-            if (r.success) {
-              if (r.name === "extract_json_direct_gpt") {
-                setResult(r?.data?.data);
-              }
-              if (r.name === "kommuneplanens") {
-                setKommunePlan(r.data);
-                setKommuneLoading(false);
-              }
-              // if (r.name === "other-documents") {
-              //   setPlanDocuments(r.data?.planning_treatments ?? []);
-              //   setExemptions(r.data?.exemptions ?? []);
-              //   setOtherDocumentInput(r.data?.inputs ?? {});
-              // }
+            if (r.success && r.name === "extract_json_direct_gpt") {
+              setResult(r?.data?.data);
             }
           });
 
           let kommuneRulesArr: any;
           if (firebaseData?.kommuneplanens?.rule_book?.link) {
             const kommuneRule = await fetch(
-              "https://iplotnor-norwaypropertyagent.hf.space/extract_rules",
+              "https://pdf-extractor-629346971068.europe-west1.run.app/extract",
               {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  url: firebaseData.kommuneplanens.rule_book.link,
+                  pdf_url: firebaseData.kommuneplanens.rule_book.link,
+                  municipality:
+                    CadastreDataFromApi?.presentationAddressApi?.response?.item
+                      ?.municipality?.municipalityName,
                 }),
               }
             );
@@ -438,11 +416,9 @@ export const BankleadsDetails = () => {
           );
           const existingKommuneDoc = await getDoc(kommunePlansDocRef);
 
-          const uniquekommuneId = String(kommunePlanId);
-
           if (!existingKommuneDoc.exists()) {
             await setDoc(kommunePlansDocRef, {
-              id: uniquekommuneId,
+              id: String(kommunePlanId),
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
               data: firebaseData?.kommuneplanens,
@@ -456,7 +432,7 @@ export const BankleadsDetails = () => {
               id: uniqueId,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
-              documents: { ...resolveResult.data },
+              documents: { ...resolveResult },
               kommune_rules: kommuneRulesArr,
               ...firebaseData,
             });
@@ -503,11 +479,11 @@ export const BankleadsDetails = () => {
           setKommuneLoading(false);
           break;
 
-        // case "other-documents":
-        //   setPlanDocuments(data?.planning_treatments ?? []);
-        //   setOtherDocumentInput(data?.inputs ?? {});
-        //   setExemptions(data?.exemptions ?? []);
-        //   break;
+        case "other-documents":
+          setPlanDocuments(data?.planning_treatments ?? []);
+          setExemptions(data?.exemptions ?? []);
+          setOtherDocumentInput(data?.inputs ?? {});
+          break;
       }
 
       return {
@@ -535,11 +511,11 @@ export const BankleadsDetails = () => {
           setKommuneLoading(false);
           break;
 
-        // case "other-documents":
-        //   setPlanDocuments([]);
-        //   setOtherDocumentInput({});
-        //   setExemptions([]);
-        //   break;
+        case "other-documents":
+          setPlanDocuments([]);
+          setExemptions([]);
+          setOtherDocumentInput({});
+          break;
       }
 
       return {
@@ -2221,7 +2197,7 @@ export const BankleadsDetails = () => {
                                               src={Ic_check_true}
                                               alt="check"
                                             />
-                                            <span>{item?.rule}</span>
+                                            <span>{item?.rule} ({item?.area_type})</span>
                                             <img
                                               src={Ic_info_circle}
                                               alt="info"
@@ -2233,7 +2209,7 @@ export const BankleadsDetails = () => {
                                           </div>
                                           {openIndex === index && (
                                             <div className="top-3 z-100 bg-white shadow-shadow1 p-3 rounded-lg text-sm text-gray absolute right-0 w-auto max-w-64">
-                                              {item.description}
+                                              {item?.category} ({item?.rule_number})
                                             </div>
                                           )}
                                         </div>

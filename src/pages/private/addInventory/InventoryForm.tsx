@@ -121,6 +121,11 @@ export const InventoryForm: React.FC = () => {
       if (!husData.Huskonfigurator) continue;
 
       let updated = false;
+      const removeUndefined = (obj: any) => {
+        return Object.fromEntries(
+          Object.entries(obj).filter(([_, v]) => v !== undefined)
+        );
+      };
 
       const hovedkategorinavn = husData.Huskonfigurator.hovedkategorinavn.map(
         (mainCat: any) => {
@@ -128,14 +133,43 @@ export const InventoryForm: React.FC = () => {
             (subCat: any) => {
               if (subCat.id === categoryId) {
                 updated = true;
+
+                let updatedProdukter = newCategoryData?.produkter;
+
+                if (subCat.produkter && newCategoryData?.produkter) {
+                  updatedProdukter = newCategoryData.produkter.map(
+                    (newProduct: any, index: number) => {
+                      const oldProduct = subCat.produkter[index];
+
+                      if (oldProduct && oldProduct.isPrisChange === true) {
+                        return {
+                          ...newProduct,
+                          pris: oldProduct.pris,
+                          isPrisChange: oldProduct.isPrisChange,
+                          IncludingOffer: oldProduct.IncludingOffer,
+                        };
+                      }
+
+                      return newProduct;
+                    }
+                  );
+                }
+
                 return {
                   ...subCat,
-                  ...newCategoryData,
+                  ...removeUndefined({
+                    navn: newCategoryData?.data?.navn,
+                    produkter: updatedProdukter,
+                    isSelected: newCategoryData?.data?.isSelected,
+                  }),
+                  id: categoryId,
                 };
               }
+
               return subCat;
             }
           );
+
           return { ...mainCat, Kategorinavn: updatedKategorinavn };
         }
       );
@@ -178,7 +212,7 @@ export const InventoryForm: React.FC = () => {
         });
       } else {
         await setDoc(inventoryDocRef, {
-          data: inventoryData,
+          data: { ...inventoryData, isPrisChange: false },
           updatedAt: formatDate(new Date()),
           createdAt: formatDate(new Date()),
           created_by: createData?.id,

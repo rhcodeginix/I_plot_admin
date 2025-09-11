@@ -14,6 +14,7 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
   const [activeTabData, setActiveTabData] = useState(0);
   const [AddCategory, setAddCategory] = useState(false);
   const [Category, setCategory] = useState<any>([]);
+  const [activeSubTabData, setActiveSubTabData] = useState(0);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [editCategory, setEditCategory] = useState<null | {
     index: number;
@@ -87,7 +88,10 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
                   ? "border-2 border-primary bg-lightGreen rounded-t-[12px]"
                   : "border border-gray2"
               }`}
-              onClick={() => setActiveTabData(index)}
+              onClick={() => {
+                setActiveTabData(index);
+                setActiveSubTabData(0);
+              }}
             >
               <div className="text-xs md:text-sm text-darkBlack py-1.5 md:py-3 flex items-center gap-1 md:gap-2 font-semibold">
                 <span className="w-5 h-5 rounded-full bg-lightGreen flex items-center justify-center text-darkBlack font-semibold text-[10px] md:text-xs">
@@ -144,6 +148,8 @@ export const Huskonfigurator: React.FC<{ setActiveTab: any }> = ({
               Category={Category}
               activeTabData={activeTabData}
               setCategory={setCategory}
+              setActiveSubTabData={setActiveSubTabData}
+              activeSubTabData={activeSubTabData}
             />
           </div>
         ) : (

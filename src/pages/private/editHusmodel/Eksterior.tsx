@@ -44,6 +44,7 @@ const productSchema = z.object({
   Produktbeskrivelse: z
     .string()
     .min(1, "Produktbeskrivelse må bestå av minst 1 tegn."),
+  isPrisChange: z.boolean().optional(),
 });
 
 const categorySchema = z.object({
@@ -70,9 +71,17 @@ export const Eksterior: React.FC<{
   Category: any;
   activeTabData: any;
   setCategory: any;
-}> = ({ setActiveTab, labelName, Category, activeTabData, setCategory }) => {
-  const [activeSubTabData, setActiveSubTabData] = useState(0);
-
+  activeSubTabData: number;
+  setActiveSubTabData: any;
+}> = ({
+  setActiveTab,
+  labelName,
+  Category,
+  activeTabData,
+  setCategory,
+  activeSubTabData,
+  setActiveSubTabData,
+}) => {
   const [createData, setCreateData] = useState<any>(null);
 
   useEffect(() => {
@@ -108,9 +117,11 @@ export const Eksterior: React.FC<{
                   pris: "",
                   IncludingOffer: false,
                   Produktbeskrivelse: "",
+                  isPrisChange: false,
                 },
               ],
               isSelected: false,
+              id: "",
             },
           ],
         },
@@ -134,6 +145,7 @@ export const Eksterior: React.FC<{
       pris: "",
       IncludingOffer: false,
       Produktbeskrivelse: "",
+      isPrisChange: false,
     });
   };
 
@@ -195,6 +207,9 @@ export const Eksterior: React.FC<{
     const updatedProductsSelector = form.watch(
       `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.isSelected`
     );
+    const updatedProductsId = form.watch(
+      `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.id`
+    );
 
     if (!updatedProducts) return;
 
@@ -217,11 +232,14 @@ export const Eksterior: React.FC<{
               pris: product.pris || "",
               IncludingOffer: product.IncludingOffer || false,
               Produktbeskrivelse: product.Produktbeskrivelse || "",
+              isPrisChange: product.isPrisChange || false,
             };
           });
           updatedCategories[activeTabData].Kategorinavn[
             activeSubTabData
           ].isSelected = updatedProductsSelector ?? false;
+          updatedCategories[activeTabData].Kategorinavn[activeSubTabData].id =
+            updatedProductsId ?? "";
         }
 
         return updatedCategories;
@@ -237,6 +255,9 @@ export const Eksterior: React.FC<{
     ),
     form.watch(
       `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.isSelected`
+    ),
+    form.watch(
+      `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.id`
     ),
   ]);
 
@@ -784,6 +805,31 @@ export const Eksterior: React.FC<{
                                 const initialValue = form.getValues(
                                   `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.pris`
                                 );
+
+                                const keyIsPrisChange: any = `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.isPrisChange`;
+                                const keyIncludingOffer: any = `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.IncludingOffer`;
+
+                                const isPrisChangeValue: any =
+                                  form.watch(keyIsPrisChange);
+                                const includingOfferValue =
+                                  form.watch(keyIncludingOffer);
+
+                                let disable;
+                                let toggleDisable;
+
+                                if (IsDisable !== "") {
+                                  if (isPrisChangeValue === true) {
+                                    disable = includingOfferValue;
+                                    toggleDisable = false;
+                                  } else {
+                                    disable = true;
+                                    toggleDisable = true;
+                                  }
+                                } else {
+                                  disable = includingOfferValue;
+                                  toggleDisable = false;
+                                }
+
                                 return (
                                   <FormItem>
                                     <div className="flex items-center justify-between gap-2 mb-[6px]">
@@ -804,13 +850,15 @@ export const Eksterior: React.FC<{
                                             id={`toggleSwitch.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.IncludingOffer`}
                                             className="toggle-input"
                                             checked={
-                                              form.watch(
-                                                `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.IncludingOffer`
-                                              ) || false
+                                              toggleDisable
+                                                ? false
+                                                : form.watch(
+                                                    `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.IncludingOffer`
+                                                  ) || false
                                             }
                                             name={`hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.IncludingOffer`}
-                                            disabled={IsDisable ? true : false}
-                                            onChange={(e: any) => {
+                                            disabled={toggleDisable}
+                                            onChange={(e) => {
                                               const checkedValue =
                                                 e.target.checked;
                                               form.setValue(
@@ -843,17 +891,9 @@ export const Eksterior: React.FC<{
                                           placeholder="Skriv inn Pris fra"
                                           {...field}
                                           className={`bg-white rounded-[8px] border text-black
-                                          ${
-                                            fieldState?.error
-                                              ? "border-red"
-                                              : "border-gray1"
-                                          } `}
+                ${fieldState?.error ? "border-red" : "border-gray1"} `}
                                           inputMode="numeric"
-                                          disable={
-                                            form.watch(
-                                              `hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.IncludingOffer`
-                                            ) || IsDisable
-                                          }
+                                          disable={disable}
                                           type="text"
                                           onChange={({
                                             target: { value },
@@ -864,12 +904,10 @@ export const Eksterior: React.FC<{
 
                                             const isNegative =
                                               cleaned.startsWith("-");
-
                                             const numericPart = cleaned.replace(
                                               /-/g,
                                               ""
                                             );
-
                                             let formatted = "";
 
                                             if (numericPart) {
@@ -899,6 +937,48 @@ export const Eksterior: React.FC<{
                                       </div>
                                     </FormControl>
                                     <FormMessage />
+                                    {IsDisable !== "" && (
+                                      <div className="mt-2">
+                                        <FormField
+                                          control={form.control}
+                                          name={`hovedkategorinavn.${activeTabData}.Kategorinavn.${activeSubTabData}.produkter.${index}.isPrisChange`}
+                                          render={({ field, fieldState }) => (
+                                            <FormItem>
+                                              <FormControl>
+                                                <div className="relative flex items-center gap-2">
+                                                  <input
+                                                    className={`bg-white rounded-[8px] accent-primary border text-black ${
+                                                      fieldState?.error
+                                                        ? "border-red"
+                                                        : "border-gray1"
+                                                    } h-4 w-4`}
+                                                    type="checkbox"
+                                                    onChange={(e) =>
+                                                      field.onChange(
+                                                        e.target.checked
+                                                      )
+                                                    }
+                                                    checked={
+                                                      field.value ?? false
+                                                    }
+                                                  />
+                                                  <p
+                                                    className={`${
+                                                      fieldState.error
+                                                        ? "text-red"
+                                                        : "text-black"
+                                                    } text-sm font-medium`}
+                                                  >
+                                                    Endre produktpris
+                                                  </p>
+                                                </div>
+                                              </FormControl>
+                                              <FormMessage />
+                                            </FormItem>
+                                          )}
+                                        />
+                                      </div>
+                                    )}
                                   </FormItem>
                                 );
                               }}

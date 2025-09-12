@@ -158,9 +158,9 @@ export const InventoryForm: React.FC = () => {
                 return {
                   ...subCat,
                   ...removeUndefined({
-                    navn: newCategoryData?.data?.navn,
+                    navn: newCategoryData?.navn,
                     produkter: updatedProdukter,
-                    isSelected: newCategoryData?.data?.isSelected,
+                    isSelected: newCategoryData?.isSelected,
                   }),
                   id: categoryId,
                 };

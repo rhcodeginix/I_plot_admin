@@ -15,10 +15,8 @@ import { formatDateToDDMMYYYY } from "../../../lib/utils";
 import Eierinformasjon from "../plot/Eierinformasjon";
 import GoogleMapNearByComponent from "../../../components/ui/map/nearbyBuiildingMap";
 import HouseDetailPage from "../../../components/ui/houseDetail";
-import { Building2, House } from "lucide-react";
+import { ArrowDownToLine, Building2, File, House } from "lucide-react";
 import Tilpass from "./Tilpass";
-import Ic_file from "../../../assets/images/Ic_file.svg";
-import Ic_download_primary from "../../../assets/images/Ic_download_primary.svg";
 import Ic_info_circle from "../../../assets/images/Ic_info_circle.svg";
 import GoogleMapComponent from "../../../components/ui/map";
 import Modal from "../../../components/common/modal";
@@ -73,14 +71,14 @@ export const BankleadsDetails = () => {
     }
   }, [plotData?.additionalData]);
   const tabs: any = [
-    { id: "Regulering", label: "Regulering" },
+    { id: "Oppsummering", label: "Oppsummering" },
     ...(lamdaDataFromApi?.latestOwnership
-      ? [{ id: "Eierinformasjon", label: "Eierinformasjon" }]
+      ? [{ id: "Eiere", label: "Eiere" }]
       : []),
     { id: "Bygninger", label: "Bygninger" },
+    { id: "PlanID", label: "PlanID" },
     { id: "Plandokumenter", label: "Plandokumenter" },
-    { id: "Dokumenter", label: "Dokumenter" },
-    { id: "Planleggingsdokumenter", label: "Planleggingsdokumenter" },
+    { id: "Lokale reguleringsendringer", label: "Lokale reguleringsendringer" },
     { id: "Dispensasjoner", label: "Dispensasjoner" },
     { id: "Kommuneplaner", label: "Kommuneplaner" },
   ];
@@ -624,27 +622,54 @@ export const BankleadsDetails = () => {
     doc: any;
     handleDownload: (doc: any) => void;
   }) => (
-    <div className="border border-gray2 rounded-lg p-2 md:p-3 bg-[#F9FAFB] flex items-center justify-between relative w-full">
+    <div
+      className={`border ${
+        doc?.type === "Bestemmelser"
+          ? "border-primary"
+          : doc?.type === "Plankart"
+          ? "border-[#FFF2E7]"
+          : "border-gray2"
+      } rounded-lg p-2 md:p-3 ${
+        doc?.type === "Bestemmelser"
+          ? "bg-primary"
+          : doc?.type === "Plankart"
+          ? "bg-[#FFF2E7]"
+          : "bg-[#F9FAFB]"
+      } flex items-center justify-between relative w-full`}
+    >
       <div className="flex items-center gap-2.5 md:gap-4 truncate w-[calc(100%-60px)] md:w-[calc(100%-65px)]">
         <div className="border-[4px] border-lightGreen rounded-full flex items-center justify-center">
           <div className="bg-lightGreen w-7 h-7 rounded-full flex justify-center items-center">
-            <img src={Ic_file} alt="file" />
+            <File
+              className={`w-4 h-4 ${
+                doc?.type === "Plankart" ? "text-darkBlack" : "text-primary"
+              }`}
+            />
           </div>
         </div>
-        <h5 className="text-darkBlack text-xs md:text-sm font-medium truncate">
+        <h5
+          className={`${
+            doc?.type === "Bestemmelser" ? "text-white" : "text-darkBlack"
+          } text-xs md:text-sm font-medium truncate`}
+        >
           {doc?.name?.toLowerCase().includes("unknown")
             ? doc?.link?.split("/").pop()?.split("?")[0]
-            : doc?.name || "Loading..."}
+            : doc?.name || "Loading..."}{" "}
+          {doc?.type && `(${doc?.type})`}
         </h5>
       </div>
       <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 w-[52px] sm:w-[56px] md:w-auto">
-        <img
-          src={Ic_download_primary}
-          alt="download"
-          className="cursor-pointer w-5 h-5 md:w-6 md:h-6"
+        <ArrowDownToLine
+          className={`cursor-pointer w-5 h-5 md:w-6 md:h-6 ${
+            doc?.type === "Bestemmelser"
+              ? "text-white"
+              : doc?.type === "Plankart"
+              ? "border-[#111322]"
+              : "text-primary"
+          }`}
           onClick={() => {
             if (
-              activeTab === "Planleggingsdokumenter" ||
+              activeTab === "Lokale reguleringsendringer" ||
               activeTab === "Dispensasjoner"
             ) {
               handleDownloads(doc);
@@ -1867,7 +1892,7 @@ export const BankleadsDetails = () => {
                 ))}
               </div>
               <div className="pt-5 md:pt-8">
-                {activeTab === "Regulering" && (
+                {activeTab === "Oppsummering" && (
                   <>
                     <div className="flex flex-col md:flex-row gap-5 lg:gap-9 desktop:gap-[60px]">
                       <div className="relative w-full md:w-1/2">
@@ -2197,7 +2222,9 @@ export const BankleadsDetails = () => {
                                               src={Ic_check_true}
                                               alt="check"
                                             />
-                                            <span>{item?.rule} ({item?.area_type})</span>
+                                            <span>
+                                              {item?.rule} ({item?.area_type})
+                                            </span>
                                             <img
                                               src={Ic_info_circle}
                                               alt="info"
@@ -2209,7 +2236,8 @@ export const BankleadsDetails = () => {
                                           </div>
                                           {openIndex === index && (
                                             <div className="top-3 z-100 bg-white shadow-shadow1 p-3 rounded-lg text-sm text-gray absolute right-0 w-auto max-w-64">
-                                              {item?.category} ({item?.rule_number})
+                                              {item?.category} (
+                                              {item?.rule_number})
                                             </div>
                                           )}
                                         </div>
@@ -2246,7 +2274,7 @@ export const BankleadsDetails = () => {
                     </div>
                   </>
                 )}
-                {activeTab === "Eierinformasjon" && (
+                {activeTab === "Eiere" && (
                   <Eierinformasjon data={lamdaDataFromApi?.latestOwnership} />
                 )}
                 {activeTab === "Bygninger" && (
@@ -2380,7 +2408,7 @@ export const BankleadsDetails = () => {
                     )}
                   </>
                 )}
-                {activeTab === "Plandokumenter" && (
+                {activeTab === "PlanID" && (
                   <>
                     {loading ? (
                       <div
@@ -2404,7 +2432,7 @@ export const BankleadsDetails = () => {
                     )}
                   </>
                 )}
-                {activeTab === "Dokumenter" && (
+                {activeTab === "Plandokumenter" && (
                   <>
                     {!Documents ? (
                       <>
@@ -2451,7 +2479,7 @@ export const BankleadsDetails = () => {
                     )}
                   </>
                 )}
-                {activeTab === "Planleggingsdokumenter" && (
+                {activeTab === "Lokale reguleringsendringer" && (
                   <>
                     {documentLoading ? (
                       <>

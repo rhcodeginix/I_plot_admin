@@ -46,7 +46,7 @@ export const InventoryPopup: React.FC<InventoryPopupProps> = ({
           id: inv.id,
           navn: inv.data.navn,
           produkter: inv.data.produkter || [],
-          isSelected: false,
+          isSelected: inv.data.isSelected ?? false,
         }));
 
       onSubmitCategories(formattedCategories);

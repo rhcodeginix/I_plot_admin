@@ -135,7 +135,6 @@ export const InventoryForm: React.FC = () => {
                 updated = true;
 
                 let updatedProdukter = newCategoryData?.produkter;
-
                 if (subCat.produkter && newCategoryData?.produkter) {
                   updatedProdukter = newCategoryData.produkter.map(
                     (newProduct: any, index: number) => {
